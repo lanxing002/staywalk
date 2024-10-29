@@ -23,6 +23,10 @@ if(NOT TARGET imgui)
     set_target_properties(imgui PROPERTIES FOLDER ${third_party_folder}/imgui)
 endif()
 
+if(NOT TARGET cpython)
+    include(cpython.cmake)
+endif()
+
 # if(NOT TARGET spdlog)
 #     option(SPDLOG_BUILD_EXAMPLE "" OFF)
 #     option(SPDLOG_INSTALL "" OFF)
