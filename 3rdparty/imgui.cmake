@@ -24,6 +24,7 @@ if (IMGUI_SIMPLE_EXAMPLE)
     if (MSVC)
         # Tell MSVC to use main instead of WinMain
         set_target_properties(imgui-test PROPERTIES LINK_FLAGS "/ENTRY:mainCRTStartup")
+        set_target_properties(imgui-test PROPERTIES FOLDER ${third_party_folder}/imgui)
     endif()
 endif()
 
