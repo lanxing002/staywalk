@@ -1,0 +1,1 @@
+set(gl3_lib ${CMAKE_CURRENT_SOURCE_DIR}/opengl/OpenGL32.Lib)
