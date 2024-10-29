@@ -15,9 +15,11 @@ set(cpython_dir_ ${CMAKE_CURRENT_SOURCE_DIR}/cpython)
 include_external_msproject(cpythoncore "${cpython_dir_}/PCbuild/pythoncore.vcxproj")
 set_target_properties(cpythoncore PROPERTIES FOLDER ${third_party_folder}/cpython)
 
+add_library(py_empty STATIC ${cpython_dir_}/PCbuild/empty.cpp)
 add_custom_command(
-    TARGET cpythoncore POST_BUILD
-    COMMAND ${CMAKE_COMMAND} cmd //C ${cpython_dir_}/PCbuild/build.bat
+    TARGET py_empty POST_BUILD
+    COMMAND ${cpython_dir_}/PCbuild/build.bat
 )
+set_target_properties(py_empty PROPERTIES FOLDER ${third_party_folder}/cpython)
 
 message(--<end==config==imgui>)
