@@ -34,10 +34,20 @@ int main(int argc, char *argv[]) {
 #else
     setenv("PYTHONPATH", updated_pythonpath.c_str(), /*replace=*/1);
 #endif
-
+    //Py_SetPythonHome(L"C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/3rdparty/cpython/build");
     py::scoped_interpreter guard{};
 
-    auto result = Catch::Session().run(argc, argv);
+    //py::scoped_interpreter guard{}; // start the interpreter and keep it alive
 
-    return result < 0xff ? result : 0xff;
+        py::exec(R"(
+        import sys
+        with open('E:/ttt.txt', 'w') as f:
+            f.write(str(sys.path))
+        kwargs = dict(name="World", number=42)
+        message = "Hello, {name}! The answer is {number}".format(**kwargs)
+        print(message)
+    )");
+
+
+    //return result < 0xff ? result : 0xff;
 }

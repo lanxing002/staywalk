@@ -2,14 +2,14 @@ message("-- ===== <start config cpython> ====")
 
 set(cpython_dir_ ${CMAKE_SOURCE_DIR}/3rdparty/cpython)
 
-# ÒýÈëvsÏîÄ¿
+# ï¿½ï¿½ï¿½ï¿½vsï¿½ï¿½Ä¿
 include_external_msproject(cpythoncore "${cpython_dir_}/PCbuild/pythoncore.vcxproj")
 set_target_properties(cpythoncore PROPERTIES FOLDER ${third_party_folder}/cpython)
 
 execute_process(
     COMMAND ${CMAKE_COMMAND} -E echo "staring runging build python......"
-    COMMAND ${cpython_dir_}/PCbuild/build.bat  # Ìæ»»ÎªÄãµÄ .bat ÎÄ¼þÃû
-    COMMAND ${cpython_dir_}/PCbuild/deploy.bat  # Ìæ»»ÎªÄãµÄ .bat ÎÄ¼þÃû
+    COMMAND ${cpython_dir_}/PCbuild/build.bat  # ï¿½æ»»Îªï¿½ï¿½ï¿½ .bat ï¿½Ä¼ï¿½ï¿½ï¿½
+    COMMAND ${cpython_dir_}/PCbuild/deploy.bat  # ï¿½æ»»Îªï¿½ï¿½ï¿½ .bat ï¿½Ä¼ï¿½ï¿½ï¿½
     WORKING_DIRECTORY ${cpython_dir_}/PCbuild
     RESULT_VARIABLE result
 )
