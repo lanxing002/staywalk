@@ -7,3 +7,5 @@ cpython 项目巨大，本身没有cmakelists.txt；从头构建.cmake文件比�
 build的时候，使用cpython/build.bat
 
 由于build.bat需要使用python.exe，这个需要注意以下
+
+分两步构建，先构建python-core, 然后deploy到一个文件夹，之后再在项目中使用。

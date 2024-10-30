@@ -27,6 +27,10 @@ if(NOT TARGET cpython)
     include(cpython.cmake)
 endif()
 
+if(NOT TARGET pybind11_headers)
+    include(pybind11.cmake)
+endif()
+
 # if(NOT TARGET spdlog)
 #     option(SPDLOG_BUILD_EXAMPLE "" OFF)
 #     option(SPDLOG_INSTALL "" OFF)
