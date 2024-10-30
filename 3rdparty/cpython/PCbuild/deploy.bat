@@ -10,6 +10,8 @@ if %ERRORLEVEL% NEQ 0 (echo SSH does not work) & exit /b %ERRORLEVEL%
 if "%PYTHON_SOURCE%"=="" (set PYTHON_SOURCE=%here%..\)
 if "%REMOTE_PYTHON_DIR%"=="" (set REMOTE_PYTHON_DIR=%PYTHON_SOURCE%build)
 
+mkdir %REMOTE_PYTHON_DIR%
+
 if NOT "%REMOTE_PYTHON_DIR:~-1,1%"=="\" (set REMOTE_PYTHON_DIR=%REMOTE_PYTHON_DIR%\)
 echo PYTHON_SOURCE = %PYTHON_SOURCE%
 echo REMOTE_PYTHON_DIR = %REMOTE_PYTHON_DIR%
@@ -18,6 +20,7 @@ REM Create Python directories
 echo -----------------
 echo %PYTHON_SOURCE%
 echo %REMOTE_PYTHON_DIR%
+
 
 @REM for /f "USEBACKQ" %%i in (`dir PCbuild\*.bat /b`) do copy PCBuild\%%i "%REMOTE_PYTHON_DIR%PCBuild"
 @REM for /f "USEBACKQ" %%i in (`dir %PYTHON_SOURCE%PCbuild\*.bat /b`) do cp %PYTHON_SOURCE%PCbuild\%%i "%REMOTE_PYTHON_DIR%PCBuild"
