@@ -55,6 +55,11 @@ if(NOT TARGET freetype)
     set_target_properties(freetype PROPERTIES FOLDER ${third_party_folder}/freetype)
 endif()
 
+if(NOT TARGET fmt)
+    add_subdirectory(fmt)
+    set_target_properties(fmt PROPERTIES FOLDER ${third_party_folder}/fmt)
+endif()
+
 # if(NOT TARGET spdlog)
 #     option(SPDLOG_BUILD_EXAMPLE "" OFF)
 #     option(SPDLOG_INSTALL "" OFF)
