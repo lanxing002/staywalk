@@ -15,6 +15,5 @@ ENDIF(NOT CMAKE_BUILD_TYPE)
 # append my module to ${CMAKE_MODULE_PATH}, set command has many params
 set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
 
-find_package(GLM REQUIRED)
 message(STATUS "GLM included at ${GLM_INCLUDE_DIR}")
 add_subdirectory(3rdparty)
