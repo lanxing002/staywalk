@@ -7,13 +7,17 @@ set(CMAKE_CXX_STANDARD 17) # this does nothing for MSVC, use target_compile_opti
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS ON)
 
-IF(NOT CMAKE_BUILD_TYPE)
-  #force overwirte 'cmake_build_type' cache string
-  SET(CMAKE_BUILD_TYPE Debug CACHE STRING "Choose the type of build (Debug or Release)" FORCE)
-ENDIF(NOT CMAKE_BUILD_TYPE)
-
-# append my module to ${CMAKE_MODULE_PATH}, set command has many params
-set(CMAKE_MODULE_PATH ${CMAKE_MODULE_PATH} "${CMAKE_SOURCE_DIR}/cmake/modules/")
-
-message(STATUS "GLM included at ${GLM_INCLUDE_DIR}")
 add_subdirectory(3rdparty)
+include(3rdparty/opengl.cmake)
+
+if(NOT TARGET opengl3)
+  message(FATAL_ERROR "not fount opengl3")
+endif()
+
+set(src_dir ${CMAKE_CURRENT_SOURCE_DIR}/src/engine)
+add_executable(engine ${src_dir}/main.cpp)
+set_target_properties(engine PROPERTIES FOLDER staywalk/engine)
+target_link_libraries(engine PRIVATE glfw glm imgui pybind11_headers fmt)
+target_link_libraries(engine INTERFACE opengl3 pylib)
+
+
