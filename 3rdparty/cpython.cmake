@@ -1,6 +1,6 @@
 message("-- ===== <start config cpython> ====")
 
-set(cpython_dir_ ${CMAKE_CURRENT_SOURCE_DIR}/cpython)
+set(cpython_dir_ ${CMAKE_SOURCE_DIR}/3rdparty/cpython)
 
 # 引入vs项目
 include_external_msproject(cpythoncore "${cpython_dir_}/PCbuild/pythoncore.vcxproj")
@@ -10,7 +10,7 @@ execute_process(
     COMMAND ${CMAKE_COMMAND} -E echo "staring runging build python......"
     COMMAND ${cpython_dir_}/PCbuild/build.bat  # 替换为你的 .bat 文件名
     COMMAND ${cpython_dir_}/PCbuild/deploy.bat  # 替换为你的 .bat 文件名
-    WORKING_DIRECTORY ${CMAKE_CURRENT_SOURCE_DIR}
+    WORKING_DIRECTORY ${cpython_dir_}/PCbuild
     RESULT_VARIABLE result
 )
 
