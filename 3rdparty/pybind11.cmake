@@ -1,4 +1,5 @@
 message("-- ===== <start config pybind11> ====")
+set(pybin11_SOURCE_DIR_ ${CMAKE_SOURCE_DIR}/3rdparty/pybind11)
 
 option(PYBIND11_NOPYTHON "use project python" ON)
 add_subdirectory(pybind11)
@@ -6,7 +7,7 @@ target_link_libraries(pybind11_headers INTERFACE pylib)
 
 option(PYBIND11_SIMPLE_EXAMPLE "Build the imgui simple example program" ON)
 if (PYBIND11_SIMPLE_EXAMPLE)
-    set(pybind_test_dir_ ${CMAKE_CURRENT_SOURCE_DIR}/pybind11/tests/test_embed)
+    set(pybind_test_dir_ ${pybin11_SOURCE_DIR_}/tests/test_embed)
     add_executable(pybind11-test ${pybind_test_dir_}/test_interpreter.cpp ${pybind_test_dir_}/catch.cpp)
     target_include_directories(pybind11-test PRIVATE ${pybind_test_dir_})
     target_link_libraries(pybind11-test PRIVATE pybind11::embed)
