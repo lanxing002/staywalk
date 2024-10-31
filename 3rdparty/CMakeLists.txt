@@ -1,6 +1,7 @@
 set(third_party_folder "ThirdParty")
 
 set(BUILD_SHARED_LIBS OFF CACHE BOOL "" FORCE)
+
 include(opengl.cmake)
 
 if(NOT TARGET glfw)
