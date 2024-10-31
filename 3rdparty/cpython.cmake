@@ -2,21 +2,25 @@ message("-- ===== <start config cpython> ====")
 
 set(cpython_dir_ ${CMAKE_SOURCE_DIR}/3rdparty/cpython)
 
-# ����vs��Ŀ
+
 include_external_msproject(cpythoncore "${cpython_dir_}/PCbuild/pythoncore.vcxproj")
 set_target_properties(cpythoncore PROPERTIES FOLDER ${third_party_folder}/cpython)
 
-execute_process(
-    COMMAND ${CMAKE_COMMAND} -E echo "staring runging build python......"
-    COMMAND ${cpython_dir_}/PCbuild/build.bat  # �滻Ϊ��� .bat �ļ���
-    COMMAND ${cpython_dir_}/PCbuild/deploy.bat  # �滻Ϊ��� .bat �ļ���
-    WORKING_DIRECTORY ${cpython_dir_}/PCbuild
-    RESULT_VARIABLE result
-)
-
-if(NOT result EQUAL 0)
-    message(FATAL_ERROR "build python failed with exit code ${result}")
+if(NOT DEFINED builed_cpython)
+    execute_process(
+        COMMAND ${CMAKE_COMMAND} -E echo "staring runging build python......"
+        COMMAND ${cpython_dir_}/PCbuild/build.bat  
+        COMMAND ${cpython_dir_}/PCbuild/deploy.bat
+        WORKING_DIRECTORY ${cpython_dir_}/PCbuild
+        RESULT_VARIABLE result
+    )
+    if(NOT result EQUAL 0)
+        message(FATAL_ERROR "build python failed with exit code ${result}")
+    endif()
+    set(builed_cpython TRUE CACHE BOOL "had build cpython")
 endif()
+
+
 
 add_library(pylib SHARED IMPORTED)
 set_property(TARGET pylib PROPERTY INTERFACE_INCLUDE_DIRECTORIES ${cpython_dir_}/build/Include)
