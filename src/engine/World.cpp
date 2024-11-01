@@ -7,6 +7,7 @@ namespace staywalk{
 	}
 	
 	shared_ptr<World> World::load_marry_world(){
+		shared_ptr<Actor> actor = std::make_shared<Actor>("marry");
 		return shared_ptr<World>();
 	}
 
