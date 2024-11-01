@@ -3,6 +3,13 @@
 #include <stdexcept>
 #include <mutex>
 
+#include <stb_image.h>
+
+#include <assimp/Importer.hpp>
+#include <assimp/scene.h>
+#include <assimp/postprocess.h>
+
+
 class snowflake_nonlock
 {
 public:
@@ -104,12 +111,30 @@ private:
     }
 };
 
+namespace staywalk{
+    int64_t Utility::GetRandomId(){
+        using snowflake_t = snowflake<1534832906275L>;
+        static snowflake_t uuid;
+        return uuid.nextid();
+    }
 
-int64_t Utility::GetRandomId()
-{
-    using snowflake_t = snowflake<1534832906275L>;
-    static snowflake_t uuid;
-    return uuid.nextid();
+    void staywalk::Utility::load_model(const string& path){
+        Assimp::Importer importer;
+        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+
+        // check for errors
+        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
+        {
+            cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
+            return;
+        }
+        // retrieve the directory path of the filepath
+        directory = path.substr(0, path.find_last_of('/'));
+
+        // process ASSIMP's root node recursively
+        processNode(scene->mRootNode, scene);
+    }
 }
+
 
 
