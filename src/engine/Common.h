@@ -24,4 +24,6 @@ namespace staywalk
 
 	template<typename T, typename VT>
 	using hashtable = std::unordered_map<T, VT>;
+	
+	using string = std::string;
 }
