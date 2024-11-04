@@ -112,7 +112,6 @@ private:
         return timestamp;
     }
 };
-namespace staywalk {
 
 namespace staywalk{
     const string Utility::kFileExt = "swobj";
@@ -268,23 +267,17 @@ namespace staywalk{
         auto check_r = Utility::check_ofstream(ofs);
         if (check_r) {
             status_table_[dump_id] = Status::Dumping;
+            ObjectType ot = obj->get_type_value();
+            ofs.write(reinterpret_cast<char*>(&ot), sizeof ot);  // dump object type
             obj->dump(ofs);
+            status_table_[dump_id] = Status::Done;
         }
-        // check for errors
-        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
-        {
-            log(LogLevel::Error, fmt::format("Assimp import error: %s", importer.GetErrorString()));
-            return;
-        }
-        // retrieve the directory path of the filepath
-        RMesh result;
-        result.path = path;
-
-        // process ASSIMP's root node recursively
-        process_node(scene->mRootNode, scene);
+        return;
     }
-
-
+    shared_ptr<Object> Loader::laod_in_file(long long id)
+    {
+        return shared_ptr<Object>();
+    }
 }
 
 

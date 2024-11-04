@@ -3,8 +3,7 @@
 
 namespace staywalk{
 	// render object is a opengl object
-	class RTex : public Object {
-	constexpr uint kMaxBoueInfluence = 4;
+	static constexpr uint kMaxBoueInfluence = 4;
 
 	struct Vertex {
 		vec3 position{.0};

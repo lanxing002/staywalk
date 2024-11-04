@@ -1,11 +1,9 @@
 #include "Actor.h"
 #include "Utility.h"
+#include "Engine.h"
 
 namespace staywalk {
 	Actor::Actor() {
-	}
-
-	Actor::~Actor() {
 	}
 
 	void Actor::tick(float delta) {
@@ -26,7 +24,9 @@ namespace staywalk {
 		const auto name_len = name_.size();
 		ofs.write(reinterpret_cast<const char*>(&name_len), sizeof name_len);
 		ofs.write(name_.c_str(), name_len);
-		// TODO: dump shared_ptr for object
+		auto smid = sm_comp_->get_guid();
+		ofs.write(reinterpret_cast<char*>(&smid), sizeof smid);
+		Engine::get_engine()->get_dumper()->dump_in_file(sm_comp_);
 	}
 
 	shared_ptr<Actor> Actor::load(ifstream& ifs){

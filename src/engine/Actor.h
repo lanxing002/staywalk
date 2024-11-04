@@ -7,9 +7,9 @@ namespace staywalk {
 		Actor();
 		Actor(const std::string& name) : name_(name) {}
 
-		~Actor();
-
 		void tick(float delta) override;
+
+		ObjectType get_type_value() override { return ObjectType::Actor; }
 		void set_sm_comp(const shared_ptr<StaticMeshComponent> comp) { sm_comp_ = comp; }
 
 		bool operator==(const Actor& gameobj);
