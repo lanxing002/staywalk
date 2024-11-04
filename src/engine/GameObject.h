@@ -18,11 +18,19 @@ namespace staywalk
 		quat get_rotation() { return rotation_; }
 		void set_rotation(quat v) { rotation_ = v; }
 
+		bool operator==(const GameObject& gameobj);
+
+		void dump(ofstream& ofstrm) override;
+		static shared_ptr<GameObject> load(ifstream& ifs);
+
+	protected:
+		static void placement_load(shared_ptr<GameObject> obj, ifstream& ifs);
+		
 	private:
 		vec3 location_{ 0.0f };
 		vec3 scale_{ 1.0f };
 		quat rotation_{.0f, .0f, .0f, 1.f};
-		mat4 trans_; // model transform matrix
+		//mat4 trans_; // model transform matrix
 	};
 }
 

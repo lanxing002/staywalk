@@ -8,6 +8,7 @@
 #include <vector>
 #include <string>
 #include <memory>
+#include <fstream>
 
 namespace staywalk
 {
@@ -26,4 +27,7 @@ namespace staywalk
 	using hashtable = std::unordered_map<T, VT>;
 	
 	using string = std::string;
+
+	using ifstream = std::ifstream;
+	using ofstream = std::ofstream;
 }
