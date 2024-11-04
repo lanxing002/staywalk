@@ -118,21 +118,46 @@ namespace staywalk{
         return uuid.nextid();
     }
 
+    bool Utility::check_ifstream(const std::ifstream& fstrm){
+        if (!fstrm.is_open()) {
+            // TODO: logger error
+            return false;
+        }
+
+        if (!fstrm.good()) {
+            // TODO: logger error
+            return false;
+        }
+    }
+
+    bool Utility::check_ofstream(const std::ofstream& fstrm)
+    {
+        if (!fstrm.is_open()) {
+            // TODO: logger error
+            return false;
+        }
+
+        if (!fstrm.good()) {
+            // TODO: logger error
+            return false;
+        }
+    }
+
     void staywalk::Utility::load_model(const string& path){
         Assimp::Importer importer;
         const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
-        // check for errors
-        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
-        {
-            cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
-            return;
-        }
-        // retrieve the directory path of the filepath
-        directory = path.substr(0, path.find_last_of('/'));
+        //// check for errors
+        //if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
+        //{
+        //    cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
+        //    return;
+        //}
+        //// retrieve the directory path of the filepath
+        //directory = path.substr(0, path.find_last_of('/'));
 
-        // process ASSIMP's root node recursively
-        processNode(scene->mRootNode, scene);
+        //// process ASSIMP's root node recursively
+        //processNode(scene->mRootNode, scene);
     }
 }
 

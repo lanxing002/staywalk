@@ -7,6 +7,10 @@ namespace staywalk{
 	public:
 		static int64_t GetRandomId();
 
+		static bool check_ifstream(const std::ifstream& fstrm);
+		
+		static bool check_ofstream(const std::ofstream& fstrm);
+
 		static void load_model(const string & path);
 	};
 }
