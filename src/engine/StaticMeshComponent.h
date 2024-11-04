@@ -8,7 +8,7 @@ namespace staywalk{
 		virtual void draw();
 
 	private:
-		vector<shared_ptr<RMesh>> meshs_;
+		vector<PRMesh> meshs_;
 	};
 }
 

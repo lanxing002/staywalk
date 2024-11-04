@@ -1,31 +1,36 @@
 #pragma once
 #include "Common.h"
+
 namespace staywalk {
 	class Object;
 	class Actor;
+	class World;
+
+	using PActor = shared_ptr<Actor>;
+	using PWorld = shared_ptr<World>;
 
 	class World{
 	public:
 		~World();
 
-		static shared_ptr<World> create_empty_world();
+		static PWorld create_empty_world();
 		
 		// test, need to serizalize to scene file
-		static shared_ptr<World> load_marry_world();
+		static PWorld load_marry_world();
 
-		shared_ptr<Actor> create_actor();
+		PActor create_actor();
 
-		void destory_actor(shared_ptr<Actor>& actor);
+		void destory_actor(PActor& actor);
 
-		const vector<shared_ptr<Actor>>& get_all_actors() { return actors_; }
+		const vector<PActor>& get_all_actors() { return actors_; }
 	
 	private:
 		World() {}
 
 	private:
-		vector<shared_ptr<Actor>> actors_;
+		vector<PActor> actors_;
 
-		hashtable<int64_t, shared_ptr<Actor>> id2actors_;
+		hashtable<int64_t, PActor> id2actors_;
 	};
 }
 
