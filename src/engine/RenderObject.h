@@ -4,18 +4,41 @@
 namespace staywalk{
 	// render object is a opengl object
 	class RTex : public Object {
+	constexpr uint kMaxBoueInfluence = 4;
+
+	struct Vertex {
+		vec3 position{.0};
+		vec3 normal{0.0};
+		vec2 texcoords{.0};
+		vec3 tangent{.0};
+		vec3 bitangent{.0};
+		//bone indexes which will influence this vertex
+		
+		array<int, kMaxBoueInfluence> boune_ids;
+		array<float, kMaxBoueInfluence> weights;
+	};
+
+	class RObject : public Object{
+
+	public:
+		uint glid = kGlValidId;  // for opgnel id, -1 is invalid
+		bool valid = false;
+		string path;
+	};
+
+	class RTex : public RObject {
 
 	};
 
-	class RMesh : public Object {
+	class RMesh : public RObject {
 
 	};
 
-	class RShader : public Object {
+	class RShader : public RObject {
 
 	};
 
-	class RProgram : public Object{
+	class RProgram : public RObject {
 
 	};
 
@@ -35,6 +58,11 @@ namespace staywalk{
 	public:
 		const bool editable = false;
 	};
+	using PRObject = shared_ptr<RObject>;
+	using PRTex = shared_ptr<RTex>;
+	using PRMesh = shared_ptr<RMesh>;
+	using PRShader = shared_ptr<RShader>;
+	using PRProgram = shared_ptr<RProgram>;
 }
 
 
