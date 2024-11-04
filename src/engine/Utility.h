@@ -35,6 +35,26 @@ namespace staywalk{
 	private:
 		hashtable<long long, Status> status_table_;
 	};
+
+	class Loader {
+	public:
+		enum class Status {
+			Wait,
+			Loading,
+			Done
+		};
+
+		Loader() {}
+		Loader(const Loader&) = delete;
+		Loader(Loader&&) = delete;
+		Loader& operator=(const Loader&) = delete;
+		Loader& operator=(Loader&&) = delete;
+
+		shared_ptr<Object> laod_in_file(long long id);
+
+	private:
+		hashtable<long long, Status> status_table_;
+	};
 }
 
 
