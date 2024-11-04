@@ -9,6 +9,8 @@ namespace staywalk
 	public:
 		virtual void tick(float delta) = 0;
 
+		virtual ObjectType get_type_value() { return ObjectType::GameObject; }
+
 		vec3 get_location() { return location_; }
 		void set_location(vec3 v) { location_ = v; }
 
