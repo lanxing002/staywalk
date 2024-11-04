@@ -26,6 +26,8 @@ namespace staywalk {
 
 		friend class World;
 	};
+
+	using PActor = shared_ptr<Actor>;
 }
 
 
