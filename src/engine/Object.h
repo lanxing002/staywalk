@@ -2,6 +2,13 @@
 #include "Common.h"
 
 namespace staywalk{
+	enum class ObjectType : uint {
+		Object,
+		GameObject,
+		Actor,
+		StaticMeshComp,
+	};
+
 	class Object{
 	public:
 		Object();
@@ -22,10 +29,16 @@ namespace staywalk{
 
 		virtual void dump(ofstream& ofs);
 		static shared_ptr<Object> load(ifstream& ifs);
+		
+		virtual ObjectType get_type_value() { return ObjectType::Object; }  // must override
+
+		virtual ~Object() = default;
 
 	protected:
 		static void placement_load(shared_ptr<Object> obj, ifstream& ifs);
 		long long guid_;
 	};
+
+
 }
 

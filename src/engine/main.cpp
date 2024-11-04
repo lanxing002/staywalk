@@ -17,16 +17,20 @@
 //const unsigned int SCR_HEIGHT = 600;
 
 #include "World.h"
+#include "Actor.h"
 
 using namespace staywalk;
 
 using namespace staywalk;
 int main()
 {
+	shared_ptr<Actor> a = std::make_shared<Actor>();
+	shared_ptr<Object> o = a;
+
 	auto world = World::load_marry_world();
 //
 //    // glfw: initialize and configure
-//    // ------------------------------
+//    // ------------------------------GameObject
 //    glfwInit();
 //    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
 //    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 3);
