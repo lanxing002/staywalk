@@ -9,7 +9,6 @@
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
 
-
 class snowflake_nonlock
 {
 public:
@@ -112,6 +111,8 @@ private:
 };
 
 namespace staywalk{
+    const string Utility::kFileExt = "swobj";
+
     int64_t Utility::GetRandomId(){
         using snowflake_t = snowflake<1534832906275L>;
         static snowflake_t uuid;
@@ -128,6 +129,7 @@ namespace staywalk{
             // TODO: logger error
             return false;
         }
+        return true;
     }
 
     bool Utility::check_ofstream(const std::ofstream& fstrm)
@@ -141,6 +143,7 @@ namespace staywalk{
             // TODO: logger error
             return false;
         }
+        return true;
     }
 
     void staywalk::Utility::load_model(const string& path){
@@ -158,6 +161,23 @@ namespace staywalk{
 
         //// process ASSIMP's root node recursively
         //processNode(scene->mRootNode, scene);
+    }
+
+    void Dumper::dump_in_file(shared_ptr<Object> obj){
+        const long long dump_id = obj->get_guid();
+        auto it = status_table_.find(dump_id);
+        if (it != status_table_.end()){
+            if (it->second == Status::Dumping || it->second == Status::Done)
+                return;
+        }
+        status_table_[dump_id] = Status::Wait;
+        std::string name = std::to_string(dump_id);
+        ofstream ofs(name + Utility::kFileExt, std::ios::binary | std::ios::trunc);
+        auto check_r = Utility::check_ofstream(ofs);
+        if (check_r) {
+            status_table_[dump_id] = Status::Dumping;
+            obj->dump(ofs);
+        }
     }
 }
 
