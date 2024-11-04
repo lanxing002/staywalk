@@ -9,9 +9,11 @@
 #include <string>
 #include <memory>
 #include <fstream>
+#include <array>
 
 namespace staywalk
 {
+	using vec2 = glm::vec2;
 	using vec3 = glm::vec3;
 	using vec4 = glm::vec4;
 	using mat4 = glm::mat4;
@@ -25,9 +27,15 @@ namespace staywalk
 
 	template<typename T, typename VT>
 	using hashtable = std::unordered_map<T, VT>;
+
+	template<typename T, std::size_t S>
+	using array = std::array<T, S>;
 	
 	using string = std::string;
 
 	using ifstream = std::ifstream;
 	using ofstream = std::ofstream;
+	using uint = unsigned int;
+
+	constexpr uint kGlValidId = -1;
 }

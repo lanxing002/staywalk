@@ -1,24 +1,26 @@
 #include "World.h"
 #include "Actor.h"
+#include "Utility.h"
 
 namespace staywalk{
-	shared_ptr<World> World::create_empty_world(){
+	PWorld World::create_empty_world(){
 		return shared_ptr<World>();
 	}
 	
-	shared_ptr<World> World::load_marry_world(){
+	PWorld World::load_marry_world(){
 		shared_ptr<Actor> actor = std::make_shared<Actor>("marry");
+		Utility::load_model(R"(C:\Users\lanxi\Documents\lanxing\codes\ErJiu\games202-hw\hw1\homework1\assets\mary\Marry.obj)");
 		return shared_ptr<World>();
 	}
 
 	World::~World(){
 	}
 
-	shared_ptr<Actor> World::create_actor(){
+	PActor World::create_actor(){
 		return shared_ptr<Actor>();
 	}
 
-	void World::destory_actor(shared_ptr<Actor>& actor){
+	void World::destory_actor(PActor& actor){
 	}
 }
 
