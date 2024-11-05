@@ -2,11 +2,14 @@
 #include "Common.h"
 
 namespace staywalk{
+	class Dumper;
+	class Loader;
+
 	enum class ObjectType : uint {
 		Object,
 		GameObject,
 		Actor,
-		StaticMeshComp,
+		StaticMeshComponent,
 		Camera,
 	};
 
@@ -28,8 +31,8 @@ namespace staywalk{
 			return guid_ == rhs.guid_;
 		}
 
-		virtual void dump(ofstream& ofs);
-		static shared_ptr<Object> load(ifstream& ifs);
+		virtual void dump(ofstream& ofs, Dumper& dumper);
+		static shared_ptr<Object> load(ifstream& ifs, Loader& loader);
 		
 		virtual ObjectType get_type_value() { return ObjectType::Object; }  // must override
 

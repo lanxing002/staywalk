@@ -267,14 +267,40 @@ namespace staywalk{
         ofstream ofs(world_file, std::ios::out | std::ios::binary | std::ios::trunc);
         auto check_r = Utility::check_ofstream(ofs);
         auto actors = world->get_all_actors();
-        size_t num = actors.size();
-        ofs.write(reinterpret_cast<char*>(&num), sizeof num);
+        auto dumper = Dumper(Utility::get_objects_dir());
+        Utility::write_to_stream(actors.size(), ofs);
         for (auto actor : actors) {
             if (nullptr == actor) continue;
             idtype dumpid = actor->get_guid();
-            ofs.write(reinterpret_cast<const char*>(&dumpid), sizeof dumpid);
+            Utility::write_to_stream(actor->get_guid(), ofs);
+            dumper.dump_in_file(actor);
         }
+        dumper.clear();
         ofs.close();
+    }
+
+    shared_ptr<World> Utility::load_world(const std::string& name)
+    {
+        auto world_file = Utility::get_worlds_dir() / (name + Utility::kWorldExt);
+        if (!fs::exists(world_file)) {
+            return nullptr;
+            //log(LogLevel::Error, fmt::format("cannot open world file: " /*world_file.c_str()*/));
+        }
+
+        ifstream ifs(world_file, std::ios::in | std::ios::binary);
+        auto check_r = Utility::check_ifstream(ifs);
+        auto loader = Loader(Utility::get_objects_dir());
+        vector<idtype> actorids;
+        if (check_r) {
+            size_t num = 0;
+            for (size_t i = 0; i < num; i++) {
+                idtype id;
+                actorids.push_back(id);
+            }
+        }
+
+
+        return nullptr;
     }
 
     fs::path Utility::get_resource_dir() {
@@ -310,7 +336,6 @@ namespace staywalk{
         return tmp_path;
     }
 
-
     Dumper::Dumper(fs::path dir)
         : target_path_(dir)
     {
@@ -336,9 +361,8 @@ namespace staywalk{
         auto check_r = Utility::check_ofstream(ofs);
         if (check_r) {
             status_table_[dump_id] = Status::Dumping;
-            ObjectType ot = obj->get_type_value();
-            ofs.write(reinterpret_cast<char*>(&ot), sizeof ot);  // dump object type
-            obj->dump(ofs);
+            Utility::write_to_stream(obj->get_type_value(), ofs);
+            obj->dump(ofs, *this);
             status_table_[dump_id] = Status::Done;
         }
         return;
@@ -358,38 +382,42 @@ namespace staywalk{
         return true;
     }
 
-    shared_ptr<Object> Loader::laod_in_file(idtype id){
+    shared_ptr<Object> Loader::load_in_file(idtype id){
+        ObjectType ot;
+        return load_in_file(id, ot);
+    }
+
+    shared_ptr<Object> Loader::load_in_file(idtype id, ObjectType& ot){
         auto it = status_table_.find(id);
         if (it != status_table_.end()) {
             assert(it->second != Status::Loading);
             if (it->second == Status::Done)
-                return nullptr; //TODO: FIND in the world
+                return ref_cache_.find(id)->second;
         }
+
         status_table_[id] = Status::Wait;
-        std::string name = std::to_string(id) + Utility::kObjExt;
-        ifstream ifs(name, std::ios::in | std::ios::binary);
+        fs::path file_name = Utility::get_objects_dir() / (std::to_string(id) + Utility::kObjExt);
+        ifstream ifs(file_name, std::ios::in | std::ios::binary);
         auto check_r = Utility::check_ifstream(ifs);
         if (check_r) {
             status_table_[id] = Status::Loading;
-            ObjectType ot;
-            ifs.read(reinterpret_cast<char*>(&ot), sizeof ot);
 
             switch (ot)
             {
             case staywalk::ObjectType::Object:
-                return Object::load(ifs);
+                return Object::load(ifs, *this);
                 break;
             case staywalk::ObjectType::GameObject:
-                return GameObject::load(ifs);
+                return GameObject::load(ifs, *this);
                 break;
             case staywalk::ObjectType::Actor:
-                return Actor::load(ifs);
+                return Actor::load(ifs, *this);
                 break;
-            case staywalk::ObjectType::StaticMeshComp:
-                return StaticMeshComponent::load(ifs);
+            case staywalk::ObjectType::StaticMeshComponent:
+                return StaticMeshComponent::load(ifs, *this);
                 break;
             case staywalk::ObjectType::Camera:
-                return Camera::load(ifs);
+                return Camera::load(ifs, *this);
                 break;
             default:
                 break;
