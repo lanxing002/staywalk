@@ -10,9 +10,10 @@ namespace staywalk {
 	}
 
 	bool Actor::operator==(const Actor& rhs) {
+		if (this == &rhs) return true;
 		if (!GameObject::operator==(rhs)) return false;
 		if (name_ != rhs.name_) return false;
-
+		if (Utility::euqals(sm_comp_, rhs.sm_comp_)) return false;
 		return true;
 	}
 
@@ -24,9 +25,14 @@ namespace staywalk {
 		const auto name_len = name_.size();
 		ofs.write(reinterpret_cast<const char*>(&name_len), sizeof name_len);
 		ofs.write(name_.c_str(), name_len);
-		auto smid = sm_comp_->get_guid();
-		ofs.write(reinterpret_cast<char*>(&smid), sizeof smid);
-		Engine::get_engine()->get_dumper()->dump_in_file(sm_comp_);
+		if(sm_comp_){
+			auto smid = sm_comp_->get_guid();
+			ofs.write(reinterpret_cast<char*>(&smid), sizeof smid);
+			Engine::get_engine()->get_dumper()->dump_in_file(sm_comp_);
+		}
+		else {
+			ofs.write(reinterpret_cast<const char*>(&kInvalidId), sizeof kInvalidId);
+		}
 	}
 
 	shared_ptr<Actor> Actor::load(ifstream& ifs){
