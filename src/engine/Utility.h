@@ -13,7 +13,7 @@ namespace staywalk{
 		static const string kObjExt;
 		static const string kWorldExt;
 
-		static idtype GetRandomId();
+		static idtype get_random_id();
 
 		static bool check_ifstream(const std::ifstream& fstrm);
 		
@@ -127,7 +127,7 @@ namespace staywalk {
 	T Utility::load_from_stream(ifstream& ifs) {
 		static_assert(std::is_trivial<T>::value && "must be trivial type");
 		T value;
-		ifs.read(reinterpret_cast<const char*>(&value), sizeof value);
+		ifs.read(reinterpret_cast<char*>(&value), sizeof value);
 		return value;
 	}
 
