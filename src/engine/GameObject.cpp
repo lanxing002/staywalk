@@ -20,11 +20,11 @@ namespace staywalk {
 		ofstrm.write(reinterpret_cast<char*>(&rotation_), sizeof rotation_);
 	}
 
-	//shared_ptr<GameObject> GameObject::load(ifstream& ifs){
-	//	auto result = std::make_shared<GameObject>();
-	//	GameObject::placement_load(result, ifs);
-	//	return result;
-	//}
+	shared_ptr<GameObject> GameObject::load(ifstream& ifs){
+		auto result = std::make_shared<GameObject>();
+		GameObject::placement_load(result, ifs);
+		return result;
+	}
 
 	void GameObject::placement_load(shared_ptr<GameObject> obj, ifstream& ifs){
 		Object::placement_load(obj, ifs);
