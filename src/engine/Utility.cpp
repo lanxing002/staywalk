@@ -75,7 +75,7 @@ public:
         datacenterid_ = datacenterid;
     }
 
-    int64_t nextid()
+    staywalk::idtype nextid()
     {
         std::lock_guard<lock_type> lock(lock_);
         //std::chrono::steady_clock  cannot decrease as physical time moves forward
@@ -211,7 +211,7 @@ namespace staywalk{
     }
 
     
-    int64_t Utility::GetRandomId(){
+    idtype Utility::get_random_id(){
         using snowflake_t = snowflake<1534832906275L>;
         static snowflake_t uuid;
         return uuid.nextid();
@@ -290,17 +290,34 @@ namespace staywalk{
         ifstream ifs(world_file, std::ios::in | std::ios::binary);
         auto check_r = Utility::check_ifstream(ifs);
         auto loader = Loader(Utility::get_objects_dir());
-        vector<idtype> actorids;
+        vector<idtype> objids;
         if (check_r) {
-            size_t num = 0;
+            size_t num = Utility::load_from_stream<size_t>(ifs);
             for (size_t i = 0; i < num; i++) {
-                idtype id;
-                actorids.push_back(id);
+                idtype id = Utility::load_from_stream<idtype>(ifs);
+                objids.push_back(id);
             }
         }
 
+        shared_ptr<World> world = std::make_shared<World>();
+        for (auto id : objids) {
+            ObjectType ot;
+            auto obj = loader.load_in_file(id, ot);
 
-        return nullptr;
+            switch (ot)
+            {
+            case staywalk::ObjectType::Actor:
+                world->add_actor(std::dynamic_pointer_cast<Actor>(obj));
+                break;
+            case staywalk::ObjectType::Camera:
+                break;
+            default:
+                break;
+            }
+        }
+
+        world->set_name(name);
+        return world;
     }
 
     fs::path Utility::get_resource_dir() {
@@ -399,32 +416,35 @@ namespace staywalk{
         fs::path file_name = Utility::get_objects_dir() / (std::to_string(id) + Utility::kObjExt);
         ifstream ifs(file_name, std::ios::in | std::ios::binary);
         auto check_r = Utility::check_ifstream(ifs);
+        shared_ptr<Object> result = nullptr;
+        status_table_[id] = Status::Loading;
         if (check_r) {
-            status_table_[id] = Status::Loading;
-
+            ot = Utility::load_from_stream<ObjectType>(ifs);
             switch (ot)
             {
             case staywalk::ObjectType::Object:
-                return Object::load(ifs, *this);
+                result = Object::load(ifs, *this);
                 break;
             case staywalk::ObjectType::GameObject:
-                return GameObject::load(ifs, *this);
+                result = GameObject::load(ifs, *this);
                 break;
             case staywalk::ObjectType::Actor:
-                return Actor::load(ifs, *this);
+                result = Actor::load(ifs, *this);
                 break;
             case staywalk::ObjectType::StaticMeshComponent:
-                return StaticMeshComponent::load(ifs, *this);
+                result = StaticMeshComponent::load(ifs, *this);
                 break;
             case staywalk::ObjectType::Camera:
-                return Camera::load(ifs, *this);
+                result = Camera::load(ifs, *this);
                 break;
             default:
                 break;
             }
         }
         //assert(false && "cannot find right object type for this object");
-        return shared_ptr<Object>();
+        status_table_[id] = Status::Done;
+        ref_cache_[id] = result;
+        return result;
     }
 }
 

@@ -21,7 +21,6 @@ namespace staywalk {
 		static void placement_load(shared_ptr<Actor> obj, ifstream& ifs, Loader& loader);
 
 	private:
-		std::string name_{"none"};
 		shared_ptr<StaticMeshComponent> sm_comp_{ nullptr };
 
 		friend class World;

@@ -41,6 +41,7 @@ namespace staywalk{
 	protected:
 		static void placement_load(shared_ptr<Object> obj, ifstream& ifs);
 		idtype guid_;
+		string name_{"default"};
 	};
 
 

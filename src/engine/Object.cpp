@@ -2,7 +2,7 @@
 #include "Utility.h"
 namespace staywalk{
 	Object::Object() 
-		:guid_(Utility::GetRandomId()){
+		:guid_(Utility::get_random_id()){
 	}
 
 	Object::Object(idtype load_id)
@@ -12,6 +12,7 @@ namespace staywalk{
 	void Object::dump(ofstream& ofs, Dumper& dumper){
 		if (!Utility::check_ofstream(ofs)) return;
 		Utility::write_to_stream(guid_, ofs);
+		Utility::write_to_stream(name_, ofs);
 	}
 
 	shared_ptr<Object> Object::load(ifstream& ifs, Loader& loader){
