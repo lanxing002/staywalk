@@ -25,15 +25,24 @@ using namespace staywalk;
 using namespace staywalk;
 int main()
 {
-	PActor a = std::make_shared<Actor>();
+	PActor a = std::make_shared<Actor>("avatar");
+	a->set_location(glm::vec3(100, 200, 400));
+	a->set_rotation(glm::quat(10.0, 20.0, 30.0, 1.0));
+	a->set_scale(glm::vec3(20.0, 30.0, 1.0));
+
 	shared_ptr<StaticMeshComponent> sm = std::make_shared<StaticMeshComponent>();
 	a->set_sm_comp(sm);
 
-	shared_ptr<World> w = World::create_empty_world("myworld");
+	shared_ptr<World> w = World::create_empty_world("test-world");
 	w->add_actor(a);
 	Utility::dump_world(w);
 
+	auto loaded_world =Utility::load_world("test-world");
+	auto actors = loaded_world->get_all_actors();
+	assert(actors.size() == 1);
+	Utility::euqals(a, actors[0]);
 
+	return 0 ;
 
 	//auto world = World::load_marry_world();
 //
