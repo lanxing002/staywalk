@@ -5,7 +5,7 @@ namespace staywalk{
 		:guid_(Utility::GetRandomId()){
 	}
 
-	Object::Object(long long load_id)
+	Object::Object(idtype load_id)
 		: guid_(load_id){
 	}
 
@@ -24,7 +24,7 @@ namespace staywalk{
 	void Object::placement_load(shared_ptr<Object> obj, ifstream& ifs){
 		if (!Utility::check_ifstream(ifs)) return;
 
-		long long rid;
+		idtype rid;
 		ifs.read(reinterpret_cast<char*>(&rid), sizeof guid_);
 		obj->guid_ = rid;
 	}

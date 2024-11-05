@@ -20,7 +20,7 @@ namespace staywalk{
 	class RObject : public Object{
 
 	public:
-		uint glid = kGlValidId;  // for opgnel id, -1 is invalid
+		uint glid = kGlInvalidId;  // for opgnel id, -1 is invalid
 		bool valid = false;
 		string path;
 	};
