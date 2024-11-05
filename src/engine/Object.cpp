@@ -9,12 +9,12 @@ namespace staywalk{
 		: guid_(load_id){
 	}
 
-	void Object::dump(ofstream& ofs){
+	void Object::dump(ofstream& ofs, Dumper& dumper){
 		if (!Utility::check_ofstream(ofs)) return;
-		ofs.write(reinterpret_cast<char*>(&guid_), sizeof guid_);
+		Utility::write_to_stream(guid_, ofs);
 	}
 
-	shared_ptr<Object> Object::load(ifstream& ifs){
+	shared_ptr<Object> Object::load(ifstream& ifs, Loader& loader){
 		if (!Utility::check_ifstream(ifs)) return nullptr;
 		auto result = std::make_shared<Object>();
 		result->placement_load(result, ifs);

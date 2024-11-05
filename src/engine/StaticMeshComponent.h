@@ -6,7 +6,7 @@ namespace staywalk{
 	class StaticMeshComponent : public GameComponent{
 	public:
 		virtual void draw();
-		virtual ObjectType get_type_value() { return ObjectType::StaticMeshComp; }
+		virtual ObjectType get_type_value() { return ObjectType::StaticMeshComponent; }
 
 	private:
 		vector<PRMesh> meshs_;

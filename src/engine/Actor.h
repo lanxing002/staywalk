@@ -14,11 +14,11 @@ namespace staywalk {
 
 		bool operator==(const Actor& gameobj);
 
-		void dump(ofstream& ofstrm) override;
-		static shared_ptr<Actor> load(ifstream& ifs);
+		void dump(ofstream& ofs, Dumper& dumper) override;
+		static shared_ptr<Actor> load(ifstream& ifs, Loader& loader);
 
 	protected:
-		static void placement_load(shared_ptr<Actor> obj, ifstream& ifs);
+		static void placement_load(shared_ptr<Actor> obj, ifstream& ifs, Loader& loader);
 
 	private:
 		std::string name_{"none"};

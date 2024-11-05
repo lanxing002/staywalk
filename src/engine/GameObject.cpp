@@ -11,16 +11,16 @@ namespace staywalk {
 		return true;
 	}
 
-	void GameObject::dump(ofstream& ofstrm){
-		Object::dump(ofstrm);
-		auto check_r = Utility::check_ofstream(ofstrm);
+	void GameObject::dump(ofstream& ofs, Dumper& dumper){
+		Object::dump(ofs, dumper);
+		auto check_r = Utility::check_ofstream(ofs);
 		assert(check_r);
-		ofstrm.write(reinterpret_cast<char*>(&location_), sizeof location_);
-		ofstrm.write(reinterpret_cast<char*>(&scale_), sizeof scale_);
-		ofstrm.write(reinterpret_cast<char*>(&rotation_), sizeof rotation_);
+		Utility::write_to_stream(location_, ofs);
+		Utility::write_to_stream(scale_, ofs);
+		Utility::write_to_stream(rotation_, ofs);
 	}
 
-	shared_ptr<GameObject> GameObject::load(ifstream& ifs){
+	shared_ptr<GameObject> GameObject::load(ifstream& ifs, Loader& loader){
 		auto result = std::make_shared<GameObject>();
 		GameObject::placement_load(result, ifs);
 		return result;

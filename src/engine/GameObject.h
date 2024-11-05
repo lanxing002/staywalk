@@ -22,8 +22,8 @@ namespace staywalk
 
 		bool operator==(const GameObject& gameobj);
 
-		void dump(ofstream& ofstrm) override;
-		static shared_ptr<GameObject> load(ifstream& ifs);
+		void dump(ofstream& ofs, Dumper& dumper) override;
+		static shared_ptr<GameObject> load(ifstream& ifs, Loader& loader);
 
 	protected:
 		static void placement_load(shared_ptr<GameObject> obj, ifstream& ifs);

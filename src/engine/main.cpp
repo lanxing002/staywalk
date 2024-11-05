@@ -26,16 +26,15 @@ using namespace staywalk;
 int main()
 {
 	PActor a = std::make_shared<Actor>();
-	PActor b = std::make_shared<Actor>();
-	//Utility::euqals(a, b);
-	Utility::euqals(a, a);
+	shared_ptr<StaticMeshComponent> sm = std::make_shared<StaticMeshComponent>();
+	a->set_sm_comp(sm);
 
 	shared_ptr<World> w = World::create_empty_world("myworld");
-	for(int i = 0; i<5; i++){
-		shared_ptr<Actor> a = std::make_shared<Actor>();
-		w->add_actor(a);
-	}
+	w->add_actor(a);
 	Utility::dump_world(w);
+
+
+
 	//auto world = World::load_marry_world();
 //
 //    // glfw: initialize and configure

@@ -24,4 +24,6 @@ set_target_properties(engine PROPERTIES
 file(GLOB SRC_FILES "${engine_src_dir}/*.cpp" "${engine_src_dir}/*.h")
 target_sources(engine PRIVATE ${SRC_FILES})
 
-
+if(MSVC)
+    target_compile_options(engine PRIVATE "/utf-8")
+endif()
