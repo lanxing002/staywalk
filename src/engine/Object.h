@@ -16,6 +16,9 @@ namespace staywalk{
 	class Object{
 	public:
 		Object();
+
+		Object(const string& name) : name_(name) {}
+
 		Object(idtype load_id);
 
 		Object(const Object&) = delete;
@@ -30,6 +33,9 @@ namespace staywalk{
 		bool operator==(const Object& rhs) {
 			return guid_ == rhs.guid_;
 		}
+
+		void set_name(const string& str) { name_ = str; }
+		string get_name() { return name_; }
 
 		virtual void dump(ofstream& ofs, Dumper& dumper);
 		static shared_ptr<Object> load(ifstream& ifs, Loader& loader);
