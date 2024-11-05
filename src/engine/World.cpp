@@ -3,8 +3,9 @@
 #include "Utility.h"
 
 namespace staywalk{
-	PWorld World::create_empty_world(){
-		return shared_ptr<World>();
+	PWorld World::create_empty_world(const string& world_name){
+		auto world = std::make_shared<World>();
+		return world;
 	}
 	
 	PWorld World::load_marry_world(){
@@ -13,14 +14,25 @@ namespace staywalk{
 		return shared_ptr<World>();
 	}
 
+	void World::add_actor(shared_ptr<Actor> actor){
+		id2actors_[actor->get_guid()] = actors_.size();
+		actors_.push_back(actor);
+	}
+
+	void World::remove_actor(shared_ptr<Actor> actor){
+		auto it = id2actors_.find(actor->get_guid());
+		if (it != id2actors_.end()) {
+			actors_.erase(actors_.begin() + it->first);
+			id2actors_.erase(it);
+		}
+	}
+
+	void World::remove_actor(idtype id){
+	}
+
 	World::~World(){
 	}
 
-	PActor World::create_actor(){
-		return shared_ptr<Actor>();
-	}
 
-	void World::destory_actor(PActor& actor){
-	}
 }
 

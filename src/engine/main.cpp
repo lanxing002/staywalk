@@ -18,16 +18,25 @@
 
 #include "World.h"
 #include "Actor.h"
+#include "Utility.h"
 
 using namespace staywalk;
 
 using namespace staywalk;
 int main()
 {
-	shared_ptr<Actor> a = std::make_shared<Actor>();
-	shared_ptr<Object> o = a;
+	PActor a = std::make_shared<Actor>();
+	PActor b = std::make_shared<Actor>();
+	//Utility::euqals(a, b);
+	Utility::euqals(a, a);
 
-	auto world = World::load_marry_world();
+	shared_ptr<World> w = World::create_empty_world("myworld");
+	for(int i = 0; i<5; i++){
+		shared_ptr<Actor> a = std::make_shared<Actor>();
+		w->add_actor(a);
+	}
+	Utility::dump_world(w);
+	//auto world = World::load_marry_world();
 //
 //    // glfw: initialize and configure
 //    // ------------------------------GameObject

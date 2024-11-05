@@ -1,11 +1,17 @@
 #include "Utility.h"
+#include "GameObject.h"
+#include "GameComponent.h"
+#include "Actor.h"
+#include "Camera.h"
 #include "Logger.h"
 #include "RenderObject.h"
+#include "World.h"
 
 #include <stb_image.h>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
 #include <assimp/postprocess.h>
+#include <filesystem>
 
 #include <chrono>
 #include <stdexcept>
@@ -114,7 +120,8 @@ private:
 };
 
 namespace staywalk{
-    const string Utility::kFileExt = "swobj";
+    const string Utility::kObjExt = ".swobj";
+    const string Utility::kWorldExt = ".sworld";
 
     // checks all material textures of a given type and loads the textures if they're not loaded yet.
     // the required info is returned as a Texture struct.
@@ -212,12 +219,12 @@ namespace staywalk{
 
     bool Utility::check_ifstream(const std::ifstream& fstrm){
         if (!fstrm.is_open()) {
-            // TODO: logger error
+            log(LogLevel::Error, fmt::format("cannot open file"));
             return false;
         }
 
         if (!fstrm.good()) {
-            // TODO: logger error
+            log(LogLevel::Error, fmt::format("file stream in wrong status"));
             return false;
         }
         return true;
@@ -226,12 +233,12 @@ namespace staywalk{
     bool Utility::check_ofstream(const std::ofstream& fstrm)
     {
         if (!fstrm.is_open()) {
-            // TODO: logger error
+            log(LogLevel::Error, fmt::format("cannot open file stream"));
             return false;
         }
 
         if (!fstrm.good()) {
-            // TODO: logger error
+            log(LogLevel::Error, fmt::format("file stream in wrong status"));
             return false;
         }
         return true;
@@ -254,16 +261,78 @@ namespace staywalk{
         //processNode(scene->mRootNode, scene);
     }
 
+    void Utility::dump_world(shared_ptr<World> world){
+        if (nullptr == world) return;
+        auto world_file = Utility::get_worlds_dir() / (world->get_name() + Utility::kWorldExt);
+        ofstream ofs(world_file, std::ios::out | std::ios::binary | std::ios::trunc);
+        auto check_r = Utility::check_ofstream(ofs);
+        auto actors = world->get_all_actors();
+        size_t num = actors.size();
+        ofs.write(reinterpret_cast<char*>(&num), sizeof num);
+        for (auto actor : actors) {
+            if (nullptr == actor) continue;
+            idtype dumpid = actor->get_guid();
+            ofs.write(reinterpret_cast<const char*>(&dumpid), sizeof dumpid);
+        }
+        ofs.close();
+    }
+
+    fs::path Utility::get_resource_dir() {
+        return fs::path("resource");
+    }
+
+    fs::path Utility::get_shaders_dir() {
+        return fs::path("resource/shaders");
+    }
+
+    fs::path Utility::get_textures_dir() {
+        return fs::path("resource/textures");
+    }
+
+    fs::path Utility::get_objects_dir() {
+        return fs::path("resource/objects");
+    }
+
+    fs::path Utility::get_worlds_dir()
+    {
+        return fs::path("resource/worlds");
+    }
+
+    fs::path Utility::create_temp_dir() {
+        using snowflake_t = snowflake<153406275L>;
+        static snowflake_t uuid;
+
+        fs::path tmp_path = fs::temp_directory_path() / std::to_string(uuid.nextid());
+        while (fs::exists(tmp_path)){
+            tmp_path = fs::temp_directory_path() / std::to_string(uuid.nextid());
+        }
+        fs::create_directory(tmp_path);
+        return tmp_path;
+    }
+
+
+    Dumper::Dumper(fs::path dir)
+        : target_path_(dir)
+    {
+        tmp_path_ = Utility::create_temp_dir();
+        if (!fs::exists(target_path_)) {
+            log(LogLevel::Error, fmt::format("dumper target folder not exists:"));
+            assert(false);
+        }
+    }
+
     void Dumper::dump_in_file(shared_ptr<Object> obj){
-        const long long dump_id = obj->get_guid();
+        const idtype dump_id = obj->get_guid();
         auto it = status_table_.find(dump_id);
         if (it != status_table_.end()){
-            if (it->second == Status::Dumping || it->second == Status::Done)
+            assert(it->second != Status::Dumping);
+            if (it->second == Status::Done)
                 return;
         }
         status_table_[dump_id] = Status::Wait;
-        std::string name = std::to_string(dump_id);
-        ofstream ofs(name + Utility::kFileExt, std::ios::binary | std::ios::trunc);
+        fs::path name = tmp_path_ /(std::to_string(dump_id) + Utility::kObjExt);
+        assert(!fs::exists(name));  // must be a new file 
+        ofstream ofs(name, std::ios::out | std::ios::binary | std::ios::trunc);
         auto check_r = Utility::check_ofstream(ofs);
         if (check_r) {
             status_table_[dump_id] = Status::Dumping;
@@ -274,8 +343,59 @@ namespace staywalk{
         }
         return;
     }
-    shared_ptr<Object> Loader::laod_in_file(long long id)
+
+    bool Dumper::clear()
     {
+        for (auto it = status_table_.begin(); it != status_table_.end(); it++) {
+            if (it->second != Status::Done) {
+                log(LogLevel::Error, fmt::format("dump not finished yet : {}", it->first));
+                assert(false);
+            }
+        }
+        const auto copyOptions = fs::copy_options::update_existing;
+        fs::copy(tmp_path_, target_path_, copyOptions);  // no recursive
+        fs::remove_all(tmp_path_);
+        return true;
+    }
+
+    shared_ptr<Object> Loader::laod_in_file(idtype id){
+        auto it = status_table_.find(id);
+        if (it != status_table_.end()) {
+            assert(it->second != Status::Loading);
+            if (it->second == Status::Done)
+                return nullptr; //TODO: FIND in the world
+        }
+        status_table_[id] = Status::Wait;
+        std::string name = std::to_string(id) + Utility::kObjExt;
+        ifstream ifs(name, std::ios::in | std::ios::binary);
+        auto check_r = Utility::check_ifstream(ifs);
+        if (check_r) {
+            status_table_[id] = Status::Loading;
+            ObjectType ot;
+            ifs.read(reinterpret_cast<char*>(&ot), sizeof ot);
+
+            switch (ot)
+            {
+            case staywalk::ObjectType::Object:
+                return Object::load(ifs);
+                break;
+            case staywalk::ObjectType::GameObject:
+                return GameObject::load(ifs);
+                break;
+            case staywalk::ObjectType::Actor:
+                return Actor::load(ifs);
+                break;
+            case staywalk::ObjectType::StaticMeshComp:
+                return StaticMeshComponent::load(ifs);
+                break;
+            case staywalk::ObjectType::Camera:
+                return Camera::load(ifs);
+                break;
+            default:
+                break;
+            }
+        }
+        //assert(false && "cannot find right object type for this object");
         return shared_ptr<Object>();
     }
 }

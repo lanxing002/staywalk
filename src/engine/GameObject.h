@@ -7,7 +7,7 @@ namespace staywalk
 	class GameObject : public Object
 	{
 	public:
-		virtual void tick(float delta) = 0;
+		virtual void tick(float delta) {}
 
 		virtual ObjectType get_type_value() { return ObjectType::GameObject; }
 
