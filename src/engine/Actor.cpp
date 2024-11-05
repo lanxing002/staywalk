@@ -17,31 +17,28 @@ namespace staywalk {
 		return true;
 	}
 
-	void Actor::dump(ofstream& ofs){
-		GameObject::dump(ofs);
+	void Actor::dump(ofstream& ofs, Dumper& dumper){
+		GameObject::dump(ofs, dumper);
 		auto check_r = Utility::check_ofstream(ofs);
 		assert(check_r);
 
-		const auto name_len = name_.size();
-		ofs.write(reinterpret_cast<const char*>(&name_len), sizeof name_len);
-		ofs.write(name_.c_str(), name_len);
+		Utility::write_to_stream(name_, ofs);
 		if(sm_comp_){
-			auto smid = sm_comp_->get_guid();
-			ofs.write(reinterpret_cast<char*>(&smid), sizeof smid);
-			Engine::get_engine()->get_dumper()->dump_in_file(sm_comp_);
+			Utility::write_to_stream(sm_comp_->get_guid(), ofs);
+			dumper.dump_in_file(sm_comp_);
 		}
 		else {
-			ofs.write(reinterpret_cast<const char*>(&kInvalidId), sizeof kInvalidId);
+			Utility::write_to_stream(kInvalidId, ofs);
 		}
 	}
 
-	shared_ptr<Actor> Actor::load(ifstream& ifs){
+	shared_ptr<Actor> Actor::load(ifstream& ifs, Loader& loader){
 		auto result = std::make_shared<Actor>();
-		Actor::placement_load(result, ifs);
+		Actor::placement_load(result, ifs, loader);
 		return result;
 	}
 
-	void Actor::placement_load(shared_ptr<Actor> obj, ifstream& ifs){
+	void Actor::placement_load(shared_ptr<Actor> obj, ifstream& ifs, Loader& loader){
 		GameObject::placement_load(obj, ifs);
 		auto check_r = Utility::check_ifstream(ifs);
 		assert(check_r);
@@ -49,8 +46,16 @@ namespace staywalk {
 		decltype(obj->name_.size()) name_len;
 		ifs.read(reinterpret_cast<char*>(&name_len), sizeof name_len);
 		obj->name_.resize(name_len);
-
 		ifs.read((obj->name_.data()), name_len);
+
+		idtype sm_comp_id = kInvalidId;
+		ifs.read(reinterpret_cast<char*>(&sm_comp_id), sizeof sm_comp_id);
+		if (sm_comp_id != kInvalidId) {
+			ObjectType ot;
+			obj->sm_comp_ = std::dynamic_pointer_cast<StaticMeshComponent>(loader.load_in_file(sm_comp_id, ot));
+			assert(ot == ObjectType::StaticMeshComponent);
+		}
+
 		return;
 	}
 }
