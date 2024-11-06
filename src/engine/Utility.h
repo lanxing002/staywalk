@@ -55,6 +55,10 @@ namespace staywalk{
 		template<>
 		static string load_from_stream(ifstream& ifs);
 
+		static void write_obj_to_stream(const shared_ptr<Object>& data, ofstream& ofs, Dumper& dumper);
+
+		static shared_ptr<Object> load_obj_from_stream(ifstream& ifs, Loader& loader);
+
 		template<typename Obj>
 		static bool euqals(shared_ptr<Obj> lhs, shared_ptr<Obj> rhs);
 
@@ -77,7 +81,7 @@ namespace staywalk{
 		Dumper& operator=(const Dumper&) = delete;
 		Dumper& operator=(Dumper&&) = delete;
 
-		void dump_in_file(shared_ptr<Object> obj);
+		void dump_obj_in_file(shared_ptr<Object> obj);
 
 		bool clear();
 
@@ -100,6 +104,7 @@ namespace staywalk{
 		Loader(Loader&&) = delete;
 		Loader& operator=(const Loader&) = delete;
 		Loader& operator=(Loader&&) = delete;
+
 
 		shared_ptr<Object> load_in_file(idtype id);
 

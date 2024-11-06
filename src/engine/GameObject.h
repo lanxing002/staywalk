@@ -4,7 +4,7 @@
 
 namespace staywalk
 {
-	class GameObject : public Object
+	class GameObject : public Object, public DumpLoad<GameObject>
 	{
 	public:
 		GameObject(const string& name = "0-game-obj")
@@ -24,12 +24,9 @@ namespace staywalk
 		void set_rotation(quat v) { rotation_ = v; }
 
 		bool operator==(const GameObject& gameobj);
-
-		void dump(ofstream& ofs, Dumper& dumper) override;
-		static shared_ptr<GameObject> load(ifstream& ifs, Loader& loader);
-
 	protected:
-		static void placement_load(shared_ptr<GameObject> obj, ifstream& ifs);
+		void dump_impl(ofstream& ofs, Dumper& dumper);
+		static void load_impl(shared_ptr<GameObject> obj, ifstream& ifs, Loader& loader);
 		
 	private:
 		vec3 location_{ 0.0f };
