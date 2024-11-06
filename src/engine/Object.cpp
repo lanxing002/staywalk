@@ -1,12 +1,12 @@
 #include "Object.h"
 #include "Utility.h"
 namespace staywalk{
-	Object::Object() 
-		:guid_(Utility::get_random_id()){
+	Object::Object(const string& name)
+		:guid_(Utility::get_random_id()), name_(name) {
 	}
-
-	Object::Object(idtype load_id)
-		: guid_(load_id){
+	
+	Object::Object(idtype load_id, const string& name)
+		: guid_(load_id), name_(name){
 	}
 
 	void Object::dump(ofstream& ofs, Dumper& dumper){
@@ -24,9 +24,7 @@ namespace staywalk{
 
 	void Object::placement_load(shared_ptr<Object> obj, ifstream& ifs){
 		if (!Utility::check_ifstream(ifs)) return;
-
-		idtype rid;
-		ifs.read(reinterpret_cast<char*>(&rid), sizeof guid_);
-		obj->guid_ = rid;
+		obj->guid_ = Utility::load_from_stream<idtype>(ifs);
+		obj->name_ = Utility::load_from_stream<string>(ifs);
 	}
 }
