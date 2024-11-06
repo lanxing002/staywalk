@@ -7,6 +7,9 @@ namespace staywalk
 	class GameObject : public Object
 	{
 	public:
+		GameObject(const string& name = "0-game-obj")
+			:Object(name) {}
+
 		virtual void tick(float delta) {}
 
 		virtual ObjectType get_type_value() { return ObjectType::GameObject; }

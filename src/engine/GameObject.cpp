@@ -30,9 +30,9 @@ namespace staywalk {
 		Object::placement_load(obj, ifs);
 		auto check_r = Utility::check_ifstream(ifs);
 		assert(check_r);
-		ifs.read(reinterpret_cast<char*>(&obj->location_), sizeof obj->location_);
-		ifs.read(reinterpret_cast<char*>(&obj->scale_), sizeof obj->scale_);
-		ifs.read(reinterpret_cast<char*>(&obj->rotation_), sizeof obj->rotation_);
+		obj->location_ =  Utility::load_from_stream<vec3>(ifs);
+		obj->scale_ =  Utility::load_from_stream<vec3>(ifs);
+		obj->rotation_ =  Utility::load_from_stream<quat>(ifs);
 	}
 }
 

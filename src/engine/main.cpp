@@ -40,7 +40,7 @@ int main()
 	auto loaded_world =Utility::load_world("test-world");
 	auto actors = loaded_world->get_all_actors();
 	assert(actors.size() == 1);
-	Utility::euqals(a, actors[0]);
+	assert(Utility::euqals(a, actors[0]));
 
 	return 0 ;
 

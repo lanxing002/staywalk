@@ -4,6 +4,14 @@
 
 #include <type_traits>
 
+#define LOAD_TARGET(TargetType)										\
+static shared_ptr<TargetType> load(ifstream& ifs, Loader& loader){	\
+	if (!Utility::check_ifstream(ifs)) return nullptr;				\
+	auto result = std::make_shared<TargetType>();					\
+	result->placement_load(result, ifs, loader);					\
+	return result;													\
+}																	\
+
 namespace staywalk{
 	class World;
 
