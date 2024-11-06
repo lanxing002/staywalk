@@ -18,23 +18,19 @@ namespace staywalk {
 		return true;
 	}
 
-	void Actor::dump(ofstream& ofs, Dumper& dumper){
-		GameObject::dump(ofs, dumper);
-		auto check_r = Utility::check_ofstream(ofs);
-		assert(check_r);
+	void Actor::dump_impl(ofstream& ofs, Dumper& dumper){
+		GameObject::dump_impl(ofs, dumper);
 		if(sm_comp_){
 			Utility::write_to_stream(sm_comp_->get_guid(), ofs);
-			dumper.dump_in_file(sm_comp_);
+			dumper.dump_obj_in_file(sm_comp_);
 		}
 		else {
 			Utility::write_to_stream(kInvalidId, ofs);
 		}
 	}
 
-	void Actor::placement_load(shared_ptr<Actor> obj, ifstream& ifs, Loader& loader){
-		GameObject::placement_load(obj, ifs);
-		auto check_r = Utility::check_ifstream(ifs);
-		assert(check_r);
+	void Actor::load_impl(shared_ptr<Actor> obj, ifstream& ifs, Loader& loader){
+		GameObject::load_impl(obj, ifs, loader);
 		idtype sm_comp_id = Utility::load_from_stream<idtype>(ifs);
 		if (sm_comp_id != kInvalidId) {
 			ObjectType ot;
