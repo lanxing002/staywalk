@@ -273,7 +273,7 @@ namespace staywalk{
             if (nullptr == actor) continue;
             idtype dumpid = actor->get_guid();
             Utility::write_to_stream(actor->get_guid(), ofs);
-            dumper.dump_in_file(actor);
+            dumper.dump_obj_in_file(actor);
         }
         dumper.clear();
         ofs.close();
@@ -363,7 +363,8 @@ namespace staywalk{
         }
     }
 
-    void Dumper::dump_in_file(shared_ptr<Object> obj){
+
+    void Dumper::dump_obj_in_file(shared_ptr<Object> obj){
         const idtype dump_id = obj->get_guid();
         auto it = status_table_.find(dump_id);
         if (it != status_table_.end()){
@@ -446,6 +447,27 @@ namespace staywalk{
         ref_cache_[id] = result;
         return result;
     }
+
+    void Utility::write_obj_to_stream(const shared_ptr<Object>& obj, ofstream& ofs, Dumper& dumper) {
+        if (obj) {
+            Utility::write_to_stream(obj->get_guid(), ofs);
+            dumper.dump_obj_in_file(obj);
+        }
+        else {
+            Utility::write_to_stream(kInvalidId, ofs);
+        }
+    }
+
+    shared_ptr<Object> Utility::load_obj_from_stream(ifstream& ifs, Loader& loader) {
+        shared_ptr<Object> result = nullptr;
+        idtype sm_comp_id = Utility::load_from_stream<idtype>(ifs);
+        if (sm_comp_id != kInvalidId) {
+            ObjectType ot;
+            result = loader.load_in_file(sm_comp_id, ot);
+        }
+        return result;
+    }
+
 }
 
 

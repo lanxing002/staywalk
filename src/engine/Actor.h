@@ -3,7 +3,7 @@
 #include "StaticMeshComponent.h"
 #include "Utility.h"
 namespace staywalk {
-	class Actor : public GameObject{
+	class Actor : public GameObject, public DumpLoad<Actor>{
 	public:
 		Actor(const string& name = "0-actor");
 
@@ -12,12 +12,10 @@ namespace staywalk {
 		ObjectType get_type_value() override { return ObjectType::Actor; }
 		void set_sm_comp(const shared_ptr<StaticMeshComponent> comp) { sm_comp_ = comp; }
 
-
 		bool operator==(const Actor& gameobj);
-		void dump(ofstream& ofs, Dumper& dumper) override;
-		LOAD_TARGET(Actor);
 	protected:
-		static void placement_load(shared_ptr<Actor> obj, ifstream& ifs, Loader& loader);
+		void dump_impl(ofstream& ofs, Dumper& dumper);
+		static void load_impl(shared_ptr<Actor> obj, ifstream& ifs, Loader& loader);
 
 	private:
 		shared_ptr<StaticMeshComponent> sm_comp_{ nullptr };
