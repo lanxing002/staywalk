@@ -283,8 +283,8 @@ namespace staywalk{
     {
         auto world_file = Utility::get_worlds_dir() / (name + Utility::kWorldExt);
         if (!fs::exists(world_file)) {
+            log(LogLevel::Error, fmt::format("cannot open world file: {}", fs::absolute(world_file).u8string()));
             return nullptr;
-            //log(LogLevel::Error, fmt::format("cannot open world file: " /*world_file.c_str()*/));
         }
 
         ifstream ifs(world_file, std::ios::in | std::ios::binary);

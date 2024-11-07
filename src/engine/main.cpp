@@ -32,7 +32,7 @@ void dump_load_test(){
 	shared_ptr<StaticMeshComponent> sm = std::make_shared<StaticMeshComponent>();
 	a->set_sm_comp(sm);
 
-	shared_ptr<World> w = World::create_empty_world("test-world");
+	shared_ptr<World> w = World::create_empty_world("test-world1");
 	w->add_actor(a);
 
 	PActor b = std::make_shared<Actor>("avater2");
@@ -40,7 +40,7 @@ void dump_load_test(){
 
 	Utility::dump_world(w);
 
-	auto loaded_world = Utility::load_world("test-world");
+	auto loaded_world = Utility::load_world(u8"test-worldd");
 	auto actors = loaded_world->get_all_actors();
 	assert(actors.size() == 2);
 	assert(Utility::euqals(a, actors[0]));
@@ -50,6 +50,7 @@ void dump_load_test(){
 
 int main()
 {
+	dump_load_test();
 	return 0;
 	//auto world = World::load_marry_world();
 //
