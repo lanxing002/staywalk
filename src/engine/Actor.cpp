@@ -20,28 +20,12 @@ namespace staywalk {
 
 	void Actor::dump_impl(ofstream& ofs, Dumper& dumper){
 		GameObject::dump_impl(ofs, dumper);
-		if(sm_comp_){
-			Utility::write_to_stream(sm_comp_->get_guid(), ofs);
-			dumper.dump_obj_in_file(sm_comp_);
-		}
-		else {
-			Utility::write_to_stream(kInvalidId, ofs);
-		}
+		dumper.write_nested_obj(sm_comp_, ofs);
 	}
 
-	void Actor::load_impl(shared_ptr<Actor> obj, ifstream& ifs, Loader& loader){
-		GameObject::load_impl(obj, ifs, loader);
-		idtype sm_comp_id = Utility::load_from_stream<idtype>(ifs);
-		if (sm_comp_id != kInvalidId) {
-			ObjectType ot;
-			auto cc = loader.load_in_file(sm_comp_id, ot);
-			auto dd = std::dynamic_pointer_cast<StaticMeshComponent>(cc);
-			auto ccc = dynamic_cast<StaticMeshComponent*>(cc.get());
-			obj->sm_comp_ = dd;
-			assert(ot == ObjectType::StaticMeshComponent);
-		}
-
-		return;
+	void Actor::load_impl(ifstream& ifs, Loader& loader){
+		GameObject::load_impl(ifs, loader);
+		sm_comp_ = std::dynamic_pointer_cast<StaticMeshComponent>(loader.read_nested_obj(ifs)); // TODO:
 	}
 }
 

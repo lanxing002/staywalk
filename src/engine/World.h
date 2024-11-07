@@ -6,6 +6,7 @@ namespace staywalk {
 	class Actor;
 	class World;
 
+	using PObject = shared_ptr<Object>;
 	using PActor = shared_ptr<Actor>;
 	using PWorld = shared_ptr<World>;
 

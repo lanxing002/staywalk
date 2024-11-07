@@ -10,12 +10,12 @@ namespace staywalk{
 	}
 
 	void Object::dump_impl(ofstream& ofs, Dumper& dumper){
-		Utility::write_to_stream(guid_, ofs);
-		Utility::write_to_stream(name_, ofs);
+		dumper.write_basic(guid_, ofs);
+		dumper.write_basic(name_, ofs);
 	}
 
-	void Object::load_impl(shared_ptr<Object> obj, ifstream& ifs, Loader& loader){
-		obj->guid_ = Utility::load_from_stream<idtype>(ifs);
-		obj->name_ = Utility::load_from_stream<string>(ifs);
+	void Object::load_impl(ifstream& ifs, Loader& loader){
+		guid_ = loader.read_basic<idtype>(ifs);
+		name_ = loader.read_basic<string>(ifs);
 	}
 }
