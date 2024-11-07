@@ -16,19 +16,29 @@ namespace staywalk{
 	}
 
 	void World::add_actor(shared_ptr<Actor> actor){
-		id2actors_[actor->get_guid()] = actors_.size();
-		actors_.push_back(actor);
+		if (actor == nullptr) return;
+		auto it = id2actors_.find(actor->get_guid());
+		if (it != id2actors_.end()) {
+			auto idx = it->second;
+			actors_[idx] = actor;
+		}
+		else {
+			id2actors_[actor->get_guid()] = actors_.size();
+			actors_.push_back(actor);
+		}
 	}
 
 	void World::remove_actor(shared_ptr<Actor> actor){
-		auto it = id2actors_.find(actor->get_guid());
+		if(actor)
+			remove_actor(actor->get_guid());
+	}
+
+	void World::remove_actor(idtype id){
+		auto it = id2actors_.find(id);
 		if (it != id2actors_.end()) {
 			actors_.erase(actors_.begin() + it->first);
 			id2actors_.erase(it);
 		}
-	}
-
-	void World::remove_actor(idtype id){
 	}
 
 	World::~World(){

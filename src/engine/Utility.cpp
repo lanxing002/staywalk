@@ -268,12 +268,12 @@ namespace staywalk{
         auto check_r = Utility::check_ofstream(ofs);
         auto actors = world->get_all_actors();
         auto dumper = Dumper(Utility::get_objects_dir());
-        Utility::write_to_stream(actors.size(), ofs);
+        dumper.write_basic(actors.size(), ofs);
         for (auto actor : actors) {
             if (nullptr == actor) continue;
             idtype dumpid = actor->get_guid();
-            Utility::write_to_stream(actor->get_guid(), ofs);
-            dumper.dump_obj_in_file(actor);
+            dumper.write_basic(actor->get_guid(), ofs);
+            dumper.dump(actor);
         }
         dumper.clear();
         ofs.close();
@@ -292,17 +292,17 @@ namespace staywalk{
         auto loader = Loader(Utility::get_objects_dir());
         vector<idtype> objids;
         if (check_r) {
-            size_t num = Utility::load_from_stream<size_t>(ifs);
+            size_t num = loader.read_basic<std::size_t>(ifs);
             for (size_t i = 0; i < num; i++) {
-                idtype id = Utility::load_from_stream<idtype>(ifs);
+                idtype id = loader.read_basic<idtype>(ifs);
                 objids.push_back(id);
             }
         }
 
         shared_ptr<World> world = std::make_shared<World>();
         for (auto id : objids) {
-            ObjectType ot;
-            auto obj = loader.load_in_file(id, ot);
+            auto obj = loader.load(id);
+            ObjectType ot = obj->get_type_value();
 
             switch (ot)
             {
@@ -363,8 +363,17 @@ namespace staywalk{
         }
     }
 
+    void Dumper::dump(shared_ptr<Object> obj){
+        dump_obj_impl(obj);
+    }
 
-    void Dumper::dump_obj_in_file(shared_ptr<Object> obj){
+    void Dumper::write_nested_obj(shared_ptr<Object> obj, ofstream& ofs) {
+        idtype dump_id = obj == nullptr ? kInvalidId : obj->get_guid();
+        write_basic(dump_id, ofs);
+        if (dump_id != kInvalidId) this->dump_obj_impl(obj);
+    }
+
+    void Dumper::dump_obj_impl(shared_ptr<Object> obj){
         const idtype dump_id = obj->get_guid();
         auto it = status_table_.find(dump_id);
         if (it != status_table_.end()){
@@ -379,8 +388,8 @@ namespace staywalk{
         auto check_r = Utility::check_ofstream(ofs);
         if (check_r) {
             status_table_[dump_id] = Status::Dumping;
-            Utility::write_to_stream(obj->get_type_value(), ofs);
-            obj->dump(ofs, *this);
+            write_basic(obj->get_type_value(), ofs);
+            obj->dump_impl(ofs, *this);
             status_table_[dump_id] = Status::Done;
         }
         return;
@@ -400,12 +409,18 @@ namespace staywalk{
         return true;
     }
 
-    shared_ptr<Object> Loader::load_in_file(idtype id){
-        ObjectType ot;
-        return load_in_file(id, ot);
+    shared_ptr<Object> Loader::load(idtype id){
+        return load_obj_impl(id);
     }
 
-    shared_ptr<Object> Loader::load_in_file(idtype id, ObjectType& ot){
+    shared_ptr<Object> Loader::read_nested_obj(ifstream& ifs)
+    {
+        auto id = read_basic<idtype>(ifs);
+        return  id == kInvalidId ? nullptr : load_obj_impl(id);
+    }
+
+    shared_ptr<Object> Loader::load_obj_impl(idtype id)
+    {
         auto it = status_table_.find(id);
         if (it != status_table_.end()) {
             assert(it->second != Status::Loading);
@@ -420,54 +435,33 @@ namespace staywalk{
         shared_ptr<Object> result = nullptr;
         status_table_[id] = Status::Loading;
         if (check_r) {
-            ot = Utility::load_from_stream<ObjectType>(ifs);
+            ObjectType ot = read_basic<ObjectType>(ifs);
             switch (ot)
             {
             case staywalk::ObjectType::Object:
-                result = Object::load(ifs, *this);
+                result = std::make_shared<Object>();
                 break;
             case staywalk::ObjectType::GameObject:
-                result = GameObject::load(ifs, *this);
+                result = std::make_shared<GameObject>();
                 break;
             case staywalk::ObjectType::Actor:
-                result = Actor::load(ifs, *this);
+                result = std::make_shared<Actor>();
                 break;
             case staywalk::ObjectType::StaticMeshComponent:
-                result = StaticMeshComponent::load(ifs, *this);
+                result = std::make_shared<StaticMeshComponent>();
                 break;
             case staywalk::ObjectType::Camera:
-                result = Camera::load(ifs, *this);
+                result = std::make_shared<Camera>();
                 break;
             default:
                 break;
             }
+            result->load_impl(ifs, *this);
         }
-        //assert(false && "cannot find right object type for this object");
         status_table_[id] = Status::Done;
         ref_cache_[id] = result;
         return result;
     }
-
-    void Utility::write_obj_to_stream(const shared_ptr<Object>& obj, ofstream& ofs, Dumper& dumper) {
-        if (obj) {
-            Utility::write_to_stream(obj->get_guid(), ofs);
-            dumper.dump_obj_in_file(obj);
-        }
-        else {
-            Utility::write_to_stream(kInvalidId, ofs);
-        }
-    }
-
-    shared_ptr<Object> Utility::load_obj_from_stream(ifstream& ifs, Loader& loader) {
-        shared_ptr<Object> result = nullptr;
-        idtype sm_comp_id = Utility::load_from_stream<idtype>(ifs);
-        if (sm_comp_id != kInvalidId) {
-            ObjectType ot;
-            result = loader.load_in_file(sm_comp_id, ot);
-        }
-        return result;
-    }
-
 }
 
 

@@ -12,16 +12,16 @@ namespace staywalk {
 
 	void GameObject::dump_impl(ofstream& ofs, Dumper& dumper){
 		Object::dump_impl(ofs, dumper);
-		Utility::write_to_stream(location_, ofs);
-		Utility::write_to_stream(scale_, ofs);
-		Utility::write_to_stream(rotation_, ofs);
+		dumper.write_basic(location_, ofs);
+		dumper.write_basic(scale_, ofs);
+		dumper.write_basic(rotation_, ofs);
 	}
 
-	void GameObject::load_impl(shared_ptr<GameObject> obj, ifstream& ifs, Loader& loader){
-		Object::load_impl(obj, ifs, loader);
-		obj->location_ = Utility::load_from_stream<vec3>(ifs);
-		obj->scale_ = Utility::load_from_stream<vec3>(ifs);
-		obj->rotation_ = Utility::load_from_stream<quat>(ifs);
+	void GameObject::load_impl(ifstream& ifs, Loader& loader){
+		Object::load_impl(ifs, loader);
+		location_ = loader.read_basic<vec3>(ifs);
+		scale_ = loader.read_basic<vec3>(ifs);
+		rotation_ = loader.read_basic<quat>(ifs);
 	}
 }
 
