@@ -1,16 +1,8 @@
 #pragma once
 #include "Common.h"
 #include "RenderObject.h"
-
 #include <type_traits>
 
-#define LOAD_TARGET(TargetType)										\
-static shared_ptr<TargetType> load(ifstream& ifs, Loader& loader){	\
-	if (!Utility::check_ifstream(ifs)) return nullptr;				\
-	auto result = std::make_shared<TargetType>();					\
-	result->placement_load(result, ifs, loader);					\
-	return result;													\
-}																	\
 
 namespace staywalk{
 	class World;
@@ -43,22 +35,6 @@ namespace staywalk{
 
 		static fs::path create_temp_dir();
 
-		template<typename T>
-		static void write_to_stream(const T& data, ofstream& ofs);
-
-		template<typename T>
-		static T load_from_stream(ifstream& ifs);
-
-		template<>
-		static void write_to_stream(const string& data, ofstream& ofs);
-
-		template<>
-		static string load_from_stream(ifstream& ifs);
-
-		static void write_obj_to_stream(const shared_ptr<Object>& data, ofstream& ofs, Dumper& dumper);
-
-		static shared_ptr<Object> load_obj_from_stream(ifstream& ifs, Loader& loader);
-
 		template<typename Obj>
 		static bool euqals(shared_ptr<Obj> lhs, shared_ptr<Obj> rhs);
 
@@ -81,11 +57,17 @@ namespace staywalk{
 		Dumper& operator=(const Dumper&) = delete;
 		Dumper& operator=(Dumper&&) = delete;
 
-		void dump_obj_in_file(shared_ptr<Object> obj);
-
+		void dump(shared_ptr<Object> obj);
+		template<typename T>
+		void write_basic(const T&, ofstream& ofs);
+		template<>
+		void write_basic(const string&, ofstream& ofs);
+		void write_nested_obj(shared_ptr<Object> obj, ofstream& ofs);
 		bool clear();
 
 	private:
+		void dump_obj_impl(shared_ptr<Object> obj);
+
 		hashtable<idtype, Status> status_table_;
 		fs::path tmp_path_;
 		fs::path target_path_;
@@ -105,12 +87,15 @@ namespace staywalk{
 		Loader& operator=(const Loader&) = delete;
 		Loader& operator=(Loader&&) = delete;
 
-
-		shared_ptr<Object> load_in_file(idtype id);
-
-		shared_ptr<Object> load_in_file(idtype id, ObjectType& ot);
+		shared_ptr<Object> load(idtype id);
+		template<typename T>
+		T read_basic(ifstream& ifs);
+		template<>
+		string read_basic<string>(ifstream& ifs);
+		shared_ptr<Object> read_nested_obj(ifstream& ifs);
 
 	private:
+		shared_ptr<Object> load_obj_impl(idtype id);
 		hashtable<idtype, Status> status_table_;
 		hashtable<idtype, shared_ptr<Object>> ref_cache_;
 		fs::path load_path_;
@@ -128,16 +113,8 @@ namespace staywalk {
 		return false;
 	}
 
-
 	template<typename T>
-	static void Utility::write_to_stream(const T& data, ofstream& ofs) {
-		static_assert(std::is_trivial<T>::value && "must be trivial type");
-		ofs.write(reinterpret_cast<const char*>(&data), sizeof data);
-		return;
-	}
-
-	template<typename T>
-	T Utility::load_from_stream(ifstream& ifs) {
+	T Loader::read_basic(ifstream& ifs) {
 		static_assert(std::is_trivial<T>::value && "must be trivial type");
 		T value;
 		ifs.read(reinterpret_cast<char*>(&value), sizeof value);
@@ -145,14 +122,7 @@ namespace staywalk {
 	}
 
 	template<>
-	void Utility::write_to_stream(const string& str, ofstream& ofs) {
-		const auto strlen = str.length();
-		ofs.write(reinterpret_cast<const char*>(&strlen), sizeof strlen);
-		ofs.write(str.c_str(), strlen);
-	}
-
-	template<>
-	string Utility::load_from_stream(ifstream& ifs)
+	string Loader::read_basic<string>(ifstream& ifs)
 	{
 		string str;
 		auto strlen = str.length();
@@ -161,4 +131,19 @@ namespace staywalk {
 		ifs.read((str.data()), strlen);
 		return str;
 	}
+
+	template<typename T>
+	void Dumper::write_basic(const T& data, ofstream& ofs) {
+		static_assert(std::is_trivial<T>::value && "must be trivial type");
+		ofs.write(reinterpret_cast<const char*>(&data), sizeof data);
+		return;
+	}
+
+	template<>
+	void Dumper::write_basic(const string& str, ofstream& ofs) {
+		const auto strlen = str.length();
+		ofs.write(reinterpret_cast<const char*>(&strlen), sizeof strlen);
+		ofs.write(str.c_str(), strlen);
+	}
+
 }
