@@ -19,12 +19,11 @@
 #include "World.h"
 #include "Actor.h"
 #include "Utility.h"
+#include "checker.h"
 
 using namespace staywalk;
 
-using namespace staywalk;
-int main()
-{
+void dump_load_test(){
 	PActor a = std::make_shared<Actor>("avatar");
 	a->set_location(glm::vec3(100, 200, 400));
 	a->set_rotation(glm::quat(10.0, 20.0, 30.0, 1.0));
@@ -35,15 +34,23 @@ int main()
 
 	shared_ptr<World> w = World::create_empty_world("test-world");
 	w->add_actor(a);
+
+	PActor b = std::make_shared<Actor>("avater2");
+	w->add_actor(b);
+
 	Utility::dump_world(w);
 
-	auto loaded_world =Utility::load_world("test-world");
+	auto loaded_world = Utility::load_world("test-world");
 	auto actors = loaded_world->get_all_actors();
-	assert(actors.size() == 1);
+	assert(actors.size() == 2);
 	assert(Utility::euqals(a, actors[0]));
+	assert(Utility::euqals(a, a));
+	assert(Utility::euqals(a, actors[1]));
+}
 
-	return 0 ;
-
+int main()
+{
+	return 0;
 	//auto world = World::load_marry_world();
 //
 //    // glfw: initialize and configure

@@ -4,7 +4,7 @@
 
 namespace staywalk
 {
-	class GameObject : public Object, public DumpLoad<GameObject>
+	class GameObject : public Object
 	{
 	public:
 		GameObject(const string& name = "0-game-obj")
@@ -12,7 +12,6 @@ namespace staywalk
 
 		virtual void tick(float delta) {}
 
-		virtual ObjectType get_type_value() { return ObjectType::GameObject; }
 
 		vec3 get_location() { return location_; }
 		void set_location(vec3 v) { location_ = v; }
@@ -23,10 +22,11 @@ namespace staywalk
 		quat get_rotation() { return rotation_; }
 		void set_rotation(quat v) { rotation_ = v; }
 
+		ObjectType get_type_value() override { return ObjectType::GameObject; }
 		bool operator==(const GameObject& gameobj);
 	protected:
-		void dump_impl(ofstream& ofs, Dumper& dumper);
-		static void load_impl(shared_ptr<GameObject> obj, ifstream& ifs, Loader& loader);
+		void dump_impl(ofstream& ofs, Dumper& dumper) override;
+		void load_impl(ifstream& ifs, Loader& loader) override;
 		
 	private:
 		vec3 location_{ 0.0f };
