@@ -28,7 +28,6 @@ namespace staywalk {
 
 		void set_name(const string& name) { name_ = name; }
 
-	private:
 
 	private:
 		string name_{"empty-world"};

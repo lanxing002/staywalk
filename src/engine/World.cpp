@@ -11,7 +11,7 @@ namespace staywalk{
 	
 	PWorld World::load_marry_world(){
 		shared_ptr<Actor> actor = std::make_shared<Actor>("marry");
-		Utility::load_model(R"(C:\Users\lanxi\Documents\lanxing\codes\ErJiu\games202-hw\hw1\homework1\assets\mary\Marry.obj)");
+		auto meshload = MeshLoader(R"(C:\Users\lanxi\Documents\lanxing\codes\ErJiu\games202-hw\hw1\homework1\assets\mary\Marry.obj)");
 		return shared_ptr<World>();
 	}
 
