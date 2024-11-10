@@ -5,6 +5,7 @@
 #include <glm/gtc/quaternion.hpp>
 
 #include <unordered_map>
+#include <map>
 #include <vector>
 #include <string>
 #include <memory>
@@ -28,6 +29,9 @@ namespace staywalk
 	template<typename T>
 	using vector = std::vector<T>;
 
+	template<typename TKey, typename TVal>
+	using map = std::map<TKey, TVal>;
+
 	template<typename T, typename VT>
 	using hashtable = std::unordered_map<T, VT>;
 
@@ -39,6 +43,11 @@ namespace staywalk
 	using ifstream = std::ifstream;
 	using ofstream = std::ofstream;
 	using uint = unsigned int;
+
+	template<typename T1, typename T2>
+	std::shared_ptr<T1> pcast(std::shared_ptr<T2>&& other) {
+		return std::dynamic_pointer_cast<T1>(std::move(other));
+	}
 
 	namespace fs = std::filesystem;
 

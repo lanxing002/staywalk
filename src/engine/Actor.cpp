@@ -11,14 +11,11 @@ namespace staywalk {
 	}
 
 	bool Actor::operator==(const Actor& rhs) {
-		if (this == &rhs) return true;
-		if (!GameObject::operator==(rhs)) return false;
-		if (name_ != rhs.name_) return false;
-		if (!Utility::euqals(sm_comp_, rhs.sm_comp_)) return false;
-		return true;
+		return GameObject::operator==(rhs) &&
+			Utility::equal(sm_comp_, sm_comp_);
 	}
 
-	void Actor::dump_impl(ofstream& ofs, Dumper& dumper){
+	void Actor::dump_impl(ofstream& ofs, Dumper& dumper) const {
 		GameObject::dump_impl(ofs, dumper);
 		dumper.write_nested_obj(sm_comp_, ofs);
 	}

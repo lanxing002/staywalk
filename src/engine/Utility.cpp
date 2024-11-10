@@ -6,6 +6,7 @@
 #include "Logger.h"
 #include "RenderObject.h"
 #include "World.h"
+#include "Material.h"
 
 #include <stb_image.h>
 #include <assimp/Importer.hpp>
@@ -123,94 +124,6 @@ namespace staywalk{
     const string Utility::kObjExt = ".swobj";
     const string Utility::kWorldExt = ".sworld";
 
-    // checks all material textures of a given type and loads the textures if they're not loaded yet.
-    // the required info is returned as a Texture struct.
-    vector<PRTex> find_material_tex(aiMaterial* mat, aiTextureType type)
-    {
-        vector<PRTex> textures;
-        for (unsigned int i = 0; i < mat->GetTextureCount(type); i++)
-        {
-            aiString str;
-            mat->GetTexture(type, i, &str);
-            PRTex tex = std::make_shared<RTex>();
-            tex->path = str.C_Str();
-            textures.push_back(tex);
-        }
-        return textures;
-    }
-
-    static RMesh construct_mesh(aiMesh* mesh, const aiScene* scene)
-    {
-        // 1. process mesh
-        vector<Vertex> vertices;
-        vector<unsigned int> indices;
-        vector<PRTex> textures;
-
-        // walk through each of the mesh's vertices
-        for (unsigned int i = 0; i < mesh->mNumVertices; i++)
-        {
-            Vertex vertex;
-            vertex.position = vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
-            if (mesh->HasNormals())
-                vertex.normal = vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
-
-            if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
-            {
-                // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
-                // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
-                vertex.texcoords = vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
-                vertex.tangent = vec3(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
-                vertex.bitangent = vec3(mesh->mBitangents[i].x, mesh->mBitangents[i].y, mesh->mBitangents[i].z);
-            }
-            else
-                vertex.texcoords = vec2(0.0f, 0.0f);
-
-            vertices.push_back(vertex);
-        }
-        // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
-        for (unsigned int i = 0; i < mesh->mNumFaces; i++)
-        {
-            aiFace face = mesh->mFaces[i];
-            for (unsigned int j = 0; j < face.mNumIndices; j++)
-                indices.push_back(face.mIndices[j]);
-        }
-
-        // 2. process materials
-        // we assume a convention for sampler names in the shaders. Each diffuse texture should be named
-        // as 'texture_diffuseN' where N is a sequential number ranging from 1 to MAX_SAMPLER_NUMBER. 
-
-        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-        // 1. diffuse maps
-        vector<PRTex> diffuseMaps = find_material_tex(material, aiTextureType_DIFFUSE);
-        textures.insert(textures.end(), diffuseMaps.begin(), diffuseMaps.end());
-        // 2. specular maps
-        vector<PRTex> specularMaps = find_material_tex(material, aiTextureType_SPECULAR);
-        textures.insert(textures.end(), specularMaps.begin(), specularMaps.end());
-        // 3. normal maps
-        std::vector<PRTex> normalMaps = find_material_tex(material, aiTextureType_HEIGHT);
-        textures.insert(textures.end(), normalMaps.begin(), normalMaps.end());
-        // 4. height maps
-        std::vector<PRTex> heightMaps = find_material_tex(material, aiTextureType_AMBIENT);
-        textures.insert(textures.end(), heightMaps.begin(), heightMaps.end());
-
-        //return Mesh(vertices, indices, textures);
-        return RMesh();
-    }
-
-
-    static void process_node(aiNode* node, const aiScene* scene)
-    {
-        for (unsigned int i = 0; i < node->mNumMeshes; i++){
-            aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
-            construct_mesh(mesh, scene);
-            //meshes.push_back(processMesh(mesh, scene));
-        }
-        for (unsigned int i = 0; i < node->mNumChildren; i++){
-            process_node(node->mChildren[i], scene);
-        }
-    }
-
-    
     idtype Utility::get_random_id(){
         using snowflake_t = snowflake<1534832906275L>;
         static snowflake_t uuid;
@@ -242,23 +155,6 @@ namespace staywalk{
             return false;
         }
         return true;
-    }
-
-    void staywalk::Utility::load_model(const string& path){
-        Assimp::Importer importer;
-        const aiScene* scene = importer.ReadFile(path, aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
-
-        //// check for errors
-        //if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
-        //{
-        //    cout << "ERROR::ASSIMP:: " << importer.GetErrorString() << endl;
-        //    return;
-        //}
-        //// retrieve the directory path of the filepath
-        //directory = path.substr(0, path.find_last_of('/'));
-
-        //// process ASSIMP's root node recursively
-        //processNode(scene->mRootNode, scene);
     }
 
     void Utility::dump_world(shared_ptr<World> world){
@@ -320,6 +216,45 @@ namespace staywalk{
         return world;
     }
 
+    shared_ptr<RTex> Utility::load_texture(fs::path path)
+    {
+        if (fs::is_directory(path) || !fs::exists(path)) {
+            log(LogLevel::Error, fmt::format("Utility --> load_texture : not find target ({})", path.u8string()));
+            return nullptr;
+        }
+
+        /*int width, height, nrComponents;
+        unsigned char* data = stbi_load(path.u8string().c_str(), &width, &height, &nrComponents, 0);
+        if (data)
+        {
+            GLenum format;
+            if (nrComponents == 1)
+                format = GL_RED;
+            else if (nrComponents == 3)
+                format = GL_RGB;
+            else if (nrComponents == 4)
+                format = GL_RGBA;
+
+            glBindTexture(GL_TEXTURE_2D, textureID);
+            glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
+            glGenerateMipmap(GL_TEXTURE_2D);
+
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
+            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+        }
+        else
+        {
+            std::cout << "Texture failed to load at path: " << path << std::endl;
+            stbi_image_free(data);
+        }*/
+        
+        //stbi_image_free(data);
+        return shared_ptr<RTex>();
+    }
+
     fs::path Utility::get_resource_dir() {
         return fs::path("resource");
     }
@@ -358,8 +293,9 @@ namespace staywalk{
     {
         tmp_path_ = Utility::create_temp_dir();
         if (!fs::exists(target_path_)) {
-            log(LogLevel::Error, fmt::format("dumper target folder not exists:"));
-            assert(false);
+            log(LogLevel::Warining, fmt::format("dumper target folder not exists: {}", target_path_.u8string()));
+            log(LogLevel::Warining, fmt::format("create new folder: {}", target_path_.u8string()));
+            fs::create_directory(target_path_);
         }
     }
 
@@ -367,13 +303,13 @@ namespace staywalk{
         dump_obj_impl(obj);
     }
 
-    void Dumper::write_nested_obj(shared_ptr<Object> obj, ofstream& ofs) {
+    void Dumper::write_nested_obj(const shared_ptr<Object> obj, ofstream& ofs) {
         idtype dump_id = obj == nullptr ? kInvalidId : obj->get_guid();
         write_basic(dump_id, ofs);
         if (dump_id != kInvalidId) this->dump_obj_impl(obj);
     }
 
-    void Dumper::dump_obj_impl(shared_ptr<Object> obj){
+    void Dumper::dump_obj_impl(const shared_ptr<Object> obj){
         const idtype dump_id = obj->get_guid();
         auto it = status_table_.find(dump_id);
         if (it != status_table_.end()){
@@ -436,6 +372,7 @@ namespace staywalk{
         status_table_[id] = Status::Loading;
         if (check_r) {
             ObjectType ot = read_basic<ObjectType>(ifs);
+
             switch (ot)
             {
             case staywalk::ObjectType::Object:
@@ -447,21 +384,143 @@ namespace staywalk{
             case staywalk::ObjectType::Actor:
                 result = std::make_shared<Actor>();
                 break;
+            case staywalk::ObjectType::GameComponent:
+                result = std::make_shared<GameComponent>();
+                break;
             case staywalk::ObjectType::StaticMeshComponent:
                 result = std::make_shared<StaticMeshComponent>();
                 break;
             case staywalk::ObjectType::Camera:
                 result = std::make_shared<Camera>();
                 break;
+            case staywalk::ObjectType::Material:
+                result = std::make_shared<Material>();
+                break;
+            case staywalk::ObjectType::RObject:
+                result = std::make_shared<RObject>();
+                break;
+            case staywalk::ObjectType::RTex:
+                result = std::make_shared<RTex>();
+                break;
+            case staywalk::ObjectType::RMesh:
+                result = std::make_shared<RMesh>();
+                break;
+            case staywalk::ObjectType::RShader:
+                result = std::make_shared<RShader>();
+                break;
+            case staywalk::ObjectType::RProgram:
+                result = std::make_shared<RProgram>();
+                break;
+            case staywalk::ObjectType::RUniform:
+                result = std::make_shared<RUniform>();
+                break;
             default:
+                assert(false);
                 break;
             }
+
             result->load_impl(ifs, *this);
         }
         status_table_[id] = Status::Done;
         ref_cache_[id] = result;
         return result;
     }
+
+    MeshLoader::MeshLoader(const string& mesh_name){
+        auto path = fs::path(mesh_name);
+        if (fs::is_directory(path) ||  !fs::exists(path)) {
+            log(LogLevel::Warining, fmt::format("MeshLoader --> mesh ({}) not exists!", path.u8string()));
+            return;
+        }
+        log(LogLevel::Info, fmt::format("MeshLoader --> consturct mesh data from ({})", path.u8string()));
+
+        Assimp::Importer importer;
+        const aiScene* scene = importer.ReadFile(path.u8string(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+
+        // check for errors
+        if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
+        {
+            log(LogLevel::Error, fmt::format("Assimp --> error : {}", importer.GetErrorString()));
+            return;
+        }
+        // retrieve the directory path of the filepath
+        work_dir_ = path.parent_path();
+        process_node(scene->mRootNode, scene);
+    }
+
+
+    PRMesh MeshLoader::construct_mesh(aiMesh* mesh, const aiScene* scene)
+    {
+        // 1. process mesh
+        vector<Vertex> vertices;
+        vector<unsigned int> indices;
+
+        // walk through each of the mesh's vertices
+        for (unsigned int i = 0; i < mesh->mNumVertices; i++)
+        {
+            Vertex vertex;
+            vertex.position = vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+            if (mesh->HasNormals())
+                vertex.normal = vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+
+            if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
+            {
+                // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
+                // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
+                vertex.texcoords = vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
+                vertex.tangent = vec3(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
+                vertex.bitangent = vec3(mesh->mBitangents[i].x, mesh->mBitangents[i].y, mesh->mBitangents[i].z);
+            }
+            else
+                vertex.texcoords = vec2(0.0f, 0.0f);
+
+            vertices.push_back(vertex);
+        }
+        // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
+        for (unsigned int i = 0; i < mesh->mNumFaces; i++)
+        {
+            aiFace face = mesh->mFaces[i];
+            for (unsigned int j = 0; j < face.mNumIndices; j++)
+                indices.push_back(face.mIndices[j]);
+        }
+
+        // 2. process materials
+        aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
+        //TODO: read texs and unforms to consturct staywalk::Material
+        PRTex diffuseMaps = find_material_tex(material, aiTextureType_DIFFUSE);
+        shared_ptr<Material> mat = std::make_shared<Material>();
+        mat->add_tex(Material::DiffuseKey, diffuseMaps);
+        
+        auto result = std::make_shared<RMesh>(vertices, indices);
+        result->set_mat(mat);
+        return result;
+    }
+
+    void MeshLoader::process_node(aiNode* node, const aiScene* scene)
+    {
+        for (unsigned int i = 0; i < node->mNumMeshes; i++) {
+            aiMesh* mesh = scene->mMeshes[node->mMeshes[i]];
+            auto a_mesh = construct_mesh(mesh, scene);
+            meshes_.push_back(a_mesh);
+        }
+        for (unsigned int i = 0; i < node->mNumChildren; i++) {
+            process_node(node->mChildren[i], scene);
+        }
+    }
+
+    // checks all material textures of a given type and loads the textures if they're not loaded yet.
+// the required info is returned as a Texture struct.
+    PRTex MeshLoader::find_material_tex(aiMaterial* mat, aiTextureType type)
+    {
+        if (mat->GetTextureCount(type) > 0) {
+            aiString str;
+            mat->GetTexture(type, 0, &str);
+            fs::path p{str.C_Str()};
+            return Utility::load_texture(p);
+        }
+        return PRTex{ nullptr };
+    }
+
 }
 
 

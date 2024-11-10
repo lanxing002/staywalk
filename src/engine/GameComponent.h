@@ -6,7 +6,7 @@ namespace staywalk{
 		GameComponent(const string& name = "0-comp")
 			:Object(name) {}
 
-		ObjectType get_type_value() override { return ObjectType::GameComponent; }
+		ObjectType get_type_value() const override { return ObjectType::GameComponent; }
 		inline bool operator==(const GameComponent& rhs) {
 			return Object::operator==(rhs);
 		}
