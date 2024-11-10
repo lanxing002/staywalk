@@ -7,11 +7,12 @@ namespace staywalk {
 		Actor(const string& name = "0-actor");
 		void tick(float delta) override;
 		void set_sm_comp(const shared_ptr<StaticMeshComponent> comp) { sm_comp_ = comp; }
+		shared_ptr<StaticMeshComponent> get_sm_comp() { return sm_comp_; }
 
-		ObjectType get_type_value() override { return ObjectType::Actor; }
+		ObjectType get_type_value() const override { return ObjectType::Actor; }
 		bool operator==(const Actor& gameobj);
 	protected:
-		void dump_impl(ofstream& ofs, Dumper& dumper) override;
+		void dump_impl(ofstream& ofs, Dumper& dumper) const override;
 		void load_impl(ifstream& ifs, Loader& loader) override;
 
 	private:

@@ -22,10 +22,10 @@ namespace staywalk
 		quat get_rotation() { return rotation_; }
 		void set_rotation(quat v) { rotation_ = v; }
 
-		ObjectType get_type_value() override { return ObjectType::GameObject; }
+		ObjectType get_type_value() const override { return ObjectType::GameObject; }
 		bool operator==(const GameObject& gameobj);
 	protected:
-		void dump_impl(ofstream& ofs, Dumper& dumper) override;
+		void dump_impl(ofstream& ofs, Dumper& dumper) const override;
 		void load_impl(ifstream& ifs, Loader& loader) override;
 		
 	private:
