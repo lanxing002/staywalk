@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#define PROPERTY 
 
 namespace staywalk{
 	struct Vertex;
@@ -10,15 +11,16 @@ namespace staywalk{
 	public:
 		RObject(const string& name = "0-RObj");
 
+		PROPERTY
 		uint glid = kGlInvalidId;  // for opgnel id, -1 is invalid
 		bool valid = false;
 		string path;
 
-		ObjectType get_type_value() const override { return ObjectType::RObject; }
-		bool operator==(const RObject& gameobj);
-	protected:
-		void dump_impl(ofstream& ofs, Dumper& dumper) const override;
-		void load_impl(ifstream& ifs, Loader& loader) override;
+	//	ObjectType get_type_value() const override { return ObjectType::RObject; }
+	//	bool operator==(const RObject& gameobj);
+	//protected:
+	//	void dump_impl(ofstream& ofs, Dumper& dumper) const override;
+	//	void load_impl(ifstream& ifs, Loader& loader) override;
 	};
 
 
@@ -38,18 +40,18 @@ namespace staywalk{
 
 		RMesh(const vector<Vertex>& vv, const vector<unsigned int>& ii, const string& name = "0-mesh");
 		
-		vector<Vertex>& get_vertices() { return vertices_; }
-		vector<unsigned int>& get_indices() { return indices_; }
-		shared_ptr<Material> get_material() { return mat_; }
-		void set_mat(shared_ptr<Material> mat) { mat_ = mat; }
+	//	vector<Vertex>& get_vertices() { return vertices_; }
+	//	vector<unsigned int>& get_indices() { return indices_; }
+	//	shared_ptr<Material> get_material() { return mat_; }
+	//	void set_mat(shared_ptr<Material> mat) { mat_ = mat; }
 
-		ObjectType get_type_value() const override { return ObjectType::RMesh; }
-		bool operator==(const RMesh& gameobj);
-	protected:
-		void dump_impl(ofstream& ofs, Dumper& dumper) const override;
-		void load_impl(ifstream& ifs, Loader& loader) override;
+	//	ObjectType get_type_value() const override { return ObjectType::RMesh; }
+	//	bool operator==(const RMesh& gameobj);
+	//protected:
+	//	void dump_impl(ofstream& ofs, Dumper& dumper) const override;
+	//	void load_impl(ifstream& ifs, Loader& loader) override;
 
-	private:
+	//private:
 		vector<Vertex> vertices_;
 		vector<unsigned int> indices_;
 		shared_ptr<Material> mat_;
