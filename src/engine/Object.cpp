@@ -9,7 +9,7 @@ namespace staywalk{
 		: guid_(load_id), name_(name){
 	}
 
-	void Object::dump_impl(ofstream& ofs, Dumper& dumper){
+	void Object::dump_impl(ofstream& ofs, Dumper& dumper) const {
 		dumper.write_basic(guid_, ofs);
 		dumper.write_basic(name_, ofs);
 	}
