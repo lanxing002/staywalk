@@ -13,6 +13,16 @@
 #include <array>
 #include <filesystem>
 
+#ifdef _IN_REFLECT
+#define sw_Prop 
+#define sw_Func
+#define sw_Class
+#else
+#define sw_Prop
+#define sw_Func
+#define sw_Class
+#endif // _IN_REFLECT
+
 namespace staywalk
 {
 	using idtype = unsigned long long;
@@ -54,3 +64,18 @@ namespace staywalk
 	constexpr idtype kInvalidId = -1;
 	constexpr uint kGlInvalidId = -1;
 }
+
+namespace staywalk{
+	namespace reflect {
+		template<typename T, typename Super>
+		class Serializer;
+
+		struct MetaInfo;
+	}
+}
+
+#define MetaRegister(TypeName, BaseType)										\
+public:																			\
+	virtual staywalk::reflect::MetaInfo get_meta_info();						\
+	friend class staywalk::reflect::Serializer<TypeName, BaseType>;				\
+
