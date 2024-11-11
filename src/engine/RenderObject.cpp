@@ -41,10 +41,10 @@
 //
 //
 //	/****************** RMesh ********************/
-//	RMesh::RMesh(const string& name)
-//		:RObject(name) {
-//
-//	}
+	//RMesh::RMesh(const string& name)
+	//	:RObject(name) {
+
+	//}
 //
 //	RMesh::RMesh(const vector<Vertex>& vv, const vector<unsigned int>& ii, const string& name) 
 //		:RObject(name), vertices_(vv), indices_(ii){
