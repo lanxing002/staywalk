@@ -17,9 +17,7 @@ target_link_libraries(engine PRIVATE glad stbimage)
 target_link_libraries(engine INTERFACE stbimage)
 
 target_include_directories(engine PRIVATE ${engine_src_dir})
-set_target_properties(engine PROPERTIES
-    VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-)
+set_target_properties(engine PROPERTIES FOLDER "staywalk")
 
 file(GLOB SRC_FILES "${engine_src_dir}/*.cpp" "${engine_src_dir}/*.h")
 target_sources(engine PRIVATE ${SRC_FILES})
@@ -38,3 +36,14 @@ file(GLOB REFLECT_SRC_FILES "${reflect_src_dir}/*.cpp" "${reflect_src_dir}/*.h")
 target_sources(engine PRIVATE ${REFLECT_SRC_FILES})
 source_group("reflect" FILES ${REFLECT_SRC_FILES})
 ##  end setup reflect  ##
+add_executable(reflect ${CMAKE_CURRENT_SOURCE_DIR}/src/parser/setup.cpp)
+set_target_properties(reflect PROPERTIES FOLDER "staywalk")
+
+
+set(py_exe ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/cpython/PCbuild/amd64/python.exe)
+set(py_parse_code ${CMAKE_CURRENT_SOURCE_DIR}/src/parser/startup.py)
+add_custom_command(
+    TARGET reflect POST_BUILD  
+    COMMAND "${py_exe}" "${py_parse_code}"  # 运行程序 'my_program' 并传递参数 'arg1' 和 'arg2'
+    COMMENT "Running parse reflect event"
+)
