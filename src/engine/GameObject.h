@@ -15,6 +15,8 @@ namespace staywalk
 		sw_Prop vec3 location{ 0.0f };
 		sw_Prop vec3 scale{ 1.0f };
 		sw_Prop quat rotation{.0f, .0f, .0f, 1.f};
+
+		MetaRegister(GameObject, Object);
 	};
 }
 

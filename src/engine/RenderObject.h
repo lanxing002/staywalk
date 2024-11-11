@@ -8,7 +8,7 @@ namespace staywalk{
 	// render object is a opengl object
 	class sw_Class RObject : public Object{
 	public:
-		sw_Func RObject(const string& name = "0-RObj");
+		sw_Func RObject(const string& name = "0-RObj") {}
 
 		sw_Prop uint glid = kGlInvalidId;  // for opgnel id, -1 is invalid
 		sw_Prop bool valid = false;
@@ -23,9 +23,9 @@ namespace staywalk{
 
 	class sw_Class RMesh : public RObject {
 	public:
-		sw_Func RMesh(const string& name = "0-rmesh");
+		sw_Func RMesh(const string& name = "0-rmesh") {}
 
-		sw_Func RMesh(const vector<Vertex>& vv, const vector<unsigned int>& ii, const string& name = "0-mesh");
+		sw_Func RMesh(const vector<Vertex>& vv, const vector<unsigned int>& ii, const string& name = "0-mesh") {}
 		
 		sw_Prop vector<Vertex> vertices_;
 		sw_Prop vector<unsigned int> indices_;
