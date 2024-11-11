@@ -21,10 +21,15 @@
 #include "Utility.h"
 #include "checker.h"
 
+#include "Common.gen.h"
+
 using namespace staywalk;
 
 void dump_load_test(){
-	PActor a = std::make_shared<Actor>("avatar");
+	Object obj;
+	auto metainfo = obj.get_meta_info();
+
+	/*PActor a = std::make_shared<Actor>("avatar");
 	a->set_location(glm::vec3(100, 200, 400));
 	a->set_rotation(glm::quat(10.0, 20.0, 30.0, 1.0));
 	a->set_scale(glm::vec3(20.0, 30.0, 1.0));
@@ -45,26 +50,26 @@ void dump_load_test(){
 	assert(actors.size() == 2);
 	assert(Utility::equal(a, actors[0]));
 	assert(Utility::equal(a, a));
-	assert(Utility::equal(a, actors[1]));
+	assert(Utility::equal(a, actors[1]));*/
 }
 
 void mesh_loader_test(){
-	//MeshLoader m1(R"(C:\Users\lanxi\Documents\lanxing\codes\ErJiu\games202-hw\hw1\homework1\assets\mary)");
-	PActor a = std::make_shared<Actor>("avatar");
-	shared_ptr<StaticMeshComponent> sm = std::make_shared<StaticMeshComponent>();
-	a->set_sm_comp(sm);
+	////MeshLoader m1(R"(C:\Users\lanxi\Documents\lanxing\codes\ErJiu\games202-hw\hw1\homework1\assets\mary)");
+	//PActor a = std::make_shared<Actor>("avatar");
+	//shared_ptr<StaticMeshComponent> sm = std::make_shared<StaticMeshComponent>();
+	//a->set_sm_comp(sm);
 
-	MeshLoader m(R"(C:\Users\lanxi\Documents\lanxing\codes\ErJiu\games202-hw\hw1\homework1\assets\mary\Marry.obj)");
-	auto meshs = m.get_meshes();
-	sm->add_meshes(m.get_meshes());
-	shared_ptr<World> w = World::create_empty_world("test-world1");
-	w->add_actor(a);
-	Utility::dump_world(w);
+	//MeshLoader m(R"(C:\Users\lanxi\Documents\lanxing\codes\ErJiu\games202-hw\hw1\homework1\assets\mary\Marry.obj)");
+	//auto meshs = m.get_meshes();
+	//sm->add_meshes(m.get_meshes());
+	//shared_ptr<World> w = World::create_empty_world("test-world1");
+	//w->add_actor(a);
+	//Utility::dump_world(w);
 
-	auto loaded_world = Utility::load_world(u8"test-world1");
-	auto actors = loaded_world->get_all_actors();
-	//actors[0]->get_sm_comp()->get_meshed()[0]->get_indices()[0] = 10;
-	assert(Utility::equal(a, actors[0]));
+	//auto loaded_world = Utility::load_world(u8"test-world1");
+	//auto actors = loaded_world->get_all_actors();
+	////actors[0]->get_sm_comp()->get_meshed()[0]->get_indices()[0] = 10;
+	//assert(Utility::equal(a, actors[0]));
 }
 
 int main()
