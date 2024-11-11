@@ -1,15 +1,10 @@
 #pragma once
 #include "Object.h"
 namespace staywalk{
-	class GameComponent	: public Object{
+	class sw_Class GameComponent : public Object{
 	public:
-		GameComponent(const string& name = "0-comp")
+		sw_Func GameComponent(const string& name = "0-comp")
 			:Object(name) {}
-
-		ObjectType get_type_value() const override { return ObjectType::GameComponent; }
-		inline bool operator==(const GameComponent& rhs) {
-			return Object::operator==(rhs);
-		}
 	};
 }
 

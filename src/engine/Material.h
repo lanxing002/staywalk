@@ -3,26 +3,21 @@
 #include <map>
 
 namespace staywalk {
-	class Material : public Object{
+	class sw_Class Material : public Object{
 	public:
 		static const string DiffuseKey;
 		static const string AoKey;
 
 	public:
-		Material(shared_ptr<RShader> shader = nullptr, const string& name="0-material");
+		sw_Func Material(shared_ptr<RShader> shader = nullptr, const string& name="0-material");
 
-		void add_tex(const string& name, PRTex tex) { texs_[name] = tex; }
-		void add_uniform(const string& name, PUniform uniform) { uniforms_[name] = uniform; }
+		sw_Func void add_tex(const string& name, PRTex tex) { texs_[name] = tex; }
+		sw_Func void add_uniform(const string& name, PUniform uniform) { uniforms_[name] = uniform; }
 
-		ObjectType get_type_value() const override { return ObjectType::Material; }
-		bool operator==(const Material& gameobj);
 	protected:
-		void dump_impl(ofstream& ofs, Dumper& dumper) const override;
-		void load_impl(ifstream& ifs, Loader& loader) override;
-
-		shared_ptr<RShader> shader_;
-		std::map<string, shared_ptr<RUniform>> uniforms_;
-		std::map<string, shared_ptr<RTex>> texs_;
+		sw_Prop shared_ptr<RShader> shader_;
+		sw_Prop std::map<string, shared_ptr<RUniform>> uniforms_;
+		sw_Prop std::map<string, shared_ptr<RTex>> texs_;
 	};
 }
 
