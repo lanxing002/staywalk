@@ -18,6 +18,8 @@
 #include <stdexcept>
 #include <mutex>
 
+#include "ReflectTemplate.h"
+
 
 class snowflake_nonlock
 {
@@ -167,8 +169,8 @@ namespace staywalk{
         dumper.write_basic(actors.size(), ofs);
         for (auto actor : actors) {
             if (nullptr == actor) continue;
-            idtype dumpid = actor->get_guid();
-            dumper.write_basic(actor->get_guid(), ofs);
+            //idtype dumpid = actor->get_guid();
+            //dumper.write_basic(actor->get_guid(), ofs);
             dumper.dump(actor);
         }
         dumper.clear();
@@ -198,18 +200,18 @@ namespace staywalk{
         shared_ptr<World> world = std::make_shared<World>();
         for (auto id : objids) {
             auto obj = loader.load(id);
-            ObjectType ot = obj->get_type_value();
+            //ObjectType ot = obj->get_type_value();
 
-            switch (ot)
-            {
-            case staywalk::ObjectType::Actor:
-                world->add_actor(std::dynamic_pointer_cast<Actor>(obj));
-                break;
-            case staywalk::ObjectType::Camera:
-                break;
-            default:
-                break;
-            }
+            //switch (ot)
+            //{
+            //case staywalk::ObjectType::Actor:
+            //    world->add_actor(std::dynamic_pointer_cast<Actor>(obj));
+            //    break;
+            //case staywalk::ObjectType::Camera:
+            //    break;
+            //default:
+            //    break;
+            //}
         }
 
         world->set_name(name);
@@ -304,30 +306,30 @@ namespace staywalk{
     }
 
     void Dumper::write_nested_obj(const shared_ptr<Object> obj, ofstream& ofs) {
-        idtype dump_id = obj == nullptr ? kInvalidId : obj->get_guid();
-        write_basic(dump_id, ofs);
-        if (dump_id != kInvalidId) this->dump_obj_impl(obj);
+        //idtype dump_id = obj == nullptr ? kInvalidId : obj->get_guid();
+        //write_basic(dump_id, ofs);
+        //if (dump_id != kInvalidId) this->dump_obj_impl(obj);
     }
 
     void Dumper::dump_obj_impl(const shared_ptr<Object> obj){
-        const idtype dump_id = obj->get_guid();
-        auto it = status_table_.find(dump_id);
-        if (it != status_table_.end()){
-            assert(it->second != Status::Dumping);
-            if (it->second == Status::Done)
-                return;
-        }
-        status_table_[dump_id] = Status::Wait;
-        fs::path name = tmp_path_ /(std::to_string(dump_id) + Utility::kObjExt);
-        assert(!fs::exists(name));  // must be a new file 
-        ofstream ofs(name, std::ios::out | std::ios::binary | std::ios::trunc);
-        auto check_r = Utility::check_ofstream(ofs);
-        if (check_r) {
-            status_table_[dump_id] = Status::Dumping;
-            write_basic(obj->get_type_value(), ofs);
-            obj->dump_impl(ofs, *this);
-            status_table_[dump_id] = Status::Done;
-        }
+        //const idtype dump_id = obj->get_guid();
+        //auto it = status_table_.find(dump_id);
+        //if (it != status_table_.end()){
+        //    assert(it->second != Status::Dumping);
+        //    if (it->second == Status::Done)
+        //        return;
+        //}
+        //status_table_[dump_id] = Status::Wait;
+        //fs::path name = tmp_path_ /(std::to_string(dump_id) + Utility::kObjExt);
+        //assert(!fs::exists(name));  // must be a new file 
+        //ofstream ofs(name, std::ios::out | std::ios::binary | std::ios::trunc);
+        //auto check_r = Utility::check_ofstream(ofs);
+        //if (check_r) {
+        //    status_table_[dump_id] = Status::Dumping;
+        //    write_basic(obj->get_type_value(), ofs);
+        //    obj->dump_impl(ofs, *this);
+        //    status_table_[dump_id] = Status::Done;
+        //}
         return;
     }
 
@@ -373,7 +375,7 @@ namespace staywalk{
         if (check_r) {
             ObjectType ot = read_basic<ObjectType>(ifs);
 
-            switch (ot)
+            /*switch (ot)
             {
             case staywalk::ObjectType::Object:
                 result = std::make_shared<Object>();
@@ -417,9 +419,9 @@ namespace staywalk{
             default:
                 assert(false);
                 break;
-            }
+            }*/
 
-            result->load_impl(ifs, *this);
+            //result->load_impl(ifs, *this);
         }
         status_table_[id] = Status::Done;
         ref_cache_[id] = result;
@@ -492,7 +494,7 @@ namespace staywalk{
         mat->add_tex(Material::DiffuseKey, diffuseMaps);
         
         auto result = std::make_shared<RMesh>(vertices, indices);
-        result->set_mat(mat);
+        //result->set_mat(mat);
         return result;
     }
 
