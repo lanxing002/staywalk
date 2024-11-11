@@ -11,7 +11,7 @@ add_subdirectory(3rdparty)
 
 set(engine_src_dir ${CMAKE_CURRENT_SOURCE_DIR}/src/engine)
 add_executable(engine ${engine_src_dir}/main.cpp)
-set_target_properties(engine PROPERTIES FOLDER staywalk/engine)
+set_target_properties(engine PROPERTIES FOLDER staywalk)
 target_link_libraries(engine PRIVATE glfw glm imgui pybind11_headers fmt assimp)
 target_link_libraries(engine PRIVATE glad stbimage)
 target_link_libraries(engine INTERFACE stbimage)
@@ -23,7 +23,18 @@ set_target_properties(engine PROPERTIES
 
 file(GLOB SRC_FILES "${engine_src_dir}/*.cpp" "${engine_src_dir}/*.h")
 target_sources(engine PRIVATE ${SRC_FILES})
+source_group("core" FILES ${SRC_FILES})
 
 if(MSVC)
     target_compile_options(engine PRIVATE "/utf-8")
 endif()
+
+
+##  setup reflect  ##
+set(reflect_src_dir ${CMAKE_CURRENT_SOURCE_DIR}/src/reflect)
+target_include_directories(engine PRIVATE ${reflect_src_dir})
+
+file(GLOB REFLECT_SRC_FILES "${reflect_src_dir}/*.cpp" "${reflect_src_dir}/*.h")
+target_sources(engine PRIVATE ${REFLECT_SRC_FILES})
+source_group("reflect" FILES ${REFLECT_SRC_FILES})
+##  end setup reflect  ##
