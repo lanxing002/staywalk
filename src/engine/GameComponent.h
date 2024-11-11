@@ -5,6 +5,8 @@ namespace staywalk{
 	public:
 		sw_Func GameComponent(const string& name = "0-comp")
 			:Object(name) {}
+
+		MetaRegister(GameComponent, Object);
 	};
 }
 

@@ -27,6 +27,8 @@ using namespace staywalk;
 
 void dump_load_test(){
 	Object obj;
+	auto p = std::make_shared<GameObject>();
+	auto ot = p->get_meta_info();
 	auto metainfo = obj.get_meta_info();
 
 	/*PActor a = std::make_shared<Actor>("avatar");
@@ -54,6 +56,10 @@ void dump_load_test(){
 }
 
 void mesh_loader_test(){
+	Object obj;
+	auto p = std::make_shared<GameObject>();
+	auto ot = p->get_meta_info();
+	auto metainfo = obj.get_meta_info();
 	////MeshLoader m1(R"(C:\Users\lanxi\Documents\lanxing\codes\ErJiu\games202-hw\hw1\homework1\assets\mary)");
 	//PActor a = std::make_shared<Actor>("avatar");
 	//shared_ptr<StaticMeshComponent> sm = std::make_shared<StaticMeshComponent>();
