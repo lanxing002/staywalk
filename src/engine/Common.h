@@ -13,8 +13,6 @@
 #include <array>
 #include <filesystem>
 
-#define _IN_REFLECT 1
-
 #ifdef _IN_REFLECT
 #define sw_Prop __attribute__((annotate("__sw;")))
 #define sw_Func __attribute__((annotate("__sw;")))
@@ -67,18 +65,8 @@ namespace staywalk
 	constexpr uint kGlInvalidId = -1;
 }
 
-// reflect code
-namespace staywalk{
-	namespace reflect {
-		template<typename T, typename Super>
-		class Serializer;
-
-		struct MetaInfo;
-	}
-}
-
 #define MetaRegister(TypeName, BaseType)										\
-public:																			\
-	virtual staywalk::reflect::MetaInfo get_meta_info();						\
-	friend class staywalk::reflect::Serializer<TypeName, BaseType>;				\
+//public:																			\
+//	virtual staywalk::reflect::MetaInfo get_meta_info();						\
+//	friend class staywalk::reflect::Serializer<TypeName, BaseType>;				\
 

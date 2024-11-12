@@ -14,7 +14,7 @@ if __name__ == '__main__':
 
 
     # code_src_path = sys.argv[1]
-    code_src_path = R'C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src'
+    code_src_path = R'C:\Users\lanxi\Documents\lanxing\codes\ErJiu\staywalk/src'
     if not os.path.isdir(code_src_path):
         print(f'Wrong src directory {code_src_path}')
 
@@ -33,7 +33,7 @@ if __name__ == '__main__':
     result: list[ClassNode] = []
     noclass_fields: set[NoClassField] = set()
     traverse(s_node.cursor, namespaces, outer_classes, result, noclass_fields, 0)
-    display_traverse(s_node.cursor, 0)
+    # display_traverse(s_node.cursor, 0)
     serialize_generate.generate(result, os.path.join(code_src_path, 'reflect'))
 
     print('===============end up parse for reflect  =================')

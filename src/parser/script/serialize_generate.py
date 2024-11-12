@@ -3,8 +3,9 @@ import clang.cindex
 import os
 from mylog import *
 
-dump_code_1 = '''
-void Serializer<{cur_type}>::dump(const {cur_type}& obj, ofstream& ofs, Dumper& dumper) {{'''
+dump_code1 = '''
+template<>
+void staywalk::reflect::Serializer<{cur_type}>::dump(const {cur_type}& obj, ofstream& ofs, Dumper& dumper) {{'''
 
 dump_code2 = '''
     Serializer<{base_type}>::dump(obj, ofs, dumper);'''
@@ -13,6 +14,21 @@ dump_code3 = '''
     dumper.write(obj.{dump_prop}, ofs);'''
 
 dump_code4 = '''
+}
+'''
+
+
+load_code1 = '''
+template<>
+void staywalk::reflect::Serializer<{cur_type}>::load({cur_type}& obj, ifstream& ifs, Loader& loader) {{'''
+
+load_code2 = '''
+    Serializer<{base_type}>::load(obj, ifs, loader);'''
+
+load_code3 = '''
+    loader.read(obj.{load_prop}, ifs);'''
+
+load_code4 = '''
 }
 '''
 
@@ -32,14 +48,30 @@ class SerializeBind(object):
     def name(self):
         return self._name
 
-    def __repr__(self):
+    def _dump_code(self):
         code = ''
-        code += dump_code_1.format(cur_type=self._full_name)
+        code += dump_code1.format(cur_type=self._name)
         code += dump_code2.format(base_type=self._base_names) if self._base_names else ''
         for p in self._props:
             code += dump_code3.format(dump_prop=p)
         code += dump_code4
         return code
+
+    def _load_code(self):
+        code = ''
+        code += load_code1.format(cur_type=self._name)
+        code += load_code2.format(base_type=self._base_names) if self._base_names else ''
+        for p in self._props:
+            code += load_code3.format(load_prop=p)
+        code += load_code4
+        return code
+
+    def __repr__(self):
+        ns_code = '{func_code}'
+        for ns in self._namespaces[::-1]:
+            ns_code = 'namespace ' + ns + '{{' + ns_code + '}}'
+        code = self._dump_code() + '\n' + self._load_code()
+        return ns_code.format(func_code=code)
 
     def __str__(self):
         return self.__repr__()
@@ -131,4 +163,4 @@ def generate(nodes: list[ClassNode], generate_dir):
             snode = SerializeBind(node)
             logging.log(logging.INFO, f'start generate {node._node.spelling}')
             f.write(str(snode))
-            f.write('\n')
+            f.write('\n\n\n')

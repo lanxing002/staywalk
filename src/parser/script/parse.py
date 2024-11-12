@@ -38,22 +38,23 @@ def traverse(root, namespace, outer_class, classes, noclass_fields, depth):
 if __name__ == '__main__':
     import serialize_generate
 
+
     index = clang.cindex.Index.create()
     compile_args = [
-        R'-IC:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src\engine',
+        R'-IC:\Users\lanxi\Documents\lanxing\codes\ErJiu\staywalk\src\engine',
         '-DOSG_EXPORT=',
         '-DOSGVIEWER_EXPORT=',
         # '-fsyntax-only',
         # '-D__GNUC__=7'
     ]
 
-    s_node = index.parse(R"C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src\parser\script\test.cpp",
+    s_node = index.parse(R"C:\Users\lanxi\Documents\lanxing\codes\ErJiu\staywalk\src\parser\script\test.cpp",
                          compile_args)
     namespaces = []
     outer_classes = []
     result: list[ClassNode] = []
     noclass_fields: set[NoClassField] = set()
-    traverse(s_node.cursor, namespaces, outer_classes, result, noclass_fields, 0)
+    # traverse(s_node.cursor, namespaces, outer_classes, result, noclass_fields, 0)
     display_traverse(s_node.cursor, 0)
 
     for item in result:
