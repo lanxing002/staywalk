@@ -1,19 +1,19 @@
 #define INTERESTING __attribute__((annotate("__sw;get;set")))
-#include <vector>
+
+namespace cc{
+namespace cc2{
 class Base{}{
 };
+}
+}
 
-template<typename T>
-using vector = std::vector<T>;
-
-class  Object : public Base{
+namespace dd{
+class  Object : public cc::cc2::Base{
     INTERESTING int a ;
 };
 
-class INTERESTING TT : public Base {
-//    INTERESTING Object obj;
-    INTERESTING vector<Object> oo;
 }
+
 
 
 //
