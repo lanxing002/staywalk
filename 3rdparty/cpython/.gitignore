@@ -39,6 +39,7 @@ gmon.out
 
 *.exe
 !Lib/distutils/command/*.exe
+!Lib/**/*.dll
 
 # Ignore core dumps... but not Tools/msi/core/ or the like.
 core
@@ -144,3 +145,4 @@ Tools/ssl/win32
 /Programs/_freeze_module
 /Python/deepfreeze/
 /Python/frozen_modules/
+
