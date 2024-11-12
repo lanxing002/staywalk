@@ -2,7 +2,3 @@
 
 #pragma once
 
-enum class ObjectType : unsigned int {
-	None,
-	Object,
-};

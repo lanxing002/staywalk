@@ -1,15 +1,30 @@
-#define INTERESTING __attribute__((annotate("get;set")))
+#define INTERESTING __attribute__((annotate("__sw;get;set")))
 
 namespace staywalk{
 	struct Vertex;
 	class Material;
 
+    enum  class INTERESTING EMY : unsigned int{
+        NONE,
+    };
+
+	INTERESTING extern int a ;
+	INTERESTING int a ;
+	INTERESTING void tdsd();
+
 	// render object is a opengl object
 	class INTERESTING RObject : public Object{
 	public:
-		RObject(const string& name = "0-RObj");
 
-        INTERESTING void tttt();
+	    class JTR{
+	        int a;
+	    };
+
+		INTERESTING RObject(const string& name = "0-RObj");
+
+
+        INTERESTING virtual int tttt();
+        INTERESTING static int static_Dd();
 		uint glid = kGlInvalidId;  // for opgnel id, -1 is invalid
 		INTERESTING bool valid = false;
 //		string path;
