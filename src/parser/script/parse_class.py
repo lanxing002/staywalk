@@ -2,6 +2,32 @@ import clang.cindex
 NodeT = clang.cindex.Cursor
 
 
+class NoClassField:
+    def __init__(self, node: NodeT, namespaces: list[NodeT]) -> None:
+        self._node = node
+        self._namespaces = namespaces
+        pass
+
+    def labeled(self) -> bool:
+        if not self._node:
+            return False
+        for child in self._node.get_children():
+            if child.kind == clang.cindex.CursorKind.ANNOTATE_ATTR  and str(child.spelling).startswith('__sw'):
+                return True
+        return False
+
+    def __str__(self):
+        return self.__repr__()
+
+    def __repr__(self):
+        return f'''{self._node.spelling}: {'::'.join([x.spelling for x in self._namespaces])}'''
+
+    def __hash__(self):
+        return hash(self.__repr__())
+
+    def __eq__(self, other):
+        return self.__repr__() == other.__repr__()
+
 class ClassNode:
     def __init__(self, node: NodeT, namespaces: list[NodeT], outer_classes: list[NodeT]):
         self._node = node
@@ -24,6 +50,14 @@ class ClassNode:
     @property
     def outer_classes(self):
         return self._outer_classes
+
+    def labeled(self) -> bool:
+        if not self._node:
+            return False
+        for child in self._node.get_children():
+            if child.kind == clang.cindex.CursorKind.ANNOTATE_ATTR and str(child.spelling).startswith('__sw'):
+                return True
+        return False
 
     def __str__(self):
         return self.__repr__()
