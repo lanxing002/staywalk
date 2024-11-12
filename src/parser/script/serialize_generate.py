@@ -1,6 +1,69 @@
+from parse_class import ClassNode, NoClassField, FuncParam
+import clang.cindex
+import os
+from mylog import *
+
+dump_code_1 = '''
+void Serializer<{cur_type}>::dump(const {cur_type}& obj, ofstream& ofs, Dumper& dumper) {{'''
+
+dump_code2 = '''
+    Serializer<{base_type}>::dump(obj, ofs, dumper);'''
+
+dump_code3 = '''
+    dumper.write(obj.{dump_prop}, ofs);'''
+
+dump_code4 = '''
+}
+'''
+
+
+class SerializeBind(object):
+    def __init__(self, bind_node: ClassNode):
+        self._node = bind_node.node
+        self._base_names = None
+        self.outer_classes = [x.spelling for x in bind_node.outer_classes]
+        self._namespaces = [x.spelling for x in bind_node.namespaces]
+        self._name = self._node.spelling
+        self._full_name = '::'.join(self._namespaces) + '::' + '::'.join(self.outer_classes) + self._node.spelling
+        self._props = []
+        self._parse()
+
+    @property
+    def name(self):
+        return self._name
+
+    def __repr__(self):
+        code = ''
+        code += dump_code_1.format(cur_type=self._full_name)
+        code += dump_code2.format(base_type=self._base_names) if self._base_names else ''
+        for p in self._props:
+            code += dump_code3.format(dump_prop=p)
+        code += dump_code4
+        return code
+
+    def __str__(self):
+        return self.__repr__()
+
+    def _parse(self):
+        find_base = [base.spelling for base in self._node.get_children() if
+                     base.kind == clang.cindex.CursorKind.CXX_BASE_SPECIFIER]
+        self._base_names = find_base[0] if len(find_base) > 0 else None
+
+        for member in self._node.get_children():
+            if member.kind != clang.cindex.CursorKind.FIELD_DECL:
+                continue
+
+            is_label = filter(lambda x: x.kind == clang.cindex.CursorKind.ANNOTATE_ATTR and
+                                        str(x.spelling).startswith('__sw'), member.get_children())
+            is_label = len(list(is_label)) > 0
+            if not is_label:
+                continue
+
+            self._props.append(member.spelling)
+
 
 code_t = \
-'''
+    '''
 #pragma once
 #include "Common.gen.h"
 
@@ -11,7 +74,6 @@ namespace reflect{
 	template<typename T, typename Super>
 	class Serializer {
 	public:
-
 		static bool operator==(const T& lhs, const T& rhs) {static_assert(false && "Not impl");}
 		static void dump(const T& obj, ofstream& ofs, Dumper& dumper) { static_assert(false && "Not impl"); }
 		static void load(T& obj, ifstream& ifs, Loader& loader) { static_assert(false && "Not impl"); }
@@ -32,8 +94,6 @@ namespace reflect{
 
 	//template<>
 	//ObjectType Serializer<Object, void>::get_type_value() { return ObjectType::Object; }
-
-
 
 	//void Serializer<Object, void>::dump(const Object& obj, ofstream& ofs, Dumper& dumper) {
 	//	dumper.write_basic(obj.guid_, ofs);
@@ -59,3 +119,16 @@ namespace reflect{
 }
 
 '''
+
+
+def generate(nodes: list[ClassNode], generate_dir):
+    target_file = os.path.join(generate_dir, 'SerializeAll.gen.h')
+    logging.log(logging.INFO, f'generate serialize code to {target_file} ...')
+    with open(target_file, 'w') as f:
+        for node in nodes:
+            if not node.labeled():
+                continue
+            snode = SerializeBind(node)
+            logging.log(logging.INFO, f'start generate {node._node.spelling}')
+            f.write(str(snode))
+            f.write('\n')
