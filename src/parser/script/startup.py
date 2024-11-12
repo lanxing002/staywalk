@@ -3,15 +3,23 @@ import os
 
 import clang.cindex
 from parse_class import ClassNode, BindClass, NoClassField
-from parse import traverse
+from parse import traverse, display_traverse
+import serialize_generate
 
 if __name__ == '__main__':
     print('===============start up parse for reflect=================')
-    print(os.getcwd())
+    # if len(sys.argv) < 2:
+        # print('Usage: python startup.py [include-directory]')
+        # exit(0)
 
 
-    code_src_path = sys.argv[1]
-    print(f'include direcory is {code_src_path}')
+    # code_src_path = sys.argv[1]
+    code_src_path = R'C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src'
+    if not os.path.isdir(code_src_path):
+        print(f'Wrong src directory {code_src_path}')
+
+    print(f'current path: {os.getcwd()}')
+    print(f'include directory is {code_src_path}')
     index = clang.cindex.Index.create()
     compile_args = [
         f'-I{code_src_path}/engine',
@@ -22,17 +30,11 @@ if __name__ == '__main__':
                          compile_args)
     namespaces = []
     outer_classes = []
-    result: set[ClassNode] = set()
+    result: list[ClassNode] = []
     noclass_fields: set[NoClassField] = set()
     traverse(s_node.cursor, namespaces, outer_classes, result, noclass_fields, 0)
-
-    for item in result:
-        if item.labeled():
-            print(item)
-
-    for item in noclass_fields:
-        if item.labeled():
-            print(item)
+    display_traverse(s_node.cursor, 0)
+    serialize_generate.generate(result, os.path.join(code_src_path, 'reflect'))
 
     print('===============end up parse for reflect  =================')
 
