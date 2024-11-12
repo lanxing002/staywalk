@@ -12,7 +12,7 @@ class NoClassField:
         if not self._node:
             return False
         for child in self._node.get_children():
-            if child.kind == clang.cindex.CursorKind.ANNOTATE_ATTR  and str(child.spelling).startswith('__sw'):
+            if child.kind == clang.cindex.CursorKind.ANNOTATE_ATTR and str(child.spelling).startswith('__sw'):
                 return True
         return False
 
@@ -27,6 +27,7 @@ class NoClassField:
 
     def __eq__(self, other):
         return self.__repr__() == other.__repr__()
+
 
 class ClassNode:
     def __init__(self, node: NodeT, namespaces: list[NodeT], outer_classes: list[NodeT]):
