@@ -36,14 +36,17 @@ file(GLOB REFLECT_SRC_FILES "${reflect_src_dir}/*.cpp" "${reflect_src_dir}/*.h")
 target_sources(engine PRIVATE ${REFLECT_SRC_FILES})
 source_group("reflect" FILES ${REFLECT_SRC_FILES})
 ##  end setup reflect  ##
-add_executable(reflect ${CMAKE_CURRENT_SOURCE_DIR}/src/parser/setup.cpp)
-set_target_properties(reflect PROPERTIES FOLDER "staywalk")
 
+## auto generate code ##
+add_executable(generate_code ${CMAKE_CURRENT_SOURCE_DIR}/src/parser/setup.cpp)
+set_target_properties(generate_code PROPERTIES FOLDER "staywalk")
 
 set(py_exe ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/cpython/PCbuild/amd64/python.exe)
-set(py_parse_code ${CMAKE_CURRENT_SOURCE_DIR}/src/parser/startup.py)
+set(py_parse_code ${CMAKE_CURRENT_SOURCE_DIR}/src/parser/script/startup.py)
 add_custom_command(
-    TARGET reflect POST_BUILD  
-    COMMAND "${py_exe}" "${py_parse_code}"  # 运行程序 'my_program' 并传递参数 'arg1' 和 'arg2'
+    TARGET generate_code POST_BUILD  
+    COMMAND cd "${CMAKE_CURRENT_SOURCE_DIR}/src/parser/script"
+    COMMAND "${py_exe}" "${py_parse_code}" "${CMAKE_CURRENT_SOURCE_DIR}/src" 
     COMMENT "Running parse reflect event"
 )
+## end auto generate code ##
