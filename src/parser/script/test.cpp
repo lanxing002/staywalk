@@ -2,18 +2,24 @@
 
 namespace cc{
 namespace cc2{
-class Base{}{
+class Base{
+    class Inner{};
 };
 }
 }
+
+template<typename T>
+class Vector{
+};
 
 namespace dd{
 class  Object : public cc::cc2::Base{
-    INTERESTING int a ;
+    INTERESTING Vector<int> vecc;
+    INTERESTING Inner vecc2;
 };
 
 }
-
+     Vector<int> vecc2;
 
 
 //

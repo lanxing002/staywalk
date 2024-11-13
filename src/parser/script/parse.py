@@ -3,7 +3,7 @@ from parse_class import ClassNode, BindClass, NoClassField
 
 
 def display_traverse(root, depth):
-    print("%s%s %s" % ("|   " * depth, str(root.kind), root.spelling))
+    print("%s%s %s" % ("|   " * depth, str(root.kind), root.displayname))
     for n in root.get_children():
         display_traverse(n, depth + 1)
 
@@ -41,14 +41,14 @@ if __name__ == '__main__':
 
     index = clang.cindex.Index.create()
     compile_args = [
-        R'-IC:\Users\lanxi\Documents\lanxing\codes\ErJiu\staywalk\src\engine',
+        R'-IC:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src\engine',
         '-DOSG_EXPORT=',
         '-DOSGVIEWER_EXPORT=',
         # '-fsyntax-only',
         # '-D__GNUC__=7'
     ]
 
-    s_node = index.parse(R"C:\Users\lanxi\Documents\lanxing\codes\ErJiu\staywalk\src\parser\script\test.cpp",
+    s_node = index.parse(R"C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src\parser\script\test2.cpp",
                          compile_args)
     namespaces = []
     outer_classes = []
@@ -57,10 +57,10 @@ if __name__ == '__main__':
     # traverse(s_node.cursor, namespaces, outer_classes, result, noclass_fields, 0)
     display_traverse(s_node.cursor, 0)
 
-    for item in result:
-        if item.labeled():
-            print(serialize_generate.SerializeBind(item))
-
-    for item in noclass_fields:
-        if item.labeled():
-            print(item)
+    # for item in result:
+    #     if item.labeled():
+    #         print(serialize_generate.SerializeBind(item))
+    #
+    # for item in noclass_fields:
+    #     if item.labeled():
+    #         print(item)

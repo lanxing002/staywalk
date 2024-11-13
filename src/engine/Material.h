@@ -18,6 +18,8 @@ namespace staywalk {
 		sw_Prop shared_ptr<RShader> shader_;
 		sw_Prop std::map<string, shared_ptr<RUniform>> uniforms_;
 		sw_Prop std::map<string, shared_ptr<RTex>> texs_;
+
+		MetaRegister(Material);
 	};
 }
 
