@@ -33,8 +33,11 @@ set(reflect_src_dir ${CMAKE_CURRENT_SOURCE_DIR}/src/reflect)
 target_include_directories(engine PRIVATE ${reflect_src_dir})
 
 file(GLOB REFLECT_SRC_FILES "${reflect_src_dir}/*.cpp" "${reflect_src_dir}/*.h")
+file(GLOB GENERATED_SRC_FILES "${reflect_src_dir}/generated/*.cpp" "${reflect_src_dir}/generated/*.h")
 target_sources(engine PRIVATE ${REFLECT_SRC_FILES})
+target_sources(engine PRIVATE ${GENERATED_SRC_FILES})
 source_group("reflect" FILES ${REFLECT_SRC_FILES})
+source_group("generated" FILES ${GENERATED_SRC_FILES})
 ##  end setup reflect  ##
 
 ## auto generate code ##

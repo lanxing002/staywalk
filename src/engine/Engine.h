@@ -12,8 +12,6 @@ namespace staywalk{
 
 	public:
 		static shared_ptr<Engine> get_engine();
-
-		shared_ptr<Dumper> get_dumper() { return nullptr; }
 	};
 }
 

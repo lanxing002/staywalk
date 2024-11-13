@@ -8,6 +8,8 @@ namespace staywalk{
 		sw_Func virtual void draw();
 
 		sw_Prop vector<PRMesh> meshs;
+
+		MetaRegister(StaticMeshComponent);
 	};
 }
 

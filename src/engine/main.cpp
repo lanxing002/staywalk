@@ -16,17 +16,24 @@
 //const unsigned int SCR_WIDTH = 800;
 //const unsigned int SCR_HEIGHT = 600;
 
-#include "World.h"
+//#include "World.h"
 #include "Actor.h"
-#include "Utility.h"
-#include "checker.h"
-
-
+//#include "Utility.h"
+//#include "checker.h"
+#include "Material.h"
+#include "Object.h"
 #include "Serialize.h"
 
 
+using namespace staywalk;
 int main()
 {
+	reflect::Dumper dumper{"."};
+	ofstream ofs{"tt.txt"};
+	Object a;
+	Object B;
+	assert(a == a);
+	reflect::Serializer<Object>::dump(a, ofs, dumper);
 	//mesh_loader_test();
 	//World::load_marry_world();
 	//dump_load_test();lanya

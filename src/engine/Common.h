@@ -63,10 +63,17 @@ namespace staywalk
 
 	constexpr idtype kInvalidId = -1;
 	constexpr uint kGlInvalidId = -1;
+
+	namespace reflect {
+		template<typename T>
+		class Serializer;
+		struct MetaInfo;
+	}
 }
 
-#define MetaRegister(TypeName, BaseType)										\
-//public:																			\
-//	virtual staywalk::reflect::MetaInfo get_meta_info();						\
-//	friend class staywalk::reflect::Serializer<TypeName, BaseType>;				\
 
+#define MetaRegister(TypeName)													\
+public:																			\
+	bool operator==(const TypeName&);											\
+	friend class staywalk::reflect::Serializer<TypeName>;						
+	//virtual staywalk::reflect::MetaInfo get_meta_info(){}						\

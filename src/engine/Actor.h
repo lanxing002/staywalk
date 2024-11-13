@@ -8,6 +8,8 @@ namespace staywalk {
 		sw_Func void tick(float delta) override;
 		
 		sw_Prop shared_ptr<StaticMeshComponent> sm_comp{ nullptr };
+
+		MetaRegister(Actor);
 	};
 
 	using PActor = shared_ptr<Actor>;

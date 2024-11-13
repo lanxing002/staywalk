@@ -13,11 +13,14 @@ namespace staywalk{
 		sw_Prop uint glid = kGlInvalidId;  // for opgnel id, -1 is invalid
 		sw_Prop bool valid = false;
 		sw_Prop string path;
+
+		MetaRegister(RObject);
 	};
 
 
 	class sw_Class RTex : public RObject {
 	public:
+		MetaRegister(RTex);
 	};
 
 
@@ -30,6 +33,8 @@ namespace staywalk{
 		sw_Prop vector<Vertex> vertices_;
 		sw_Prop vector<unsigned int> indices_;
 		sw_Prop shared_ptr<Material> mat_;
+
+		MetaRegister(RMesh);
 	};
 
 
@@ -55,6 +60,8 @@ namespace staywalk{
 		
 		sw_Prop fs::path source;
 		sw_Prop fs::path dump_dir;
+
+		MetaRegister(Resource);
 	};
 
 	enum class ShaderType : unsigned char{
@@ -70,6 +77,8 @@ namespace staywalk{
 
 		sw_Prop string code;
 		sw_Prop ShaderType shader_type{ShaderType::None};
+
+		MetaRegister(Shader);
 	};
 
 	class Tex2d : public Resource {
