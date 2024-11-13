@@ -18,9 +18,6 @@
 #include <stdexcept>
 #include <mutex>
 
-#include "ReflectTemplate.h"
-
-
 class snowflake_nonlock
 {
 public:

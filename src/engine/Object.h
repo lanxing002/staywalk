@@ -3,7 +3,7 @@
 
 
 namespace staywalk{
-	class Object {
+	class sw_Class Object {
 	public:
 		Object(const string& name = "0-obj");
 		Object(idtype load_id, const string& name = "0-obj");
@@ -14,12 +14,14 @@ namespace staywalk{
 		Object& operator=(const Object&) = delete;
 		Object& operator=(Object&&) = delete;
 		
+		sw_Func idtype get_guid() { return guid_; }
+
 		sw_Prop string name;
 
 	protected:
 		sw_Prop idtype guid_;
 
-		MetaRegister(Object, void);
+		MetaRegister(Object);
 	};
 }
 
