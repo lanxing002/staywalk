@@ -144,15 +144,21 @@ namespace staywalk{
 	}
 }
 
-
+#include "generated/SerializeAll.gen.h"
 
 /**********************************Dump-Load impl**************************************/
 namespace staywalk {
 	namespace reflect {
 		template<typename T>
 		void Dumper::write_basic(const T& data, ofstream& ofs) {
-			static_assert(std::is_trivial<T>::value && "must be trivial type");
-			ofs.write(reinterpret_cast<const char*>(&data), sizeof data);
+			constexpr bool is_obj = std::is_base_of_v<staywalk::Object, T> || std::is_same_v<T, staywalk::Object>;
+			if constexpr (is_obj) {
+				Serializer<T>::dump(data, ofs, *this);
+			}
+			else{
+				static_assert(std::is_trivial<T>::value && "must be trivial type");
+				ofs.write(reinterpret_cast<const char*>(&data), sizeof data);
+			}
 			return;
 		}
 
@@ -257,5 +263,4 @@ namespace staywalk {
 	}
 }
 
-#include "generated/SerializeAll.gen.h"
 #endif // !_IN_REFLECT
