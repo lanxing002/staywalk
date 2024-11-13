@@ -8,12 +8,12 @@ import serialize_generate
 
 if __name__ == '__main__':
     print('===============start up parse for reflect=================')
-    # if len(sys.argv) < 2:
-        # print('Usage: python startup.py [include-directory]')
-        # exit(0)
+    if len(sys.argv) < 2:
+        print('Usage: python startup.py [include-directory]')
+        exit(0)
 
-    # code_src_path = sys.argv[1]
-    code_src_path = R'C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src'
+    code_src_path = sys.argv[1]
+    # code_src_path = R'C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src'
     if not os.path.isdir(code_src_path):
         print(f'Wrong src directory {code_src_path}')
 
