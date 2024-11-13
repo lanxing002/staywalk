@@ -65,10 +65,10 @@ eop_declare = ''' '''
 
 # ---------------operator == code start------------------
 typeo_code1 = '''
-virtual staywalk::reflect::MetaInfo {cur_type}::get_meta_info() const {{'''
+::staywalk::reflect::MetaInfo {cur_type}::get_meta_info() const {{'''
 
 typeo_code2 = '''
-    return MetaInfo{{{cur_type_enum}}};
+    return ::staywalk::reflect::MetaInfo{{"{cur_type_enum}"}};
 '''
 
 typeo_code3 = '''
@@ -76,8 +76,27 @@ typeo_code3 = '''
 '''
 
 typeo_declare = ''' '''
+# ---------------operator == code end------------------
 
 
+# ---------------operator == code start------------------
+create_obj_code1 = '''
+using namespace staywalk;
+shared_ptr<Object> create_empty(reflect::MetaInfo minfo) {
+    if (false) { return nullptr; }
+'''
+
+create_obj_code2 = '''
+    else if (minfo.tname == "{cur_type_str}"){{return std::make_shared<{cur_type}>();}}
+'''
+
+create_obj_code3 = '''
+    else {assert(false); return nullptr;}
+'''
+
+create_obj_code4 = '''
+}
+'''
 # ---------------operator == code end------------------
 
 class SerializeBind(object):
@@ -95,6 +114,10 @@ class SerializeBind(object):
     @property
     def name(self):
         return self._name
+
+    @property
+    def fullname(self):
+        return self._full_name
 
     @property
     def header(self):
@@ -134,8 +157,8 @@ class SerializeBind(object):
 
     def _typeo_code(self):
         code = ''
-        code += typeo_code1.format(cur_type=self._full_name)
-        code += typeo_code2.format(cur_type_enum=self.name)
+        code += typeo_code1.format(cur_type=self._full_name[2:])
+        code += typeo_code2.format(cur_type_enum=self._full_name[2:])
         code += typeo_code3
         return typeo_declare, code
 
@@ -173,6 +196,7 @@ def generate(nodes: list[ClassNode], reflect_dir):
     declare_target_file = os.path.join(generate_dir, 'SerializeAll.gen.h')
     impl_target_file = os.path.join(generate_dir, 'SerializeAll.gen.cpp')
     common_target_file = os.path.join(generate_dir, 'Common.gen.h')
+    common_imp_target_file = os.path.join(generate_dir, 'Common.gen.cpp')
     logging.log(logging.INFO, f'generate serialize code to {declare_target_file}, {impl_target_file} ...')
 
     include_code = '#include "{}"'
@@ -188,6 +212,9 @@ def generate(nodes: list[ClassNode], reflect_dir):
                 common.write('}; }}')
 
             impl.write(include_code.format(os.path.join(reflect_dir, 'Serialize.h')))
+
+            all_include_code = ''
+            create_code = ''
             for node in nodes:
                 if not node.labeled():
                     continue
@@ -197,3 +224,15 @@ def generate(nodes: list[ClassNode], reflect_dir):
                 decl.write(include_code.format(snode.header) + '\n')
                 decl.write(decl_code + '\n')
                 impl.write(impl_code + '\n')
+
+                # generate create_empty function code
+                all_include_code += include_code.format(snode.header) + '\n'
+                create_code += create_obj_code2.format(cur_type_str=snode.fullname[2:], cur_type=snode.fullname)
+
+            with open(common_imp_target_file, 'w') as common:
+                common.write(all_include_code + '\n\n\n')
+                common.write(include_code.format(os.path.join(reflect_dir, 'reflect.h')))
+                common.write(create_obj_code1)
+                common.write(create_code)
+                common.write(create_obj_code3)
+                common.write(create_obj_code4)
