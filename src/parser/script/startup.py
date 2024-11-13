@@ -12,9 +12,8 @@ if __name__ == '__main__':
         # print('Usage: python startup.py [include-directory]')
         # exit(0)
 
-
     # code_src_path = sys.argv[1]
-    code_src_path = R'C:\Users\lanxi\Documents\lanxing\codes\ErJiu\staywalk/src'
+    code_src_path = R'C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src'
     if not os.path.isdir(code_src_path):
         print(f'Wrong src directory {code_src_path}')
 
@@ -23,6 +22,7 @@ if __name__ == '__main__':
     index = clang.cindex.Index.create()
     compile_args = [
         f'-I{code_src_path}/engine',
+        # f'-I{code_src_path}/reflect',
         '-D_IN_REFLECT=1',  # switch on reflect
     ]
 
