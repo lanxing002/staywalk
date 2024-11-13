@@ -47,7 +47,7 @@ namespace staywalk{
 	// resource file use for cpu side, for create render object and edit
 	class sw_Class Resource : public Object {
 	public:
-		sw_Func Resource(const string& name = "0-resource");
+		sw_Func Resource(const string& name = "0-resource") {}
 		
 		sw_Prop fs::path source;
 		sw_Prop fs::path dump_dir;
@@ -64,7 +64,7 @@ namespace staywalk{
 
 	class sw_Class Shader : public Resource {
 	public:
-		Shader(const string& name = "0-shader");
+		Shader(const string& name = "0-shader") {}
 
 		sw_Prop string code;
 		sw_Prop ShaderType shader_type{ShaderType::None};
@@ -74,7 +74,7 @@ namespace staywalk{
 
 	class sw_Class Tex2d : public Resource {
 	public:
-		Tex2d(const string& name="0-Tex2d");
+		Tex2d(const string& name = "0-Tex2d") {}
 
 		static shared_ptr<Tex2d> MakeTex(fs::path src_path);
 

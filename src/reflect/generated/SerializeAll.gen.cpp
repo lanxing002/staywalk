@@ -1,4 +1,4 @@
-#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src\reflect\Serialize.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src\reflect\Serialize.h"
 template<>
 void ::staywalk::reflect::Serializer<::staywalk::Object>::dump(const ::staywalk::Object& obj, ofstream& ofs, Dumper& dumper) {
     dumper.write(obj.name, ofs);
@@ -16,6 +16,12 @@ void ::staywalk::reflect::Serializer<::staywalk::Object>::load(::staywalk::Objec
 bool ::staywalk::Object::operator==(const ::staywalk::Object& rhs) const {
     return 
 true && ::staywalk::Comparer::equal(this->name, rhs.name) && ::staywalk::Comparer::equal(this->guid_, rhs.guid_);
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::Object::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::Object"};
+
 }
 
 
@@ -43,6 +49,12 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->location, rhs.loca
 }
 
 
+::staywalk::reflect::MetaInfo staywalk::GameObject::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::GameObject"};
+
+}
+
+
 template<>
 void ::staywalk::reflect::Serializer<::staywalk::GameComponent>::dump(const ::staywalk::GameComponent& obj, ofstream& ofs, Dumper& dumper) {
     Serializer<Object>::dump(obj, ofs, dumper);
@@ -58,6 +70,12 @@ void ::staywalk::reflect::Serializer<::staywalk::GameComponent>::load(::staywalk
 bool ::staywalk::GameComponent::operator==(const ::staywalk::GameComponent& rhs) const {
     return 
 Object::operator==(rhs) ;
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::GameComponent::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::GameComponent"};
+
 }
 
 
@@ -85,6 +103,12 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->glid, rhs.glid) &&
 }
 
 
+::staywalk::reflect::MetaInfo staywalk::RObject::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::RObject"};
+
+}
+
+
 template<>
 void ::staywalk::reflect::Serializer<::staywalk::RTex>::dump(const ::staywalk::RTex& obj, ofstream& ofs, Dumper& dumper) {
     Serializer<RObject>::dump(obj, ofs, dumper);
@@ -100,6 +124,12 @@ void ::staywalk::reflect::Serializer<::staywalk::RTex>::load(::staywalk::RTex& o
 bool ::staywalk::RTex::operator==(const ::staywalk::RTex& rhs) const {
     return 
 RObject::operator==(rhs) ;
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::RTex::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::RTex"};
+
 }
 
 
@@ -121,6 +151,12 @@ RObject::operator==(rhs) ;
 }
 
 
+::staywalk::reflect::MetaInfo staywalk::RShader::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::RShader"};
+
+}
+
+
 template<>
 void ::staywalk::reflect::Serializer<::staywalk::RProgram>::dump(const ::staywalk::RProgram& obj, ofstream& ofs, Dumper& dumper) {
     Serializer<RObject>::dump(obj, ofs, dumper);
@@ -139,6 +175,12 @@ RObject::operator==(rhs) ;
 }
 
 
+::staywalk::reflect::MetaInfo staywalk::RProgram::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::RProgram"};
+
+}
+
+
 template<>
 void ::staywalk::reflect::Serializer<::staywalk::RUniform>::dump(const ::staywalk::RUniform& obj, ofstream& ofs, Dumper& dumper) {
     Serializer<RObject>::dump(obj, ofs, dumper);
@@ -154,6 +196,12 @@ void ::staywalk::reflect::Serializer<::staywalk::RUniform>::load(::staywalk::RUn
 bool ::staywalk::RUniform::operator==(const ::staywalk::RUniform& rhs) const {
     return 
 RObject::operator==(rhs) ;
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::RUniform::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::RUniform"};
+
 }
 
 
@@ -179,6 +227,12 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->source, rhs.source
 }
 
 
+::staywalk::reflect::MetaInfo staywalk::Resource::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::Resource"};
+
+}
+
+
 template<>
 void ::staywalk::reflect::Serializer<::staywalk::Shader>::dump(const ::staywalk::Shader& obj, ofstream& ofs, Dumper& dumper) {
     Serializer<Resource>::dump(obj, ofs, dumper);
@@ -201,6 +255,12 @@ Resource::operator==(rhs)  && ::staywalk::Comparer::equal(this->code, rhs.code) 
 }
 
 
+::staywalk::reflect::MetaInfo staywalk::Shader::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::Shader"};
+
+}
+
+
 template<>
 void ::staywalk::reflect::Serializer<::staywalk::Tex2d>::dump(const ::staywalk::Tex2d& obj, ofstream& ofs, Dumper& dumper) {
     Serializer<Resource>::dump(obj, ofs, dumper);
@@ -216,6 +276,12 @@ void ::staywalk::reflect::Serializer<::staywalk::Tex2d>::load(::staywalk::Tex2d&
 bool ::staywalk::Tex2d::operator==(const ::staywalk::Tex2d& rhs) const {
     return 
 Resource::operator==(rhs) ;
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::Tex2d::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::Tex2d"};
+
 }
 
 
@@ -243,6 +309,12 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->shader_, rhs.shade
 }
 
 
+::staywalk::reflect::MetaInfo staywalk::Material::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::Material"};
+
+}
+
+
 template<>
 void ::staywalk::reflect::Serializer<::staywalk::RMesh>::dump(const ::staywalk::RMesh& obj, ofstream& ofs, Dumper& dumper) {
     Serializer<RObject>::dump(obj, ofs, dumper);
@@ -267,6 +339,12 @@ RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->vertices_, rhs.ve
 }
 
 
+::staywalk::reflect::MetaInfo staywalk::RMesh::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::RMesh"};
+
+}
+
+
 template<>
 void ::staywalk::reflect::Serializer<::staywalk::StaticMeshComponent>::dump(const ::staywalk::StaticMeshComponent& obj, ofstream& ofs, Dumper& dumper) {
     Serializer<GameComponent>::dump(obj, ofs, dumper);
@@ -287,6 +365,12 @@ GameComponent::operator==(rhs)  && ::staywalk::Comparer::equal(this->meshs, rhs.
 }
 
 
+::staywalk::reflect::MetaInfo staywalk::StaticMeshComponent::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::StaticMeshComponent"};
+
+}
+
+
 template<>
 void ::staywalk::reflect::Serializer<::staywalk::Actor>::dump(const ::staywalk::Actor& obj, ofstream& ofs, Dumper& dumper) {
     Serializer<GameObject>::dump(obj, ofs, dumper);
@@ -304,5 +388,11 @@ void ::staywalk::reflect::Serializer<::staywalk::Actor>::load(::staywalk::Actor&
 bool ::staywalk::Actor::operator==(const ::staywalk::Actor& rhs) const {
     return 
 GameObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->sm_comp, rhs.sm_comp);
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::Actor::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::Actor"};
+
 }
 

@@ -4,12 +4,12 @@
 
 namespace staywalk {
 	namespace reflect {
-		enum class ObjectType : unsigned int;
-
 		struct MetaInfo {
-			ObjectType obj_type;
+			std::string_view tname;
 		};
+
+		shared_ptr<::staywalk::Object> create_empty(MetaInfo minfo);
 	}
 }
 
-#include "Common.gen.h"
+#include "generated/Common.gen.h"
