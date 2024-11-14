@@ -1,15 +1,15 @@
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src\reflect\Serialize.h"
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::Object>::dump(const ::staywalk::Object& obj, ofstream& ofs, Dumper& dumper) {
-    dumper.write(obj.name, ofs);
-    dumper.write(obj.guid_, ofs);
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src\reflect\Serialize.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Object.h"
+
+void ::staywalk::Object::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    dumper.write(this->name, ofs);
+    dumper.write(this->guid_, ofs);
 }
 
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::Object>::load(::staywalk::Object& obj, ifstream& ifs, Loader& loader) {
-    loader.read(obj.name, ifs);
-    loader.read(obj.guid_, ifs);
+void ::staywalk::Object::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    loader.read(this->name, ifs);
+    loader.read(this->guid_, ifs);
 }
 
 
@@ -24,22 +24,21 @@ true && ::staywalk::Comparer::equal(this->name, rhs.name) && ::staywalk::Compare
 
 }
 
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\GameObject.h"
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::GameObject>::dump(const ::staywalk::GameObject& obj, ofstream& ofs, Dumper& dumper) {
-    Serializer<Object>::dump(obj, ofs, dumper);
-    dumper.write(obj.location, ofs);
-    dumper.write(obj.scale, ofs);
-    dumper.write(obj.rotation, ofs);
+void ::staywalk::GameObject::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    Object::dump(ofs, dumper);
+    dumper.write(this->location, ofs);
+    dumper.write(this->scale, ofs);
+    dumper.write(this->rotation, ofs);
 }
 
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::GameObject>::load(::staywalk::GameObject& obj, ifstream& ifs, Loader& loader) {
-    Serializer<Object>::load(obj, ifs, loader);
-    loader.read(obj.location, ifs);
-    loader.read(obj.scale, ifs);
-    loader.read(obj.rotation, ifs);
+void ::staywalk::GameObject::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    Object::load(ifs, loader);
+    loader.read(this->location, ifs);
+    loader.read(this->scale, ifs);
+    loader.read(this->rotation, ifs);
 }
 
 
@@ -54,16 +53,15 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->location, rhs.loca
 
 }
 
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\GameComponent.h"
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::GameComponent>::dump(const ::staywalk::GameComponent& obj, ofstream& ofs, Dumper& dumper) {
-    Serializer<Object>::dump(obj, ofs, dumper);
+void ::staywalk::GameComponent::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    Object::dump(ofs, dumper);
 }
 
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::GameComponent>::load(::staywalk::GameComponent& obj, ifstream& ifs, Loader& loader) {
-    Serializer<Object>::load(obj, ifs, loader);
+void ::staywalk::GameComponent::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    Object::load(ifs, loader);
 }
 
 
@@ -78,22 +76,21 @@ Object::operator==(rhs) ;
 
 }
 
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::RObject>::dump(const ::staywalk::RObject& obj, ofstream& ofs, Dumper& dumper) {
-    Serializer<Object>::dump(obj, ofs, dumper);
-    dumper.write(obj.glid, ofs);
-    dumper.write(obj.valid, ofs);
-    dumper.write(obj.path, ofs);
+void ::staywalk::RObject::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    Object::dump(ofs, dumper);
+    dumper.write(this->glid, ofs);
+    dumper.write(this->valid, ofs);
+    dumper.write(this->path, ofs);
 }
 
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::RObject>::load(::staywalk::RObject& obj, ifstream& ifs, Loader& loader) {
-    Serializer<Object>::load(obj, ifs, loader);
-    loader.read(obj.glid, ifs);
-    loader.read(obj.valid, ifs);
-    loader.read(obj.path, ifs);
+void ::staywalk::RObject::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    Object::load(ifs, loader);
+    loader.read(this->glid, ifs);
+    loader.read(this->valid, ifs);
+    loader.read(this->path, ifs);
 }
 
 
@@ -108,16 +105,15 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->glid, rhs.glid) &&
 
 }
 
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::RTex>::dump(const ::staywalk::RTex& obj, ofstream& ofs, Dumper& dumper) {
-    Serializer<RObject>::dump(obj, ofs, dumper);
+void ::staywalk::RTex::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    RObject::dump(ofs, dumper);
 }
 
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::RTex>::load(::staywalk::RTex& obj, ifstream& ifs, Loader& loader) {
-    Serializer<RObject>::load(obj, ifs, loader);
+void ::staywalk::RTex::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    RObject::load(ifs, loader);
 }
 
 
@@ -132,16 +128,15 @@ RObject::operator==(rhs) ;
 
 }
 
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::RShader>::dump(const ::staywalk::RShader& obj, ofstream& ofs, Dumper& dumper) {
-    Serializer<RObject>::dump(obj, ofs, dumper);
+void ::staywalk::RShader::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    RObject::dump(ofs, dumper);
 }
 
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::RShader>::load(::staywalk::RShader& obj, ifstream& ifs, Loader& loader) {
-    Serializer<RObject>::load(obj, ifs, loader);
+void ::staywalk::RShader::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    RObject::load(ifs, loader);
 }
 
 
@@ -156,16 +151,15 @@ RObject::operator==(rhs) ;
 
 }
 
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::RProgram>::dump(const ::staywalk::RProgram& obj, ofstream& ofs, Dumper& dumper) {
-    Serializer<RObject>::dump(obj, ofs, dumper);
+void ::staywalk::RProgram::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    RObject::dump(ofs, dumper);
 }
 
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::RProgram>::load(::staywalk::RProgram& obj, ifstream& ifs, Loader& loader) {
-    Serializer<RObject>::load(obj, ifs, loader);
+void ::staywalk::RProgram::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    RObject::load(ifs, loader);
 }
 
 
@@ -180,16 +174,15 @@ RObject::operator==(rhs) ;
 
 }
 
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::RUniform>::dump(const ::staywalk::RUniform& obj, ofstream& ofs, Dumper& dumper) {
-    Serializer<RObject>::dump(obj, ofs, dumper);
+void ::staywalk::RUniform::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    RObject::dump(ofs, dumper);
 }
 
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::RUniform>::load(::staywalk::RUniform& obj, ifstream& ifs, Loader& loader) {
-    Serializer<RObject>::load(obj, ifs, loader);
+void ::staywalk::RUniform::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    RObject::load(ifs, loader);
 }
 
 
@@ -204,20 +197,19 @@ RObject::operator==(rhs) ;
 
 }
 
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::Resource>::dump(const ::staywalk::Resource& obj, ofstream& ofs, Dumper& dumper) {
-    Serializer<Object>::dump(obj, ofs, dumper);
-    dumper.write(obj.source, ofs);
-    dumper.write(obj.dump_dir, ofs);
+void ::staywalk::Resource::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    Object::dump(ofs, dumper);
+    dumper.write(this->source, ofs);
+    dumper.write(this->dump_dir, ofs);
 }
 
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::Resource>::load(::staywalk::Resource& obj, ifstream& ifs, Loader& loader) {
-    Serializer<Object>::load(obj, ifs, loader);
-    loader.read(obj.source, ifs);
-    loader.read(obj.dump_dir, ifs);
+void ::staywalk::Resource::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    Object::load(ifs, loader);
+    loader.read(this->source, ifs);
+    loader.read(this->dump_dir, ifs);
 }
 
 
@@ -232,20 +224,19 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->source, rhs.source
 
 }
 
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::Shader>::dump(const ::staywalk::Shader& obj, ofstream& ofs, Dumper& dumper) {
-    Serializer<Resource>::dump(obj, ofs, dumper);
-    dumper.write(obj.code, ofs);
-    dumper.write(obj.shader_type, ofs);
+void ::staywalk::Shader::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    Resource::dump(ofs, dumper);
+    dumper.write(this->code, ofs);
+    dumper.write(this->shader_type, ofs);
 }
 
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::Shader>::load(::staywalk::Shader& obj, ifstream& ifs, Loader& loader) {
-    Serializer<Resource>::load(obj, ifs, loader);
-    loader.read(obj.code, ifs);
-    loader.read(obj.shader_type, ifs);
+void ::staywalk::Shader::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    Resource::load(ifs, loader);
+    loader.read(this->code, ifs);
+    loader.read(this->shader_type, ifs);
 }
 
 
@@ -260,16 +251,15 @@ Resource::operator==(rhs)  && ::staywalk::Comparer::equal(this->code, rhs.code) 
 
 }
 
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::Tex2d>::dump(const ::staywalk::Tex2d& obj, ofstream& ofs, Dumper& dumper) {
-    Serializer<Resource>::dump(obj, ofs, dumper);
+void ::staywalk::Tex2d::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    Resource::dump(ofs, dumper);
 }
 
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::Tex2d>::load(::staywalk::Tex2d& obj, ifstream& ifs, Loader& loader) {
-    Serializer<Resource>::load(obj, ifs, loader);
+void ::staywalk::Tex2d::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    Resource::load(ifs, loader);
 }
 
 
@@ -284,22 +274,21 @@ Resource::operator==(rhs) ;
 
 }
 
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Material.h"
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::Material>::dump(const ::staywalk::Material& obj, ofstream& ofs, Dumper& dumper) {
-    Serializer<Object>::dump(obj, ofs, dumper);
-    dumper.write(obj.shader_, ofs);
-    dumper.write(obj.uniforms_, ofs);
-    dumper.write(obj.texs_, ofs);
+void ::staywalk::Material::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    Object::dump(ofs, dumper);
+    dumper.write(this->shader_, ofs);
+    dumper.write(this->uniforms_, ofs);
+    dumper.write(this->texs_, ofs);
 }
 
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::Material>::load(::staywalk::Material& obj, ifstream& ifs, Loader& loader) {
-    Serializer<Object>::load(obj, ifs, loader);
-    loader.read(obj.shader_, ifs);
-    loader.read(obj.uniforms_, ifs);
-    loader.read(obj.texs_, ifs);
+void ::staywalk::Material::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    Object::load(ifs, loader);
+    loader.read(this->shader_, ifs);
+    loader.read(this->uniforms_, ifs);
+    loader.read(this->texs_, ifs);
 }
 
 
@@ -314,22 +303,21 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->shader_, rhs.shade
 
 }
 
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RMesh.h"
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::RMesh>::dump(const ::staywalk::RMesh& obj, ofstream& ofs, Dumper& dumper) {
-    Serializer<RObject>::dump(obj, ofs, dumper);
-    dumper.write(obj.vertices_, ofs);
-    dumper.write(obj.indices_, ofs);
-    dumper.write(obj.mat_, ofs);
+void ::staywalk::RMesh::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    RObject::dump(ofs, dumper);
+    dumper.write(this->vertices_, ofs);
+    dumper.write(this->indices_, ofs);
+    dumper.write(this->mat_, ofs);
 }
 
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::RMesh>::load(::staywalk::RMesh& obj, ifstream& ifs, Loader& loader) {
-    Serializer<RObject>::load(obj, ifs, loader);
-    loader.read(obj.vertices_, ifs);
-    loader.read(obj.indices_, ifs);
-    loader.read(obj.mat_, ifs);
+void ::staywalk::RMesh::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    RObject::load(ifs, loader);
+    loader.read(this->vertices_, ifs);
+    loader.read(this->indices_, ifs);
+    loader.read(this->mat_, ifs);
 }
 
 
@@ -344,18 +332,17 @@ RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->vertices_, rhs.ve
 
 }
 
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\StaticMeshComponent.h"
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::StaticMeshComponent>::dump(const ::staywalk::StaticMeshComponent& obj, ofstream& ofs, Dumper& dumper) {
-    Serializer<GameComponent>::dump(obj, ofs, dumper);
-    dumper.write(obj.meshs, ofs);
+void ::staywalk::StaticMeshComponent::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    GameComponent::dump(ofs, dumper);
+    dumper.write(this->meshs, ofs);
 }
 
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::StaticMeshComponent>::load(::staywalk::StaticMeshComponent& obj, ifstream& ifs, Loader& loader) {
-    Serializer<GameComponent>::load(obj, ifs, loader);
-    loader.read(obj.meshs, ifs);
+void ::staywalk::StaticMeshComponent::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    GameComponent::load(ifs, loader);
+    loader.read(this->meshs, ifs);
 }
 
 
@@ -370,18 +357,17 @@ GameComponent::operator==(rhs)  && ::staywalk::Comparer::equal(this->meshs, rhs.
 
 }
 
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Actor.h"
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::Actor>::dump(const ::staywalk::Actor& obj, ofstream& ofs, Dumper& dumper) {
-    Serializer<GameObject>::dump(obj, ofs, dumper);
-    dumper.write(obj.sm_comp, ofs);
+void ::staywalk::Actor::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    GameObject::dump(ofs, dumper);
+    dumper.write(this->sm_comp, ofs);
 }
 
 
-template<>
-void ::staywalk::reflect::Serializer<::staywalk::Actor>::load(::staywalk::Actor& obj, ifstream& ifs, Loader& loader) {
-    Serializer<GameObject>::load(obj, ifs, loader);
-    loader.read(obj.sm_comp, ifs);
+void ::staywalk::Actor::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    GameObject::load(ifs, loader);
+    loader.read(this->sm_comp, ifs);
 }
 
 

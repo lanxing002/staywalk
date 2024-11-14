@@ -38,11 +38,6 @@ namespace staywalk{
 
 		static fs::path create_temp_dir();
 
-		static void dump_world(shared_ptr<World> world);
-
-		static shared_ptr<World> load_world(const std::string& name);
-
-
 		/***********************************************/
 		/*****************render object*****************/
 		/***********************************************/
