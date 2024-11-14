@@ -14,18 +14,19 @@ namespace staywalk {
 	public:
 		~World();
 
+		void dump();
+
 		static PWorld create_empty_world(const string& world_name);
 		// test, need to serizalize to scene file
 		static PWorld load_marry_world();
+		static shared_ptr<World> load(const string& name);
 
+		const vector<PActor>& get_all_actors() { return actors_; }
 		void add_actor(shared_ptr<Actor> actor);
 		void remove_actor(shared_ptr<Actor> actor);
 		void remove_actor(idtype id);
-
-		const vector<PActor>& get_all_actors() { return actors_; }
-
+		
 		const string& get_name() { return name_; }
-
 		void set_name(const string& name) { name_ = name; }
 
 

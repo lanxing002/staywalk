@@ -5,7 +5,7 @@
 namespace staywalk {
 	namespace reflect {
 		struct MetaInfo {
-			std::string_view tname;
+			std::string tname;
 		};
 
 		shared_ptr<::staywalk::Object> create_empty(MetaInfo minfo);

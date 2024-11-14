@@ -7,6 +7,7 @@
 #include "RenderObject.h"
 #include "World.h"
 #include "Material.h"
+#include "Serialize.h"
 
 #include <stb_image.h>
 #include <assimp/Importer.hpp>
@@ -154,65 +155,6 @@ namespace staywalk{
             return false;
         }
         return true;
-    }
-
-    void Utility::dump_world(shared_ptr<World> world){
-        if (nullptr == world) return;
-        //auto world_file = Utility::get_worlds_dir() / (world->get_name() + Utility::kWorldExt);
-        //ofstream ofs(world_file, std::ios::out | std::ios::binary | std::ios::trunc);
-        //auto check_r = Utility::check_ofstream(ofs);
-        //auto actors = world->get_all_actors();
-        //auto dumper = Dumper(Utility::get_objects_dir());
-        //dumper.write_basic(actors.size(), ofs);
-        //for (auto actor : actors) {
-        //    if (nullptr == actor) continue;
-        //    //idtype dumpid = actor->get_guid();
-        //    //dumper.write_basic(actor->get_guid(), ofs);
-        //    dumper.dump(actor);
-        //}
-        //dumper.clear();
-        //ofs.close();
-    }
-
-    shared_ptr<World> Utility::load_world(const std::string& name)
-    {
-        auto world_file = Utility::get_worlds_dir() / (name + Utility::kWorldExt);
-        if (!fs::exists(world_file)) {
-            log(LogLevel::Error, fmt::format("cannot open world file: {}", fs::absolute(world_file).u8string()));
-            return nullptr;
-        }
-
-        //ifstream ifs(world_file, std::ios::in | std::ios::binary);
-        //auto check_r = Utility::check_ifstream(ifs);
-        //auto loader = Loader(Utility::get_objects_dir());
-        //vector<idtype> objids;
-        //if (check_r) {
-        //    size_t num = loader.read_basic<std::size_t>(ifs);
-        //    for (size_t i = 0; i < num; i++) {
-        //        idtype id = loader.read_basic<idtype>(ifs);
-        //        objids.push_back(id);
-        //    }
-        //}
-
-        shared_ptr<World> world = std::make_shared<World>();
-        //for (auto id : objids) {
-        //    auto obj = loader.load(id);
-        //    //ObjectType ot = obj->get_type_value();
-
-        //    //switch (ot)
-        //    //{
-        //    //case staywalk::ObjectType::Actor:
-        //    //    world->add_actor(std::dynamic_pointer_cast<Actor>(obj));
-        //    //    break;
-        //    //case staywalk::ObjectType::Camera:
-        //    //    break;
-        //    //default:
-        //    //    break;
-        //    //}
-        //}
-
-        //world->set_name(name);
-        return world;
     }
 
     shared_ptr<RTex> Utility::load_texture(fs::path path)

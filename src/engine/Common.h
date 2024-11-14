@@ -12,6 +12,7 @@
 #include <fstream>
 #include <array>
 #include <filesystem>
+#include <cassert>
 
 #ifdef _IN_REFLECT
 #define sw_Prop __attribute__((annotate("__sw;")))
@@ -68,12 +69,16 @@ namespace staywalk
 		template<typename T>
 		class Serializer;
 		struct MetaInfo;
+		class Dumper;
+		class Loader;
 	}
 }
-
 
 #define MetaRegister(TypeName)													\
 public:																			\
 	bool operator==(const TypeName&) const;										\
 	friend class staywalk::reflect::Serializer<TypeName>;						\
-	virtual staywalk::reflect::MetaInfo get_meta_info() const;						
+	virtual staywalk::reflect::MetaInfo get_meta_info() const;					\
+	virtual void dump(staywalk::ofstream&, staywalk::reflect::Dumper&) const;	\
+	virtual void load(staywalk::ifstream&, staywalk::reflect::Loader&);
+	

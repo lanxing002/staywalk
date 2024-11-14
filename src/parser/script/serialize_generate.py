@@ -5,43 +5,37 @@ from mylog import *
 
 # --------------dump code start-----------------
 dump_code1 = '''
-template<>
-void ::staywalk::reflect::Serializer<{cur_type}>::dump(const {cur_type}& obj, ofstream& ofs, Dumper& dumper) {{'''
+void {cur_type}::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {{'''
 
 dump_code2 = '''
-    Serializer<{base_type}>::dump(obj, ofs, dumper);'''
+    {base_type}::dump(ofs, dumper);'''
 
 dump_code3 = '''
-    dumper.write(obj.{dump_prop}, ofs);'''
+    dumper.write(this->{dump_prop}, ofs);'''
 
 dump_code4 = '''
 }
 '''
 
-dump_declare = '''
-template<>
-void ::staywalk::reflect::Serializer<{cur_type}>::dump(const {cur_type}& obj, ofstream& ofs, Dumper& dumper);'''
+dump_declare = ''' '''
 # --------------dump code end-----------------
 
 
 # --------------load code start-----------------
 load_code1 = '''
-template<>
-void ::staywalk::reflect::Serializer<{cur_type}>::load({cur_type}& obj, ifstream& ifs, Loader& loader) {{'''
+void {cur_type}::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {{'''
 
 load_code2 = '''
-    Serializer<{base_type}>::load(obj, ifs, loader);'''
+    {base_type}::load(ifs, loader);'''
 
 load_code3 = '''
-    loader.read(obj.{load_prop}, ifs);'''
+    loader.read(this->{load_prop}, ifs);'''
 
 load_code4 = '''
 }
 '''
 
-load_declare = '''
-template<>
-void ::staywalk::reflect::Serializer<{cur_type}>::load({cur_type}& obj, ifstream& ifs, Loader& loader);'''
+load_declare = ''' '''
 # --------------load code end-----------------
 
 
@@ -63,7 +57,7 @@ eop_code5 = '''
 
 eop_declare = ''' '''
 
-# ---------------operator == code start------------------
+# ---------------type object code start------------------
 typeo_code1 = '''
 ::staywalk::reflect::MetaInfo {cur_type}::get_meta_info() const {{'''
 
@@ -76,13 +70,13 @@ typeo_code3 = '''
 '''
 
 typeo_declare = ''' '''
-# ---------------operator == code end------------------
+# ---------------otype object  code end------------------
 
 
-# ---------------operator == code start------------------
+# ---------------create code start------------------
 create_obj_code1 = '''
 using namespace staywalk;
-shared_ptr<Object> create_empty(reflect::MetaInfo minfo) {
+shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
     if (false) { return nullptr; }
 '''
 
@@ -97,7 +91,7 @@ create_obj_code3 = '''
 create_obj_code4 = '''
 }
 '''
-# ---------------operator == code end------------------
+# ---------------create code end------------------
 
 class SerializeBind(object):
     def __init__(self, bind_node: ClassNode):
@@ -212,6 +206,7 @@ def generate(nodes: list[ClassNode], reflect_dir):
                 common.write('}; }}')
 
             impl.write(include_code.format(os.path.join(reflect_dir, 'Serialize.h')))
+            impl.write('\n')
 
             all_include_code = ''
             create_code = ''
@@ -221,9 +216,9 @@ def generate(nodes: list[ClassNode], reflect_dir):
                 snode = SerializeBind(node)
                 logging.log(logging.INFO, f'start generate {node._node.spelling}')
                 decl_code, impl_code = snode.generate_code()
-                decl.write(include_code.format(snode.header) + '\n')
-                decl.write(decl_code + '\n')
+                impl.write(include_code.format(snode.header) + '\n')
                 impl.write(impl_code + '\n')
+                # decl.write(decl_code + '\n')
 
                 # generate create_empty function code
                 all_include_code += include_code.format(snode.header) + '\n'
