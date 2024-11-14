@@ -8,9 +8,16 @@ namespace staywalk{
 
 		sw_Func RMesh(const vector<Vertex>& vv, const vector<unsigned int>& ii, const string& name = "0-mesh");
 
+		void organize() override;
+		void disband() override;
+		bool load_resource() override;
+
+	public:
 		sw_Prop vector<Vertex> vertices;
 		sw_Prop vector<unsigned int> indices;
 		sw_Prop shared_ptr<Material> mat;
+
+		uint vbo;
 
 		MetaRegister(RMesh);
 	};
