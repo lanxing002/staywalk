@@ -63,7 +63,7 @@ namespace staywalk
 	namespace fs = std::filesystem;
 
 	constexpr idtype kInvalidId = -1;
-	constexpr uint kGlInvalidId = -1;
+	constexpr uint kGlSickId = -1;
 
 	namespace reflect {
 		template<typename T>

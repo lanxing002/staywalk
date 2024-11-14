@@ -157,23 +157,17 @@ Resource::operator==(rhs) ;
 
 void ::staywalk::RObject::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     Object::dump(ofs, dumper);
-    dumper.write(this->glid, ofs);
-    dumper.write(this->valid, ofs);
-    dumper.write(this->path, ofs);
 }
 
 
 void ::staywalk::RObject::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
     Object::load(ifs, loader);
-    loader.read(this->glid, ifs);
-    loader.read(this->valid, ifs);
-    loader.read(this->path, ifs);
 }
 
 
 bool ::staywalk::RObject::operator==(const ::staywalk::RObject& rhs) const {
     return 
-Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->glid, rhs.glid) && ::staywalk::Comparer::equal(this->valid, rhs.valid) && ::staywalk::Comparer::equal(this->path, rhs.path);
+Object::operator==(rhs) ;
 }
 
 
