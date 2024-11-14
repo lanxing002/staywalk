@@ -21,20 +21,6 @@ namespace staywalk{
 	};
 
 	namespace reflect {
-		class Dumper;
-		class Loader;
-
-		template<typename T>
-		class Serializer {
-		public:
-			//static ObjectType get_type_value() { static_assert(false && "Not impl"); }
-			//static bool operator==(const T& lhs, const T& rhs) {static_assert(false && "Not impl");}
-
-			static void dump(const T& obj, ofstream& ofs, Dumper& dumper); /*{ static_assert(false && "Not impl"); }*/
-			static void load(T& obj, ifstream& ifs, Loader& loader); /*{ static_assert(false && "Not impl"); }*/
-		};
-
-
 		class Dumper {
 		public:
 			enum class Status {
@@ -49,11 +35,14 @@ namespace staywalk{
 			Dumper& operator=(const Dumper&) = delete;
 			Dumper& operator=(Dumper&&) = delete;
 
+			/**
+			*@brief create a ofstream, and write type info
+			*/
 			void dump(shared_ptr<Object> obj);
 
 			// wirte data to stream for all type which can serialize
 			template<typename T>
-			void write(const T& data, ofstream& ofs) { this->write_basic<T>(data, ofs); }
+			void write(const T& data, ofstream& ofs) { this->write_single<T>(data, ofs); }
 
 			template<typename T>
 			void write(const std::vector<T>& data, ofstream& ofs) { this->write_vector<T>(data, ofs); }
@@ -63,23 +52,30 @@ namespace staywalk{
 
 			template<typename T>
 			void write(const std::shared_ptr<T>& obj, ofstream& ofs) { 
-				static_assert(std::is_base_of_v<staywalk::Object, T> && "unsupport shared_ptr dump of other type");
+				static_assert((std::is_base_of_v<staywalk::Object, T> || std::is_same_v<staywalk::Object, T>) 
+					&& "unsupport shared_ptr dump of other type");
 				idtype dump_id = obj == nullptr ? kInvalidId : obj->get_guid();
-				write_basic(dump_id, ofs);
+				write(dump_id, ofs);
 				if (dump_id != kInvalidId) this->dump_obj_impl(obj);
 			}
 			// end 
+			bool clear();
 
 		private:
-			template<typename T>
-			void write_basic(const T&, ofstream& ofs);
+			/**
+			*@brief create a ofstream, and write type info 
+			*/
+			void dump_obj_impl(const shared_ptr<Object> obj);
 
+			/**
+			*@brief write common type dataread_single
+			*/
+			template<typename T>
+			void write_single(const T&, ofstream& ofs);
 			template<typename T>
 			void write_vector(const vector<T>& data, ofstream& ofs);
 			template<typename TKey, typename TVal>
 			void write_map(const map<TKey, TVal>& data, ofstream& ofs);
-			bool clear();
-			void dump_obj_impl(const shared_ptr<Object> obj);
 
 		private:
 			hashtable<idtype, Status> status_table_;
@@ -101,34 +97,31 @@ namespace staywalk{
 			Loader& operator=(const Loader&) = delete;
 			Loader& operator=(Loader&&) = delete;
 
+			/**
+			*@brief create a ifstream, and read type info
+			*/
 			shared_ptr<Object> load(idtype id);
 
 			template<typename T>
-			void read(T& data, ifstream& ofs) { this->read_basic<T>(data, ofs); }
+			void read(T& data, ifstream& ifs) { this->read_single<T>(data, ifs); }
 
 			template<typename T>
-			void read(std::vector<T>& data, ifstream& ofs) { this->read_vector<T>(data, ofs); }
+			void read(std::vector<T>& data, ifstream& ifs) { this->read_vector<T>(data, ifs); }
 
 			template<typename TK, typename TV>
-			void read(std::map<TK, TV>& data, ifstream& ofs) { this->read_map<TK, TV>(data, ofs); }
+			void read(std::map<TK, TV>& data, ifstream& ifs) { this->read_map<TK, TV>(data, ifs); }
 
 			template<typename T>
 			void read(std::shared_ptr<T>& data, ifstream& ifs) {
-				static_assert((std::is_same_v<::staywalk::Object, T> || std::is_base_of_v<staywalk::Object, T>) && "unsupport shared_ptr dump of other type");
-				idtype id; read_basic<idtype>(id, ifs);
-				//return  id == kInvalidId ? nullptr : load_obj_impl(id);
+				static_assert((std::is_same_v<::staywalk::Object, T> || std::is_base_of_v<staywalk::Object, T>) 
+					&& "unsupport shared_ptr load of other type");
+				idtype id; read(id, ifs);
+				data = (id == kInvalidId) ? nullptr : pcast<T>(load_obj_impl(id));
 			}
 
 		private:
 			template<typename T>
-			void read_basic(T& data, ifstream& ifs);
-			template<>
-			void Loader::read_basic<string>(string& str, ifstream& ifs);
-
-			template<>
-			void Loader::read_basic(fs::path& path, ifstream& ifs){
-				string pstr; this->read_basic(pstr, ifs);  path = fs::path{ pstr };
-			}
+			void read_single(T& data, ifstream& ifs);
 
 			template<typename T>
 			void read_vector(vector<T>& data, ifstream& ifs);
@@ -150,10 +143,10 @@ namespace staywalk{
 namespace staywalk {
 	namespace reflect {
 		template<typename T>
-		void Dumper::write_basic(const T& data, ofstream& ofs) {
+		void Dumper::write_single(const T& data, ofstream& ofs) {
 			constexpr bool is_obj = std::is_base_of_v<staywalk::Object, T> || std::is_same_v<T, staywalk::Object>;
 			if constexpr (is_obj) {
-				Serializer<T>::dump(data, ofs, *this);
+				data.dump(ofs, *this);
 			}
 			else{
 				static_assert(std::is_trivial<T>::value && "must be trivial type");
@@ -163,72 +156,65 @@ namespace staywalk {
 		}
 
 		template<>
-		void Dumper::write_basic<string>(const string& str, ofstream& ofs);
+		void Dumper::write_single<string>(const string& str, ofstream& ofs);
 
 		template<>
-		void Dumper::write_basic(const fs::path& path, ofstream& ofs);
+		void Dumper::write_single(const fs::path& path, ofstream& ofs);
 
 		template<typename T>
 		void Dumper::write_vector(const vector<T>& data, ofstream& ofs) {
-			//this->write_basic(data.size(), ofs);
-			//constexpr bool is_basic = std::is_trivial_v<T> || std::is_same_v<T, string>;
-			//for (const auto& it : data) {
-			//	if constexpr (is_basic) write_basic(it, ofs);
-			//	else write_nested_obj(it, ofs);
-			//}
+			this->write(data.size(), ofs);
+			for (const auto& it : data) this->write(it, ofs);
 		}
 
 		template<typename TKey, typename TVal>
 		void Dumper::write_map(const map<TKey, TVal>& data, ofstream& ofs) {
-			//this->write_basic(data.size(), ofs);
-			//constexpr bool is_basic = std::is_trivial_v<TVal> || std::is_same_v<TVal, string>;
-			//for (const auto& it : data) {
-			//	this->write_basic(it.first, ofs);
-			//	if constexpr (is_basic) write_basic(it.second, ofs);
-			//	else write_nested_obj(it.second, ofs);
-			//}
-		}
-
-		template<typename T>
-		void Loader::read_basic(T& data, ifstream& ifs) {
-			static_assert(std::is_trivial<T>::value && "must be trivial type");
-			ifs.read(reinterpret_cast<char*>(&data), sizeof data);
+			this->write(data.size(), ofs);
+			for (const auto& it : data) {
+				this->write(it.first, ofs); 
+				this->write(it.second, ofs);
+			}
 		}
 
 		template<>
-		inline void Loader::read_basic(string& str, ifstream& ifs) {
-			str.clear();
-			auto strlen = str.length();
-			ifs.read(reinterpret_cast<char*>(&strlen), sizeof strlen);
-			str.resize(strlen);
-			ifs.read((str.data()), strlen);
+		void Loader::read_single<string>(string& str, ifstream& ifs);
+
+		template<>
+		void Loader::read_single(fs::path& path, ifstream& ifs);
+
+		template<typename T>
+		void Loader::read_single(T& data, ifstream& ifs) {
+			constexpr bool is_obj = std::is_base_of_v<staywalk::Object, T> || std::is_same_v<T, staywalk::Object>;
+			if constexpr (is_obj) {
+				data.load(ifs, *this);
+			}
+			else {
+				static_assert(std::is_trivial<T>::value && "must be trivial type");
+				ifs.read(reinterpret_cast<char*>(&data), sizeof data);
+			}
 		}
 
 		template<typename T>
 		void Loader::read_vector(vector<T>& data, ifstream& ifs) {
 			data.clear();
-			//auto num = this->read_basic<size_t>(ifs);
-			//data.resize(num);
-			//constexpr bool is_basic = std::is_trivial_v<T> || std::is_same_v<T, string>;
-			//for (size_t i = 0; i < num; i++) {
-			//	if constexpr (is_basic) data[i] = read_basic<T>(ifs);
-			//	else data[i] = std::dynamic_pointer_cast<T::element_type>(read_nested_obj(ifs));
-			//}
+			size_t num;
+			read(num, ifs);
+			data.resize(num);
+			for (size_t i = 0; i < num; i++) read(data[i], ifs);
 		}
 
 		template<typename TKey, typename TVal>
 		void Loader::read_map(map<TKey, TVal>& data, ifstream& ifs) {
 			data.clear();
 			typename map<TKey, TVal>::size_type map_size;
-			read_basic<typename map<TKey, TVal>::size_type>(map_size, ifs);
-			constexpr bool is_basic = std::is_trivial_v<TVal> || std::is_same_v<TVal, string>;
+			read(map_size, ifs);
 			for (size_t i = 0; i < map_size; i++) {
-				TKey key; read_basic(key, ifs);
-				if constexpr (is_basic) data[key] = read_basic<TVal>(ifs);
-				//else data[key] = std::dynamic_pointer_cast<TVal::element_type>(read_nested_obj(ifs));
+				TKey key; 
+				read(key, ifs);
+				read(data[key], ifs);
 			}
 		}
-}
+	}
 }
 
 /************************compareor impl**************************/
