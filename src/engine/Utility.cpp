@@ -9,6 +9,7 @@
 #include "Material.h"
 #include "Serialize.h"
 
+#define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
 #include <assimp/Importer.hpp>
 #include <assimp/scene.h>
@@ -157,43 +158,32 @@ namespace staywalk{
         return true;
     }
 
-    shared_ptr<RTex> Utility::load_texture(fs::path path)
+    shared_ptr<RTex> Utility::make_texture(fs::path tex_name)
     {
+        auto result = std::make_shared<RTex>();
+        result->tex.name = tex_name.u8string();
+        load_tex_resource(result);
+        return result;
+    }
+
+    bool Utility::load_tex_resource(shared_ptr<RTex> rtex)
+    {
+        if (rtex == nullptr) return false;
+
+        auto path = get_textures_dir() / fs::path(rtex->tex.name);
         if (fs::is_directory(path) || !fs::exists(path)) {
             log(LogLevel::Error, fmt::format("Utility --> load_texture : not find target ({})", path.u8string()));
-            return nullptr;
+            return false;
         }
 
-        /*int width, height, nrComponents;
-        unsigned char* data = stbi_load(path.u8string().c_str(), &width, &height, &nrComponents, 0);
-        if (data)
-        {
-            GLenum format;
-            if (nrComponents == 1)
-                format = GL_RED;
-            else if (nrComponents == 3)
-                format = GL_RGB;
-            else if (nrComponents == 4)
-                format = GL_RGBA;
+        rtex->tex.data = stbi_load(path.u8string().c_str(),
+            &(rtex->tex.width), &(rtex->tex.height), &(rtex->tex.nr_comps), 0);
 
-            glBindTexture(GL_TEXTURE_2D, textureID);
-            glTexImage2D(GL_TEXTURE_2D, 0, format, width, height, 0, format, GL_UNSIGNED_BYTE, data);
-            glGenerateMipmap(GL_TEXTURE_2D);
-
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR_MIPMAP_LINEAR);
-            glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-
+        if (rtex->tex.data == nullptr) {
+            log(LogLevel::Error, fmt::format("Utility --> load_texture : failed when load {}", path.u8string()));
+            return false;
         }
-        else
-        {
-            std::cout << "Texture failed to load at path: " << path << std::endl;
-            stbi_image_free(data);
-        }*/
-        
-        //stbi_image_free(data);
-        return shared_ptr<RTex>();
+        return true;
     }
 
     fs::path Utility::get_resource_dir() {
@@ -230,16 +220,17 @@ namespace staywalk{
     }
 
     
-    MeshLoader::MeshLoader(const string& mesh_name){
-        auto path = fs::path(mesh_name);
-        if (fs::is_directory(path) ||  !fs::exists(path)) {
-            log(LogLevel::Warining, fmt::format("MeshLoader --> mesh ({}) not exists!", path.u8string()));
+    MeshLoader::MeshLoader(const string& mname)
+    :mesh_name_(mname){
+        if (fs::is_directory(mesh_name_) ||  !fs::exists(mesh_name_)) {
+            log(LogLevel::Warining, fmt::format("MeshLoader --> mesh ({}) not exists!", mesh_name_.u8string()));
             return;
         }
-        log(LogLevel::Info, fmt::format("MeshLoader --> consturct mesh data from ({})", path.u8string()));
+        log(LogLevel::Info, fmt::format("MeshLoader --> consturct mesh data from ({})", mesh_name_.u8string()));
+        load_dir_ = mesh_name_.parent_path();
 
         Assimp::Importer importer;
-        const aiScene* scene = importer.ReadFile(path.u8string(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+        const aiScene* scene = importer.ReadFile(mesh_name_.u8string(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
         // check for errors
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
@@ -248,7 +239,6 @@ namespace staywalk{
             return;
         }
         // retrieve the directory path of the filepath
-        work_dir_ = path.parent_path();
         process_node(scene->mRootNode, scene);
     }
 
@@ -294,9 +284,9 @@ namespace staywalk{
         PRTex diffuseMaps = find_material_tex(material, aiTextureType_DIFFUSE);
         shared_ptr<Material> mat = std::make_shared<Material>();
         mat->add_tex(Material::DiffuseKey, diffuseMaps);
-        
+
         auto result = std::make_shared<RMesh>(vertices, indices);
-        //result->set_mat(mat);
+        result->mat = mat;
         return result;
     }
 
@@ -319,10 +309,40 @@ namespace staywalk{
         if (mat->GetTextureCount(type) > 0) {
             aiString str;
             mat->GetTexture(type, 0, &str);
-            fs::path p{str.C_Str()};
-            return Utility::load_texture(p);
+            fs::path tex_path = load_dir_ / fs::path{ str.C_Str()};
+            return make_tex(tex_path);
         }
         return PRTex{ nullptr };
+    }
+
+    PRTex MeshLoader::make_tex(fs::path path)
+    {
+        auto it = loaded_texs_.find(path);
+        if(it != loaded_texs_.end()) return it->second;
+
+        if (!fs::exists(path)) {
+            log(LogLevel::Warining, fmt::format("MeshLoader::make_tex cannot find target texture file: {}", path.u8string()));
+            return nullptr; 
+        }
+
+        auto tex_name = path.stem();
+        auto tex_extension = path.extension();
+        auto new_tex_name = tex_name.u8string() + std::to_string(0) + tex_extension.u8string();
+        for (int i = 1; i < 1e8; i++) {
+            fs::path new_path = Utility::get_textures_dir() / new_tex_name;
+            if (!fs::exists(new_path)) {
+                break;
+            }
+            new_tex_name = tex_name.u8string() + std::to_string(i) + tex_extension.u8string();
+        }
+
+        if (fs::copy_file(path, Utility::get_textures_dir() / new_tex_name)){
+            auto result = Utility::make_texture(new_tex_name);
+            loaded_texs_[path] = result;
+            return result;
+        }
+
+        return PRTex(nullptr);
     }
 
 }

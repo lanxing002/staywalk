@@ -27,6 +27,12 @@ shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
 
     else if (minfo.tname == "staywalk::GameComponent"){return std::make_shared<::staywalk::GameComponent>();}
 
+    else if (minfo.tname == "staywalk::Resource"){return std::make_shared<::staywalk::Resource>();}
+
+    else if (minfo.tname == "staywalk::Shader"){return std::make_shared<::staywalk::Shader>();}
+
+    else if (minfo.tname == "staywalk::Tex2d"){return std::make_shared<::staywalk::Tex2d>();}
+
     else if (minfo.tname == "staywalk::RObject"){return std::make_shared<::staywalk::RObject>();}
 
     else if (minfo.tname == "staywalk::RTex"){return std::make_shared<::staywalk::RTex>();}
@@ -36,12 +42,6 @@ shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
     else if (minfo.tname == "staywalk::RProgram"){return std::make_shared<::staywalk::RProgram>();}
 
     else if (minfo.tname == "staywalk::RUniform"){return std::make_shared<::staywalk::RUniform>();}
-
-    else if (minfo.tname == "staywalk::Resource"){return std::make_shared<::staywalk::Resource>();}
-
-    else if (minfo.tname == "staywalk::Shader"){return std::make_shared<::staywalk::Shader>();}
-
-    else if (minfo.tname == "staywalk::Tex2d"){return std::make_shared<::staywalk::Tex2d>();}
 
     else if (minfo.tname == "staywalk::Material"){return std::make_shared<::staywalk::Material>();}
 

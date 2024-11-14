@@ -7,13 +7,14 @@
 using namespace staywalk;
 
 void test() {
-
 }
 
 using namespace staywalk;
 int main()
 {
-	PActor a = std::make_shared<Actor>("avatar");
+	auto w = World::load_marry_world();
+
+	/*PActor a = std::make_shared<Actor>("avatar");
 	PActor b = std::make_shared<Actor>("avatar1");
 	PActor c = std::make_shared<Actor>("avatar2");
 
@@ -32,6 +33,6 @@ int main()
 
 	auto loaded_world = World::load("test-world");
 	auto actors = loaded_world->get_all_actors();
-	assert(Comparer::equal(w->get_all_actors(), loaded_world->get_all_actors()));
+	assert(Comparer::equal(w->get_all_actors(), loaded_world->get_all_actors()));*/
 	return 0;
 }
