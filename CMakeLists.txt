@@ -27,6 +27,9 @@ if(MSVC)
     target_compile_options(engine PRIVATE "/utf-8")
 endif()
 
+set_target_properties(engine PROPERTIES
+    VS_DEBUGGER_WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
+)
 
 ##  setup reflect  ##
 set(reflect_src_dir ${CMAKE_CURRENT_SOURCE_DIR}/src/reflect)
