@@ -78,6 +78,83 @@ Object::operator==(rhs) ;
 
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
+void ::staywalk::Resource::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    Object::dump(ofs, dumper);
+    dumper.write(this->source, ofs);
+    dumper.write(this->dump_dir, ofs);
+}
+
+
+void ::staywalk::Resource::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    Object::load(ifs, loader);
+    loader.read(this->source, ifs);
+    loader.read(this->dump_dir, ifs);
+}
+
+
+bool ::staywalk::Resource::operator==(const ::staywalk::Resource& rhs) const {
+    return 
+Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->source, rhs.source) && ::staywalk::Comparer::equal(this->dump_dir, rhs.dump_dir);
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::Resource::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::Resource"};
+
+}
+
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+
+void ::staywalk::Shader::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    Resource::dump(ofs, dumper);
+    dumper.write(this->code, ofs);
+    dumper.write(this->shader_type, ofs);
+}
+
+
+void ::staywalk::Shader::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    Resource::load(ifs, loader);
+    loader.read(this->code, ifs);
+    loader.read(this->shader_type, ifs);
+}
+
+
+bool ::staywalk::Shader::operator==(const ::staywalk::Shader& rhs) const {
+    return 
+Resource::operator==(rhs)  && ::staywalk::Comparer::equal(this->code, rhs.code) && ::staywalk::Comparer::equal(this->shader_type, rhs.shader_type);
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::Shader::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::Shader"};
+
+}
+
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+
+void ::staywalk::Tex2d::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
+    Resource::dump(ofs, dumper);
+}
+
+
+void ::staywalk::Tex2d::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
+    Resource::load(ifs, loader);
+}
+
+
+bool ::staywalk::Tex2d::operator==(const ::staywalk::Tex2d& rhs) const {
+    return 
+Resource::operator==(rhs) ;
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::Tex2d::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{"staywalk::Tex2d"};
+
+}
+
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+
 void ::staywalk::RObject::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     Object::dump(ofs, dumper);
     dumper.write(this->glid, ofs);
@@ -109,17 +186,19 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->glid, rhs.glid) &&
 
 void ::staywalk::RTex::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     RObject::dump(ofs, dumper);
+    dumper.write(this->tex, ofs);
 }
 
 
 void ::staywalk::RTex::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
     RObject::load(ifs, loader);
+    loader.read(this->tex, ifs);
 }
 
 
 bool ::staywalk::RTex::operator==(const ::staywalk::RTex& rhs) const {
     return 
-RObject::operator==(rhs) ;
+RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->tex, rhs.tex);
 }
 
 
@@ -197,83 +276,6 @@ RObject::operator==(rhs) ;
 
 }
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
-
-void ::staywalk::Resource::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    Object::dump(ofs, dumper);
-    dumper.write(this->source, ofs);
-    dumper.write(this->dump_dir, ofs);
-}
-
-
-void ::staywalk::Resource::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    Object::load(ifs, loader);
-    loader.read(this->source, ifs);
-    loader.read(this->dump_dir, ifs);
-}
-
-
-bool ::staywalk::Resource::operator==(const ::staywalk::Resource& rhs) const {
-    return 
-Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->source, rhs.source) && ::staywalk::Comparer::equal(this->dump_dir, rhs.dump_dir);
-}
-
-
-::staywalk::reflect::MetaInfo staywalk::Resource::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::Resource"};
-
-}
-
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
-
-void ::staywalk::Shader::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    Resource::dump(ofs, dumper);
-    dumper.write(this->code, ofs);
-    dumper.write(this->shader_type, ofs);
-}
-
-
-void ::staywalk::Shader::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    Resource::load(ifs, loader);
-    loader.read(this->code, ifs);
-    loader.read(this->shader_type, ifs);
-}
-
-
-bool ::staywalk::Shader::operator==(const ::staywalk::Shader& rhs) const {
-    return 
-Resource::operator==(rhs)  && ::staywalk::Comparer::equal(this->code, rhs.code) && ::staywalk::Comparer::equal(this->shader_type, rhs.shader_type);
-}
-
-
-::staywalk::reflect::MetaInfo staywalk::Shader::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::Shader"};
-
-}
-
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
-
-void ::staywalk::Tex2d::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    Resource::dump(ofs, dumper);
-}
-
-
-void ::staywalk::Tex2d::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    Resource::load(ifs, loader);
-}
-
-
-bool ::staywalk::Tex2d::operator==(const ::staywalk::Tex2d& rhs) const {
-    return 
-Resource::operator==(rhs) ;
-}
-
-
-::staywalk::reflect::MetaInfo staywalk::Tex2d::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::Tex2d"};
-
-}
-
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Material.h"
 
 void ::staywalk::Material::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
@@ -307,23 +309,23 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->shader_, rhs.shade
 
 void ::staywalk::RMesh::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     RObject::dump(ofs, dumper);
-    dumper.write(this->vertices_, ofs);
-    dumper.write(this->indices_, ofs);
-    dumper.write(this->mat_, ofs);
+    dumper.write(this->vertices, ofs);
+    dumper.write(this->indices, ofs);
+    dumper.write(this->mat, ofs);
 }
 
 
 void ::staywalk::RMesh::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
     RObject::load(ifs, loader);
-    loader.read(this->vertices_, ifs);
-    loader.read(this->indices_, ifs);
-    loader.read(this->mat_, ifs);
+    loader.read(this->vertices, ifs);
+    loader.read(this->indices, ifs);
+    loader.read(this->mat, ifs);
 }
 
 
 bool ::staywalk::RMesh::operator==(const ::staywalk::RMesh& rhs) const {
     return 
-RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->vertices_, rhs.vertices_) && ::staywalk::Comparer::equal(this->indices_, rhs.indices_) && ::staywalk::Comparer::equal(this->mat_, rhs.mat_);
+RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->vertices, rhs.vertices) && ::staywalk::Comparer::equal(this->indices, rhs.indices) && ::staywalk::Comparer::equal(this->mat, rhs.mat);
 }
 
 
@@ -362,18 +364,20 @@ GameComponent::operator==(rhs)  && ::staywalk::Comparer::equal(this->meshs, rhs.
 void ::staywalk::Actor::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     GameObject::dump(ofs, dumper);
     dumper.write(this->sm_comp, ofs);
+    dumper.write(this->ssm_comp, ofs);
 }
 
 
 void ::staywalk::Actor::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
     GameObject::load(ifs, loader);
     loader.read(this->sm_comp, ifs);
+    loader.read(this->ssm_comp, ifs);
 }
 
 
 bool ::staywalk::Actor::operator==(const ::staywalk::Actor& rhs) const {
     return 
-GameObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->sm_comp, rhs.sm_comp);
+GameObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->sm_comp, rhs.sm_comp) && ::staywalk::Comparer::equal(this->ssm_comp, rhs.ssm_comp);
 }
 
 
