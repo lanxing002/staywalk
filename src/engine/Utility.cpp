@@ -158,28 +158,25 @@ namespace staywalk{
         return true;
     }
 
-    shared_ptr<RTex> Utility::make_texture(fs::path tex_name)
-    {
+    shared_ptr<RTex> Utility::make_texture(fs::path tex_name){
         auto result = std::make_shared<RTex>();
         result->tex.name = tex_name.u8string();
-        load_tex_resource(result);
+        load_tex_resource(*result);
         return result;
     }
 
-    bool Utility::load_tex_resource(shared_ptr<RTex> rtex)
+    bool Utility::load_tex_resource(RTex& rtex)
     {
-        if (rtex == nullptr) return false;
-
-        auto path = get_textures_dir() / fs::path(rtex->tex.name);
+        auto path = get_textures_dir() / fs::path(rtex.tex.name);
         if (fs::is_directory(path) || !fs::exists(path)) {
             log(LogLevel::Error, fmt::format("Utility --> load_texture : not find target ({})", path.u8string()));
             return false;
         }
 
-        rtex->tex.data = stbi_load(path.u8string().c_str(),
-            &(rtex->tex.width), &(rtex->tex.height), &(rtex->tex.nr_comps), 0);
+        rtex.tex.data = stbi_load(path.u8string().c_str(),
+            &(rtex.tex.width), &(rtex.tex.height), &(rtex.tex.nr_comps), 0);
 
-        if (rtex->tex.data == nullptr) {
+        if (rtex.tex.data == nullptr) {
             log(LogLevel::Error, fmt::format("Utility --> load_texture : failed when load {}", path.u8string()));
             return false;
         }

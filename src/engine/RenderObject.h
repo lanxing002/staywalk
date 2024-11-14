@@ -1,5 +1,7 @@
 #pragma once
 #include "Object.h"
+#define gltype int
+#include "glad/glad.h"
 
 namespace staywalk{
 	
@@ -71,19 +73,32 @@ namespace staywalk{
 
 		virtual void organize() {}
 		virtual void disband() {}
+		virtual bool load_resource() {}
+
+		virtual bool valid() { return glid != kGlSickId; }
 
 		MetaRegister(RObject);
 
 	protected:
 		uint glid = kGlSickId;  // for opgnel id, -1 is invalid
-		bool valid = false;
 	};
 
 
 	class sw_Class RTex : public RObject {
 	public:
-		
+		RTex(const string& name = "0-rtex");
+
+		void organize() override;
+		void disband() override;
+		bool load_resource() override;
+
+	public:
 		sw_Prop Tex2d tex;
+		sw_Prop bool mipmap = true;
+		sw_Prop gltype wrap_s = GL_REPEAT;
+		sw_Prop gltype wrap_t = GL_REPEAT;
+		sw_Prop gltype min_filter = GL_LINEAR_MIPMAP_LINEAR;
+		sw_Prop gltype mag_filter = GL_LINEAR;
 		
 		MetaRegister(RTex);
 	};

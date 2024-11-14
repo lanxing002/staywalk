@@ -43,7 +43,7 @@ namespace staywalk{
 		/***********************************************/
 		static shared_ptr<RTex> make_texture(fs::path path);
 
-		static bool load_tex_resource(shared_ptr<RTex> tex);
+		static bool load_tex_resource(RTex& tex);
 	};
 
 	class MeshLoader
