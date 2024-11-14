@@ -69,11 +69,14 @@ namespace staywalk{
 	public:
 		sw_Func RObject(const string& name = "0-RObj");
 
-		sw_Prop uint glid = kGlInvalidId;  // for opgnel id, -1 is invalid
-		sw_Prop bool valid = false;
-		sw_Prop string path;
+		virtual void organize() {}
+		virtual void disband() {}
 
 		MetaRegister(RObject);
+
+	protected:
+		uint glid = kGlSickId;  // for opgnel id, -1 is invalid
+		bool valid = false;
 	};
 
 
