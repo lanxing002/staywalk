@@ -26,7 +26,7 @@ namespace staywalk{
 	
 	PWorld World::load_marry_world(){
 		shared_ptr<Actor> actor = std::make_shared<Actor>("marry");
-		auto meshload = MeshLoader(R"(C:\Users\lanxi\Documents\lanxing\codes\ErJiu\games202-hw\hw1\homework1\assets\mary\Marry.obj)");
+		auto meshload = MeshLoader(R"(E:\gly\codes\LearnOpenGL\resources\objects\backpack\backpack.obj)");
 		return shared_ptr<World>();
 	}
 
@@ -44,7 +44,6 @@ namespace staywalk{
 		auto loader = reflect::Loader(Utility::get_objects_dir());
 		loader.read(world->actors_, ifs);
 		return world;
-
 	}
 
 	void World::add_actor(shared_ptr<Actor> actor){
