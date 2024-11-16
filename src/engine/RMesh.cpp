@@ -18,7 +18,7 @@ void staywalk::RMesh::organize(){
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
 
-	constexpr auto vertex_size = sizeof decltype(vertices)::value_type;
+	constexpr auto vertex_size = sizeof(decltype(vertices)::value_type);
 	auto size_byte = vertices.size() * vertex_size;
 	glBufferData(GL_ARRAY_BUFFER, size_byte, vertices.data(), GL_STATIC_DRAW);
 	

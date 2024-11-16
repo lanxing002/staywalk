@@ -1,38 +1,427 @@
+// Dear ImGui: standalone example application for GLFW + OpenGL 3, using programmable pipeline
+// (GLFW is a cross-platform general purpose library for handling windows, inputs, OpenGL/Vulkan/Metal graphics context creation, etc.)
 
-#include "World.h"
-#include "Actor.h"
-#include "Utility.h"
-#include "Serialize.h"
+// Learn about Dear ImGui:
+// - FAQ                  https://dearimgui.com/faq
+// - Getting Started      https://dearimgui.com/getting-started
+// - Documentation        https://dearimgui.com/docs (same as your local docs/ folder).
+// - Introduction, links and more at the top of imgui.cpp
 
-using namespace staywalk;
+#include "imgui.h"
+#include "imgui_internal.h"
+#include "imgui_impl_glfw.h"
+#include "imgui_impl_opengl3.h"
+#include <stdio.h>
+#define GL_SILENCE_DEPRECATION
+#if defined(IMGUI_IMPL_OPENGL_ES2)
+#include <GLES2/gl2.h>
+#endif
+#include <GLFW/glfw3.h> // Will drag system OpenGL headers
 
-void test() {
+// [Win32] Our example includes a copy of glfw3.lib pre-compiled with VS2010 to maximize ease of testing and compatibility with old VS compilers.
+// To link with VS2010-era libraries, VS2015+ requires linking with legacy_stdio_definitions.lib, which we do using this pragma.
+// Your own project should not be affected, as you are likely to link with a newer binary of GLFW that is adequate for your version of Visual Studio.
+#if defined(_MSC_VER) && (_MSC_VER >= 1900) && !defined(IMGUI_DISABLE_WIN32_FUNCTIONS)
+#pragma comment(lib, "legacy_stdio_definitions")
+#endif
+
+// This example can also compile and run with Emscripten! See 'Makefile.emscripten' for details.
+#ifdef __EMSCRIPTEN__
+#include "../libs/emscripten/emscripten_mainloop_stub.h"
+#endif
+
+static void glfw_error_callback(int error, const char* description)
+{
+    fprintf(stderr, "GLFW Error %d: %s\n", error, description);
 }
 
-using namespace staywalk;
-int main()
+#include <iostream>
+#include <string>
+
+class EditorUI
 {
-	auto w = World::load_marry_world();
+public:
+    EditorUI();
 
-	/*PActor a = std::make_shared<Actor>("avatar");
-	PActor b = std::make_shared<Actor>("avatar1");
-	PActor c = std::make_shared<Actor>("avatar2");
+    void initialize();
+    void render();
 
-	a->location = (glm::vec3(100, 200, 400));
-	a->rotation = (glm::quat(10.0, 20.0, 30.0, 1.0));
-	a->scale = (glm::vec3(20.0, 30.0, 1.0));
+private:
+    void showEditorMenu();
+    void showEditorWorldObjectsWindow(bool* opended);
+    void showComponentDetailsWindow(bool* opened);
+    void showFileContentWindow(bool* opened);
+    void showConsoleWindow(bool* opened);
 
-	shared_ptr<StaticMeshComponent> sm = std::make_shared<StaticMeshComponent>();
-	a->sm_comp = (sm);
+private:
+    bool m_worldObjectsOpen = true;
+    bool m_detailsOpen = true;
+    bool m_consoleOpen = true;
+    bool m_fileContentOpen = true;
+};
 
-	shared_ptr<World> w = World::create_empty_world("test-world");
-	w->add_actor(a);
-	w->add_actor(b);
-	w->add_actor(c);
-	w->dump();
+EditorUI::EditorUI()
+{
+}
 
-	auto loaded_world = World::load("test-world");
-	auto actors = loaded_world->get_all_actors();
-	assert(Comparer::equal(w->get_all_actors(), loaded_world->get_all_actors()));*/
-	return 0;
+void EditorUI::initialize()
+{
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;			// Enable Docking
+    io.IniFilename = NULL;										// 禁用持久化文件
+}
+
+void EditorUI::render()
+{
+    showEditorMenu();
+    showEditorWorldObjectsWindow(&m_worldObjectsOpen);
+    showComponentDetailsWindow(&m_detailsOpen);
+    showFileContentWindow(&m_fileContentOpen);
+    showConsoleWindow(&m_consoleOpen);
+}
+
+void EditorUI::showEditorMenu()
+{
+    auto& style = ImGui::GetStyle();
+    style.WindowPadding = ImVec2(7.0, 6.0);
+    style.FramePadding = ImVec2(7.0, 6.0);
+    style.ItemSpacing = ImVec2(7.0, 6.0);
+    style.ItemInnerSpacing = ImVec2(7.0, 6.0);
+    style.ItemInnerSpacing = ImVec2(7.0, 6.0);
+    style.WindowTitleAlign = ImVec2(0.5, 0.5);
+    style.TabRounding = 12.0;
+    //ImGuiWindowFlags window_flags = ImGuiWindowFlags_NoTitleBar;
+    //window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove;
+    //window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
+
+    //ImGui::PushStyleVar(ImGuiStyleVar_FramePadding, ImVec2(30.0f, 50.0f)); // 调整内边距
+
+    //if (ImGui::BeginMenuBar())
+    //{
+    //    if (ImGui::BeginMenu("Project"))
+    //    {
+    //        if (ImGui::MenuItem("New"))
+    //        {
+    //            //g_runtime_global_context.m_world_manager->reloadCurrentLevel();
+    //            //g_runtime_global_context.m_render_system->clearForLevelReloading();
+    //            //g_editor_global_context.m_scene_manager->onGObjectSelected(k_invalid_gobject_id);
+    //        }
+    //        if (ImGui::MenuItem("Open"))
+    //        {
+    //            //g_runtime_global_context.m_world_manager->saveCurrentLevel();
+    //        }
+    //        if (ImGui::MenuItem("Save"))
+    //        {
+    //        }
+    //        if (ImGui::BeginMenu("Recents"))
+    //        {
+    //            if (ImGui::MenuItem("Recent --- 1"))
+    //            {
+    //            }
+    //            ImGui::EndMenu();
+    //        }
+
+    //        ImGui::EndMenu();
+    //    }
+    //    if (ImGui::BeginMenu("Window"))
+    //    {
+    //        ImGui::MenuItem("World-Objects", nullptr, &m_worldObjectsOpen);
+    //        ImGui::MenuItem("Components-Details", nullptr, &m_detailsOpen);
+    //        ImGui::MenuItem("File-Content", nullptr, &m_fileContentOpen);
+    //        ImGui::MenuItem("Console", nullptr, &m_consoleOpen);
+    //        ImGui::EndMenu();
+    //    }
+    //    ImGui::EndMenuBar();
+    //}
+
+    if (ImGui::BeginMainMenuBar())
+    {
+        if (ImGui::BeginMenu("File"))
+        {
+            //ShowExampleMenuFile();
+            ImGui::EndMenu();
+        }
+        if (ImGui::BeginMenu("Edit"))
+        {
+            if (ImGui::MenuItem("Undo", "CTRL+Z")) {}
+            if (ImGui::MenuItem("Redo", "CTRL+Y", false, false)) {}  // Disabled item
+            ImGui::Separator();
+            if (ImGui::MenuItem("Cut", "CTRL+X")) {}
+            if (ImGui::MenuItem("Copy", "CTRL+C")) {}
+            if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+            ImGui::EndMenu();
+        }
+        ImGui::EndMainMenuBar();
+    }
+
+    const ImGuiViewport* main_viewport = ImGui::GetMainViewport();
+    ImGui::SetNextWindowPos(main_viewport->WorkPos);
+    ImGui::SetNextWindowSize(main_viewport->WorkSize);
+    ImGui::SetNextWindowViewport(main_viewport->ID);
+
+    //ImGui::PushStyleVar(ImGuiStyleVar_WindowRounding, 0.0f);
+    //ImGui::PushStyleVar(ImGuiStyleVar_WindowBorderSize, 0.0f);
+    ImGui::PushStyleVar(ImGuiStyleVar_WindowPadding, ImVec2(0.0f, 0.0f));
+
+    ImGuiID mainDock = ImGui::GetID("main-dock");
+    if (ImGui::DockBuilderGetNode(mainDock) == nullptr)
+    {
+        //ImGui::DockBuilderRemoveNode(mainDock);
+        ImGui::DockBuilderAddNode(mainDock, ImGuiDockNodeFlags_DockSpace);
+        //ImGui::DockBuilderSetNodePos(main_docking_id, ImVec2(main_viewport->WorkPos));
+        ImGui::DockBuilderSetNodeSize(mainDock, ImVec2(main_viewport->WorkSize.x, main_viewport->WorkSize.y - 20));
+
+        ImGuiID center = mainDock;
+        ImGuiID bottom;
+        ImGuiID left, right;
+
+        {
+            ImGuiID rightTemp, topTemp;
+            ImGui::DockBuilderSplitNode(center, ImGuiDir_Down, 0.25f, &bottom, &topTemp);
+            ImGui::DockBuilderSplitNode(topTemp, ImGuiDir_Left, 0.25f, &left, &rightTemp);
+            ImGui::DockBuilderSplitNode(rightTemp, ImGuiDir_Right, 0.40, &right, nullptr);
+            //ImGui::DockBuilderSplitNode(rightTemp, ImGuiDir_Right, 0.430f, nullptr, &right);  // seem bug, this line should has same effect with before line, but not really
+        }
+        ImGui::DockBuilderDockWindow("World-Objects", left);
+        ImGui::DockBuilderDockWindow("Components-Details", right);
+        ImGui::DockBuilderDockWindow("File-Content", bottom);
+        ImGui::DockBuilderDockWindow("Console", bottom);
+
+        ImGui::DockBuilderFinish(mainDock);
+    }
+
+    ImGuiWindowFlags host_window_flags = 0;
+    host_window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking;
+    host_window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
+    //if (dockspace_flags & ImGuiDockNodeFlags_PassthruCentralNode)
+        //host_window_flags |= ImGuiWindowFlags_NoBackground;
+    ImGui::Begin("Editor menu", nullptr, host_window_flags);
+    ImGui::PopStyleVar(1);
+
+    //ImGui::PopStyleVar();
+    ImGui::DockSpace(mainDock, ImVec2(0, 0), ImGuiDockNodeFlags_NoDockingOverCentralNode | ImGuiDockNodeFlags_PassthruCentralNode);
+
+    ImGui::End();
+}
+
+void EditorUI::showEditorWorldObjectsWindow(bool* opened)
+{
+    ImGuiWindowFlags window_flags = ImGuiWindowFlags_None;
+    if (!*opened) return;
+
+    if (!ImGui::Begin("World-Objects", opened, window_flags))
+    {
+        ImGui::End();
+        return;
+    }
+
+    //std::shared_ptr<Level> current_active_level =
+    //    g_runtime_global_context.m_world_manager->getCurrentActiveLevel().lock();
+    //if (current_active_level == nullptr)
+    //    return;
+    //const LevelObjectsMap& all_gobjects = current_active_level->getAllGObjects();
+    for (int i = 0; i < 5; i++)
+    {
+        if (ImGui::Selectable(("name" + std::to_string(i)).c_str(),
+            true))
+        {
+            std::cout << "click " << i << std::endl;
+        }
+    }
+    ImGui::End();
+}
+
+void EditorUI::showComponentDetailsWindow(bool* opened)
+{
+    if (!*opened) return;
+    if (!ImGui::Begin("Components-Details", opened, ImGuiWindowFlags_None))
+    {
+        ImGui::End();
+        return;
+    }
+    ImGui::Text("component details window");
+    ImGui::End();
+}
+
+void EditorUI::showFileContentWindow(bool* opened)
+{
+    if (!*opened) return;
+    if (!ImGui::Begin("File-Content", opened, ImGuiWindowFlags_None))
+    {
+        ImGui::End();
+        return;
+    }
+
+    ImGui::Text("FileContent window text");
+
+    ImGui::End();
+}
+
+void EditorUI::showConsoleWindow(bool* opened)
+{
+    if (!*opened) return;
+    if (!ImGui::Begin("Console", opened, ImGuiWindowFlags_None))
+    {
+        ImGui::End();
+        return;
+    }
+
+    ImGui::Text("console window text1");
+    ImGui::Text("console window text2");
+
+    ImGui::End();
+}
+
+
+
+// Main code
+int main(int, char**)
+{
+    glfwSetErrorCallback(glfw_error_callback);
+    if (!glfwInit())
+        return 1;
+
+    // Decide GL+GLSL versions
+#if defined(IMGUI_IMPL_OPENGL_ES2)
+    // GL ES 2.0 + GLSL 100
+    const char* glsl_version = "#version 100";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 2);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    glfwWindowHint(GLFW_CLIENT_API, GLFW_OPENGL_ES_API);
+#elif defined(__APPLE__)
+    // GL 3.2 + GLSL 150
+    const char* glsl_version = "#version 150";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 2);
+    glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+    glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // Required on Mac
+#else
+    // GL 3.0 + GLSL 130
+    const char* glsl_version = "#version 130";
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MAJOR, 3);
+    glfwWindowHint(GLFW_CONTEXT_VERSION_MINOR, 0);
+    //glfwWindowHint(GLFW_OPENGL_PROFILE, GLFW_OPENGL_CORE_PROFILE);  // 3.2+ only
+    //glfwWindowHint(GLFW_OPENGL_FORWARD_COMPAT, GL_TRUE);            // 3.0+ only
+#endif
+
+    // Create window with graphics context
+    GLFWwindow* window = glfwCreateWindow(1280, 720, "Dear ImGui GLFW+OpenGL3 example", nullptr, nullptr);
+    if (window == nullptr)
+        return 1;
+    glfwMakeContextCurrent(window);
+    glfwSwapInterval(1); // Enable vsync
+
+    // Setup Dear ImGui context
+    //IMGUI_CHECKVERSION();
+    ImGui::CreateContext();
+    ImGuiIO& io = ImGui::GetIO(); (void)io;
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
+    io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
+    io.ConfigFlags |= ImGuiConfigFlags_DockingEnable;         // Enable Docking
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;       // Enable Multi-Viewport / Platform Windows
+    //io.ConfigViewportsNoAutoMerge = true;
+    //io.ConfigViewportsNoTaskBarIcon = true;
+
+    // Setup Dear ImGui style
+    ImGui::StyleColorsDark();
+    //ImGui::StyleColorsLight();
+
+    // When viewports are enabled we tweak WindowRounding/WindowBg so platform windows can look identical to regular ones.
+    ImGuiStyle& style = ImGui::GetStyle();
+    if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+    {
+        style.WindowRounding = 0.0f;
+        style.Colors[ImGuiCol_WindowBg].w = 1.0f;
+    }
+
+    // Setup Platform/Renderer backends
+    ImGui_ImplGlfw_InitForOpenGL(window, true);
+#ifdef __EMSCRIPTEN__
+    ImGui_ImplGlfw_InstallEmscriptenCallbacks(window, "#canvas");
+#endif
+    ImGui_ImplOpenGL3_Init(glsl_version);
+
+    // Load Fonts
+    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
+    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
+    // - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
+    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
+    // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
+    // - Read 'docs/FONTS.md' for more instructions and details.
+    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
+    // - Our Emscripten build process allows embedding fonts to be accessible at runtime from the "fonts/" folder. See Makefile.emscripten for details.
+    //io.Fonts->AddFontDefault();
+    //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
+    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
+    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
+    io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 18.0f);
+    //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
+    //IM_ASSERT(font != nullptr);
+
+    // Our state
+    bool show_demo_window = true;
+    bool show_another_window = false;
+    ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+    EditorUI ui;
+    ui.initialize();
+
+    // Main loop
+#ifdef __EMSCRIPTEN__
+    // For an Emscripten build we are disabling file-system access, so let's not attempt to do a fopen() of the imgui.ini file.
+    // You may manually call LoadIniSettingsFromMemory() to load settings from your own storage.
+    io.IniFilename = nullptr;
+    EMSCRIPTEN_MAINLOOP_BEGIN
+#else
+    while (!glfwWindowShouldClose(window))
+#endif
+    {
+        // Poll and handle events (inputs, window resize, etc.)
+        // You can read the io.WantCaptureMouse, io.WantCaptureKeyboard flags to tell if dear imgui wants to use your inputs.
+        // - When io.WantCaptureMouse is true, do not dispatch mouse input data to your main application, or clear/overwrite your copy of the mouse data.
+        // - When io.WantCaptureKeyboard is true, do not dispatch keyboard input data to your main application, or clear/overwrite your copy of the keyboard data.
+        // Generally you may always pass all inputs to dear imgui, and hide them from your application based on those two flags.
+        glfwPollEvents();
+
+        // Start the Dear ImGui frame
+        ImGui_ImplOpenGL3_NewFrame();
+        ImGui_ImplGlfw_NewFrame();
+
+        //ImGui::NewFrame();
+        ImGui::NewFrame();
+        ui.render();
+
+        ImGui::Render();
+        int display_w, display_h;
+        glfwGetFramebufferSize(window, &display_w, &display_h);
+        glViewport(0, 0, display_w, display_h);
+        glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
+        glClear(GL_COLOR_BUFFER_BIT);
+        ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
+
+        // Update and Render additional Platform Windows
+        // (Platform functions may change the current OpenGL context, so we save/restore it to make it easier to paste this code elsewhere.
+        //  For this specific demo app we could also call glfwMakeContextCurrent(window) directly)
+        if (io.ConfigFlags & ImGuiConfigFlags_ViewportsEnable)
+        {
+            GLFWwindow* backup_current_context = glfwGetCurrentContext();
+            ImGui::UpdatePlatformWindows();
+            ImGui::RenderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
+        }
+
+        glfwSwapBuffers(window);
+    }
+#ifdef __EMSCRIPTEN__
+    EMSCRIPTEN_MAINLOOP_END;
+#endif
+
+    // Cleanup
+    ImGui_ImplOpenGL3_Shutdown();
+    ImGui_ImplGlfw_Shutdown();
+    ImGui::DestroyContext();
+
+    glfwDestroyWindow(window);
+    glfwTerminate();
+
+    return 0;
 }
