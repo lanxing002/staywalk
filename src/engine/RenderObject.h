@@ -73,7 +73,7 @@ namespace staywalk{
 
 		virtual void organize() {}
 		virtual void disband() {}
-		virtual bool load_resource() {}
+		virtual bool load_resource() { return false; }
 
 		virtual bool valid() { return glid != kGlSickId; }
 

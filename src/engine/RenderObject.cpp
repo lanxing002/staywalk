@@ -51,7 +51,7 @@ namespace staywalk {
 	}
 
 	bool RTex::load_resource(){
-		if (nullptr != tex.data) return;
+		if (nullptr != tex.data) return false;
 		return Utility::load_tex_resource(*this);
 	}
 }
