@@ -21,6 +21,10 @@ namespace staywalk{
 	PWorld World::create_empty_world(const string& world_name){
 		auto world = std::make_shared<World>();
 		world->set_name(world_name);
+		auto a1 = std::make_shared<Actor>("actor 1");
+		auto a2 = std::make_shared<Actor>("actor 2");
+		world->add_actor(a1);
+		world->add_actor(a2);
 		return world;
 	}
 	
