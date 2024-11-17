@@ -80,5 +80,6 @@ public:																			\
 	friend class staywalk::reflect::Serializer<TypeName>;						\
 	virtual staywalk::reflect::MetaInfo get_meta_info() const;					\
 	virtual void dump(staywalk::ofstream&, staywalk::reflect::Dumper&) const;	\
-	virtual void load(staywalk::ifstream&, staywalk::reflect::Loader&);
+	virtual void load(staywalk::ifstream&, staywalk::reflect::Loader&);	
+	//virtual void construct_ui();	
 	
