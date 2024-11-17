@@ -1,7 +1,8 @@
 #pragma once
 #include "Common.h"
 
-class Renderer
-{
+class Renderer{
+public:
+	virtual void render(double delta, unsigned long long count);
 };
 
