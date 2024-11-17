@@ -56,3 +56,8 @@ add_custom_command(
     COMMENT "Running parse reflect event"
 )
 ## end auto generate code ##
+set(editor_src_dir ${CMAKE_CURRENT_SOURCE_DIR}/src/editor)
+file(GLOB Editor_SRC_FILES "${editor_src_dir}/*.cpp" "${editor_src_dir}/*.h")
+target_include_directories(engine PRIVATE ${editor_src_dir})
+target_sources(engine PRIVATE ${Editor_SRC_FILES})
+source_group("editor" FILES ${Editor_SRC_FILES})
