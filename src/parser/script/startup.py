@@ -5,6 +5,7 @@ import clang.cindex
 from parse_class import ClassNode, BindClass, NoClassField
 from parse import traverse, display_traverse
 import serialize_generate
+import ui_generate
 
 if __name__ == '__main__':
     print('===============start up parse for reflect=================')
@@ -35,6 +36,6 @@ if __name__ == '__main__':
     traverse(s_node.cursor, namespaces, outer_classes, result, noclass_fields, 0)
     # display_traverse(s_node.cursor, 0)
     serialize_generate.generate(result, os.path.join(code_src_path, 'reflect'))
-
+    ui_generate.generate(result, os.path.join(code_src_path, 'reflect'))
     print('===============end up parse for reflect  =================')
 
