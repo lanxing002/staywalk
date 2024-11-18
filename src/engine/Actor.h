@@ -10,8 +10,6 @@ namespace staywalk {
 		sw_Prop shared_ptr<StaticMeshComponent> sm_comp{ nullptr };
 
 		sw_Prop StaticMeshComponent ssm_comp;
-		void ui_help();
-		virtual void construct_ui();
 
 		MetaRegister(Actor);
 	};

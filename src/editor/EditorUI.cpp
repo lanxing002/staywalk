@@ -112,7 +112,7 @@ void EditorUI::build_dock_space(){
             ImGuiID rightTemp, topTemp;
             ImGui::DockBuilderSplitNode(center, ImGuiDir_Down, 0.25f, &bottom, &topTemp);
             ImGui::DockBuilderSplitNode(topTemp, ImGuiDir_Left, 0.25f, &left, &rightTemp);
-            ImGui::DockBuilderSplitNode(rightTemp, ImGuiDir_Right, 0.40, &right, nullptr);
+            ImGui::DockBuilderSplitNode(rightTemp, ImGuiDir_Right, 0.40f, &right, nullptr);
         }
         ImGui::DockBuilderDockWindow("actors", left);
         ImGui::DockBuilderDockWindow("details", right);
