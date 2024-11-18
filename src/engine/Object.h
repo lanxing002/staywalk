@@ -16,6 +16,8 @@ namespace staywalk{
 		
 		sw_Func idtype get_guid() { return guid_; }
 
+		void construct_ui() const;
+
 		sw_Prop string name;
 
 	protected:
