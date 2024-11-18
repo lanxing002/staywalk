@@ -1,5 +1,6 @@
 #pragma once
 #include "rhi.h"
+#include "Console.h"
 
 class EditorUI
 {
@@ -19,6 +20,7 @@ private:
     void show_actors();
 
     void show_details();
+    void show_console();
     void showFileContentWindow(bool* opened);
     void showConsoleWindow(bool* opened);
 
