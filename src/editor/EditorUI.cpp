@@ -32,8 +32,7 @@ void EditorUI::initialize(GLFWwindow* window){
     setup_style();
 }
 
-void EditorUI::render()
-{
+void EditorUI::render(){
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
@@ -45,14 +44,14 @@ void EditorUI::render()
     show_actors();
     //showEditorWorldObjectsWindow(&m_worldObjectsOpen);
     show_details();
-    showFileContentWindow(&m_fileContentOpen);
-    showConsoleWindow(&m_consoleOpen);
+    show_console();
+    //showFileContentWindow(&m_fileContentOpen);
+    //showConsoleWindow(&m_consoleOpen);
 
     ImGui::Render();
 }
 
-void EditorUI::render_post()
-{
+void EditorUI::render_post(){
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
     ImGui::UpdatePlatformWindows();
 }
@@ -71,24 +70,23 @@ void EditorUI::setup_style(){
     auto& style = ImGui::GetStyle();
     ImGui::StyleColorsClassic();
     style.Colors[ImGuiCol_WindowBg] = ImVec4(49 / 255.0f, 46 / 255.0f, 46 / 255.0f, 217 / 255.0f);
-    style.Colors[ImGuiCol_FrameBg] = ImVec4(178 / 255.0f, 178 / 255.0f, 178 / 255.0f, 217 / 255.0f);
+    style.Colors[ImGuiCol_FrameBg] = ImVec4(80 / 255.0f, 80/ 255.0f, 80 / 255.0f, 217 / 255.0f);
 
     // ui style
-    style.WindowPadding = ImVec2(5.0, 4.0);
-    style.FramePadding = ImVec2(5.0, 4.0);
-    style.ItemSpacing = ImVec2(5.0, 4.0);
-    style.ItemInnerSpacing = ImVec2(5.0, 4.0);
-    style.ItemInnerSpacing = ImVec2(5.0, 4.0);
+    style.WindowPadding = ImVec2(3.0, 3.0);
+    style.FramePadding = ImVec2(3.0, 3.0);
+    style.ItemSpacing = ImVec2(3.0, 4.0);
+    style.ItemInnerSpacing = ImVec2(3.0, 4.0);
     style.WindowTitleAlign = ImVec2(0.5, 0.5);
     style.WindowBorderSize = 0.0;
     style.FrameBorderSize = 0.0;
     style.TabBarBorderSize = 0.0;
 
-    style.WindowRounding = 12.0;
-    style.TabRounding = 12.0;
-    style.FrameRounding = 9.0;
-    style.GrabRounding = 9.0;
-    style.TabRounding = 9.0;
+    style.WindowRounding = 10.0;
+    style.TabRounding = 10.0;
+    style.FrameRounding = 8.0;
+    style.GrabRounding = 8.0;
+    style.TabRounding = 8.0;
 
     style.ButtonTextAlign = ImVec2(0.5, 0.5);
     style.SelectableTextAlign = ImVec2(0.0, 0.5);
@@ -178,11 +176,15 @@ void EditorUI::show_details(){
     auto selected = Engine::get_engine()->get_selected();
     if (selected) selected->construct_ui();
 
+
     ImGui::End();
 }
 
-void EditorUI::showFileContentWindow(bool* opened)
-{
+void EditorUI::show_console(){
+    Engine::get_console()->draw("Console");
+}
+
+void EditorUI::showFileContentWindow(bool* opened){
     if (!*opened) return;
     if (!ImGui::Begin("File-Content", opened, ImGuiWindowFlags_None))
     {
