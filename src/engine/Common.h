@@ -38,6 +38,9 @@ namespace staywalk
 	using shared_ptr = std::shared_ptr<T>;
 
 	template<typename T>
+	using Ref = std::shared_ptr<T>;
+
+	template<typename T>
 	using vector = std::vector<T>;
 
 	template<typename TKey, typename TVal>
@@ -72,6 +75,15 @@ namespace staywalk
 		class Dumper;
 		class Loader;
 	}
+
+	struct Transform {
+		vec3 location;
+		vec3 scale;
+		quat rotation;
+
+		static constexpr Transform Iden
+	};
+
 }
 
 #define MetaRegister(TypeName)													\
