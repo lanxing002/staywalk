@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "Utility.h"
 #include "World.h"
+#include "Console.h"
 
 #include <memory>
 #include <unordered_map>
@@ -16,6 +17,7 @@ namespace staywalk{
 		// engine functions
 		static shared_ptr<Engine> get_engine();
 		static shared_ptr<World> get_world() { return Engine::get_engine()->world_; }
+		static Ref<Console> get_console() { return Engine::get_engine()->console_; }
 
 		~Engine();
 		//end of engine functions
@@ -36,6 +38,8 @@ namespace staywalk{
 
 		// memeber for editor
 		shared_ptr<Actor> selelcted_;
+
+		shared_ptr<Console> console_;
 
 		// end member for editor
 	};

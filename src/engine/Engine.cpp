@@ -11,6 +11,7 @@ namespace staywalk {
 	
 	Engine::Engine(){
 		world_ = World::create_empty_world("default");
+		console_ = std::make_shared<Console>();
 	}
 	
 	Engine::~Engine(){
