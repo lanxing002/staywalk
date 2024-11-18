@@ -77,13 +77,18 @@ namespace staywalk
 	}
 
 	struct Transform {
-		vec3 location;
+		vec3 location ;
 		vec3 scale;
-		quat rotation;
+		quat rotation ;
 
-		static constexpr Transform Iden
+		bool operator==(const Transform& rhs) const {
+			return location == rhs.location &&
+				scale == rhs.scale &&
+				rotation == rhs.rotation;
+		}
 	};
 
+	constexpr static Transform Identity = Transform{vec3(.0), vec3(1.0), quat(0.0, .0, .0, 1.0)};
 }
 
 #define MetaRegister(TypeName)													\
@@ -92,6 +97,8 @@ public:																			\
 	friend class staywalk::reflect::Serializer<TypeName>;						\
 	virtual staywalk::reflect::MetaInfo get_meta_info() const;					\
 	virtual void dump(staywalk::ofstream&, staywalk::reflect::Dumper&) const;	\
-	virtual void load(staywalk::ifstream&, staywalk::reflect::Loader&);	
+	virtual void load(staywalk::ifstream&, staywalk::reflect::Loader&);			\
+	virtual void construct_basic_ui() const;									\
+	virtual void construct_obj_ui() const;
 	//virtual void construct_ui();	
-	
+

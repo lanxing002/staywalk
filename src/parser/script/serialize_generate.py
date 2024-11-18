@@ -141,7 +141,8 @@ class SerializeBind(object):
         code = ''
         code += eop_code1.format(cur_type=self._full_name)
         code += eop_code2
-        code += eop_code3.format(base_type=self._base_names) if self._base_names else 'true'
+        code += eop_code3.format(base_type=self
+                                 ._base_names) if self._base_names else 'true'
         for p in self._props:
             code += ' && ' + eop_code4.format(load_prop=p)
         code += ';'
@@ -231,3 +232,4 @@ def generate(nodes: list[ClassNode], reflect_dir):
                 common.write(create_code)
                 common.write(create_obj_code3)
                 common.write(create_obj_code4)
+

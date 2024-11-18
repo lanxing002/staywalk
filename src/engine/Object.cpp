@@ -1,5 +1,8 @@
 #include "Object.h"
 #include "Utility.h"
+#include "imgui.h"
+#include "ConstructUI.h"
+
 namespace staywalk{
 	Object::Object(const string& name)
 		:guid_(Utility::get_random_id()), name(name) {
