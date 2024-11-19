@@ -143,6 +143,11 @@ void EditorUI::show_main_menu(){
             if (ImGui::MenuItem("Cut", "CTRL+X")) {}
             if (ImGui::MenuItem("Copy", "CTRL+C")) {}
             if (ImGui::MenuItem("Paste", "CTRL+V")) {}
+
+            if (ImGui::MenuItem("save world")) {
+                Engine::get_world()->dump();
+            }
+
             ImGui::EndMenu();
         }
         ImGui::EndMainMenuBar();
