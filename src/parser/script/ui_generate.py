@@ -1,3 +1,5 @@
+import logging
+
 from parse_class import ClassNode, NoClassField, FuncParam
 import clang.cindex
 import os
@@ -22,8 +24,12 @@ bind_base_obj = '''
     {base_type}::construct_obj_ui();'''
 
 bind_obj = '''
-    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype({prop})>()) 
-        staywalk::reflect::UIHelper::construct_ui("{prop}", {prop});'''
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype({prop})>()){{ 
+        //if (ImGui::TreeNode("{prop}")){{
+            staywalk::reflect::UIHelper::construct_ui("{prop}", {prop});
+            //ImGui::TreePop();
+        //}}    
+    }}'''
 
 bind_end_code = '''
 }
@@ -61,8 +67,6 @@ class UIHelper(object):
         code += bind_basic_func_code.format(cur_type=self._full_name)
         code += bind_base_basic.format(base_type=self._base_names) if self._base_names else ''
         for p in self._props:
-            if p == 'guid_':
-                continue
             code += bind_basic.format(prop=p)
         code += bind_end_code
         code += '\n\n'
@@ -70,8 +74,6 @@ class UIHelper(object):
         code += bind_obj_func_code.format(cur_type=self._full_name)
         code += bind_base_obj.format(base_type=self._base_names) if self._base_names else ''
         for p in self._props:
-            if p == 'guid_':
-                continue
             code += bind_obj.format(prop=p)
         code += bind_end_code
         code += '\n\n'
@@ -88,10 +90,16 @@ class UIHelper(object):
             if member.kind != clang.cindex.CursorKind.FIELD_DECL:
                 continue
 
-            is_label = filter(lambda x: x.kind == clang.cindex.CursorKind.ANNOTATE_ATTR and
-                                        str(x.spelling).startswith('__sw'), member.get_children())
-            is_label = len(list(is_label)) > 0
-            if not is_label:
+            labels = [str(m.spelling) for m in member.get_children() if m.kind == clang.cindex.CursorKind.ANNOTATE_ATTR]
+            if len(labels) == 0:
+                continue
+            assert len(labels) == 1
+            labels = labels[0].split(';')
+            labels = [s.strip() for s in labels]
+            assert [0] != '__sw'
+
+            if 'nogui' in labels:
+                logging.log(logging.INFO, "nogui for this property : {}".format(member.spelling))
                 continue
 
             self._props.append(member.spelling)

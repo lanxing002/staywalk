@@ -1,3 +1,5 @@
+#pragma once
+
 namespace staywalk{ namespace reflect{
 	enum class ObjectType : unsigned int{
 		Object, 
@@ -16,3 +18,10 @@ namespace staywalk{ namespace reflect{
 		StaticMeshComponent, 
 		Actor, 
 }; }}
+
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::ShaderType>();
+
+

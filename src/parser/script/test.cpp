@@ -1,4 +1,4 @@
-#define INTERESTING __attribute__((annotate("__sw;get;set")))
+#define INTERESTING(...) __attribute__((annotate("__sw;" #__VA_ARGS__)))
 
 namespace cc{
 namespace cc2{
@@ -14,8 +14,8 @@ class Vector{
 
 namespace dd{
 class  Object : public cc::cc2::Base{
-    INTERESTING Vector<int> vecc;
-    INTERESTING Inner vecc2;
+    INTERESTING() Vector<int> vecc;
+    INTERESTING(abd) Inner vecc2;
 };
 
 }

@@ -43,7 +43,6 @@ template<>
 void UIHelper::construct_ui(const string& label, bool& data) {
     TableStartCommon();
     ImGui::Checkbox(fmt::format("##{}--", label).c_str(), &data);
-    ImGui::PopID();
     TableEndCommon();
 }
 
@@ -85,5 +84,26 @@ void UIHelper::construct_ui(const string& label, quat& q) {
         q = glm::quat(glm::radians(euler));
     }
 
+    TableEndCommon();
+}
+
+void UIHelper::construct_enum_ui(const string& label, int& data, const std::vector<std::pair<int, std::string>>& enum_labels) {
+    TableStartCommon();
+
+    std::string choice_lable = "--Error--";
+    for (auto [idx, l] : enum_labels)
+        if (idx == data) choice_lable = l;
+
+    if (ImGui::BeginCombo(fmt::format("##combox{}", label).c_str(), choice_lable.c_str())) {
+        for (int n = 0; n < enum_labels.size(); n++) {
+            const bool is_selected = (enum_labels[n].first == data);
+            if (ImGui::Selectable(enum_labels[n].second.c_str(), is_selected))
+                data = enum_labels[n].first;
+            
+            if (is_selected)
+                ImGui::SetItemDefaultFocus();
+        }
+        ImGui::EndCombo();
+    }
     TableEndCommon();
 }
