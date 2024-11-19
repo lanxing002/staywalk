@@ -3,9 +3,10 @@ NodeT = clang.cindex.Cursor
 
 
 class NoClassField:
-    def __init__(self, node: NodeT, namespaces: list[NodeT]) -> None:
+    def __init__(self, node: NodeT, namespaces: list[NodeT], outer_classes: list[NodeT]) -> None:
         self._node = node
         self._namespaces = namespaces
+        self._outer_classes = outer_classes
         pass
 
     def labeled(self) -> bool:
@@ -15,6 +16,13 @@ class NoClassField:
             if child.kind == clang.cindex.CursorKind.ANNOTATE_ATTR and str(child.spelling).startswith('__sw'):
                 return True
         return False
+
+    @property
+    def full_name(self) -> str:
+        return '::' + '::'.join(self._namespaces) + '::' + '::'.join(self.outer_classes) + self._node.spelling
+
+    def is_enum(self):
+        return self._node.kind == clang.cindex.CursorKind.ENUM_DECL
 
     def __str__(self):
         return self.__repr__()

@@ -27,34 +27,34 @@ namespace staywalk{
 	};
 
 	// resource file use for cpu side, for create render object and edit
-	class sw_Class Resource : public Object {
+	class sw_Class()  Resource : public Object {
 	public:
-		sw_Func Resource(const string& name = "0-resource");
+		sw_Func()  Resource(const string& name = "0-resource");
 
-		sw_Prop fs::path source;
-		sw_Prop fs::path dump_dir;
+		sw_Prop() fs::path source;
+		sw_Prop() fs::path dump_dir;
 
 		MetaRegister(Resource);
 	};
 
-	enum class sw_Class ShaderType : unsigned char {
+	enum class sw_Class()  ShaderType : unsigned char {
 		None,
 		VS,
 		FS,
 		CS,
 	};
 
-	class sw_Class Shader : public Resource {
+	class sw_Class()  Shader : public Resource {
 	public:
 		Shader(const string& name = "0-shader");
 
-		sw_Prop string code;
-		sw_Prop ShaderType shader_type{ ShaderType::None };
+		sw_Prop() string code;
+		sw_Prop() ShaderType shader_type{ ShaderType::None };
 
 		MetaRegister(Shader);
 	};
 
-	class sw_Class Tex2d : public Resource {
+	class sw_Class()  Tex2d : public Resource {
 	public:
 		Tex2d(const string& name = "0-Tex2d");
 
@@ -67,9 +67,9 @@ namespace staywalk{
 	};
 
 	// render object is a opengl object
-	class sw_Class RObject : public Object{
+	class sw_Class()  RObject : public Object{
 	public:
-		sw_Func RObject(const string& name = "0-RObj");
+		sw_Func()  RObject(const string& name = "0-RObj");
 
 		virtual void organize() {}
 		virtual void disband() {}
@@ -84,7 +84,7 @@ namespace staywalk{
 	};
 
 
-	class sw_Class RTex : public RObject {
+	class sw_Class()  RTex : public RObject {
 	public:
 		RTex(const string& name = "0-rtex");
 
@@ -93,31 +93,31 @@ namespace staywalk{
 		bool load_resource() override;
 
 	public:
-		sw_Prop Tex2d tex;
-		sw_Prop bool mipmap = true;
-		sw_Prop gltype wrap_s = GL_REPEAT;
-		sw_Prop gltype wrap_t = GL_REPEAT;
-		sw_Prop gltype min_filter = GL_LINEAR_MIPMAP_LINEAR;
-		sw_Prop gltype mag_filter = GL_LINEAR;
+		sw_Prop() Tex2d tex;
+		sw_Prop() bool mipmap = true;
+		sw_Prop() gltype wrap_s = GL_REPEAT;
+		sw_Prop() gltype wrap_t = GL_REPEAT;
+		sw_Prop() gltype min_filter = GL_LINEAR_MIPMAP_LINEAR;
+		sw_Prop() gltype mag_filter = GL_LINEAR;
 		
 		MetaRegister(RTex);
 	};
 
-	class sw_Class RShader : public RObject {
+	class sw_Class()  RShader : public RObject {
 	public:
 
 		MetaRegister(RShader);
 	};
 
 
-	class sw_Class RProgram : public RObject {
+	class sw_Class()  RProgram : public RObject {
 	public:
 
 		MetaRegister(RProgram);
 	};
 
 
-	class sw_Class RUniform : public RObject {
+	class sw_Class()  RUniform : public RObject {
 	public:
 
 		MetaRegister(RUniform);

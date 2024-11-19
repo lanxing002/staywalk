@@ -4,11 +4,11 @@
 #include "RMesh.h"
 
 namespace staywalk{
-	class sw_Class StaticMeshComponent : public GameComponent {
+	class sw_Class()  StaticMeshComponent : public GameComponent {
 	public:
-		sw_Func virtual void draw();
+		sw_Func()  virtual void draw();
 
-		sw_Prop vector<PRMesh> meshs;
+		sw_Prop() vector<PRMesh> meshs;
 
 		MetaRegister(StaticMeshComponent);
 	};
