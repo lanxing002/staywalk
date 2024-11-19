@@ -23,18 +23,38 @@ create_obj_code4 = '''
 '''
 # ---------------create code end------------------
 
+# ---------------create enum table start------------------
+enum_info_code1 = '''
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<{cur_type}>() {{
+    return {{ '''
+
+enum_info_code2 = '''
+        {{static_cast<int>({enum_value}), "{enum_str}"}},'''
+
+enum_info_code_end = '''
+    };
+}'''
+
+enum_info_declare = '''
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<{cur_type}>();'''
+
+# ---------------create enum table end------------------
+
 
 class CommonBind(object):
-    def __init__(self, bind_node: ClassNode):
-        self._node = bind_node.node
+    def __init__(self, bind_node):
         self._base_names = None
-        self.outer_classes = [x.spelling for x in bind_node.outer_classes]
-        self._namespaces = [x.spelling for x in bind_node.namespaces]
+        self._node = bind_node._node
+        self.outer_classes = [x.spelling for x in bind_node._outer_classes]
+        self._namespaces = [x.spelling for x in bind_node._namespaces]
         self._name = self._node.spelling
         self._full_name = '::' + '::'.join(self._namespaces) + '::' + '::'.join(
             self.outer_classes) + self._node.spelling
         self._props = []
-        self._parse()
 
     @property
     def name(self):
@@ -48,19 +68,23 @@ class CommonBind(object):
     def header(self):
         return str(self._node.extent.start.file.name)
 
-    def _typeo_code(self):
+
+class EnumBind(CommonBind):
+    def __init__(self, bind_node: NoClassField):
+        super().__init__(bind_node)
+        self._parse()
+
+    def _enum_info_code(self):
         code = ''
-        code += typeo_code1.format(cur_type=self._full_name[2:])
-        code += typeo_code2.format(cur_type_enum=self._full_name[2:])
-        code += typeo_code3
-        return typeo_declare, code
+        code += enum_info_code1.format(cur_type=self._full_name)
+        for prop in self._props:
+            code += enum_info_code2.format(enum_value=self._full_name + '::' + prop, enum_str=prop)
+        code += enum_info_code_end
+        declare = enum_info_declare.format(cur_type=self._full_name)
+        return declare, code
 
     def generate_code(self):
-        ns_code = '{func_code}'
-        for ns in self._namespaces[::-1]:
-            ns_code = 'namespace ' + ns + '{{' + ns_code + '}}'
-
-        declare, impl = self._typeo_code()
+        declare, impl = self._enum_info_code()
         return declare, impl
 
     def _parse(self):
@@ -69,44 +93,41 @@ class CommonBind(object):
         self._base_names = find_base[0] if len(find_base) > 0 else None
 
         for member in self._node.get_children():
-            if member.kind != clang.cindex.CursorKind.FIELD_DECL:
+            if member.kind != clang.cindex.CursorKind.ENUM_CONSTANT_DECL:
                 continue
-
-            is_label = filter(lambda x: x.kind == clang.cindex.CursorKind.ANNOTATE_ATTR and
-                                        str(x.spelling).startswith('__sw'), member.get_children())
-            is_label = len(list(is_label)) > 0
-            if not is_label:
-                continue
-
             self._props.append(member.spelling)
 
 
-def generate(nodes: list[ClassNode], reflect_dir):
+def generate(nodes: list[ClassNode], enums: list[NoClassField],  reflect_dir):
     generate_dir = os.path.join(reflect_dir, 'generated')
     common_target_file = os.path.join(generate_dir, 'Common.gen.h')
     common_imp_target_file = os.path.join(generate_dir, 'Common.gen.cpp')
     logging.log(logging.INFO, f'generate serialize code to {common_target_file}, {common_imp_target_file} ...')
 
     include_code = '#include "{}"'
-
-    with open(common_target_file, 'w') as common:
-        common.write('namespace staywalk{ namespace reflect{\n\tenum class ObjectType : unsigned int{\n')
-        for node in nodes:
-            if not node.labeled():
-                continue
-            common.write('\t\t' + node.name + ', \n')
-        common.write('}; }}')
-
-
     all_include_code = ''
     create_code = ''
+
     for node in nodes:
         if not node.labeled():
             continue
-        snode = CommonBind(node)
+        snode = CommonBind(node)  # 只是使用了文件头
         logging.log(logging.INFO, f'start generate {node._node.spelling}')
         all_include_code += include_code.format(snode.header) + '\n'
         create_code += create_obj_code2.format(cur_type_str=snode.fullname[2:], cur_type=snode.fullname)
+
+    enum_code_declare = ''
+    enum_code_impl = ''
+    for e in enums:
+        if not e.labeled():
+            continue
+        snode = EnumBind(e)
+        logging.log(logging.INFO, f'start generate {snode.fullname}')
+        all_include_code += include_code.format(snode.header) + '\n'
+        declare, impl = snode.generate_code()
+        enum_code_declare += declare + '\n'
+        enum_code_impl += impl + '\n'
+        print('-------------->', snode.fullname)
 
     with open(common_imp_target_file, 'w') as common:
         common.write(all_include_code + '\n\n\n')
@@ -115,4 +136,19 @@ def generate(nodes: list[ClassNode], reflect_dir):
         common.write(create_code)
         common.write(create_obj_code3)
         common.write(create_obj_code4)
+        common.write('\n\n')
+        common.write(enum_code_impl)
+
+    with open(common_target_file, 'w') as common:
+        common.write('#pragma once\n\n')
+        common.write('namespace staywalk{ namespace reflect{\n\tenum class ObjectType : unsigned int{\n')
+        for node in nodes:
+            if not node.labeled():
+                continue
+            common.write('\t\t' + node.name + ', \n')
+        common.write('}; }}')
+
+        common.write('\n\n')
+        common.write(enum_code_declare)
+        common.write('\n\n')
 

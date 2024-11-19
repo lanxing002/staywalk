@@ -15,13 +15,13 @@
 #include <cassert>
 
 #ifdef _IN_REFLECT
-#define sw_Prop __attribute__((annotate("__sw;")))
-#define sw_Func __attribute__((annotate("__sw;")))
-#define sw_Class __attribute__((annotate("__sw;")))
+#define sw_Prop(...) __attribute__((annotate("__sw;" #__VA_ARGS__)))
+#define sw_Func(...) __attribute__((annotate("__sw;" #__VA_ARGS__)))
+#define sw_Class(...) __attribute__((annotate("__sw;" #__VA_ARGS__)))
 #else
-#define sw_Prop
-#define sw_Func
-#define sw_Class
+#define sw_Prop(...)
+#define sw_Func(...)
+#define sw_Class(...)
 #endif // _IN_REFLECT
 
 namespace staywalk

@@ -10,7 +10,8 @@ namespace staywalk {
 	}
 	
 	Engine::Engine(){
-		world_ = World::create_empty_world("default");
+		//world_ = World::create_empty_world("default");
+		world_ = World::load_marry_world();
 		console_ = std::make_shared<Console>();
 	}
 	

@@ -20,7 +20,7 @@ def traverse(root, namespace, outer_class, classes, noclass_fields, depth):
             if n.kind == clang.cindex.CursorKind.ENUM_DECL \
                     or n.kind == clang.cindex.CursorKind.VAR_DECL \
                     or n.kind == clang.cindex.CursorKind.FUNCTION_DECL:
-                noclass_fields.add(NoClassField(n, [x for x in namespace]))
+                noclass_fields.add(NoClassField(n, [x for x in namespace],  [x for x in outer_class]))
 
             namespace.pop()
         elif root.kind == clang.cindex.CursorKind.CLASS_DECL:
@@ -48,7 +48,7 @@ if __name__ == '__main__':
         # '-D__GNUC__=7'
     ]
 
-    s_node = index.parse(R"C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src\parser\script\test2.cpp",
+    s_node = index.parse(R"C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src\parser\script\test.cpp",
                          compile_args)
     namespaces = []
     outer_classes = []
@@ -56,11 +56,3 @@ if __name__ == '__main__':
     noclass_fields: set[NoClassField] = set()
     # traverse(s_node.cursor, namespaces, outer_classes, result, noclass_fields, 0)
     display_traverse(s_node.cursor, 0)
-
-    # for item in result:
-    #     if item.labeled():
-    #         print(serialize_generate.SerializeBind(item))
-    #
-    # for item in noclass_fields:
-    #     if item.labeled():
-    #         print(item)

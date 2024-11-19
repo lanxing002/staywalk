@@ -36,9 +36,10 @@ if __name__ == '__main__':
     noclass_fields: set[NoClassField] = set()
     traverse(s_node.cursor, namespaces, outer_classes, result, noclass_fields, 0)
     # display_traverse(s_node.cursor, 0)
+    enums = list(filter(lambda x: x.is_enum(), noclass_fields))
     serialize_generate.generate(result, os.path.join(code_src_path, 'reflect'))
     ui_generate.generate(result, os.path.join(code_src_path, 'reflect'))
     ui_generate.generate(result, os.path.join(code_src_path, 'reflect'))
-    common_generate.generate(result, os.path.join(code_src_path, 'reflect'))
+    common_generate.generate(result, enums, os.path.join(code_src_path, 'reflect'))
     print('===============end up parse for reflect  =================')
 
