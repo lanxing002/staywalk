@@ -36,6 +36,7 @@ namespace staywalk{
 		sm->meshs = meshload.get_meshes();
 		actor->sm_comp = sm;
 		auto world = std::make_shared<World>();
+		world->name_ = "marry-world";
 		world->add_actor(actor);
 		return world;
 	}
