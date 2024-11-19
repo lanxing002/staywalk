@@ -1,23 +1,23 @@
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src\reflect\ConstructUI.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Object.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src\reflect\ConstructUI.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Object.h"
 
-void ::staywalk::Object::construct_basic_ui() const {
+void ::staywalk::Object::construct_basic_ui() {
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(name)>()) 
         staywalk::reflect::UIHelper::construct_ui("name", name);
 }
 
 
 
-void ::staywalk::Object::construct_basic_ui() const {
+void ::staywalk::Object::construct_obj_ui() {
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(name)>()) 
         staywalk::reflect::UIHelper::construct_ui("name", name);
 }
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\GameObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\GameObject.h"
 
-void ::staywalk::GameObject::construct_basic_ui() const {
+void ::staywalk::GameObject::construct_basic_ui() {
     Object::construct_basic_ui();
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(transform)>()) 
         staywalk::reflect::UIHelper::construct_ui("transform", transform);
@@ -25,7 +25,7 @@ void ::staywalk::GameObject::construct_basic_ui() const {
 
 
 
-void ::staywalk::GameObject::construct_basic_ui() const {
+void ::staywalk::GameObject::construct_obj_ui() {
     Object::construct_obj_ui();
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(transform)>()) 
         staywalk::reflect::UIHelper::construct_ui("transform", transform);
@@ -33,23 +33,23 @@ void ::staywalk::GameObject::construct_basic_ui() const {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\GameComponent.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\GameComponent.h"
 
-void ::staywalk::GameComponent::construct_basic_ui() const {
+void ::staywalk::GameComponent::construct_basic_ui() {
     Object::construct_basic_ui();
 }
 
 
 
-void ::staywalk::GameComponent::construct_basic_ui() const {
+void ::staywalk::GameComponent::construct_obj_ui() {
     Object::construct_obj_ui();
 }
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-void ::staywalk::Resource::construct_basic_ui() const {
+void ::staywalk::Resource::construct_basic_ui() {
     Object::construct_basic_ui();
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(source)>()) 
         staywalk::reflect::UIHelper::construct_ui("source", source);
@@ -59,7 +59,7 @@ void ::staywalk::Resource::construct_basic_ui() const {
 
 
 
-void ::staywalk::Resource::construct_basic_ui() const {
+void ::staywalk::Resource::construct_obj_ui() {
     Object::construct_obj_ui();
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(source)>()) 
         staywalk::reflect::UIHelper::construct_ui("source", source);
@@ -69,9 +69,9 @@ void ::staywalk::Resource::construct_basic_ui() const {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-void ::staywalk::Shader::construct_basic_ui() const {
+void ::staywalk::Shader::construct_basic_ui() {
     Resource::construct_basic_ui();
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(code)>()) 
         staywalk::reflect::UIHelper::construct_ui("code", code);
@@ -81,7 +81,7 @@ void ::staywalk::Shader::construct_basic_ui() const {
 
 
 
-void ::staywalk::Shader::construct_basic_ui() const {
+void ::staywalk::Shader::construct_obj_ui() {
     Resource::construct_obj_ui();
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(code)>()) 
         staywalk::reflect::UIHelper::construct_ui("code", code);
@@ -91,37 +91,32 @@ void ::staywalk::Shader::construct_basic_ui() const {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-void ::staywalk::Tex2d::construct_basic_ui() const {
+void ::staywalk::Tex2d::construct_basic_ui() {
     Resource::construct_basic_ui();
 }
 
 
-
-void ::staywalk::Tex2d::construct_basic_ui() const {
+void ::staywalk::Tex2d::construct_obj_ui() {
     Resource::construct_obj_ui();
 }
 
 
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-
-void ::staywalk::RObject::construct_basic_ui() const {
+void ::staywalk::RObject::construct_basic_ui() {
     Object::construct_basic_ui();
 }
 
 
-
-void ::staywalk::RObject::construct_basic_ui() const {
+void ::staywalk::RObject::construct_obj_ui() {
     Object::construct_obj_ui();
 }
 
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-
-void ::staywalk::RTex::construct_basic_ui() const {
+void ::staywalk::RTex::construct_basic_ui() {
     RObject::construct_basic_ui();
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(tex)>()) 
         staywalk::reflect::UIHelper::construct_ui("tex", tex);
@@ -139,7 +134,7 @@ void ::staywalk::RTex::construct_basic_ui() const {
 
 
 
-void ::staywalk::RTex::construct_basic_ui() const {
+void ::staywalk::RTex::construct_obj_ui() {
     RObject::construct_obj_ui();
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(tex)>()) 
         staywalk::reflect::UIHelper::construct_ui("tex", tex);
@@ -157,51 +152,51 @@ void ::staywalk::RTex::construct_basic_ui() const {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-void ::staywalk::RShader::construct_basic_ui() const {
+void ::staywalk::RShader::construct_basic_ui() {
     RObject::construct_basic_ui();
 }
 
 
 
-void ::staywalk::RShader::construct_basic_ui() const {
+void ::staywalk::RShader::construct_obj_ui() {
     RObject::construct_obj_ui();
 }
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-void ::staywalk::RProgram::construct_basic_ui() const {
+void ::staywalk::RProgram::construct_basic_ui() {
     RObject::construct_basic_ui();
 }
 
 
 
-void ::staywalk::RProgram::construct_basic_ui() const {
+void ::staywalk::RProgram::construct_obj_ui() {
     RObject::construct_obj_ui();
 }
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-void ::staywalk::RUniform::construct_basic_ui() const {
+void ::staywalk::RUniform::construct_basic_ui() {
     RObject::construct_basic_ui();
 }
 
 
 
-void ::staywalk::RUniform::construct_basic_ui() const {
+void ::staywalk::RUniform::construct_obj_ui() {
     RObject::construct_obj_ui();
 }
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Material.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Material.h"
 
-void ::staywalk::Material::construct_basic_ui() const {
+void ::staywalk::Material::construct_basic_ui() {
     Object::construct_basic_ui();
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(shader_)>()) 
         staywalk::reflect::UIHelper::construct_ui("shader_", shader_);
@@ -213,7 +208,7 @@ void ::staywalk::Material::construct_basic_ui() const {
 
 
 
-void ::staywalk::Material::construct_basic_ui() const {
+void ::staywalk::Material::construct_obj_ui() {
     Object::construct_obj_ui();
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(shader_)>()) 
         staywalk::reflect::UIHelper::construct_ui("shader_", shader_);
@@ -225,9 +220,9 @@ void ::staywalk::Material::construct_basic_ui() const {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RMesh.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RMesh.h"
 
-void ::staywalk::RMesh::construct_basic_ui() const {
+void ::staywalk::RMesh::construct_basic_ui() {
     RObject::construct_basic_ui();
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(vertices)>()) 
         staywalk::reflect::UIHelper::construct_ui("vertices", vertices);
@@ -239,7 +234,7 @@ void ::staywalk::RMesh::construct_basic_ui() const {
 
 
 
-void ::staywalk::RMesh::construct_basic_ui() const {
+void ::staywalk::RMesh::construct_obj_ui() {
     RObject::construct_obj_ui();
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(vertices)>()) 
         staywalk::reflect::UIHelper::construct_ui("vertices", vertices);
@@ -251,9 +246,9 @@ void ::staywalk::RMesh::construct_basic_ui() const {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\StaticMeshComponent.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\StaticMeshComponent.h"
 
-void ::staywalk::StaticMeshComponent::construct_basic_ui() const {
+void ::staywalk::StaticMeshComponent::construct_basic_ui() {
     GameComponent::construct_basic_ui();
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(meshs)>()) 
         staywalk::reflect::UIHelper::construct_ui("meshs", meshs);
@@ -261,7 +256,7 @@ void ::staywalk::StaticMeshComponent::construct_basic_ui() const {
 
 
 
-void ::staywalk::StaticMeshComponent::construct_basic_ui() const {
+void ::staywalk::StaticMeshComponent::construct_obj_ui() {
     GameComponent::construct_obj_ui();
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(meshs)>()) 
         staywalk::reflect::UIHelper::construct_ui("meshs", meshs);
@@ -269,9 +264,9 @@ void ::staywalk::StaticMeshComponent::construct_basic_ui() const {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Actor.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Actor.h"
 
-void ::staywalk::Actor::construct_basic_ui() const {
+void ::staywalk::Actor::construct_basic_ui() {
     GameObject::construct_basic_ui();
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(sm_comp)>()) 
         staywalk::reflect::UIHelper::construct_ui("sm_comp", sm_comp);
@@ -281,7 +276,7 @@ void ::staywalk::Actor::construct_basic_ui() const {
 
 
 
-void ::staywalk::Actor::construct_basic_ui() const {
+void ::staywalk::Actor::construct_obj_ui() {
     GameObject::construct_obj_ui();
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(sm_comp)>()) 
         staywalk::reflect::UIHelper::construct_ui("sm_comp", sm_comp);

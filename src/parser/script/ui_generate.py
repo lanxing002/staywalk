@@ -6,7 +6,7 @@ from mylog import *
 
 # --------------dump code start-----------------
 bind_basic_func_code = '''
-void {cur_type}::construct_basic_ui() const {{'''
+void {cur_type}::construct_basic_ui() {{'''
 
 bind_base_basic = '''
     {base_type}::construct_basic_ui();'''
@@ -16,7 +16,7 @@ bind_basic = '''
         staywalk::reflect::UIHelper::construct_ui("{prop}", {prop});'''
 
 bind_obj_func_code = '''
-void {cur_type}::construct_basic_ui() const {{'''
+void {cur_type}::construct_obj_ui() {{'''
 
 bind_base_obj = '''
     {base_type}::construct_obj_ui();'''
