@@ -30,6 +30,13 @@ namespace staywalk{
 					std::is_same_v<T, fs::path>) return true;
 				else return false;
 			}
+
+			template <typename T, typename = void>
+			struct is_public_field : std::false_type {};
+
+			template <typename T>
+			struct is_public_field<T, std::void_t<decltype(std::declval<T>().name)>> : std::true_type {};
+
 		};
 	}
 }
@@ -45,8 +52,8 @@ namespace staywalk {
 			//static_assert(is_obj && "must drived from staywalk::object");
 			if constexpr (std::is_enum_v<T>){
 				int idata = static_cast<int>(data);
-				construct_enum_ui(label, idata, get_enum_label<T>());
-				data = static_cast<T>(data);
+				construct_enum_ui(label, idata, get_enum_label<T>(), read_only);
+				data = static_cast<T>(idata);
 			}
 			else if (!is_obj) {
 				construct_ui(label, data, read_only);
@@ -68,7 +75,7 @@ namespace staywalk {
 			if (data == nullptr) return;
 			string tname = data->get_meta_info().tname.substr(10);
 			if (ImGui::TreeNode(fmt::format("{}<{}>", label, tname).c_str())) {
-				data->construct_ui();
+				data->construct_ui(read_only);
 				ImGui::TreePop();
 			}
 		}
@@ -101,7 +108,7 @@ namespace staywalk {
 		void UIHelper::construct_ui(const string& label, vector<T>& data, bool read_only) {
 			if (ImGui::TreeNode(fmt::format("{}<vector>", label).c_str())) {
 				for (int i = 0; i < data.size(); i++) {
-					construct_ui(fmt::format("{}-{}", label, i), data[i]);
+					construct_ui(fmt::format("{}-{}", label, i), data[i], read_only);
 				}
 				ImGui::TreePop();
 			}
