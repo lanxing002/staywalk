@@ -9,6 +9,9 @@ namespace staywalk {
 		};
 
 		shared_ptr<::staywalk::Object> create_empty(MetaInfo minfo);
+
+		template<typename T>
+		vector<std::pair<int, string>> get_enum_label();
 	}
 }
 

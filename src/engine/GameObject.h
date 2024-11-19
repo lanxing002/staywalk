@@ -12,7 +12,7 @@ namespace staywalk
 
 		sw_Func virtual void tick(float delta) {}
 
-		sw_Prop Transform transform;
+		sw_Prop Transform transform = Identity;
 
 		MetaRegister(GameObject);
 	};
