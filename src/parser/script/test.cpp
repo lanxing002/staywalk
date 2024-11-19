@@ -14,8 +14,11 @@ class Vector{
 
 namespace dd{
 class  Object : public cc::cc2::Base{
+public:
     INTERESTING() Vector<int> vecc;
     INTERESTING(abd) Inner vecc2;
+  private:
+  int ____dsee;
 };
 
 }
