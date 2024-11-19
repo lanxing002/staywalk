@@ -1,6 +1,8 @@
 #include "ConstructUI.h"
 #include "Logger.h"
 
+#include <glm/gtc/quaternion.hpp>
+
 using namespace staywalk;
 using namespace staywalk::reflect;
 
@@ -9,7 +11,7 @@ using namespace staywalk::reflect;
     ImGui::PushID(label.c_str());                                       \
     ImGui::TableNextColumn();                                           \
     ImGui::AlignTextToFramePadding();                                   \
-    ImGui::TextUnformatted(fmt::format(" {} ", label).c_str());    \
+    ImGui::TextUnformatted(fmt::format(" {}   ", label).c_str());       \
     ImGui::TableNextColumn();
 
 
@@ -28,6 +30,13 @@ void UIHelper::construct_ui(const string& label, string& data) {
         }
     }
     TableEndCommon();
+}
+
+template<>
+void UIHelper::construct_ui(const string& label, fs::path& path) {
+    string str = path.u8string();
+    construct_ui(label, str);
+    path = str;
 }
 
 template<>
@@ -50,5 +59,31 @@ template<>
 void UIHelper::construct_ui(const string& label, float& data) {
     TableStartCommon();
     ImGui::DragFloat(fmt::format("##{}--", label).c_str(), &data);
+    TableEndCommon();
+}
+
+template<>
+void UIHelper::construct_ui(const string& label, Transform& tf) {
+    UIHelper::construct_ui<vec3>("position", tf.location);
+    UIHelper::construct_ui<vec3>("scale", tf.scale);
+    UIHelper::construct_ui<quat>("rotation", tf.rotation);
+}
+
+template<>
+void UIHelper::construct_ui(const string& label, vec3& tf) {
+    TableStartCommon();
+    ImGui::DragFloat3(fmt::format("##{}--", label).c_str(), &tf.x);
+    TableEndCommon();
+}
+
+
+template<>
+void UIHelper::construct_ui(const string& label, quat& q) {
+    TableStartCommon();
+    glm::vec3 euler = glm::degrees(glm::eulerAngles(q));
+    if (ImGui::DragFloat3(fmt::format("##{}--", label).c_str(), &euler.x)) {
+        q = glm::quat(glm::radians(euler));
+    }
+
     TableEndCommon();
 }

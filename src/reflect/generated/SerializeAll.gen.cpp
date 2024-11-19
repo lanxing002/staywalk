@@ -1,5 +1,5 @@
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src\reflect\Serialize.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Object.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src\reflect\Serialize.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Object.h"
 
 void ::staywalk::Object::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     dumper.write(this->name, ofs);
@@ -24,7 +24,7 @@ true && ::staywalk::Comparer::equal(this->name, rhs.name) && ::staywalk::Compare
 
 }
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\GameObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\GameObject.h"
 
 void ::staywalk::GameObject::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     Object::dump(ofs, dumper);
@@ -49,7 +49,7 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->transform, rhs.tra
 
 }
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\GameComponent.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\GameComponent.h"
 
 void ::staywalk::GameComponent::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     Object::dump(ofs, dumper);
@@ -72,7 +72,7 @@ Object::operator==(rhs) ;
 
 }
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
 void ::staywalk::Resource::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     Object::dump(ofs, dumper);
@@ -99,7 +99,7 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->source, rhs.source
 
 }
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
 void ::staywalk::Shader::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     Resource::dump(ofs, dumper);
@@ -126,7 +126,7 @@ Resource::operator==(rhs)  && ::staywalk::Comparer::equal(this->code, rhs.code) 
 
 }
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
 void ::staywalk::Tex2d::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     Resource::dump(ofs, dumper);
@@ -149,7 +149,7 @@ Resource::operator==(rhs) ;
 
 }
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
 void ::staywalk::RObject::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     Object::dump(ofs, dumper);
@@ -172,7 +172,7 @@ Object::operator==(rhs) ;
 
 }
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
 void ::staywalk::RTex::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     RObject::dump(ofs, dumper);
@@ -207,7 +207,7 @@ RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->tex, rhs.tex) && 
 
 }
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
 void ::staywalk::RShader::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     RObject::dump(ofs, dumper);
@@ -230,7 +230,7 @@ RObject::operator==(rhs) ;
 
 }
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
 void ::staywalk::RProgram::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     RObject::dump(ofs, dumper);
@@ -253,7 +253,7 @@ RObject::operator==(rhs) ;
 
 }
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
 void ::staywalk::RUniform::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     RObject::dump(ofs, dumper);
@@ -276,7 +276,7 @@ RObject::operator==(rhs) ;
 
 }
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Material.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Material.h"
 
 void ::staywalk::Material::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     Object::dump(ofs, dumper);
@@ -305,7 +305,7 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->shader_, rhs.shade
 
 }
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RMesh.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RMesh.h"
 
 void ::staywalk::RMesh::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     RObject::dump(ofs, dumper);
@@ -334,7 +334,7 @@ RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->vertices, rhs.ver
 
 }
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\StaticMeshComponent.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\StaticMeshComponent.h"
 
 void ::staywalk::StaticMeshComponent::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     GameComponent::dump(ofs, dumper);
@@ -359,7 +359,7 @@ GameComponent::operator==(rhs)  && ::staywalk::Comparer::equal(this->meshs, rhs.
 
 }
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Actor.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Actor.h"
 
 void ::staywalk::Actor::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
     GameObject::dump(ofs, dumper);

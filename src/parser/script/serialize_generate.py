@@ -57,41 +57,6 @@ eop_code5 = '''
 
 eop_declare = ''' '''
 
-# ---------------type object code start------------------
-typeo_code1 = '''
-::staywalk::reflect::MetaInfo {cur_type}::get_meta_info() const {{'''
-
-typeo_code2 = '''
-    return ::staywalk::reflect::MetaInfo{{"{cur_type_enum}"}};
-'''
-
-typeo_code3 = '''
-}
-'''
-
-typeo_declare = ''' '''
-# ---------------otype object  code end------------------
-
-
-# ---------------create code start------------------
-create_obj_code1 = '''
-using namespace staywalk;
-shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
-    if (false) { return nullptr; }
-'''
-
-create_obj_code2 = '''
-    else if (minfo.tname == "{cur_type_str}"){{return std::make_shared<{cur_type}>();}}
-'''
-
-create_obj_code3 = '''
-    else {assert(false); return nullptr;}
-'''
-
-create_obj_code4 = '''
-}
-'''
-# ---------------create code end------------------
 
 class SerializeBind(object):
     def __init__(self, bind_node: ClassNode):

@@ -16,7 +16,7 @@ namespace staywalk{
 		
 		sw_Func idtype get_guid() { return guid_; }
 
-		void construct_ui() const;
+		void construct_ui(bool open = true, const std::string& header_name = "Basic");
 
 		sw_Prop string name;
 
