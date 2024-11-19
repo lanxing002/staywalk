@@ -3,22 +3,6 @@ import clang.cindex
 import os
 from mylog import *
 
-# ---------------type object code start------------------
-typeo_code1 = '''
-::staywalk::reflect::MetaInfo {cur_type}::get_meta_info() const {{'''
-
-typeo_code2 = '''
-    return ::staywalk::reflect::MetaInfo{{"{cur_type_enum}"}};
-'''
-
-typeo_code3 = '''
-}
-'''
-
-typeo_declare = ''' '''
-# ---------------otype object  code end------------------
-
-
 # ---------------create code start------------------
 create_obj_code1 = '''
 using namespace staywalk;

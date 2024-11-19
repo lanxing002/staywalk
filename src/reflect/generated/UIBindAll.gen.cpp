@@ -1,5 +1,5 @@
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src\reflect\ConstructUI.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Object.h"
+#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src\reflect\ConstructUI.h"
+#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src/engine\Object.h"
 
 void ::staywalk::Object::construct_basic_ui() {
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(name)>()) 
@@ -15,7 +15,7 @@ void ::staywalk::Object::construct_obj_ui() {
 
 
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\GameObject.h"
+#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src/engine\GameObject.h"
 
 void ::staywalk::GameObject::construct_basic_ui() {
     Object::construct_basic_ui();
@@ -33,7 +33,7 @@ void ::staywalk::GameObject::construct_obj_ui() {
 
 
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\GameComponent.h"
+#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src/engine\GameComponent.h"
 
 void ::staywalk::GameComponent::construct_basic_ui() {
     Object::construct_basic_ui();
@@ -47,7 +47,7 @@ void ::staywalk::GameComponent::construct_obj_ui() {
 
 
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src/engine\RenderObject.h"
 
 void ::staywalk::Resource::construct_basic_ui() {
     Object::construct_basic_ui();
@@ -69,7 +69,7 @@ void ::staywalk::Resource::construct_obj_ui() {
 
 
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src/engine\RenderObject.h"
 
 void ::staywalk::Shader::construct_basic_ui() {
     Resource::construct_basic_ui();
@@ -91,11 +91,12 @@ void ::staywalk::Shader::construct_obj_ui() {
 
 
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src/engine\RenderObject.h"
 
 void ::staywalk::Tex2d::construct_basic_ui() {
     Resource::construct_basic_ui();
 }
+
 
 
 void ::staywalk::Tex2d::construct_obj_ui() {
@@ -103,18 +104,22 @@ void ::staywalk::Tex2d::construct_obj_ui() {
 }
 
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+
+#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src/engine\RenderObject.h"
 
 void ::staywalk::RObject::construct_basic_ui() {
     Object::construct_basic_ui();
 }
 
 
+
 void ::staywalk::RObject::construct_obj_ui() {
     Object::construct_obj_ui();
 }
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+
+
+#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src/engine\RenderObject.h"
 
 void ::staywalk::RTex::construct_basic_ui() {
     RObject::construct_basic_ui();
@@ -152,7 +157,7 @@ void ::staywalk::RTex::construct_obj_ui() {
 
 
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src/engine\RenderObject.h"
 
 void ::staywalk::RShader::construct_basic_ui() {
     RObject::construct_basic_ui();
@@ -166,7 +171,7 @@ void ::staywalk::RShader::construct_obj_ui() {
 
 
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src/engine\RenderObject.h"
 
 void ::staywalk::RProgram::construct_basic_ui() {
     RObject::construct_basic_ui();
@@ -180,7 +185,7 @@ void ::staywalk::RProgram::construct_obj_ui() {
 
 
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src/engine\RenderObject.h"
 
 void ::staywalk::RUniform::construct_basic_ui() {
     RObject::construct_basic_ui();
@@ -194,7 +199,7 @@ void ::staywalk::RUniform::construct_obj_ui() {
 
 
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Material.h"
+#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src/engine\Material.h"
 
 void ::staywalk::Material::construct_basic_ui() {
     Object::construct_basic_ui();
@@ -220,7 +225,7 @@ void ::staywalk::Material::construct_obj_ui() {
 
 
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RMesh.h"
+#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src/engine\RMesh.h"
 
 void ::staywalk::RMesh::construct_basic_ui() {
     RObject::construct_basic_ui();
@@ -246,7 +251,7 @@ void ::staywalk::RMesh::construct_obj_ui() {
 
 
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\StaticMeshComponent.h"
+#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src/engine\StaticMeshComponent.h"
 
 void ::staywalk::StaticMeshComponent::construct_basic_ui() {
     GameComponent::construct_basic_ui();
@@ -264,7 +269,7 @@ void ::staywalk::StaticMeshComponent::construct_obj_ui() {
 
 
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Actor.h"
+#include "C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src/engine\Actor.h"
 
 void ::staywalk::Actor::construct_basic_ui() {
     GameObject::construct_basic_ui();

@@ -57,6 +57,21 @@ eop_code5 = '''
 
 eop_declare = ''' '''
 
+# ---------------type object code start------------------
+typeo_code1 = '''
+::staywalk::reflect::MetaInfo {cur_type}::get_meta_info() const {{'''
+
+typeo_code2 = '''
+    return ::staywalk::reflect::MetaInfo{{"{cur_type_enum}"}};
+'''
+
+typeo_code3 = '''
+}
+'''
+
+typeo_declare = ''' '''
+# ---------------otype object  code end------------------
+
 
 class SerializeBind(object):
     def __init__(self, bind_node: ClassNode):
@@ -155,27 +170,15 @@ def generate(nodes: list[ClassNode], reflect_dir):
     generate_dir = os.path.join(reflect_dir, 'generated')
     declare_target_file = os.path.join(generate_dir, 'SerializeAll.gen.h')
     impl_target_file = os.path.join(generate_dir, 'SerializeAll.gen.cpp')
-    common_target_file = os.path.join(generate_dir, 'Common.gen.h')
-    common_imp_target_file = os.path.join(generate_dir, 'Common.gen.cpp')
     logging.log(logging.INFO, f'generate serialize code to {declare_target_file}, {impl_target_file} ...')
 
     include_code = '#include "{}"'
-
     with open(declare_target_file, 'w') as decl:
         with open(impl_target_file, 'w') as impl:
-            with open(common_target_file, 'w') as common:
-                common.write('namespace staywalk{ namespace reflect{\n\tenum class ObjectType : unsigned int{\n')
-                for node in nodes:
-                    if not node.labeled():
-                        continue
-                    common.write('\t\t' + node.name + ', \n')
-                common.write('}; }}')
 
             impl.write(include_code.format(os.path.join(reflect_dir, 'Serialize.h')))
             impl.write('\n')
 
-            all_include_code = ''
-            create_code = ''
             for node in nodes:
                 if not node.labeled():
                     continue
@@ -185,16 +188,3 @@ def generate(nodes: list[ClassNode], reflect_dir):
                 impl.write(include_code.format(snode.header) + '\n')
                 impl.write(impl_code + '\n')
                 # decl.write(decl_code + '\n')
-
-                # generate create_empty function code
-                all_include_code += include_code.format(snode.header) + '\n'
-                create_code += create_obj_code2.format(cur_type_str=snode.fullname[2:], cur_type=snode.fullname)
-
-            with open(common_imp_target_file, 'w') as common:
-                common.write(all_include_code + '\n\n\n')
-                common.write(include_code.format(os.path.join(reflect_dir, 'reflect.h')))
-                common.write(create_obj_code1)
-                common.write(create_code)
-                common.write(create_obj_code3)
-                common.write(create_obj_code4)
-
