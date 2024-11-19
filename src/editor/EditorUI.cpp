@@ -179,7 +179,7 @@ void EditorUI::show_details(){
         return;
     }
     auto selected = Engine::get_engine()->get_selected();
-    if (selected) selected->construct_ui();
+    if (selected) selected->construct_ui(false);
 
 
     ImGui::End();

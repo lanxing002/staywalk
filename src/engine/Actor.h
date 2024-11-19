@@ -11,6 +11,8 @@ namespace staywalk {
 
 		sw_Prop() StaticMeshComponent ssm_comp;
 
+		sw_Prop() ShaderType shader_type = ShaderType::VS;
+
 		MetaRegister(Actor);
 	};
 

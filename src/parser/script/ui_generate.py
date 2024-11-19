@@ -4,29 +4,29 @@ from parse_class import ClassNode, NoClassField, FuncParam
 import clang.cindex
 import os
 from mylog import *
-
+from enum import Enum
 
 # --------------dump code start-----------------
 bind_basic_func_code = '''
-void {cur_type}::construct_basic_ui() {{'''
+void {cur_type}::construct_basic_ui(bool read_only) {{'''
 
 bind_base_basic = '''
-    {base_type}::construct_basic_ui();'''
+    {base_type}::construct_basic_ui(read_only);'''
 
 bind_basic = '''
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype({prop})>()) 
-        staywalk::reflect::UIHelper::construct_ui("{prop}", {prop});'''
+        staywalk::reflect::UIHelper::construct_ui("{prop}", {prop}, read_only || {read_only});'''
 
 bind_obj_func_code = '''
-void {cur_type}::construct_obj_ui() {{'''
+void {cur_type}::construct_obj_ui(bool read_only) {{'''
 
 bind_base_obj = '''
-    {base_type}::construct_obj_ui();'''
+    {base_type}::construct_obj_ui(read_only);'''
 
 bind_obj = '''
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype({prop})>()){{ 
         //if (ImGui::TreeNode("{prop}")){{
-            staywalk::reflect::UIHelper::construct_ui("{prop}", {prop});
+            staywalk::reflect::UIHelper::construct_ui("{prop}", {prop}, read_only || {read_only});
             //ImGui::TreePop();
         //}}    
     }}'''
@@ -36,6 +36,12 @@ bind_end_code = '''
 '''
 
 # ---------------create code end------------------
+
+
+class Accessor(Enum):
+    PUBLIC = 0
+    PROTECTED = 1
+    PRIVATE = 2
 
 
 class UIHelper(object):
@@ -66,15 +72,15 @@ class UIHelper(object):
         code = ''
         code += bind_basic_func_code.format(cur_type=self._full_name)
         code += bind_base_basic.format(base_type=self._base_names) if self._base_names else ''
-        for p in self._props:
-            code += bind_basic.format(prop=p)
+        for p, accessor in self._props:
+            code += bind_basic.format(prop=p, read_only='false' if accessor == Accessor.PUBLIC else 'true')
         code += bind_end_code
         code += '\n\n'
 
         code += bind_obj_func_code.format(cur_type=self._full_name)
         code += bind_base_obj.format(base_type=self._base_names) if self._base_names else ''
-        for p in self._props:
-            code += bind_obj.format(prop=p)
+        for p, accessor in self._props:
+            code += bind_obj.format(prop=p, read_only='false' if accessor == Accessor.PUBLIC else 'true')
         code += bind_end_code
         code += '\n\n'
 
@@ -102,7 +108,11 @@ class UIHelper(object):
                 logging.log(logging.INFO, "nogui for this property : {}".format(member.spelling))
                 continue
 
-            self._props.append(member.spelling)
+            accessor = None
+            accessor = Accessor.PUBLIC if member.access_specifier == clang.cindex.AccessSpecifier.PUBLIC else accessor
+            accessor = Accessor.PROTECTED if member.access_specifier == clang.cindex.AccessSpecifier.PROTECTED else accessor
+            accessor = Accessor.PRIVATE if member.access_specifier == clang.cindex.AccessSpecifier.PRIVATE else accessor
+            self._props.append((member.spelling, accessor))
 
 
 def generate(nodes: list[ClassNode], reflect_dir):
