@@ -96,8 +96,7 @@ public:																			\
 	bool operator==(const TypeName&) const;										\
 	friend class staywalk::reflect::Serializer<TypeName>;						\
 	virtual staywalk::reflect::MetaInfo get_meta_info() const;					\
-	virtual void dump(staywalk::ofstream&, staywalk::reflect::Dumper&) const;	\
-	virtual void load(staywalk::ifstream&, staywalk::reflect::Loader&);			\
+	virtual void dump(staywalk::reflect::Writer&) const;						\
 	virtual void construct_basic_ui(bool read_only);							\
 	virtual void construct_obj_ui(bool read_only);
 	//virtual void construct_ui();	

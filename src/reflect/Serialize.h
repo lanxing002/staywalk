@@ -3,6 +3,8 @@
 #ifndef _IN_REFLECT
 //#include "Common.gen.h"
 #include "reflect.h"
+#include "rapidjson/prettywriter.h"
+
 namespace staywalk{
 
 	class Comparer {
@@ -21,6 +23,8 @@ namespace staywalk{
 	};
 
 	namespace reflect {
+		using Writer = rapidjson::PrettyWriter<rapidjson::StringBuffer>;
+
 		class Dumper {
 		public:
 			enum class Status {
@@ -38,20 +42,20 @@ namespace staywalk{
 			/**
 			*@brief create a ofstream, and write type info
 			*/
-			void dump(shared_ptr<Object> obj);
+			void dump(Ref<Object> obj);
 
 			// wirte data to stream for all type which can serialize
 			template<typename T>
-			void write(const T& data, ofstream& ofs) { this->write_single<T>(data, ofs); }
+			void write(const T& data, Writer& writer) { this->write_single<T>(data, ofs); }
 
 			template<typename T>
-			void write(const std::vector<T>& data, ofstream& ofs) { this->write_vector<T>(data, ofs); }
+			void write(const T& data, Writer& writer) { this->write_vector<T>(data, ofs); }
 			
 			template<typename TK, typename TV>
-			void write(const std::map<TK, TV>& data, ofstream& ofs) { this->write_map<TK, TV>(data, ofs); }
+			void write(const std::map<TK, TV>& data, Writer& writer) { this->write_map<TK, TV>(data, ofs); }
 
 			template<typename T>
-			void write(const std::shared_ptr<T>& obj, ofstream& ofs) { 
+			void write(const std::shared_ptr<T>& obj, Writer& writer) {
 				static_assert((std::is_base_of_v<staywalk::Object, T> || std::is_same_v<staywalk::Object, T>) 
 					&& "unsupport shared_ptr dump of other type");
 				idtype dump_id = obj == nullptr ? kInvalidId : obj->get_guid();
@@ -71,16 +75,17 @@ namespace staywalk{
 			*@brief write common type dataread_single
 			*/
 			template<typename T>
-			void write_single(const T&, ofstream& ofs);
+			void write_single(const T&, Writer& writer);
 			template<typename T>
-			void write_vector(const vector<T>& data, ofstream& ofs);
+			void write_vector(const vector<T>& data, Writer& writer);
 			template<typename TKey, typename TVal>
-			void write_map(const map<TKey, TVal>& data, ofstream& ofs);
+			void write_map(const map<TKey, TVal>& data, Writer& writer);
 
 		private:
 			hashtable<idtype, Status> status_table_;
 			fs::path tmp_path_;
 			fs::path target_path_;
+			rapidjson::StringBuffer sb_;
 		};
 
 		class Loader {
@@ -143,37 +148,62 @@ namespace staywalk{
 namespace staywalk {
 	namespace reflect {
 		template<typename T>
-		void Dumper::write_single(const T& data, ofstream& ofs) {
+		void Dumper::write_single(const T& data, Writer& writer) {
 			constexpr bool is_obj = std::is_base_of_v<staywalk::Object, T> || std::is_same_v<T, staywalk::Object>;
-			if constexpr (is_obj) {
-				data.dump(ofs, *this);
-			}
-			else{
-				static_assert(std::is_trivial<T>::value && "must be trivial type");
-				ofs.write(reinterpret_cast<const char*>(&data), sizeof data);
-			}
-			return;
+			static_assert(is_obj && "must be object");
+			this->dump
 		}
 
 		template<>
-		void Dumper::write_single<string>(const string& str, ofstream& ofs);
+		void Dumper::write_single<string>(const string& str, Writer& writer) {
+			writer.String(str.c_str());
+		}
 
 		template<>
-		void Dumper::write_single(const fs::path& path, ofstream& ofs);
+		void Dumper::write_single(const fs::path& path, Writer& writer) {
+			writer.String(path.u8string().c_str());
+		}
+
+		template<>
+		void Dumper::write_single(const bool& data, Writer& writer) {
+			writer.Bool(data);
+		}
+
+		template<>
+		void Dumper::write_single(const int32_t& data, Writer& writer) {
+			writer.Int(data);
+		}
+
+		template<>
+		void Dumper::write_single(const int64_t& data, Writer& writer) {
+			writer.Int64(data);
+		}
+
+		template<>
+		void Dumper::write_single(const uint32_t& data, Writer& writer) {
+			writer.Uint(data);
+		}
+
+		template<>
+		void Dumper::write_single(const uint64_t& data, Writer& writer) {
+			writer.Uint64(data);
+		}
 
 		template<typename T>
-		void Dumper::write_vector(const vector<T>& data, ofstream& ofs) {
-			this->write(data.size(), ofs);
-			for (const auto& it : data) this->write(it, ofs);
+		void Dumper::write_vector(const vector<T>& data, Writer& writer) {
+			writer.StartArray();
+			for (const auto& it : data) this->write(it, writer);
+			writer.EndArray();
 		}
 
 		template<typename TKey, typename TVal>
-		void Dumper::write_map(const map<TKey, TVal>& data, ofstream& ofs) {
-			this->write(data.size(), ofs);
+		void Dumper::write_map(const map<TKey, TVal>& data, Writer& writer) {
+			writer.StartObject();
 			for (const auto& it : data) {
-				this->write(it.first, ofs); 
-				this->write(it.second, ofs);
+				this->write(it.first, writer); 
+				this->write(it.second, writer);
 			}
+			writer.EndObject();
 		}
 
 		template<>
