@@ -4,9 +4,10 @@
 using namespace staywalk;
 using namespace staywalk::reflect;
 
+static const std::string kObjectTypeKey = "__object_type_";
+
 Dumper::Dumper(fs::path dir)
-    : target_path_(dir)
-{
+    : target_path_(dir){
     tmp_path_ = Utility::create_temp_dir();
     if (!fs::exists(target_path_)) {
         log(LogLevel::Warining, fmt::format("dumper target folder not exists: {}", target_path_.u8string()));
@@ -15,10 +16,9 @@ Dumper::Dumper(fs::path dir)
     }
 }
 
-void Dumper::dump(shared_ptr<Object> obj) {
+void Dumper::dump(Ref<Object> obj) {
     dump_obj_impl(obj);
 }
-
 
 void Dumper::dump_obj_impl(const shared_ptr<Object> obj) {
     const idtype dump_id = obj->get_guid();
@@ -28,32 +28,16 @@ void Dumper::dump_obj_impl(const shared_ptr<Object> obj) {
         if (it->second == Status::Done)
             return;
     }
-    status_table_[dump_id] = Status::Wait;
-    fs::path name = tmp_path_ /(std::to_string(dump_id) + Utility::kObjExt);
-    assert(!fs::exists(name));  // must be a new file 
-    ofstream ofs(name, std::ios::out | std::ios::binary | std::ios::trunc);
-    auto check_r = Utility::check_ofstream(ofs);
-    if (check_r) {
-        status_table_[dump_id] = Status::Dumping;
-        write(obj->get_meta_info().tname, ofs);
-        obj->dump(ofs, *this);
-        status_table_[dump_id] = Status::Done;
-    }
+    status_table_[dump_id] = Status::Dumping;
+    Writer writer(sb_);
+    writer.StartObject();
+    writer.String(kObjectTypeKey.c_str());
+    writer.String(obj->get_meta_info().tname.c_str());
+    obj->dump(writer);
+    writer.EndObject();
+    status_table_[dump_id] = Status::Done;
     return;
 }
-
-template<>
-void Dumper::write_single(const string& str, ofstream& ofs){
-    const auto strlen = str.length();
-    ofs.write(reinterpret_cast<const char*>(&strlen), sizeof strlen);
-    ofs.write(str.c_str(), strlen);
-}
-        
-template<>
-void Dumper::write_single(const fs::path& path, ofstream& ofs) {
-    this->write_single<string>(path.u8string(), ofs);
-}
-
 
 bool Dumper::clear()
 {
