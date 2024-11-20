@@ -67,3 +67,8 @@ if(NOT TARGET fmt)
     set_target_properties(fmt PROPERTIES FOLDER ${third_party_folder}/fmt)
 endif()
 
+
+if(NOT TARGET RapidJSON)
+    add_subdirectory(rapidjson)
+endif()
+
