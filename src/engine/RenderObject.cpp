@@ -25,7 +25,7 @@ namespace staywalk {
 	void RTex::organize() {
 		if (!load_resource()) return;
 		
-		GLenum format;
+		GLenum format = GL_RED;
 		if (tex.nr_comps == 1)
 			format = GL_RED;
 		else if (tex.nr_comps == 3)

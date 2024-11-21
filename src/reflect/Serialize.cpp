@@ -1,19 +1,17 @@
 #include "Serialize.h"
 #include "Logger.h"
 
+#include <rapidjson/prettywriter.h>
+#include <sstream>
 using namespace staywalk;
 using namespace staywalk::reflect;
 
 static const std::string kObjectTypeKey = "__object_type_";
 
-Dumper::Dumper(fs::path dir)
-    : target_path_(dir){
-    tmp_path_ = Utility::create_temp_dir();
-    if (!fs::exists(target_path_)) {
-        log(LogLevel::Warining, fmt::format("dumper target folder not exists: {}", target_path_.u8string()));
-        log(LogLevel::Warining, fmt::format("create new folder: {}", target_path_.u8string()));
-        fs::create_directory(target_path_);
-    }
+Dumper::Dumper(fs::path file_name)
+    : target_file_(file_name){
+    doc_ = json::Document();
+    doc_.SetObject();
 }
 
 void Dumper::dump(Ref<Object> obj) {
@@ -29,12 +27,12 @@ void Dumper::dump_obj_impl(const shared_ptr<Object> obj) {
             return;
     }
     status_table_[dump_id] = Status::Dumping;
-    Writer writer(sb_);
-    writer.StartObject();
-    writer.String(kObjectTypeKey.c_str());
-    writer.String(obj->get_meta_info().tname.c_str());
-    obj->dump(writer);
-    writer.EndObject();
+    json::Value value(json::kObjectType);
+    value.AddMember(json::StringRef(kObjectTypeKey.c_str()),
+        json::StringRef(obj->get_meta_info().tname.data()), doc_.GetAllocator()); //TODO:
+    obj->dump(value, *this);
+    json::Value kvalue(std::to_string(dump_id).c_str(), doc_.GetAllocator());
+    doc_.AddMember(kvalue, value, doc_.GetAllocator());
     status_table_[dump_id] = Status::Done;
     return;
 }
@@ -47,29 +45,42 @@ bool Dumper::clear()
             assert(false);
         }
     }
-    const auto copyOptions = fs::copy_options::update_existing;
-    fs::copy(tmp_path_, target_path_, copyOptions);  // no recursive
-    fs::remove_all(tmp_path_);
+    json::StringBuffer sb;
+    json::PrettyWriter<json::StringBuffer> writer(sb);
+    doc_.Accept(writer);
+
+    if (target_file_.has_parent_path() && target_file_.has_filename()) {
+        if (!fs::exists(target_file_.parent_path()))
+            fs::create_directory(target_file_.parent_path());
+        ofstream ofs = ofstream(target_file_, std::ios::out | std::ios::trunc);
+        ofs << sb.GetString();
+    }
+    else {
+        log(LogLevel::Error, fmt::format("dump target file is incorrect : {}", target_file_.u8string()));
+        return false;
+    }
+
     return true;
+}
+
+Loader::Loader(fs::path file_name)
+    : load_file_(file_name) {
+    if (fs::exists(file_name)) {
+        log(LogLevel::Error, fmt::format("Loader cannot open target file: {}", file_name.u8string()));
+        return;
+    }
+
+    std::ifstream ifs(file_name, std::ios::in);
+    json_str_ = std::string(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>());
+
+    doc_ = json::Document();
+    if (doc_.ParseInsitu(json_str_.data()).HasParseError()) 
+        log(LogLevel::Error, fmt::format("parse json data error: {}", file_name.u8string()));
+    assert(doc_.IsObject());
 }
 
 shared_ptr<Object> Loader::load(idtype id) {
     return load_obj_impl(id);
-}
-
-template<>
-void Loader::read_single<string>(string& str, ifstream& ifs) {
-    str.clear();
-    auto strlen = str.length();
-    ifs.read(reinterpret_cast<char*>(&strlen), sizeof strlen);
-    str.resize(strlen);
-    ifs.read((str.data()), strlen);
-}
-
-template<>
-void Loader::read_single(fs::path& path, ifstream& ifs) {
-    string pstr; this->read_single(pstr, ifs);
-    path = fs::path{ pstr };
 }
 
 shared_ptr<Object> Loader::load_obj_impl(idtype id)
@@ -82,22 +93,82 @@ shared_ptr<Object> Loader::load_obj_impl(idtype id)
     }
 
     status_table_[id] = Status::Wait;
-    fs::path file_name = Utility::get_objects_dir() / (std::to_string(id) + Utility::kObjExt);
-    ifstream ifs(file_name, std::ios::in | std::ios::binary);
-    auto check_r = Utility::check_ifstream(ifs);
     shared_ptr<Object> result = nullptr;
     status_table_[id] = Status::Loading;
-    if (check_r) {
-        string tname;
-        this->read(tname, ifs);
+    auto itr = doc_.FindMember(std::to_string(id).c_str());
+    if (itr != doc_.MemberEnd()) {
+        string tname(itr->value[kObjectTypeKey.c_str()].GetString());
         result = create_empty(MetaInfo{tname});
-        result->load(ifs, *this);
+        result->load(itr->value, *this);
     }
     status_table_[id] = Status::Done;
     ref_cache_[id] = result;
     return result;
 }
 
+void staywalk::Transform::dump(rapidjson::Value& value, staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    {
+        json::Value prop;
+        dumper.write(location, prop);
+        value.AddMember("location", prop, dumper.get_doc().GetAllocator()); 
+    }
+
+    {
+        json::Value prop;
+        dumper.write(scale, prop);
+        value.AddMember("scale", prop, dumper.get_doc().GetAllocator());
+    }
+
+    {
+        json::Value prop;
+        dumper.write(rotation, prop);
+        value.AddMember("rotation", prop, dumper.get_doc().GetAllocator());
+    }
+}
+
+void staywalk::Transform::load(rapidjson::Value& value, staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+    
+    itr = value.FindMember("location");
+    if(itr != value.MemberEnd()){
+        loader.read(location, itr->value);
+    }
+
+    itr = value.FindMember("scale");
+    if (itr != value.MemberEnd()) {
+        loader.read(scale, itr->value);
+    }
+
+    itr = value.FindMember("rotation");
+    if (itr != value.MemberEnd()) {
+        loader.read(rotation, itr->value);
+    }
+}
+
+void Vertex::dump(rapidjson::Value& value, staywalk::reflect::Dumper& dumper) const {
+    static_assert(std::is_trivial_v<Vertex> && "vertex must be trivial");
+    constexpr auto size = sizeof Vertex / sizeof(float);
+    //dumper.write_array<const float*, size>(reinterpret_cast<const float*>(this), value);
+}
+
+void Vertex::load(rapidjson::Value& value, staywalk::reflect::Loader& loader) {
+
+}
 
 
-
+//void staywalk::Object::dump(rapidjson::Value& value, staywalk::reflect::Dumper& dumper) const {
+//    assert(value.IsObject());
+//    {
+//        json::Value prop;
+//        dumper.write(name, prop);
+//        value.AddMember("name", prop, dumper.get_doc().GetAllocator()); 
+//    }
+//
+//    {
+//        json::Value prop;
+//        dumper.write(guid_, prop);
+//        value.AddMember("guid_", prop, dumper.get_doc().GetAllocator());
+//    }
+//}

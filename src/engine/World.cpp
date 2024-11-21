@@ -10,12 +10,9 @@ namespace staywalk{
 
 	void World::dump() {
 		auto world_file = Utility::get_worlds_dir() / (get_name() + Utility::kWorldExt);
-		ofstream ofs(world_file, std::ios::out | std::ios::binary | std::ios::trunc);
-		auto check_r = Utility::check_ofstream(ofs);
-		auto dumper = reflect::Dumper(Utility::get_objects_dir());
-		dumper.write(actors_, ofs);
+		auto dumper = reflect::Dumper(world_file);
+		for (auto& a : actors_) dumper.dump(a);
 		dumper.clear();
-		ofs.close();
 	}
 
 	PWorld World::create_empty_world(const string& world_name){
@@ -45,15 +42,9 @@ namespace staywalk{
 	{
 		auto world = std::make_shared<World>();
 		auto world_file = Utility::get_worlds_dir() / (name + Utility::kWorldExt);
-		if (!fs::exists(world_file)) {
-			log(LogLevel::Error, fmt::format("cannot open world file: {}", fs::absolute(world_file).u8string()));
-			return nullptr;
-		}
-
-		ifstream ifs(world_file, std::ios::in | std::ios::binary);
-		auto check_r = Utility::check_ifstream(ifs);
-		auto loader = reflect::Loader(Utility::get_objects_dir());
-		loader.read(world->actors_, ifs);
+		auto loader = reflect::Loader(world_file);
+		std::map<idtype, std::shared_ptr<Object>> objects;
+		loader.read(objects, loader.get_doc());
 		return world;
 	}
 

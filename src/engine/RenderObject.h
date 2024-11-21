@@ -20,6 +20,8 @@ namespace staywalk{
 				tangent == rhs.tangent &&
 				bitangent == rhs.bitangent;
 		}
+		void dump(rapidjson::Value& value, staywalk::reflect::Dumper& dumper) const;
+		void load(rapidjson::Value& value, staywalk::reflect::Loader& loader);
 		//bone indexes which will influence this vertex
 
 		//array<int, kMaxBoueInfluence> boune_ids;
@@ -60,8 +62,8 @@ namespace staywalk{
 
 		unsigned char* data = nullptr;
 		int width = -1;
-		int height;
-		int nr_comps;
+		int height = -1;
+		int nr_comps = -1;
 
 		MetaRegister(Tex2d)
 	};

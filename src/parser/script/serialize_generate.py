@@ -5,13 +5,18 @@ from mylog import *
 
 # --------------dump code start-----------------
 dump_code1 = '''
-void {cur_type}::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {{'''
+void {cur_type}::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {{
+    assert(value.IsObject());'''
 
 dump_code2 = '''
-    {base_type}::dump(ofs, dumper);'''
+    {base_type}::dump(value, dumper);'''
 
 dump_code3 = '''
-    dumper.write(this->{dump_prop}, ofs);'''
+    {{
+        json::Value prop;
+        dumper.write(this->{dump_prop}, prop);
+        value.AddMember("{dump_prop}", prop, dumper.get_doc().GetAllocator()); 
+    }}'''
 
 dump_code4 = '''
 }
@@ -23,10 +28,16 @@ dump_declare = ''' '''
 
 # --------------load code start-----------------
 load_code1 = '''
-void {cur_type}::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {{'''
+void {cur_type}::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {{
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+'''
 
 load_code2 = '''
-    {base_type}::load(ifs, loader);'''
+    itr = value.FindMember("{load_prop}");
+    if(itr != value.MemberEnd()){
+        loader.read(this->{load_prop}, itr->value);
+    }'''
 
 load_code3 = '''
     loader.read(this->{load_prop}, ifs);'''
@@ -115,7 +126,8 @@ class SerializeBind(object):
             code += load_code3.format(load_prop=p)
         code += load_code4
         declare = load_declare.format(cur_type=self._full_name)
-        return declare, code
+        # return declare, code
+        return '', ''
 
     def _eop_code(self):
         code = ''
@@ -155,6 +167,18 @@ class SerializeBind(object):
 
         for member in self._node.get_children():
             if member.kind != clang.cindex.CursorKind.FIELD_DECL:
+                continue
+
+            labels = [str(m.spelling) for m in member.get_children() if m.kind == clang.cindex.CursorKind.ANNOTATE_ATTR]
+            if len(labels) == 0:
+                continue
+            assert len(labels) == 1
+            labels = labels[0].split(';')
+            labels = [s.strip() for s in labels]
+            assert [0] != '__sw'
+
+            if 'nodump' in labels:
+                logging.log(logging.INFO, "nogui for this property : {}".format(member.spelling))
                 continue
 
             is_label = filter(lambda x: x.kind == clang.cindex.CursorKind.ANNOTATE_ATTR and

@@ -13,13 +13,13 @@ namespace staywalk{
 	}
 	
 	void Object::construct_ui(bool read_only) {
-        if (ImGui::BeginTable("##properties", 2, ImGuiTableFlags_Resizable))
-        {
-            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed);
-            ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch, 1.0f);
-			construct_basic_ui(read_only);
-            ImGui::EndTable();
-        }
-		construct_obj_ui(read_only);
+  //      if (ImGui::BeginTable("##properties", 2, ImGuiTableFlags_Resizable))
+  //      {
+  //          ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed);
+  //          ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch, 1.0f);
+		//	construct_basic_ui(read_only);
+  //          ImGui::EndTable();
+  //      }
+		//construct_obj_ui(read_only);
 	}
 }

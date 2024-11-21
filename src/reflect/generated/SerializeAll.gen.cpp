@@ -1,16 +1,20 @@
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src\reflect\Serialize.h"
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Object.h"
 
-void ::staywalk::Object::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    dumper.write(this->name, ofs);
-    dumper.write(this->guid_, ofs);
+void ::staywalk::Object::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    {
+        json::Value prop;
+        dumper.write(this->name, prop);
+        value.AddMember("name", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->guid_, prop);
+        value.AddMember("guid_", prop, dumper.get_doc().GetAllocator()); 
+    }
 }
 
-
-void ::staywalk::Object::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    loader.read(this->name, ifs);
-    loader.read(this->guid_, ifs);
-}
 
 
 bool ::staywalk::Object::operator==(const ::staywalk::Object& rhs) const {
@@ -26,16 +30,16 @@ true && ::staywalk::Comparer::equal(this->name, rhs.name) && ::staywalk::Compare
 
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\GameObject.h"
 
-void ::staywalk::GameObject::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    Object::dump(ofs, dumper);
-    dumper.write(this->transform, ofs);
+void ::staywalk::GameObject::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    Object::dump(value, dumper);
+    {
+        json::Value prop;
+        dumper.write(this->transform, prop);
+        value.AddMember("transform", prop, dumper.get_doc().GetAllocator()); 
+    }
 }
 
-
-void ::staywalk::GameObject::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    Object::load(ifs, loader);
-    loader.read(this->transform, ifs);
-}
 
 
 bool ::staywalk::GameObject::operator==(const ::staywalk::GameObject& rhs) const {
@@ -51,14 +55,11 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->transform, rhs.tra
 
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\GameComponent.h"
 
-void ::staywalk::GameComponent::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    Object::dump(ofs, dumper);
+void ::staywalk::GameComponent::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    Object::dump(value, dumper);
 }
 
-
-void ::staywalk::GameComponent::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    Object::load(ifs, loader);
-}
 
 
 bool ::staywalk::GameComponent::operator==(const ::staywalk::GameComponent& rhs) const {
@@ -74,18 +75,21 @@ Object::operator==(rhs) ;
 
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-void ::staywalk::Resource::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    Object::dump(ofs, dumper);
-    dumper.write(this->source, ofs);
-    dumper.write(this->dump_dir, ofs);
+void ::staywalk::Resource::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    Object::dump(value, dumper);
+    {
+        json::Value prop;
+        dumper.write(this->source, prop);
+        value.AddMember("source", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->dump_dir, prop);
+        value.AddMember("dump_dir", prop, dumper.get_doc().GetAllocator()); 
+    }
 }
 
-
-void ::staywalk::Resource::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    Object::load(ifs, loader);
-    loader.read(this->source, ifs);
-    loader.read(this->dump_dir, ifs);
-}
 
 
 bool ::staywalk::Resource::operator==(const ::staywalk::Resource& rhs) const {
@@ -101,18 +105,21 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->source, rhs.source
 
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-void ::staywalk::Shader::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    Resource::dump(ofs, dumper);
-    dumper.write(this->code, ofs);
-    dumper.write(this->shader_type, ofs);
+void ::staywalk::Shader::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    Resource::dump(value, dumper);
+    {
+        json::Value prop;
+        dumper.write(this->code, prop);
+        value.AddMember("code", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->shader_type, prop);
+        value.AddMember("shader_type", prop, dumper.get_doc().GetAllocator()); 
+    }
 }
 
-
-void ::staywalk::Shader::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    Resource::load(ifs, loader);
-    loader.read(this->code, ifs);
-    loader.read(this->shader_type, ifs);
-}
 
 
 bool ::staywalk::Shader::operator==(const ::staywalk::Shader& rhs) const {
@@ -128,14 +135,11 @@ Resource::operator==(rhs)  && ::staywalk::Comparer::equal(this->code, rhs.code) 
 
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-void ::staywalk::Tex2d::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    Resource::dump(ofs, dumper);
+void ::staywalk::Tex2d::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    Resource::dump(value, dumper);
 }
 
-
-void ::staywalk::Tex2d::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    Resource::load(ifs, loader);
-}
 
 
 bool ::staywalk::Tex2d::operator==(const ::staywalk::Tex2d& rhs) const {
@@ -151,14 +155,11 @@ Resource::operator==(rhs) ;
 
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-void ::staywalk::RObject::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    Object::dump(ofs, dumper);
+void ::staywalk::RObject::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    Object::dump(value, dumper);
 }
 
-
-void ::staywalk::RObject::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    Object::load(ifs, loader);
-}
 
 
 bool ::staywalk::RObject::operator==(const ::staywalk::RObject& rhs) const {
@@ -174,26 +175,41 @@ Object::operator==(rhs) ;
 
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-void ::staywalk::RTex::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    RObject::dump(ofs, dumper);
-    dumper.write(this->tex, ofs);
-    dumper.write(this->mipmap, ofs);
-    dumper.write(this->wrap_s, ofs);
-    dumper.write(this->wrap_t, ofs);
-    dumper.write(this->min_filter, ofs);
-    dumper.write(this->mag_filter, ofs);
+void ::staywalk::RTex::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    RObject::dump(value, dumper);
+    {
+        json::Value prop;
+        dumper.write(this->tex, prop);
+        value.AddMember("tex", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->mipmap, prop);
+        value.AddMember("mipmap", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->wrap_s, prop);
+        value.AddMember("wrap_s", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->wrap_t, prop);
+        value.AddMember("wrap_t", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->min_filter, prop);
+        value.AddMember("min_filter", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->mag_filter, prop);
+        value.AddMember("mag_filter", prop, dumper.get_doc().GetAllocator()); 
+    }
 }
 
-
-void ::staywalk::RTex::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    RObject::load(ifs, loader);
-    loader.read(this->tex, ifs);
-    loader.read(this->mipmap, ifs);
-    loader.read(this->wrap_s, ifs);
-    loader.read(this->wrap_t, ifs);
-    loader.read(this->min_filter, ifs);
-    loader.read(this->mag_filter, ifs);
-}
 
 
 bool ::staywalk::RTex::operator==(const ::staywalk::RTex& rhs) const {
@@ -209,14 +225,11 @@ RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->tex, rhs.tex) && 
 
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-void ::staywalk::RShader::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    RObject::dump(ofs, dumper);
+void ::staywalk::RShader::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    RObject::dump(value, dumper);
 }
 
-
-void ::staywalk::RShader::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    RObject::load(ifs, loader);
-}
 
 
 bool ::staywalk::RShader::operator==(const ::staywalk::RShader& rhs) const {
@@ -232,14 +245,11 @@ RObject::operator==(rhs) ;
 
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-void ::staywalk::RProgram::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    RObject::dump(ofs, dumper);
+void ::staywalk::RProgram::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    RObject::dump(value, dumper);
 }
 
-
-void ::staywalk::RProgram::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    RObject::load(ifs, loader);
-}
 
 
 bool ::staywalk::RProgram::operator==(const ::staywalk::RProgram& rhs) const {
@@ -255,14 +265,11 @@ RObject::operator==(rhs) ;
 
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
 
-void ::staywalk::RUniform::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    RObject::dump(ofs, dumper);
+void ::staywalk::RUniform::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    RObject::dump(value, dumper);
 }
 
-
-void ::staywalk::RUniform::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    RObject::load(ifs, loader);
-}
 
 
 bool ::staywalk::RUniform::operator==(const ::staywalk::RUniform& rhs) const {
@@ -278,20 +285,26 @@ RObject::operator==(rhs) ;
 
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Material.h"
 
-void ::staywalk::Material::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    Object::dump(ofs, dumper);
-    dumper.write(this->shader_, ofs);
-    dumper.write(this->uniforms_, ofs);
-    dumper.write(this->texs_, ofs);
+void ::staywalk::Material::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    Object::dump(value, dumper);
+    {
+        json::Value prop;
+        dumper.write(this->shader_, prop);
+        value.AddMember("shader_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->uniforms_, prop);
+        value.AddMember("uniforms_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->texs_, prop);
+        value.AddMember("texs_", prop, dumper.get_doc().GetAllocator()); 
+    }
 }
 
-
-void ::staywalk::Material::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    Object::load(ifs, loader);
-    loader.read(this->shader_, ifs);
-    loader.read(this->uniforms_, ifs);
-    loader.read(this->texs_, ifs);
-}
 
 
 bool ::staywalk::Material::operator==(const ::staywalk::Material& rhs) const {
@@ -307,25 +320,21 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->shader_, rhs.shade
 
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RMesh.h"
 
-void ::staywalk::RMesh::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    RObject::dump(ofs, dumper);
-    dumper.write(this->vertices, ofs);
-    dumper.write(this->indices, ofs);
-    dumper.write(this->mat, ofs);
+void ::staywalk::RMesh::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    RObject::dump(value, dumper);
+    {
+        json::Value prop;
+        dumper.write(this->mat, prop);
+        value.AddMember("mat", prop, dumper.get_doc().GetAllocator()); 
+    }
 }
 
-
-void ::staywalk::RMesh::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    RObject::load(ifs, loader);
-    loader.read(this->vertices, ifs);
-    loader.read(this->indices, ifs);
-    loader.read(this->mat, ifs);
-}
 
 
 bool ::staywalk::RMesh::operator==(const ::staywalk::RMesh& rhs) const {
     return 
-RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->vertices, rhs.vertices) && ::staywalk::Comparer::equal(this->indices, rhs.indices) && ::staywalk::Comparer::equal(this->mat, rhs.mat);
+RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->mat, rhs.mat);
 }
 
 
@@ -336,16 +345,16 @@ RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->vertices, rhs.ver
 
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\StaticMeshComponent.h"
 
-void ::staywalk::StaticMeshComponent::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    GameComponent::dump(ofs, dumper);
-    dumper.write(this->meshs, ofs);
+void ::staywalk::StaticMeshComponent::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    GameComponent::dump(value, dumper);
+    {
+        json::Value prop;
+        dumper.write(this->meshs, prop);
+        value.AddMember("meshs", prop, dumper.get_doc().GetAllocator()); 
+    }
 }
 
-
-void ::staywalk::StaticMeshComponent::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    GameComponent::load(ifs, loader);
-    loader.read(this->meshs, ifs);
-}
 
 
 bool ::staywalk::StaticMeshComponent::operator==(const ::staywalk::StaticMeshComponent& rhs) const {
@@ -361,20 +370,26 @@ GameComponent::operator==(rhs)  && ::staywalk::Comparer::equal(this->meshs, rhs.
 
 #include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Actor.h"
 
-void ::staywalk::Actor::dump(::staywalk::ofstream& ofs, ::staywalk::reflect::Dumper& dumper) const {
-    GameObject::dump(ofs, dumper);
-    dumper.write(this->sm_comp, ofs);
-    dumper.write(this->ssm_comp, ofs);
-    dumper.write(this->shader_type, ofs);
+void ::staywalk::Actor::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    GameObject::dump(value, dumper);
+    {
+        json::Value prop;
+        dumper.write(this->sm_comp, prop);
+        value.AddMember("sm_comp", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->ssm_comp, prop);
+        value.AddMember("ssm_comp", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->shader_type, prop);
+        value.AddMember("shader_type", prop, dumper.get_doc().GetAllocator()); 
+    }
 }
 
-
-void ::staywalk::Actor::load(::staywalk::ifstream& ifs, ::staywalk::reflect::Loader& loader) {
-    GameObject::load(ifs, loader);
-    loader.read(this->sm_comp, ifs);
-    loader.read(this->ssm_comp, ifs);
-    loader.read(this->shader_type, ifs);
-}
 
 
 bool ::staywalk::Actor::operator==(const ::staywalk::Actor& rhs) const {
