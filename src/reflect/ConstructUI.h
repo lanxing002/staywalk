@@ -59,7 +59,8 @@ namespace staywalk {
 				construct_ui(label, data, read_only);
 			}
 			else {
-				string tname = data.get_meta_info().tname.substr(10);
+				auto tname = data.get_meta_info().tname;
+				tname.remove_prefix(10);
 				if (ImGui::TreeNode(fmt::format("{}<{}>", label, tname).c_str())) {
 					data.construct_ui(read_only);
 					ImGui::TreePop();
@@ -73,7 +74,8 @@ namespace staywalk {
 				|| std::is_base_of_v<staywalk::Object, T>;
 			static_assert(is_obj && "must drived from staywalk::object");
 			if (data == nullptr) return;
-			string tname = data->get_meta_info().tname.substr(10);
+			auto tname = data->get_meta_info().tname;
+			tname.remove_prefix(10);
 			if (ImGui::TreeNode(fmt::format("{}<{}>", label, tname).c_str())) {
 				data->construct_ui(read_only);
 				ImGui::TreePop();
