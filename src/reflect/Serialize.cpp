@@ -65,8 +65,8 @@ bool Dumper::clear()
 
 Loader::Loader(fs::path file_name)
     : load_file_(file_name) {
-    if (fs::exists(file_name)) {
-        log(LogLevel::Error, fmt::format("Loader cannot open target file: {}", file_name.u8string()));
+    if (!fs::exists(file_name)) {
+        log(LogLevel::Error, fmt::format("Loader cannot open target file: {}", fs::absolute(file_name).u8string()));
         return;
     }
 
@@ -74,16 +74,16 @@ Loader::Loader(fs::path file_name)
     json_str_ = std::string(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>());
 
     doc_ = json::Document();
-    if (doc_.ParseInsitu(json_str_.data()).HasParseError()) 
+    if (doc_.Parse(json_str_.data()).HasParseError()) 
         log(LogLevel::Error, fmt::format("parse json data error: {}", file_name.u8string()));
     assert(doc_.IsObject());
 }
 
-shared_ptr<Object> Loader::load(idtype id) {
+shared_ptr<Object> Loader::load(const std::string& id) {
     return load_obj_impl(id);
 }
 
-shared_ptr<Object> Loader::load_obj_impl(idtype id)
+shared_ptr<Object> Loader::load_obj_impl(const std::string& id)
 {
     auto it = status_table_.find(id);
     if (it != status_table_.end()) {
@@ -95,10 +95,10 @@ shared_ptr<Object> Loader::load_obj_impl(idtype id)
     status_table_[id] = Status::Wait;
     shared_ptr<Object> result = nullptr;
     status_table_[id] = Status::Loading;
-    auto itr = doc_.FindMember(std::to_string(id).c_str());
+    auto itr = doc_.FindMember(id.c_str());
     if (itr != doc_.MemberEnd()) {
-        string tname(itr->value[kObjectTypeKey.c_str()].GetString());
-        result = create_empty(MetaInfo{tname});
+        std::string tname(itr->value[kObjectTypeKey.c_str()].GetString());
+        result = create_empty(MetaInfo{std::string_view(tname)});
         result->load(itr->value, *this);
     }
     status_table_[id] = Status::Done;

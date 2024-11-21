@@ -6,10 +6,12 @@ from mylog import *
 # --------------dump code start-----------------
 dump_code1 = '''
 void {cur_type}::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {{
-    assert(value.IsObject());'''
+    assert(value.IsObject());
+'''
 
 dump_code2 = '''
-    {base_type}::dump(value, dumper);'''
+    {base_type}::dump(value, dumper);
+'''
 
 dump_code3 = '''
     {{
@@ -34,13 +36,14 @@ void {cur_type}::load(rapidjson::Value& value, ::staywalk::reflect::Loader& load
 '''
 
 load_code2 = '''
-    itr = value.FindMember("{load_prop}");
-    if(itr != value.MemberEnd()){
-        loader.read(this->{load_prop}, itr->value);
-    }'''
+    {base_type}::load(value, loader);
+'''
 
 load_code3 = '''
-    loader.read(this->{load_prop}, ifs);'''
+    itr = value.FindMember("{load_prop}");
+    if(itr != value.MemberEnd()){{
+        loader.read(this->{load_prop}, itr->value);
+    }}'''
 
 load_code4 = '''
 }
@@ -126,8 +129,7 @@ class SerializeBind(object):
             code += load_code3.format(load_prop=p)
         code += load_code4
         declare = load_declare.format(cur_type=self._full_name)
-        # return declare, code
-        return '', ''
+        return declare, code
 
     def _eop_code(self):
         code = ''
