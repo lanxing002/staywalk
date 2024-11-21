@@ -149,7 +149,7 @@ namespace staywalk {
 			/**
 			*@brief create a ifstream, and read type info
 			*/
-			shared_ptr<Object> load(idtype id);
+			shared_ptr<Object> load(const std::string& id);
 
 			template<typename T>
 			void read(T& data, json::Value& ivalue) { read_single(data, ivalue); }
@@ -165,7 +165,7 @@ namespace staywalk {
 				static_assert((std::is_same_v<::staywalk::Object, T> || std::is_base_of_v<staywalk::Object, T>)
 					&& "unsupport shared_ptr load of other type");
 				idtype id; read(id, ivalue);
-				data = (id == kInvalidId) ? nullptr : pcast<T>(load_obj_impl(id));
+				data = (id == kInvalidId) ? nullptr : pcast<T>(load_obj_impl(std::to_string(id)));
 			}
 
 			template<typename T, size_t N>
@@ -217,11 +217,11 @@ namespace staywalk {
 			template<typename TKey, typename TVal>
 			void read_map(map<TKey, TVal>& data, json::Value& ivalue);
 
-			shared_ptr<Object> load_obj_impl(idtype id);
+			shared_ptr<Object> load_obj_impl(const std::string& id);
 
 		private:
-			hashtable<idtype, Status> status_table_;
-			hashtable<idtype, shared_ptr<Object>> ref_cache_;
+			hashtable<string, Status> status_table_;
+			hashtable<string, shared_ptr<Object>> ref_cache_;
 			std::string json_str_;
 			fs::path load_file_;
 			json::Document doc_;
@@ -311,7 +311,7 @@ namespace staywalk {
 			if (!ivalue.IsArray()) return;
 			auto arr = ivalue.GetArray();
 			data.resize(arr.Size());
-			for (size_t i = 0; i < arr.Size(); i++)
+			for (int i = 0; i < static_cast<int>(arr.Size()); i++)
 				read(data[i], arr[i]);
 		}
 

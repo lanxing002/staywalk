@@ -1,8 +1,9 @@
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src\reflect\Serialize.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Object.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src\reflect\Serialize.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Object.h"
 
 void ::staywalk::Object::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
+
     {
         json::Value prop;
         dumper.write(this->name, prop);
@@ -16,6 +17,20 @@ void ::staywalk::Object::dump(rapidjson::Value& value, ::staywalk::reflect::Dump
 }
 
 
+void ::staywalk::Object::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    itr = value.FindMember("name");
+    if(itr != value.MemberEnd()){
+        loader.read(this->name, itr->value);
+    }
+    itr = value.FindMember("guid_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->guid_, itr->value);
+    }
+}
+
 
 bool ::staywalk::Object::operator==(const ::staywalk::Object& rhs) const {
     return 
@@ -28,11 +43,13 @@ true && ::staywalk::Comparer::equal(this->name, rhs.name) && ::staywalk::Compare
 
 }
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\GameObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\GameObject.h"
 
 void ::staywalk::GameObject::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
+
     Object::dump(value, dumper);
+
     {
         json::Value prop;
         dumper.write(this->transform, prop);
@@ -40,6 +57,18 @@ void ::staywalk::GameObject::dump(rapidjson::Value& value, ::staywalk::reflect::
     }
 }
 
+
+void ::staywalk::GameObject::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    Object::load(value, loader);
+
+    itr = value.FindMember("transform");
+    if(itr != value.MemberEnd()){
+        loader.read(this->transform, itr->value);
+    }
+}
 
 
 bool ::staywalk::GameObject::operator==(const ::staywalk::GameObject& rhs) const {
@@ -53,13 +82,23 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->transform, rhs.tra
 
 }
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\GameComponent.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\GameComponent.h"
 
 void ::staywalk::GameComponent::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
+
     Object::dump(value, dumper);
+
 }
 
+
+void ::staywalk::GameComponent::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    Object::load(value, loader);
+
+}
 
 
 bool ::staywalk::GameComponent::operator==(const ::staywalk::GameComponent& rhs) const {
@@ -73,11 +112,13 @@ Object::operator==(rhs) ;
 
 }
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
 
 void ::staywalk::Resource::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
+
     Object::dump(value, dumper);
+
     {
         json::Value prop;
         dumper.write(this->source, prop);
@@ -91,6 +132,22 @@ void ::staywalk::Resource::dump(rapidjson::Value& value, ::staywalk::reflect::Du
 }
 
 
+void ::staywalk::Resource::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    Object::load(value, loader);
+
+    itr = value.FindMember("source");
+    if(itr != value.MemberEnd()){
+        loader.read(this->source, itr->value);
+    }
+    itr = value.FindMember("dump_dir");
+    if(itr != value.MemberEnd()){
+        loader.read(this->dump_dir, itr->value);
+    }
+}
+
 
 bool ::staywalk::Resource::operator==(const ::staywalk::Resource& rhs) const {
     return 
@@ -103,11 +160,13 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->source, rhs.source
 
 }
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
 
 void ::staywalk::Shader::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
+
     Resource::dump(value, dumper);
+
     {
         json::Value prop;
         dumper.write(this->code, prop);
@@ -121,6 +180,22 @@ void ::staywalk::Shader::dump(rapidjson::Value& value, ::staywalk::reflect::Dump
 }
 
 
+void ::staywalk::Shader::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    Resource::load(value, loader);
+
+    itr = value.FindMember("code");
+    if(itr != value.MemberEnd()){
+        loader.read(this->code, itr->value);
+    }
+    itr = value.FindMember("shader_type");
+    if(itr != value.MemberEnd()){
+        loader.read(this->shader_type, itr->value);
+    }
+}
+
 
 bool ::staywalk::Shader::operator==(const ::staywalk::Shader& rhs) const {
     return 
@@ -133,13 +208,23 @@ Resource::operator==(rhs)  && ::staywalk::Comparer::equal(this->code, rhs.code) 
 
 }
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
 
 void ::staywalk::Tex2d::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
+
     Resource::dump(value, dumper);
+
 }
 
+
+void ::staywalk::Tex2d::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    Resource::load(value, loader);
+
+}
 
 
 bool ::staywalk::Tex2d::operator==(const ::staywalk::Tex2d& rhs) const {
@@ -153,13 +238,23 @@ Resource::operator==(rhs) ;
 
 }
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
 
 void ::staywalk::RObject::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
+
     Object::dump(value, dumper);
+
 }
 
+
+void ::staywalk::RObject::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    Object::load(value, loader);
+
+}
 
 
 bool ::staywalk::RObject::operator==(const ::staywalk::RObject& rhs) const {
@@ -173,11 +268,13 @@ Object::operator==(rhs) ;
 
 }
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
 
 void ::staywalk::RTex::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
+
     RObject::dump(value, dumper);
+
     {
         json::Value prop;
         dumper.write(this->tex, prop);
@@ -211,6 +308,38 @@ void ::staywalk::RTex::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper
 }
 
 
+void ::staywalk::RTex::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    RObject::load(value, loader);
+
+    itr = value.FindMember("tex");
+    if(itr != value.MemberEnd()){
+        loader.read(this->tex, itr->value);
+    }
+    itr = value.FindMember("mipmap");
+    if(itr != value.MemberEnd()){
+        loader.read(this->mipmap, itr->value);
+    }
+    itr = value.FindMember("wrap_s");
+    if(itr != value.MemberEnd()){
+        loader.read(this->wrap_s, itr->value);
+    }
+    itr = value.FindMember("wrap_t");
+    if(itr != value.MemberEnd()){
+        loader.read(this->wrap_t, itr->value);
+    }
+    itr = value.FindMember("min_filter");
+    if(itr != value.MemberEnd()){
+        loader.read(this->min_filter, itr->value);
+    }
+    itr = value.FindMember("mag_filter");
+    if(itr != value.MemberEnd()){
+        loader.read(this->mag_filter, itr->value);
+    }
+}
+
 
 bool ::staywalk::RTex::operator==(const ::staywalk::RTex& rhs) const {
     return 
@@ -223,13 +352,23 @@ RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->tex, rhs.tex) && 
 
 }
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
 
 void ::staywalk::RShader::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
+
     RObject::dump(value, dumper);
+
 }
 
+
+void ::staywalk::RShader::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    RObject::load(value, loader);
+
+}
 
 
 bool ::staywalk::RShader::operator==(const ::staywalk::RShader& rhs) const {
@@ -243,13 +382,23 @@ RObject::operator==(rhs) ;
 
 }
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
 
 void ::staywalk::RProgram::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
+
     RObject::dump(value, dumper);
+
 }
 
+
+void ::staywalk::RProgram::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    RObject::load(value, loader);
+
+}
 
 
 bool ::staywalk::RProgram::operator==(const ::staywalk::RProgram& rhs) const {
@@ -263,13 +412,23 @@ RObject::operator==(rhs) ;
 
 }
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
 
 void ::staywalk::RUniform::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
+
     RObject::dump(value, dumper);
+
 }
 
+
+void ::staywalk::RUniform::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    RObject::load(value, loader);
+
+}
 
 
 bool ::staywalk::RUniform::operator==(const ::staywalk::RUniform& rhs) const {
@@ -283,11 +442,13 @@ RObject::operator==(rhs) ;
 
 }
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Material.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Material.h"
 
 void ::staywalk::Material::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
+
     Object::dump(value, dumper);
+
     {
         json::Value prop;
         dumper.write(this->shader_, prop);
@@ -306,6 +467,26 @@ void ::staywalk::Material::dump(rapidjson::Value& value, ::staywalk::reflect::Du
 }
 
 
+void ::staywalk::Material::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    Object::load(value, loader);
+
+    itr = value.FindMember("shader_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->shader_, itr->value);
+    }
+    itr = value.FindMember("uniforms_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->uniforms_, itr->value);
+    }
+    itr = value.FindMember("texs_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->texs_, itr->value);
+    }
+}
+
 
 bool ::staywalk::Material::operator==(const ::staywalk::Material& rhs) const {
     return 
@@ -318,11 +499,13 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->shader_, rhs.shade
 
 }
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RMesh.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RMesh.h"
 
 void ::staywalk::RMesh::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
+
     RObject::dump(value, dumper);
+
     {
         json::Value prop;
         dumper.write(this->mat, prop);
@@ -330,6 +513,18 @@ void ::staywalk::RMesh::dump(rapidjson::Value& value, ::staywalk::reflect::Dumpe
     }
 }
 
+
+void ::staywalk::RMesh::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    RObject::load(value, loader);
+
+    itr = value.FindMember("mat");
+    if(itr != value.MemberEnd()){
+        loader.read(this->mat, itr->value);
+    }
+}
 
 
 bool ::staywalk::RMesh::operator==(const ::staywalk::RMesh& rhs) const {
@@ -343,11 +538,13 @@ RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->mat, rhs.mat);
 
 }
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\StaticMeshComponent.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\StaticMeshComponent.h"
 
 void ::staywalk::StaticMeshComponent::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
+
     GameComponent::dump(value, dumper);
+
     {
         json::Value prop;
         dumper.write(this->meshs, prop);
@@ -355,6 +552,18 @@ void ::staywalk::StaticMeshComponent::dump(rapidjson::Value& value, ::staywalk::
     }
 }
 
+
+void ::staywalk::StaticMeshComponent::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    GameComponent::load(value, loader);
+
+    itr = value.FindMember("meshs");
+    if(itr != value.MemberEnd()){
+        loader.read(this->meshs, itr->value);
+    }
+}
 
 
 bool ::staywalk::StaticMeshComponent::operator==(const ::staywalk::StaticMeshComponent& rhs) const {
@@ -368,11 +577,13 @@ GameComponent::operator==(rhs)  && ::staywalk::Comparer::equal(this->meshs, rhs.
 
 }
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Actor.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Actor.h"
 
 void ::staywalk::Actor::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
+
     GameObject::dump(value, dumper);
+
     {
         json::Value prop;
         dumper.write(this->sm_comp, prop);
@@ -390,6 +601,26 @@ void ::staywalk::Actor::dump(rapidjson::Value& value, ::staywalk::reflect::Dumpe
     }
 }
 
+
+void ::staywalk::Actor::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    GameObject::load(value, loader);
+
+    itr = value.FindMember("sm_comp");
+    if(itr != value.MemberEnd()){
+        loader.read(this->sm_comp, itr->value);
+    }
+    itr = value.FindMember("ssm_comp");
+    if(itr != value.MemberEnd()){
+        loader.read(this->ssm_comp, itr->value);
+    }
+    itr = value.FindMember("shader_type");
+    if(itr != value.MemberEnd()){
+        loader.read(this->shader_type, itr->value);
+    }
+}
 
 
 bool ::staywalk::Actor::operator==(const ::staywalk::Actor& rhs) const {
