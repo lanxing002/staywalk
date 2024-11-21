@@ -4,6 +4,8 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
 
+#include "rapidjson/document.h"
+
 #include <unordered_map>
 #include <map>
 #include <vector>
@@ -26,7 +28,7 @@
 
 namespace staywalk
 {
-	using idtype = unsigned long long;
+	using idtype = uint64_t;
 
 	using vec2 = glm::vec2;
 	using vec3 = glm::vec3;
@@ -86,6 +88,10 @@ namespace staywalk
 				scale == rhs.scale &&
 				rotation == rhs.rotation;
 		}
+
+		void dump(rapidjson::Value&, staywalk::reflect::Dumper&) const;
+
+		void load(rapidjson::Value&, staywalk::reflect::Loader&);
 	};
 
 	constexpr static Transform Identity = Transform{vec3(.0), vec3(1.0), quat(0.0, .0, .0, 1.0)};
@@ -96,7 +102,8 @@ public:																			\
 	bool operator==(const TypeName&) const;										\
 	friend class staywalk::reflect::Serializer<TypeName>;						\
 	virtual staywalk::reflect::MetaInfo get_meta_info() const;					\
-	virtual void dump(staywalk::reflect::Writer&) const;						\
+	virtual void dump(rapidjson::Value&, staywalk::reflect::Dumper&) const;		\
+	virtual void load(rapidjson::Value&, staywalk::reflect::Loader&);			\
 	virtual void construct_basic_ui(bool read_only);							\
 	virtual void construct_obj_ui(bool read_only);
 	//virtual void construct_ui();	
