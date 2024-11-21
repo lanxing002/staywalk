@@ -3,9 +3,11 @@
 #ifndef _IN_REFLECT
 //#include "Common.gen.h"
 #include "reflect.h"
-#include "rapidjson/prettywriter.h"
+#include "rapidjson/document.h"
+#include "fmt/format.h"
 
-namespace staywalk{
+namespace json = rapidjson;
+namespace staywalk {
 
 	class Comparer {
 	public:
@@ -23,8 +25,6 @@ namespace staywalk{
 	};
 
 	namespace reflect {
-		using Writer = rapidjson::PrettyWriter<rapidjson::StringBuffer>;
-
 		class Dumper {
 		public:
 			enum class Status {
@@ -33,7 +33,7 @@ namespace staywalk{
 				Done
 			};
 
-			Dumper(fs::path dir);
+			Dumper(fs::path file_name);
 			Dumper(const Dumper&) = delete;
 			Dumper(Dumper&&) = delete;
 			Dumper& operator=(const Dumper&) = delete;
@@ -42,32 +42,38 @@ namespace staywalk{
 			/**
 			*@brief create a ofstream, and write type info
 			*/
-			void dump(Ref<Object> obj);
+			void dump(shared_ptr<Object> obj);
 
 			// wirte data to stream for all type which can serialize
 			template<typename T>
-			void write(const T& data, Writer& writer) { this->write_single<T>(data, ofs); }
+			void write(const T& data, json::Value& value) { this->write_single(data, value); }
 
 			template<typename T>
-			void write(const T& data, Writer& writer) { this->write_vector<T>(data, ofs); }
-			
+			void write(const std::vector<T>& data, json::Value& value) { this->write_vector<T>(data, value); }
+
 			template<typename TK, typename TV>
-			void write(const std::map<TK, TV>& data, Writer& writer) { this->write_map<TK, TV>(data, ofs); }
+			void write(const std::map<TK, TV>& data, json::Value& value) { this->write_map<TK, TV>(data, value); }
 
 			template<typename T>
-			void write(const std::shared_ptr<T>& obj, Writer& writer) {
-				static_assert((std::is_base_of_v<staywalk::Object, T> || std::is_same_v<staywalk::Object, T>) 
+			void write(const std::shared_ptr<T>& obj, json::Value& value) {
+				static_assert((std::is_base_of_v<staywalk::Object, T> || std::is_same_v<staywalk::Object, T>)
 					&& "unsupport shared_ptr dump of other type");
 				idtype dump_id = obj == nullptr ? kInvalidId : obj->get_guid();
-				write(dump_id, ofs);
+				write(dump_id, value);
 				if (dump_id != kInvalidId) this->dump_obj_impl(obj);
 			}
+
+			template<typename T, size_t N>
+			void write_array(const T& data, json::Value& value);
+
 			// end 
 			bool clear();
 
+			json::Document& get_doc() { return doc_; }
+
 		private:
 			/**
-			*@brief create a ofstream, and write type info 
+			*@brief create a ofstream, and write type info
 			*/
 			void dump_obj_impl(const shared_ptr<Object> obj);
 
@@ -75,17 +81,53 @@ namespace staywalk{
 			*@brief write common type dataread_single
 			*/
 			template<typename T>
-			void write_single(const T&, Writer& writer);
+			void write_single(const T&, json::Value& value);
 			template<typename T>
-			void write_vector(const vector<T>& data, Writer& writer);
+			void write_vector(const vector<T>& data, json::Value& value);
 			template<typename TKey, typename TVal>
-			void write_map(const map<TKey, TVal>& data, Writer& writer);
+			void write_map(const map<TKey, TVal>& data, json::Value& value);
+
+
+			void write_single(const string& str, rapidjson::Value& value) {
+				value = json::StringRef(str.c_str());
+			}
+			void write_single(const fs::path& path, rapidjson::Value& value) {
+				value = json::StringRef(path.u8string().c_str());
+			}
+			void write_single(const bool& data, rapidjson::Value& value) { value.SetBool(data); }
+
+			void write_single(const int& data, rapidjson::Value& value) { value.SetInt(data); }
+
+			void write_single(const int64_t& data, rapidjson::Value& value) { value.SetInt64(data); }
+
+			void write_single(const uint& data, rapidjson::Value& value) { value.SetUint(data); }
+
+			void write_single(const uint64_t& data, rapidjson::Value& value) { value.SetUint64(data); }
+
+			void write_single(const float& data, rapidjson::Value& value) { value.SetFloat(data); }
+			
+			void write_single(const double& data, rapidjson::Value& value) { value.SetDouble(data); }
+
+			void write_single(const vec2& data, rapidjson::Value& value) {
+				this->write_array<vec2, 2>(data, value);
+			}
+			void write_single(const vec3& data, rapidjson::Value& value) {
+				write_array<vec3, 3>(data, value);
+			}
+			void write_single(const vec4& data, rapidjson::Value& value) {
+				write_array<vec4, 4>(data, value);
+			}
+			void write_single(const quat& data, rapidjson::Value& value) {
+				write_array<quat, 4>(data, value);
+			}
+			void write_single(const mat4& data, rapidjson::Value& value) {
+				write_array<mat4, 4>(data, value);
+			}
 
 		private:
 			hashtable<idtype, Status> status_table_;
-			fs::path tmp_path_;
-			fs::path target_path_;
-			rapidjson::StringBuffer sb_;
+			fs::path target_file_;
+			json::Document doc_;
 		};
 
 		class Loader {
@@ -96,11 +138,13 @@ namespace staywalk{
 				Done
 			};
 
-			Loader(fs::path dir) : load_path_(dir) {}
+			Loader(fs::path file_name);
 			Loader(const Loader&) = delete;
 			Loader(Loader&&) = delete;
 			Loader& operator=(const Loader&) = delete;
 			Loader& operator=(Loader&&) = delete;
+
+			json::Document& get_doc() { return doc_; }
 
 			/**
 			*@brief create a ifstream, and read type info
@@ -108,36 +152,79 @@ namespace staywalk{
 			shared_ptr<Object> load(idtype id);
 
 			template<typename T>
-			void read(T& data, ifstream& ifs) { this->read_single<T>(data, ifs); }
+			void read(T& data, json::Value& ivalue) { read_single(data, ivalue); }
 
 			template<typename T>
-			void read(std::vector<T>& data, ifstream& ifs) { this->read_vector<T>(data, ifs); }
+			void read(std::vector<T>& data, json::Value& ivalue) { this->read_vector<T>(data, ivalue); }
 
 			template<typename TK, typename TV>
-			void read(std::map<TK, TV>& data, ifstream& ifs) { this->read_map<TK, TV>(data, ifs); }
+			void read(std::map<TK, TV>& data, json::Value& ivalue) { this->read_map<TK, TV>(data, ivalue); }
 
 			template<typename T>
-			void read(std::shared_ptr<T>& data, ifstream& ifs) {
-				static_assert((std::is_same_v<::staywalk::Object, T> || std::is_base_of_v<staywalk::Object, T>) 
+			void read(std::shared_ptr<T>& data, json::Value& ivalue) {
+				static_assert((std::is_same_v<::staywalk::Object, T> || std::is_base_of_v<staywalk::Object, T>)
 					&& "unsupport shared_ptr load of other type");
-				idtype id; read(id, ifs);
+				idtype id; read(id, ivalue);
 				data = (id == kInvalidId) ? nullptr : pcast<T>(load_obj_impl(id));
 			}
 
+			template<typename T, size_t N>
+			void read_array(T& data, json::Value& ivalue);
+
 		private:
 			template<typename T>
-			void read_single(T& data, ifstream& ifs);
+			void read_single(T& data, json::Value& ivalue);
+
+			void read_single(string& str, rapidjson::Value& value) {
+				if (value.IsString()) str = std::string(value.GetString());
+			}
+			void read_single(fs::path& path, rapidjson::Value& value) {
+				if (value.IsString()) path = std::string(value.GetString());
+			}
+			void read_single(bool& data, rapidjson::Value& value) { if (value.IsBool()) data = value.GetBool(); }
+
+			void read_single(int& data, rapidjson::Value& value) { if (value.IsInt()) data = value.GetInt(); }
+
+			void read_single(int64_t& data, rapidjson::Value& value) { if (value.IsInt64()) data = value.GetInt64(); }
+
+			void read_single(uint& data, rapidjson::Value& value) { if (value.IsUint()) data = value.GetUint(); }
+
+			void read_single(uint64_t& data, rapidjson::Value& value) { if (value.IsUint64()) data = value.GetUint64(); }
+
+			void read_single(float& data, rapidjson::Value& value) { if (value.IsFloat()) data = value.GetFloat(); }
+
+			void read_single(double& data, rapidjson::Value& value) { if (value.IsDouble()) data = value.GetDouble(); }
+
+			void read_single(vec2& data, rapidjson::Value& value) {
+				read_array<glm::vec2, 2>(data, value);
+			}
+			void read_single(vec3& data, rapidjson::Value& value) {
+				read_array<glm::vec3, 3>(data, value);
+			}
+			void read_single(vec4& data, rapidjson::Value& value) {
+				read_array<vec4, 4>(data, value);
+			}
+			void read_single(quat& data, rapidjson::Value& value) {
+				read_array<quat, 4>(data, value);
+			}
+			void read_single(mat4& data, rapidjson::Value& value) {
+				read_array<mat4, 4>(data, value);
+			}
 
 			template<typename T>
-			void read_vector(vector<T>& data, ifstream& ifs);
+			void read_vector(vector<T>& data, json::Value& ivalue);
+			
 			template<typename TKey, typename TVal>
-			void read_map(map<TKey, TVal>& data, ifstream& ifs);
+			void read_map(map<TKey, TVal>& data, json::Value& ivalue);
+
 			shared_ptr<Object> load_obj_impl(idtype id);
 
 		private:
 			hashtable<idtype, Status> status_table_;
 			hashtable<idtype, shared_ptr<Object>> ref_cache_;
-			fs::path load_path_;
+			std::string json_str_;
+			fs::path load_file_;
+			json::Document doc_;
 		};
 	}
 }
@@ -148,101 +235,105 @@ namespace staywalk{
 namespace staywalk {
 	namespace reflect {
 		template<typename T>
-		void Dumper::write_single(const T& data, Writer& writer) {
-			constexpr bool is_obj = std::is_base_of_v<staywalk::Object, T> || std::is_same_v<T, staywalk::Object>;
-			static_assert(is_obj && "must be object");
-			this->dump
-		}
+		void Dumper::write_single(const T& data, rapidjson::Value& value) {
+			constexpr bool is_obj = 
+				std::is_base_of_v<staywalk::Object, T> || 
+				std::is_same_v<T, staywalk::Object> ||
+				std::is_same_v<T, staywalk::Transform> ||
+				std::is_same_v<T, staywalk::Vertex>;
 
-		template<>
-		void Dumper::write_single<string>(const string& str, Writer& writer) {
-			writer.String(str.c_str());
-		}
-
-		template<>
-		void Dumper::write_single(const fs::path& path, Writer& writer) {
-			writer.String(path.u8string().c_str());
-		}
-
-		template<>
-		void Dumper::write_single(const bool& data, Writer& writer) {
-			writer.Bool(data);
-		}
-
-		template<>
-		void Dumper::write_single(const int32_t& data, Writer& writer) {
-			writer.Int(data);
-		}
-
-		template<>
-		void Dumper::write_single(const int64_t& data, Writer& writer) {
-			writer.Int64(data);
-		}
-
-		template<>
-		void Dumper::write_single(const uint32_t& data, Writer& writer) {
-			writer.Uint(data);
-		}
-
-		template<>
-		void Dumper::write_single(const uint64_t& data, Writer& writer) {
-			writer.Uint64(data);
-		}
-
-		template<typename T>
-		void Dumper::write_vector(const vector<T>& data, Writer& writer) {
-			writer.StartArray();
-			for (const auto& it : data) this->write(it, writer);
-			writer.EndArray();
-		}
-
-		template<typename TKey, typename TVal>
-		void Dumper::write_map(const map<TKey, TVal>& data, Writer& writer) {
-			writer.StartObject();
-			for (const auto& it : data) {
-				this->write(it.first, writer); 
-				this->write(it.second, writer);
-			}
-			writer.EndObject();
-		}
-
-		template<>
-		void Loader::read_single<string>(string& str, ifstream& ifs);
-
-		template<>
-		void Loader::read_single(fs::path& path, ifstream& ifs);
-
-		template<typename T>
-		void Loader::read_single(T& data, ifstream& ifs) {
-			constexpr bool is_obj = std::is_base_of_v<staywalk::Object, T> || std::is_same_v<T, staywalk::Object>;
+			constexpr bool is_enum = std::is_enum_v<T>;
+			static_assert((is_obj || is_enum) && "other tyep shoubld override in template function");
 			if constexpr (is_obj) {
-				data.load(ifs, *this);
+				value.SetObject();
+				data.dump(value, *this);
 			}
 			else {
-				static_assert(std::is_trivial<T>::value && "must be trivial type");
-				ifs.read(reinterpret_cast<char*>(&data), sizeof data);
+				write_single(static_cast<const int>(data), value);
 			}
 		}
 
 		template<typename T>
-		void Loader::read_vector(vector<T>& data, ifstream& ifs) {
-			data.clear();
-			size_t num;
-			read(num, ifs);
-			data.resize(num);
-			for (size_t i = 0; i < num; i++) read(data[i], ifs);
+		void Dumper::write_vector(const vector<T>& data, rapidjson::Value& value) {
+			value.SetArray();
+			for (const auto& it : data) {
+				json::Value item_value;
+				this->write(it, item_value);
+				value.PushBack(item_value, doc_.GetAllocator());
+			}
 		}
 
 		template<typename TKey, typename TVal>
-		void Loader::read_map(map<TKey, TVal>& data, ifstream& ifs) {
-			data.clear();
-			typename map<TKey, TVal>::size_type map_size;
-			read(map_size, ifs);
-			for (size_t i = 0; i < map_size; i++) {
-				TKey key; 
-				read(key, ifs);
-				read(data[key], ifs);
+		void Dumper::write_map(const map<TKey, TVal>& data, rapidjson::Value& value) {
+			value.SetObject();
+			for (const auto& it : data) {
+				json::Value kvalue(fmt::format("{}", it.first).c_str(), doc_.GetAllocator());
+				json::Value vvalue;
+				this->write(it.second, vvalue);
+				value.AddMember(kvalue, vvalue, doc_.GetAllocator());
 			}
+		}
+
+		template<typename T, size_t N>
+		void Dumper::write_array(const T& data, json::Value& value) {
+			value.SetArray();
+			for (int i = 0; i < N; i++) {
+				json::Value element;
+				write_single(data[i], element);
+				value.PushBack(element, doc_.GetAllocator());
+			}
+		}
+
+		template<typename T>
+		void Loader::read_single(T& data, json::Value& ivalue) {
+			constexpr bool is_obj =
+				std::is_base_of_v<staywalk::Object, T> ||
+				std::is_same_v<T, staywalk::Object> ||
+				std::is_same_v<T, staywalk::Transform> ||
+				std::is_same_v<T, staywalk::Vertex>;
+
+			constexpr bool is_enum = std::is_enum_v<T>;
+			static_assert((is_obj || is_enum) && "other tyep shoubld override in template function");
+
+			if constexpr (is_obj) {
+				data.load(ivalue, *this);
+			}
+			else {
+				int cast_data;
+				read_single(cast_data, ivalue);
+				data = static_cast<T>(cast_data);
+			}
+		}
+
+		template<typename T>
+		void Loader::read_vector(vector<T>& data, json::Value& ivalue) {
+			data.clear();
+			if (!ivalue.IsArray()) return;
+			auto arr = ivalue.GetArray();
+			data.resize(arr.Size());
+			for (size_t i = 0; i < arr.Size(); i++)
+				read(data[i], arr[i]);
+		}
+
+		template<typename TKey, typename TVal>
+		void Loader::read_map(map<TKey, TVal>& data, json::Value& ivalue) {
+			data.clear();
+			if (!ivalue.IsObject()) return;
+			for (auto& m : ivalue.GetObject()) {
+				TKey k; TVal v;
+				read(k, m.name);
+				read(v, m.value);
+				data.emplace(k, v);
+			}
+		}
+
+		template<typename T, size_t N>
+		void Loader::read_array(T& data, json::Value& value) {
+			if (!value.IsArray()) return;
+			auto arr = value.GetArray();
+			assert(arr.Size() == N);
+			for (int i = 0; i < N; i++) 
+				read(data[i], value[i]);
 		}
 	}
 }

@@ -14,11 +14,11 @@ namespace staywalk{
 		bool load_resource() override;
 
 	public:
-		sw_Prop(nogui;) vector<Vertex> vertices;
-		sw_Prop(nogui;) vector<unsigned int> indices;
+		sw_Prop(nodump;nogui;) vector<Vertex> vertices;
+		sw_Prop(nodump; nogui;) vector<unsigned int> indices;
 		sw_Prop() shared_ptr<Material> mat;
 
-		uint vbo;
+		uint vbo = kGlSickId;
 
 		MetaRegister(RMesh);
 	};
