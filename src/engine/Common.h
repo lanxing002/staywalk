@@ -61,8 +61,8 @@ namespace staywalk
 	using uint = unsigned int;
 
 	template<typename T1, typename T2>
-	std::shared_ptr<T1> pcast(std::shared_ptr<T2>&& other) {
-		return std::dynamic_pointer_cast<T1>(std::move(other));
+	std::shared_ptr<T1> pcast(std::shared_ptr<T2> other) {
+		return std::dynamic_pointer_cast<T1>(other);
 	}
 
 	namespace fs = std::filesystem;
