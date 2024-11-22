@@ -1,89 +1,1406 @@
 {
-    "827814931519766528": {
-        "__object_type_": "staywalk::Material",
-        "name": "0-material",
-        "guid_": 827814931519766528,
-        "shader_": 18446744073709551615,
-        "uniforms_": {},
-        "texs_": {
-            "diffuse": 18446744073709551615
-        }
-    },
-    "827814931519766529": {
-        "__object_type_": "staywalk::RMesh",
-        "name": "0-mesh",
-        "guid_": 827814931519766529,
-        "mat": 827814931519766528
-    },
-    "827814931544932352": {
-        "__object_type_": "staywalk::RTex",
-        "name": "0-rtex",
-        "guid_": 827814931544932352,
-        "tex": {
-            "name": "MC003_Kozakura_Mari0.png",
-            "guid_": 827814931544932353,
-            "source": "",
-            "dump_dir": ""
+    "actors": [
+        827989430210920448
+    ],
+    "cameras": [],
+    "lights": [],
+    "stashs": [],
+    "__real_objects": {
+        "827989427245547520": {
+            "__object_type_": "staywalk::RTex",
+            "name": "0-rtex",
+            "guid_": 827989427245547520,
+            "tex": {
+                "name": "diffuse1.jpg",
+                "guid_": 827989427245547521,
+                "source": "",
+                "dump_dir": ""
+            },
+            "mipmap": true,
+            "wrap_s": 10497,
+            "wrap_t": 10497,
+            "min_filter": 9987,
+            "mag_filter": 9729
         },
-        "mipmap": true,
-        "wrap_s": 10497,
-        "wrap_t": 10497,
-        "min_filter": 9987,
-        "mag_filter": 9729
-    },
-    "827814931628818432": {
-        "__object_type_": "staywalk::Material",
-        "name": "1-material",
-        "guid_": 827814931628818432,
-        "shader_": 18446744073709551615,
-        "uniforms_": {},
-        "texs_": {
-            "diffuse": 827814931544932352
-        }
-    },
-    "827814931628818433": {
-        "__object_type_": "staywalk::RMesh",
-        "name": "1-mesh",
-        "guid_": 827814931628818433,
-        "mat": 827814931628818432
-    },
-    "827814931637207042": {
-        "__object_type_": "staywalk::StaticMeshComponent",
-        "name": "0-comp",
-        "guid_": 827814931637207042,
-        "meshs": [
-            827814931519766529,
-            827814931628818433
-        ]
-    },
-    "827814931637207040": {
-        "__object_type_": "staywalk::Actor",
-        "name": "marry--test",
-        "guid_": 827814931637207040,
-        "transform": {
-            "location": [
-                0.0,
-                0.0,
-                0.0
-            ],
-            "scale": [
-                1.0,
-                1.0,
-                1.0
-            ],
-            "rotation": [
-                0.0,
-                0.0,
-                1.0,
-                0.0
+        "827989429854404608": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429854404608,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429854404609": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429854404609,
+            "mat": 827989429854404608
+        },
+        "827989429879570432": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429879570432,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429879570433": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429879570433,
+            "mat": 827989429879570432
+        },
+        "827989429883764736": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429883764736,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429883764737": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429883764737,
+            "mat": 827989429883764736
+        },
+        "827989429908930560": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429908930560,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429908930561": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429908930561,
+            "mat": 827989429908930560
+        },
+        "827989429925707776": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429925707776,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429925707777": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429925707777,
+            "mat": 827989429925707776
+        },
+        "827989429942484992": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429942484992,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429942484993": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429942484993,
+            "mat": 827989429942484992
+        },
+        "827989429946679296": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429946679296,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429946679297": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429946679297,
+            "mat": 827989429946679296
+        },
+        "827989429946679298": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429946679298,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429946679299": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429946679299,
+            "mat": 827989429946679298
+        },
+        "827989429946679300": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429946679300,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429946679301": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429946679301,
+            "mat": 827989429946679300
+        },
+        "827989429946679302": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429946679302,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429946679303": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429946679303,
+            "mat": 827989429946679302
+        },
+        "827989429955067904": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429955067904,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429955067905": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429955067905,
+            "mat": 827989429955067904
+        },
+        "827989429984428032": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429984428032,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429984428033": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429984428033,
+            "mat": 827989429984428032
+        },
+        "827989429988622336": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429988622336,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429988622337": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429988622337,
+            "mat": 827989429988622336
+        },
+        "827989429988622338": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429988622338,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429988622339": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429988622339,
+            "mat": 827989429988622338
+        },
+        "827989429988622340": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429988622340,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429988622341": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429988622341,
+            "mat": 827989429988622340
+        },
+        "827989429997010944": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429997010944,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429997010945": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429997010945,
+            "mat": 827989429997010944
+        },
+        "827989429997010946": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429997010946,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429997010947": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429997010947,
+            "mat": 827989429997010946
+        },
+        "827989429997010948": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429997010948,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429997010949": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429997010949,
+            "mat": 827989429997010948
+        },
+        "827989429997010950": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429997010950,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429997010951": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429997010951,
+            "mat": 827989429997010950
+        },
+        "827989429997010952": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989429997010952,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989429997010953": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989429997010953,
+            "mat": 827989429997010952
+        },
+        "827989430001205248": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430001205248,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430001205249": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430001205249,
+            "mat": 827989430001205248
+        },
+        "827989430001205250": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430001205250,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430001205251": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430001205251,
+            "mat": 827989430001205250
+        },
+        "827989430005399552": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430005399552,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430005399553": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430005399553,
+            "mat": 827989430005399552
+        },
+        "827989430009593856": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430009593856,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430009593857": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430009593857,
+            "mat": 827989430009593856
+        },
+        "827989430009593858": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430009593858,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430009593859": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430009593859,
+            "mat": 827989430009593858
+        },
+        "827989430013788160": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430013788160,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430013788161": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430013788161,
+            "mat": 827989430013788160
+        },
+        "827989430013788162": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430013788162,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430013788163": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430013788163,
+            "mat": 827989430013788162
+        },
+        "827989430013788164": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430013788164,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430013788165": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430013788165,
+            "mat": 827989430013788164
+        },
+        "827989430013788166": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430013788166,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430013788167": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430013788167,
+            "mat": 827989430013788166
+        },
+        "827989430013788168": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430013788168,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430013788169": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430013788169,
+            "mat": 827989430013788168
+        },
+        "827989430013788170": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430013788170,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430013788171": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430013788171,
+            "mat": 827989430013788170
+        },
+        "827989430013788172": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430013788172,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430013788173": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430013788173,
+            "mat": 827989430013788172
+        },
+        "827989430013788174": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430013788174,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430013788175": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430013788175,
+            "mat": 827989430013788174
+        },
+        "827989430013788176": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430013788176,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430013788177": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430013788177,
+            "mat": 827989430013788176
+        },
+        "827989430013788178": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430013788178,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430013788179": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430013788179,
+            "mat": 827989430013788178
+        },
+        "827989430013788180": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430013788180,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430013788181": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430013788181,
+            "mat": 827989430013788180
+        },
+        "827989430017982464": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430017982464,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430017982465": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430017982465,
+            "mat": 827989430017982464
+        },
+        "827989430017982466": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430017982466,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430017982467": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430017982467,
+            "mat": 827989430017982466
+        },
+        "827989430017982468": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430017982468,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430017982469": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430017982469,
+            "mat": 827989430017982468
+        },
+        "827989430022176768": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430022176768,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430022176769": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430022176769,
+            "mat": 827989430022176768
+        },
+        "827989430026371072": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430026371072,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430026371073": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430026371073,
+            "mat": 827989430026371072
+        },
+        "827989430030565376": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430030565376,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430030565377": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430030565377,
+            "mat": 827989430030565376
+        },
+        "827989430038953984": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430038953984,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430038953985": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430038953985,
+            "mat": 827989430038953984
+        },
+        "827989430043148288": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430043148288,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430043148289": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430043148289,
+            "mat": 827989430043148288
+        },
+        "827989430047342592": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430047342592,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430047342593": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430047342593,
+            "mat": 827989430047342592
+        },
+        "827989430047342594": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430047342594,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430047342595": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430047342595,
+            "mat": 827989430047342594
+        },
+        "827989430047342596": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430047342596,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430047342597": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430047342597,
+            "mat": 827989430047342596
+        },
+        "827989430051536896": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430051536896,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430051536897": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430051536897,
+            "mat": 827989430051536896
+        },
+        "827989430064119808": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430064119808,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430064119809": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430064119809,
+            "mat": 827989430064119808
+        },
+        "827989430068314112": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430068314112,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430068314113": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430068314113,
+            "mat": 827989430068314112
+        },
+        "827989430068314114": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430068314114,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430068314115": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430068314115,
+            "mat": 827989430068314114
+        },
+        "827989430068314116": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430068314116,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430068314117": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430068314117,
+            "mat": 827989430068314116
+        },
+        "827989430068314118": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430068314118,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430068314119": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430068314119,
+            "mat": 827989430068314118
+        },
+        "827989430072508416": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430072508416,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430072508417": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430072508417,
+            "mat": 827989430072508416
+        },
+        "827989430072508418": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430072508418,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430072508419": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430072508419,
+            "mat": 827989430072508418
+        },
+        "827989430089285632": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430089285632,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430089285633": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430089285633,
+            "mat": 827989430089285632
+        },
+        "827989430093479936": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430093479936,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430093479937": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430093479937,
+            "mat": 827989430093479936
+        },
+        "827989430093479938": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430093479938,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430093479939": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430093479939,
+            "mat": 827989430093479938
+        },
+        "827989430093479940": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430093479940,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430093479941": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430093479941,
+            "mat": 827989430093479940
+        },
+        "827989430106062848": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430106062848,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430106062849": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430106062849,
+            "mat": 827989430106062848
+        },
+        "827989430110257152": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430110257152,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430110257153": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430110257153,
+            "mat": 827989430110257152
+        },
+        "827989430110257154": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430110257154,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430110257155": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430110257155,
+            "mat": 827989430110257154
+        },
+        "827989430114451456": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430114451456,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430114451457": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430114451457,
+            "mat": 827989430114451456
+        },
+        "827989430114451458": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430114451458,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430114451459": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430114451459,
+            "mat": 827989430114451458
+        },
+        "827989430127034368": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430127034368,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430127034369": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430127034369,
+            "mat": 827989430127034368
+        },
+        "827989430127034370": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430127034370,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430127034371": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430127034371,
+            "mat": 827989430127034370
+        },
+        "827989430127034372": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430127034372,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430127034373": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430127034373,
+            "mat": 827989430127034372
+        },
+        "827989430131228672": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430131228672,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430131228673": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430131228673,
+            "mat": 827989430131228672
+        },
+        "827989430131228674": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430131228674,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430131228675": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430131228675,
+            "mat": 827989430131228674
+        },
+        "827989430131228676": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430131228676,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430131228677": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430131228677,
+            "mat": 827989430131228676
+        },
+        "827989430139617280": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430139617280,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430139617281": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430139617281,
+            "mat": 827989430139617280
+        },
+        "827989430148005888": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430148005888,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430148005889": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430148005889,
+            "mat": 827989430148005888
+        },
+        "827989430152200192": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430152200192,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430152200193": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430152200193,
+            "mat": 827989430152200192
+        },
+        "827989430152200194": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430152200194,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430152200195": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430152200195,
+            "mat": 827989430152200194
+        },
+        "827989430156394496": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430156394496,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430156394497": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430156394497,
+            "mat": 827989430156394496
+        },
+        "827989430156394498": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430156394498,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430156394499": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430156394499,
+            "mat": 827989430156394498
+        },
+        "827989430160588800": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430160588800,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430160588801": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430160588801,
+            "mat": 827989430160588800
+        },
+        "827989430160588802": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430160588802,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430160588803": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430160588803,
+            "mat": 827989430160588802
+        },
+        "827989430164783104": {
+            "__object_type_": "staywalk::Material",
+            "name": "0-material",
+            "guid_": 827989430164783104,
+            "shader_": 18446744073709551615,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 827989427245547520
+            }
+        },
+        "827989430164783105": {
+            "__object_type_": "staywalk::RMesh",
+            "name": "0-mesh",
+            "guid_": 827989430164783105,
+            "mat": 827989430164783104
+        },
+        "827989430210920450": {
+            "__object_type_": "staywalk::StaticMeshComponent",
+            "name": "0-comp",
+            "guid_": 827989430210920450,
+            "meshs": [
+                827989429854404609,
+                827989429879570433,
+                827989429883764737,
+                827989429908930561,
+                827989429925707777,
+                827989429942484993,
+                827989429946679297,
+                827989429946679299,
+                827989429946679301,
+                827989429946679303,
+                827989429955067905,
+                827989429984428033,
+                827989429988622337,
+                827989429988622339,
+                827989429988622341,
+                827989429997010945,
+                827989429997010947,
+                827989429997010949,
+                827989429997010951,
+                827989429997010953,
+                827989430001205249,
+                827989430001205251,
+                827989430005399553,
+                827989430009593857,
+                827989430009593859,
+                827989430013788161,
+                827989430013788163,
+                827989430013788165,
+                827989430013788167,
+                827989430013788169,
+                827989430013788171,
+                827989430013788173,
+                827989430013788175,
+                827989430013788177,
+                827989430013788179,
+                827989430013788181,
+                827989430017982465,
+                827989430017982467,
+                827989430017982469,
+                827989430022176769,
+                827989430026371073,
+                827989430030565377,
+                827989430038953985,
+                827989430043148289,
+                827989430047342593,
+                827989430047342595,
+                827989430047342597,
+                827989430051536897,
+                827989430064119809,
+                827989430068314113,
+                827989430068314115,
+                827989430068314117,
+                827989430068314119,
+                827989430072508417,
+                827989430072508419,
+                827989430089285633,
+                827989430093479937,
+                827989430093479939,
+                827989430093479941,
+                827989430106062849,
+                827989430110257153,
+                827989430110257155,
+                827989430114451457,
+                827989430114451459,
+                827989430127034369,
+                827989430127034371,
+                827989430127034373,
+                827989430131228673,
+                827989430131228675,
+                827989430131228677,
+                827989430139617281,
+                827989430148005889,
+                827989430152200193,
+                827989430152200195,
+                827989430156394497,
+                827989430156394499,
+                827989430160588801,
+                827989430160588803,
+                827989430164783105
             ]
         },
-        "sm_comp": 827814931637207042,
-        "ssm_comp": {
-            "name": "1-comp",
-            "guid_": 827814931637207041,
-            "meshs": []
-        },
-        "shader_type": 2
+        "827989430210920448": {
+            "__object_type_": "staywalk::Actor",
+            "name": "marry",
+            "guid_": 827989430210920448,
+            "transform": {
+                "location": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    0.0,
+                    0.0,
+                    1.0,
+                    0.0
+                ]
+            },
+            "sm_comp": 827989430210920450,
+            "ssm_comp": {
+                "name": "0-comp",
+                "guid_": 827989430210920449,
+                "meshs": []
+            },
+            "shader_type": 1
+        }
     }
 }
