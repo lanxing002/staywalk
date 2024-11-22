@@ -8,9 +8,13 @@ namespace staywalk {
 		}
 		return engine;
 	}
+
+	void Engine::load_world(const string& name){
+		world_ = World::load(name);
+	}
 	
 	Engine::Engine(){
-		//world_ = World::create_empty_world("default");
+		////world_ = World::create_empty_world("default");
 		//world_ = World::load_marry_world();
 		world_ = World::load("marry-world");
 		console_ = std::make_shared<Console>();

@@ -17,6 +17,8 @@ namespace staywalk{ namespace reflect{
 		RMesh, 
 		StaticMeshComponent, 
 		Actor, 
+		Camera, 
+		Light, 
 }; }}
 
 
