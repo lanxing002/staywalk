@@ -12,5 +12,7 @@ namespace staywalk{
 
 	void log(LogLevel level, string& text, bool new_line = true);
 
+	void log(LogLevel level, const char* str, bool new_line = true);
+
 }
 

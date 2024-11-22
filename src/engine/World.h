@@ -1,14 +1,24 @@
 #pragma once
 #include "Common.h"
+#include "Light.h"
+#include "Camera.h"
 
 namespace staywalk {
 	class Object;
 	class Actor;
 	class World;
 
-	using PObject = shared_ptr<Object>;
-	using PActor = shared_ptr<Actor>;
-	using PWorld = shared_ptr<World>;
+	using PObject = Ref<Object>;
+	using PActor = Ref<Actor>;
+	using PCamera = Ref<Camera>;
+	using PLight = Ref<Light>;
+
+	using PWorld = Ref<World>;
+
+	namespace reflect {
+		class Dumper;
+		class Loader;
+	}
 
 	class World {
 	public:
@@ -34,8 +44,14 @@ namespace staywalk {
 		string name_{"empty-world"};
 
 		vector<PActor> actors_;
+		vector<PLight> lights_;
+		vector<PCamera> cameras_;
+		vector<PObject> stash_objs_;
 
 		hashtable<idtype, size_t> id2actors_;
+
+		friend class reflect::Dumper;
+		friend class reflect::Loader;
 	};
 }
 

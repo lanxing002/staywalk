@@ -28,7 +28,7 @@ if __name__ == '__main__':
         '-D_IN_REFLECT=1',  # switch on reflect
     ]
 
-    s_node = index.parse(f"{code_src_path}/engine/main.cpp",
+    s_node = index.parse(f"{code_src_path}/engine/ReflectEntry.cpp",
                          compile_args)
     namespaces = []
     outer_classes = []
