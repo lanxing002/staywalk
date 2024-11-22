@@ -166,12 +166,33 @@ void EditorUI::show_world(){
      }
 
      auto world = Engine::get_world();
-     auto actors = world->get_all_actors();
      auto selected = Engine::get_engine()->get_selected();
-     for (auto a : actors) {
-         if (ImGui::Selectable(a->name.c_str(), selected == a)) {
-             Engine::get_engine()->select(a);
+
+     if (ImGui::TreeNode("actor")) {
+         for (auto a : world->get_actors()) {
+             if (ImGui::Selectable(a->name.c_str(), selected == a)) {
+                 Engine::get_engine()->select(a);
+             }
          }
+         ImGui::TreePop();
+     }
+
+     if (ImGui::TreeNode("camera")) {
+         for (auto a : world->get_cameras()) {
+             if (ImGui::Selectable(a->name.c_str(), selected == a)) {
+                 Engine::get_engine()->select(a);
+             }
+         }
+         ImGui::TreePop();
+     }
+
+     if (ImGui::TreeNode("light")) {
+         for (auto a : world->get_lights()) {
+             if (ImGui::Selectable(a->name.c_str(), selected == a)) {
+                 Engine::get_engine()->select(a);
+             }
+         }
+         ImGui::TreePop();
      }
 
      ImGui::End();
@@ -184,8 +205,34 @@ void EditorUI::show_misc()
         return;
     }
 
-    ImGui::Text("FileContent window text");
+    if (ImGui::TreeNode("world")) {
+        static char buffer[128] = "";
+        auto world = Engine::get_world();
+        auto& world_name = world->get_name();
 
+        if (ImGui::Button("rename-world")) {
+            ImGui::OpenPopup("rename-world");
+            if (world)
+                memcpy(buffer, world_name.c_str(), world_name.size());
+        }
+        
+        if (ImGui::BeginPopupModal("rename-world", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
+            ImGui::Text("world name:");
+            ImGui::InputText("##Input", buffer, IM_ARRAYSIZE(buffer));
+
+            if (ImGui::Button("   OK   ")) {
+                auto len = strlen(buffer);
+                string new_name(buffer, len);
+                world->set_name(new_name);
+                ImGui::CloseCurrentPopup();
+            }
+            ImGui::SameLine();
+            if (ImGui::Button(" Cancel ")) ImGui::CloseCurrentPopup(); 
+            
+            ImGui::EndPopup();
+        }
+        ImGui::TreePop();
+    }
 
     ImGui::End();
 }

@@ -5,8 +5,18 @@ namespace staywalk {
 		static shared_ptr<Engine> engine{nullptr};
 		if (engine == nullptr) {
 			engine = shared_ptr<Engine>(new Engine);
+			engine->console_ = get_console();
 		}
 		return engine;
+	}
+
+	Ref<Console> Engine::get_console()
+	{
+		static Ref<Console> console{nullptr};
+		if (console == nullptr) {
+			console = shared_ptr<Console>(new Console);
+		}
+		return console;
 	}
 
 	void Engine::load_world(const string& name){
