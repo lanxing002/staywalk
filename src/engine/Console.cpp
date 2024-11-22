@@ -29,16 +29,14 @@ namespace staywalk {
 
     Console::~Console() {
         clear_log();
-        for (int i = 0; i < History.Size; i++)
-            ImGui::MemFree(History[i]);
     }
 
     void Console::clear_log() {
         Items.clear();
     }
 
-    void Console::add_log(const std::string& str) {
-        Items.push_back(str);
+    void Console::add_log(const std::string& str, LogLevel level) {
+        Items.emplace_back(level, str);
     }
 
     void Console::draw(const std::string& str)
@@ -67,29 +65,26 @@ namespace staywalk {
         const float footer_height_to_reserve = ImGui::GetStyle().ItemSpacing.y + ImGui::GetFrameHeightWithSpacing();
         if (ImGui::BeginChild("ScrollingRegion", ImVec2(0, -footer_height_to_reserve), ImGuiChildFlags_NavFlattened, ImGuiWindowFlags_HorizontalScrollbar))
         {
-            if (ImGui::BeginPopupContextWindow())
-            {
+            if (ImGui::BeginPopupContextWindow()){
                 if (ImGui::Selectable("Clear")) clear_log();
                 ImGui::EndPopup();
             }
 
             ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1)); // Tighten spacing
-            for (const auto& item : Items)
+            for (const auto& [level, item] : Items)
             {
                 if (!Filter.PassFilter(item.c_str()))
                     continue;
 
-                // Normally you would store more information in your item than just a string.
-                // (e.g. make Items[] an array of structure, store color/type etc.)
-                //ImVec4 color;
-                //bool has_color = false;
-                //if (strstr(item, "[error]")) { color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f); has_color = true; }
-                //else if (strncmp(item, "# ", 2) == 0) { color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f); has_color = true; }
-                //if (has_color)
-                //    ImGui::PushStyleColor(ImGuiCol_Text, color);
+                ImVec4 color;
+                bool has_color = false;
+                if (level == LogLevel::Error) { color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f); has_color = true; }
+                if (level == LogLevel::Warning) { color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f); has_color = true; }
+                if (has_color)
+                    ImGui::PushStyleColor(ImGuiCol_Text, color);
                 ImGui::TextUnformatted(item.c_str());
-                //if (has_color)
-                //    ImGui::PopStyleColor();
+                if (has_color)
+                    ImGui::PopStyleColor();
             }
 
             // Keep up at the bottom of the scroll region if we were already at the bottom at the beginning of the frame.

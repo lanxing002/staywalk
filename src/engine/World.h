@@ -31,7 +31,10 @@ namespace staywalk {
 		static PWorld load_marry_world();
 		static shared_ptr<World> load(const string& name);
 
-		const vector<PActor>& get_all_actors() { return actors_; }
+		const vector<PActor>& get_actors() { return actors_; }
+		const vector<PCamera>& get_cameras() { return cameras_; }
+		const vector<PLight>& get_lights() { return lights_; }
+
 		void add_actor(shared_ptr<Actor> actor);
 		void remove_actor(shared_ptr<Actor> actor);
 		void remove_actor(idtype id);

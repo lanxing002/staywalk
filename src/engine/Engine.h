@@ -17,7 +17,7 @@ namespace staywalk{
 		// engine functions
 		static shared_ptr<Engine> get_engine();
 		static shared_ptr<World> get_world() { return Engine::get_engine()->world_; }
-		static Ref<Console> get_console() { return Engine::get_engine()->console_; }
+		static Ref<Console> get_console();
 
 		~Engine();
 		//end of engine functions
@@ -26,8 +26,8 @@ namespace staywalk{
 
 	public:
 		//editor function
-		void select(shared_ptr<Actor> target) { selelcted_ = target; }
-		shared_ptr<Actor> get_selected() { return selelcted_; }
+		void select(Ref<GameObject> target) { selelcted_ = target; }
+		Ref<GameObject> get_selected() { return selelcted_; }
 
 		// end of editor function
 
@@ -39,9 +39,9 @@ namespace staywalk{
 		friend class std::shared_ptr<Engine>;
 
 		// memeber for editor
-		shared_ptr<Actor> selelcted_;
+		Ref<GameObject> selelcted_;
 
-		shared_ptr<Console> console_;
+		Ref<Console> console_;
 
 		// end member for editor
 	};

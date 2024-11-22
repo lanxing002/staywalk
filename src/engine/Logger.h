@@ -6,13 +6,13 @@ namespace staywalk{
 	enum LogLevel {
 		Debug, 
 		Info,
-		Warining,
+		Warning,
 		Error
 	};
 
-	void log(LogLevel level, string& text, bool new_line = true);
+	void log(string& text, LogLevel level = LogLevel::Info, bool new_line = true);
 
-	void log(LogLevel level, const char* str, bool new_line = true);
+	void log(const char* str, LogLevel level = LogLevel::Info, bool new_line = true);
 
 }
 

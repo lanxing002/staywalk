@@ -133,12 +133,12 @@ namespace staywalk{
 
     bool Utility::check_ifstream(const std::ifstream& fstrm){
         if (!fstrm.is_open()) {
-            log(LogLevel::Error, fmt::format("cannot open file"));
+            log(fmt::format("cannot open file"), LogLevel::Error);
             return false;
         }
 
         if (!fstrm.good()) {
-            log(LogLevel::Error, fmt::format("file stream in wrong status"));
+            log(fmt::format("file stream in wrong status"), LogLevel::Error);
             return false;
         }
         return true;
@@ -147,12 +147,12 @@ namespace staywalk{
     bool Utility::check_ofstream(const std::ofstream& fstrm)
     {
         if (!fstrm.is_open()) {
-            log(LogLevel::Error, fmt::format("cannot open file stream"));
+            log(fmt::format("cannot open file stream"), LogLevel::Error);
             return false;
         }
 
         if (!fstrm.good()) {
-            log(LogLevel::Error, fmt::format("file stream in wrong status"));
+            log( fmt::format("file stream in wrong status"), LogLevel::Error);
             return false;
         }
         return true;
@@ -169,7 +169,7 @@ namespace staywalk{
     {
         auto path = get_textures_dir() / fs::path(rtex.tex.name);
         if (fs::is_directory(path) || !fs::exists(path)) {
-            log(LogLevel::Error, fmt::format("Utility --> load_texture : not find target ({})", path.u8string()));
+            log(fmt::format("Utility --> load_texture : not find target ({})", path.u8string()), LogLevel::Error);
             return false;
         }
 
@@ -177,7 +177,7 @@ namespace staywalk{
             &(rtex.tex.width), &(rtex.tex.height), &(rtex.tex.nr_comps), 0);
 
         if (rtex.tex.data == nullptr) {
-            log(LogLevel::Error, fmt::format("Utility --> load_texture : failed when load {}", path.u8string()));
+            log(fmt::format("Utility --> load_texture : failed when load {}", path.u8string()), LogLevel::Error);
             return false;
         }
         return true;
@@ -220,10 +220,10 @@ namespace staywalk{
     MeshLoader::MeshLoader(const string& mname)
     :mesh_name_(mname){
         if (fs::is_directory(mesh_name_) ||  !fs::exists(mesh_name_)) {
-            log(LogLevel::Warining, fmt::format("MeshLoader --> mesh ({}) not exists!", mesh_name_.u8string()));
+            log(fmt::format("MeshLoader --> mesh ({}) not exists!", mesh_name_.u8string()), LogLevel::Warning);
             return;
         }
-        log(LogLevel::Info, fmt::format("MeshLoader --> consturct mesh data from ({})", mesh_name_.u8string()));
+        log(fmt::format("MeshLoader --> consturct mesh data from ({})", mesh_name_.u8string()));
         load_dir_ = mesh_name_.parent_path();
 
         Assimp::Importer importer;
@@ -232,7 +232,7 @@ namespace staywalk{
         // check for errors
         if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) // if is Not Zero
         {
-            log(LogLevel::Error, fmt::format("Assimp --> error : {}", importer.GetErrorString()));
+            log(fmt::format("Assimp --> error : {}", importer.GetErrorString()), LogLevel::Error);
             return;
         }
         // retrieve the directory path of the filepath
@@ -318,7 +318,7 @@ namespace staywalk{
         if(it != loaded_texs_.end()) return it->second;
 
         if (!fs::exists(path)) {
-            log(LogLevel::Warining, fmt::format("MeshLoader::make_tex cannot find target texture file: {}", path.u8string()));
+            log(fmt::format("MeshLoader::make_tex cannot find target texture file: {}", path.u8string()), LogLevel::Warning);
             return nullptr; 
         }
 

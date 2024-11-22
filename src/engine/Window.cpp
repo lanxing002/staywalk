@@ -15,7 +15,7 @@ Window::Window(int width, int height)
 
     window_ = glfwCreateWindow(width, height, "<S<>W>", NULL, NULL);
     if (window_ == NULL){
-        log(LogLevel::Error, std::string("can not create glfw window!!"));
+        log( std::string("can not create glfw window!!"), LogLevel::Error);
         glfwTerminate();
         terminate();
     }
@@ -23,7 +23,7 @@ Window::Window(int width, int height)
     glfwSetFramebufferSizeCallback(window_, Window::handle_resize);
 
     if (!gladLoadGLLoader((GLADloadproc)glfwGetProcAddress)){
-        log(LogLevel::Error, std::string("Failed to initialize GLAD!!"));
+        log(std::string("Failed to initialize GLAD!!"), LogLevel::Error);
         terminate();
     }
     editor_ui_.initialize(window_);
