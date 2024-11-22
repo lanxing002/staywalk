@@ -1,28 +1,25 @@
 #include "Logger.h"
+#include "Engine.h"
 #include <fmt/color.h>
+#include <fmt/chrono.h>
+#include <chrono>
+using namespace std::chrono;
 
-void staywalk::log(LogLevel level, string& text, bool new_line){
-	log(level, text.c_str(), new_line);
+void staywalk::log(string& text, LogLevel level, bool new_line){
+	log(text.c_str(), level, new_line);
 }
 
-void staywalk::log(LogLevel level, const char* str, bool new_line){
-	auto color = fmt::color::white;
-	switch (level)
-	{
-	case staywalk::Warining:
-		color = fmt::color::yellow;
-		break;
-	case staywalk::Error:
-		color = fmt::color::red;
-		break;
-	default:
-		break;
-	}
-	if (level == LogLevel::Error || level == LogLevel::Warining)
-		fmt::print(fmt::fg(color), str);
-	else
-		fmt::print(str);
+void staywalk::log(const char* str, LogLevel level, bool new_line){
+	std::time_t now = std::time(nullptr);
+	string text_with_time = fmt::format("[{:%Y-%m-%d %H:%M:%S}]:  {}", fmt::localtime(now), str);
 
-	if (new_line) fmt::println("");
+	static auto console = Engine::get_console();
+	if (!console) console = Engine::get_console();
+	if (console) {
+		console->add_log(text_with_time, level);
+	}
+	else {
+		fmt::println(text_with_time);
+	}
 	return;
 }

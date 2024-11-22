@@ -1,4 +1,6 @@
 #pragma once
+#include "Common.h"
+#include "Logger.h"
 #include "rhi.h"
 #include "imgui.h"
 #include <string>
@@ -15,7 +17,7 @@ namespace staywalk {
 
         void clear_log();
 
-        void add_log(const std::string& log);
+        void add_log(const std::string& log, LogLevel level = LogLevel::Info);
 
         void draw(const std::string& log);
 
@@ -27,9 +29,9 @@ namespace staywalk {
 
     private:
         char                  InputBuf[256];
-        ImVector<std::string> Items;
-        ImVector<const char*> Commands;
-        ImVector<char*>       History;
+        vector<std::pair<LogLevel, string>>         Items;
+        vector<string>          Commands;
+        vector<string>       History;
         int                   HistoryPos;    // -1: new line, 0..History.Size-1 browsing history.
         ImGuiTextFilter       Filter;
         bool                  AutoScroll;
