@@ -60,7 +60,7 @@ bool Dumper::clear()
 {
     for (auto it = status_table_.begin(); it != status_table_.end(); it++) {
         if (it->second != Status::Done) {
-            log(LogLevel::Error, fmt::format("dump not finished yet : {}", it->first));
+            log(fmt::format("dump not finished yet : {}", it->first), LogLevel::Error);
             assert(false);
         }
     }
@@ -75,7 +75,7 @@ bool Dumper::clear()
         ofs << sb.GetString();
     }
     else {
-        log(LogLevel::Error, fmt::format("dump target file is incorrect : {}", target_file_.u8string()));
+        log(fmt::format("dump target file is incorrect : {}", target_file_.u8string()), LogLevel::Error);
         return false;
     }
 
@@ -85,17 +85,17 @@ bool Dumper::clear()
 Loader::Loader(fs::path file_name)
     : load_file_(file_name) {
     if (!fs::exists(file_name)) {
-        log(LogLevel::Error, fmt::format("Loader cannot open target file: [{}]", fs::absolute(file_name).u8string()));
+        log(fmt::format("Loader cannot open target file: [{}]", fs::absolute(file_name).u8string()), LogLevel::Error);
         return;
     }
     
-    log(LogLevel::Info, fmt::format("start load world from: [{}]", fs::absolute(file_name).u8string()));
+    log(fmt::format("start load world from: [{}]", fs::absolute(file_name).u8string()));
     std::ifstream ifs(file_name, std::ios::in);
     json_str_ = std::string(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>());
 
     doc_ = json::Document();
     if (doc_.Parse(json_str_.data()).HasParseError()) 
-        log(LogLevel::Error, fmt::format("parse json data error: [{}]", file_name.u8string()));
+        log(fmt::format("parse json data error: [{}]", file_name.u8string()), LogLevel::Error);
     assert(doc_.IsObject());
 }
 
@@ -109,7 +109,7 @@ void Loader::load(World& world) {
     if (actors_it == end_it || cameras_it == end_it || 
         lights_it == end_it || real_objs_it== end_it ||
         stashs_it == end_it) {
-        log(LogLevel::Error, "wrong world json data");
+        log("wrong world json data", LogLevel::Error);
     }
 
     real_objs_ = real_objs_it->value;
