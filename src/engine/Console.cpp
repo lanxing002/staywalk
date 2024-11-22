@@ -87,6 +87,23 @@ namespace staywalk {
                     ImGui::PopStyleColor();
             }
 
+            // 检测鼠标交互
+            if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(0)) {
+                selecting = true;
+                // 获取鼠标开始选中的位置 (简化示例：基于屏幕坐标)
+                startIdx = ImGui::GetMousePos().x;
+            }
+            else if (ImGui::IsMouseReleased(0) && selecting) {
+                selecting = false;
+                // 获取鼠标结束选中的位置
+                endIdx = ImGui::GetMousePos().x;
+
+                // 模拟选中文本（具体需按字符位置处理）
+                if (startIdx >= 0 && endIdx > startIdx) {
+                    ImGui::SetClipboardText(text.substr(startIdx, endIdx - startIdx).c_str());
+                }
+            }
+
             // Keep up at the bottom of the scroll region if we were already at the bottom at the beginning of the frame.
             // Using a scrollbar or mouse-wheel will take away from the bottom edge.
             if (ScrollToBottom || (AutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()))
