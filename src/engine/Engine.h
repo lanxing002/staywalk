@@ -22,6 +22,8 @@ namespace staywalk{
 		~Engine();
 		//end of engine functions
 
+		void load_world(const string& name);
+
 	public:
 		//editor function
 		void select(shared_ptr<Actor> target) { selelcted_ = target; }

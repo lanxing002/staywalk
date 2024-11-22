@@ -2,6 +2,10 @@
 #include <fmt/color.h>
 
 void staywalk::log(LogLevel level, string& text, bool new_line){
+	log(level, text.c_str(), new_line);
+}
+
+void staywalk::log(LogLevel level, const char* str, bool new_line){
 	auto color = fmt::color::white;
 	switch (level)
 	{
@@ -15,9 +19,9 @@ void staywalk::log(LogLevel level, string& text, bool new_line){
 		break;
 	}
 	if (level == LogLevel::Error || level == LogLevel::Warining)
-		fmt::print(fmt::fg(color), text);
+		fmt::print(fmt::fg(color), str);
 	else
-		fmt::print( text);
+		fmt::print(str);
 
 	if (new_line) fmt::println("");
 	return;

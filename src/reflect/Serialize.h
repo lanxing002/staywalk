@@ -9,6 +9,8 @@
 namespace json = rapidjson;
 namespace staywalk {
 
+	class World;
+
 	class Comparer {
 	public:
 		template<typename T>
@@ -42,7 +44,7 @@ namespace staywalk {
 			/**
 			*@brief create a ofstream, and write type info
 			*/
-			void dump(shared_ptr<Object> obj);
+			void dump_world(const World& world);
 
 			// wirte data to stream for all type which can serialize
 			template<typename T>
@@ -66,12 +68,11 @@ namespace staywalk {
 			template<typename T, size_t N>
 			void write_array(const T& data, json::Value& value);
 
-			// end 
-			bool clear();
-
 			json::Document& get_doc() { return doc_; }
 
 		private:
+			bool clear();
+
 			/**
 			*@brief create a ofstream, and write type info
 			*/
@@ -128,6 +129,7 @@ namespace staywalk {
 			hashtable<idtype, Status> status_table_;
 			fs::path target_file_;
 			json::Document doc_;
+			json::Value real_objs_;
 		};
 
 		class Loader {
@@ -144,12 +146,10 @@ namespace staywalk {
 			Loader& operator=(const Loader&) = delete;
 			Loader& operator=(Loader&&) = delete;
 
-			json::Document& get_doc() { return doc_; }
-
 			/**
 			*@brief create a ifstream, and read type info
 			*/
-			shared_ptr<Object> load(const std::string& id);
+			void load(World& world);
 
 			template<typename T>
 			void read(T& data, json::Value& ivalue) { read_single(data, ivalue); }
@@ -170,6 +170,8 @@ namespace staywalk {
 
 			template<typename T, size_t N>
 			void read_array(T& data, json::Value& ivalue);
+
+			void clear();
 
 		private:
 			template<typename T>
@@ -222,6 +224,7 @@ namespace staywalk {
 		private:
 			hashtable<string, Status> status_table_;
 			hashtable<string, shared_ptr<Object>> ref_cache_;
+			json::Value real_objs_;
 			std::string json_str_;
 			fs::path load_file_;
 			json::Document doc_;
