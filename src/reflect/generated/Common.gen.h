@@ -19,6 +19,8 @@ namespace staywalk{ namespace reflect{
 		Actor, 
 		Camera, 
 		Light, 
+		World, 
+		Engine, 
 }; }}
 
 
