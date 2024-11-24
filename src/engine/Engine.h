@@ -1,33 +1,35 @@
 #pragma once
+
 #include "Common.h"
 #include "Utility.h"
 #include "World.h"
 #include "Console.h"
 
-#include <memory>
-#include <unordered_map>
+//#include <memory>
+//#include <unordered_map>
 
 
 namespace staywalk{
 	class Object;
 	class Actor;
 
-	class Engine{
+	class sw_Class(nogui; nojson) Engine{
 	public:
 		// engine functions
-		static shared_ptr<Engine> get_engine();
-		static shared_ptr<World> get_world() { return Engine::get_engine()->world_; }
-		static Ref<Console> get_console();
+		sw_Func() static shared_ptr<Engine> get_engine();
+		sw_Func() static shared_ptr<World> get_world() { return Engine::get_engine()->world_; }
+		sw_Func() static void set_world(Ref<World> world) { if (world) Engine::get_engine()->world_ = world; }
+		sw_Func() static Ref<Console> get_console();
 
 		~Engine();
 		//end of engine functions
 
-		void load_world(const string& name);
+		sw_Func() void load_world(const string& name);
 
 	public:
 		//editor function
-		void select(Ref<GameObject> target) { selelcted_ = target; }
-		Ref<GameObject> get_selected() { return selelcted_; }
+		sw_Func() void select(Ref<GameObject> target) { selelcted_ = target; }
+		sw_Func() Ref<GameObject> get_selected() { return selelcted_; }
 
 		// end of editor function
 
@@ -36,7 +38,7 @@ namespace staywalk{
 
 	private:
 		shared_ptr<World> world_;
-		friend class std::shared_ptr<Engine>;
+		//friend class std::shared_ptr<Engine>;
 
 		// memeber for editor
 		Ref<GameObject> selelcted_;

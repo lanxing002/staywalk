@@ -4,8 +4,13 @@
 #include "RMesh.h"
 
 #include <type_traits>
-#include <assimp/scene.h>
 #include <xutility>
+
+struct aiMesh;
+struct aiNode;
+enum aiTextureType;
+struct aiMaterial;
+struct aiScene;
 
 namespace staywalk{
 	class World;
@@ -25,6 +30,8 @@ namespace staywalk{
 		static bool check_ofstream(const std::ofstream& fstrm);
 
 		//static fs::path get_exe_dir();
+
+		static fs::path get_py_home();
 
 		static fs::path get_resource_dir();
 

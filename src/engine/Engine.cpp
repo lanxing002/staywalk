@@ -1,4 +1,5 @@
 #include "Engine.h"
+#include "PyEnv.h"
 
 namespace staywalk {
 	shared_ptr<Engine> Engine::get_engine(){
@@ -28,6 +29,7 @@ namespace staywalk {
 		//world_ = World::load_marry_world();
 		world_ = World::load("marry-world");
 		console_ = std::make_shared<Console>();
+		Py::run("");
 	}
 	
 	Engine::~Engine(){

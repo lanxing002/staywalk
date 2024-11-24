@@ -1,5 +1,7 @@
 #include "Window.h"
 #include "Logger.h"
+#include "Engine.h"
+
 using namespace staywalk;
 
 Window* Window::curr_window = nullptr;
@@ -35,6 +37,7 @@ Window::~Window(){
 }
 
 void Window::run(){
+    Engine::get_engine();
     while (!shold_close()){
         frame_count_++;
         process_evnet();

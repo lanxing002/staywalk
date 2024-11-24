@@ -1,5 +1,5 @@
 import clang.cindex
-from parse_class import ClassNode, BindClass, NoClassField
+from parse_class import ClassNode, NoClassField
 
 
 def display_traverse(root, depth):
@@ -48,7 +48,7 @@ if __name__ == '__main__':
         # '-D__GNUC__=7'
     ]
 
-    s_node = index.parse(R"C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src\parser\script\test.cpp",
+    s_node = index.parse(R"C:\Users\lanxi\Documents\lanxing\codes\ErJiu\staywalk\src\parser\script\test3.cpp",
                          compile_args)
     namespaces = []
     outer_classes = []

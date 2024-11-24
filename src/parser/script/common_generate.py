@@ -1,4 +1,4 @@
-from parse_class import ClassNode, NoClassField, FuncParam
+from parse_class import ClassNode, NoClassField, get_sw_labels
 import clang.cindex
 import os
 from mylog import *
@@ -111,6 +111,9 @@ def generate(nodes: list[ClassNode], enums: list[NoClassField],  reflect_dir):
     for node in nodes:
         if not node.labeled():
             continue
+        labels = get_sw_labels(node._node)
+        if 'nojson' in labels:
+            continue
         snode = CommonBind(node)  # 只是使用了文件头
         logging.log(logging.INFO, f'start generate {node._node.spelling}')
         all_include_code += include_code.format(snode.header) + '\n'
@@ -121,6 +124,7 @@ def generate(nodes: list[ClassNode], enums: list[NoClassField],  reflect_dir):
     for e in enums:
         if not e.labeled():
             continue
+
         snode = EnumBind(e)
         logging.log(logging.INFO, f'start generate {snode.fullname}')
         all_include_code += include_code.format(snode.header) + '\n'

@@ -183,6 +183,10 @@ namespace staywalk{
         return true;
     }
 
+    fs::path Utility::get_py_home() {
+        return fs::absolute(fs::path("3rdparty/cpython/build"));
+    }
+
     fs::path Utility::get_resource_dir() {
         return fs::path("resource");
     }
@@ -220,7 +224,7 @@ namespace staywalk{
     MeshLoader::MeshLoader(const string& mname)
     :mesh_name_(mname){
         if (fs::is_directory(mesh_name_) ||  !fs::exists(mesh_name_)) {
-            log(fmt::format("MeshLoader --> mesh ({}) not exists!", mesh_name_.u8string()), LogLevel::Warning);
+            log(fmt::format("MeshLoader --> mesh ({}) not exists!", mesh_name_.u8string()), LogLevel::Warn);
             return;
         }
         log(fmt::format("MeshLoader --> consturct mesh data from ({})", mesh_name_.u8string()));
@@ -318,7 +322,7 @@ namespace staywalk{
         if(it != loaded_texs_.end()) return it->second;
 
         if (!fs::exists(path)) {
-            log(fmt::format("MeshLoader::make_tex cannot find target texture file: {}", path.u8string()), LogLevel::Warning);
+            log(fmt::format("MeshLoader::make_tex cannot find target texture file: {}", path.u8string()), LogLevel::Warn);
             return nullptr; 
         }
 

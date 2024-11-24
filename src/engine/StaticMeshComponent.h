@@ -6,7 +6,9 @@
 namespace staywalk{
 	class sw_Class()  StaticMeshComponent : public GameComponent {
 	public:
-		sw_Func()  virtual void draw();
+		sw_Func() StaticMeshComponent(const string & name = "0-staticmeshcomp");
+
+		sw_Func(nopy;)  virtual void draw();
 
 		sw_Prop() vector<PRMesh> meshs;
 

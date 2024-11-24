@@ -1,4 +1,4 @@
-from parse_class import ClassNode, NoClassField, FuncParam
+from parse_class import ClassNode, NoClassField, get_sw_labels
 import clang.cindex
 import os
 from mylog import *
@@ -171,16 +171,9 @@ class SerializeBind(object):
             if member.kind != clang.cindex.CursorKind.FIELD_DECL:
                 continue
 
-            labels = [str(m.spelling) for m in member.get_children() if m.kind == clang.cindex.CursorKind.ANNOTATE_ATTR]
-            if len(labels) == 0:
-                continue
-            assert len(labels) == 1
-            labels = labels[0].split(';')
-            labels = [s.strip() for s in labels]
-            assert [0] != '__sw'
-
-            if 'nodump' in labels:
-                logging.log(logging.INFO, "nogui for this property : {}".format(member.spelling))
+            labels = get_sw_labels(member)
+            if 'nojson' in labels:
+                logging.log(logging.INFO, "nojson for this property : {}".format(member.spelling))
                 continue
 
             is_label = filter(lambda x: x.kind == clang.cindex.CursorKind.ANNOTATE_ATTR and
@@ -208,6 +201,11 @@ def generate(nodes: list[ClassNode], reflect_dir):
             for node in nodes:
                 if not node.labeled():
                     continue
+
+                labels = get_sw_labels(node._node)
+                if 'nojson' in labels:
+                    continue
+
                 snode = SerializeBind(node)
                 logging.log(logging.INFO, f'start generate {node._node.spelling}')
                 decl_code, impl_code = snode.generate_code()

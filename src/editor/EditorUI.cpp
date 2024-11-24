@@ -30,19 +30,26 @@ void EditorUI::initialize(GLFWwindow* window){
     const char* glsl_version = "#version 130";
     ImGui_ImplOpenGL3_Init(glsl_version);
 
+    ImGuiIO& io = ImGui::GetIO();
+    io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
+
     setup_style();
+    text_editor_ = std::make_shared<TextEditor>();
 }
 
 void EditorUI::render(){
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
-
-    pop_inputs_.remove_if([](const PopTextInput& e) {return e.finished(); });
-    for (auto& pop : pop_inputs_)
-        pop.draw();
-
     show_main_menu();
+
+
+    bool editing = text_editor_ && text_editor_->isEditing();
+    if (editing) {
+        text_editor_->Render("text-editor");
+        //ImGui::BeginDisabled();
+    }
+
     build_dock_space();
     show_world();
     show_misc();
@@ -50,12 +57,20 @@ void EditorUI::render(){
     show_console();
     show_content();
 
+    //if (editing) ImGui::EndDisabled();
     ImGui::Render();
 }
 
 void EditorUI::render_post(){
     ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
-    ImGui::UpdatePlatformWindows();
+    
+    if (ImGui::GetIO().ConfigFlags & ImGuiConfigFlags_ViewportsEnable) {
+        GLFWwindow* backup_current_context = glfwGetCurrentContext();
+        ImGui::UpdatePlatformWindows();
+        ImGui::RenderPlatformWindowsDefault();
+        glfwMakeContextCurrent(backup_current_context);
+    }
+    //ImGui::UpdatePlatformWindows();
 }
 
 void EditorUI::setup_style(){
@@ -112,9 +127,9 @@ void EditorUI::build_dock_space(){
 
         {
             ImGuiID rightTemp, topTemp;
-            ImGui::DockBuilderSplitNode(center, ImGuiDir_Down, 0.25f, &bottom, &topTemp);
-            ImGui::DockBuilderSplitNode(topTemp, ImGuiDir_Left, 0.25f, &left, &rightTemp);
-            ImGui::DockBuilderSplitNode(rightTemp, ImGuiDir_Right, 0.40f, &right, nullptr);
+            ImGui::DockBuilderSplitNode(center, ImGuiDir_Down, 0.35f, &bottom, &topTemp);
+            ImGui::DockBuilderSplitNode(topTemp, ImGuiDir_Left, 0.18f, &left, &rightTemp);
+            ImGui::DockBuilderSplitNode(rightTemp, ImGuiDir_Right, 0.30f, &right, nullptr);
         }
         ImGui::DockBuilderDockWindow("world", left);
         ImGui::DockBuilderDockWindow("misc", left);
@@ -160,7 +175,7 @@ void EditorUI::show_main_menu(){
 }
 
 void EditorUI::show_world(){
-     if (!ImGui::Begin("world")){
+     if (!ImGui::Begin("world", &world_open_)){
          ImGui::End();
          return;
      }
@@ -200,7 +215,9 @@ void EditorUI::show_world(){
 
 void EditorUI::show_misc()
 {
-    if (!ImGui::Begin("misc")) {
+    if (!misc_open_) return;
+
+    if (!ImGui::Begin("misc", &misc_open_)) {
         ImGui::End();
         return;
     }
@@ -215,6 +232,11 @@ void EditorUI::show_misc()
             if (world)
                 memcpy(buffer, world_name.c_str(), world_name.size());
         }
+
+        if (ImGui::Button("editor-test")) {
+            if (text_editor_) text_editor_->startEdit();
+        }
+
         
         if (ImGui::BeginPopupModal("rename-world", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
             ImGui::Text("world name:");
@@ -238,7 +260,7 @@ void EditorUI::show_misc()
 }
 
 void EditorUI::show_detail(){
-    if (!ImGui::Begin("detail"))
+    if (!ImGui::Begin("detail", &details_open_))
     {
         ImGui::End();
         return;
@@ -251,11 +273,12 @@ void EditorUI::show_detail(){
 }
 
 void EditorUI::show_console(){
-    Engine::get_console()->draw("console");
+    if (!console_open_) return;
+    Engine::get_console()->draw("console", &console_open_);
 }
 
 void EditorUI::show_content(){
-    if (!ImGui::Begin("content"))
+    if (!ImGui::Begin("content", &content_open_))
     {
         ImGui::End();
         return;

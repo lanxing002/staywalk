@@ -1,4 +1,6 @@
 #include "Console.h"
+#include "PyEnv.h"
+#include "Logger.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -24,7 +26,9 @@ namespace staywalk {
         Commands.push_back("CLASSIFY");
         AutoScroll = true;
         ScrollToBottom = false;
-        add_log("Welcome to Dear ImGui!");
+
+        ImGuiIO& io = ImGui::GetIO();
+        font_ = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/consola.ttf", 18.0f);
     }
 
     Console::~Console() {
@@ -39,14 +43,22 @@ namespace staywalk {
         Items.emplace_back(level, str);
     }
 
-    void Console::draw(const std::string& str)
+    void Console::draw(const std::string& str, bool* b_open)
     {
-        if (!ImGui::Begin(str.c_str()))
-        {
+        if (!ImGui::Begin(str.c_str(), b_open, ImGuiWindowFlags_NoNavInputs)){
             ImGui::End();
             return;
         }
+        if (ImGui::IsWindowHovered()) {
+            if (ImGui::IsKeyPressed(ImGuiKey_UpArrow)) {
+                HistoryPos += 1; HistoryPos = std::min((int)(History.size()) - 1, HistoryPos);
+            }
+            else if (ImGui::IsKeyPressed(ImGuiKey_DownArrow)) {
+                HistoryPos -= 1; HistoryPos = std::max(-1, HistoryPos);
+            }
+        }
 
+        ImGui::PushFont(font_);
         // Options menu
         if (ImGui::BeginPopup("Options")) {
             ImGui::Checkbox("Auto-scroll", &AutoScroll);
@@ -54,11 +66,11 @@ namespace staywalk {
         }
 
         // Options, Filter
-        ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_O, ImGuiInputFlags_Tooltip);
-        if (ImGui::Button("Options"))
-            ImGui::OpenPopup("Options");
-        ImGui::SameLine();
-        Filter.Draw("Filter (\"incl,-excl\") (\"error\")", 180);
+        //ImGui::SetNextItemShortcut(ImGuiMod_Ctrl | ImGuiKey_O, ImGuiInputFlags_Tooltip);
+        //if (ImGui::Button("Options"))
+        //    ImGui::OpenPopup("Options");
+        //ImGui::SameLine();
+        Filter.Draw("Filter", 180);
         ImGui::Separator();
 
         // Reserve enough left-over height for 1 separator + 1 input text
@@ -79,7 +91,7 @@ namespace staywalk {
                 ImVec4 color;
                 bool has_color = false;
                 if (level == LogLevel::Error) { color = ImVec4(1.0f, 0.4f, 0.4f, 1.0f); has_color = true; }
-                if (level == LogLevel::Warning) { color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f); has_color = true; }
+                if (level == LogLevel::Warn) { color = ImVec4(1.0f, 0.8f, 0.6f, 1.0f); has_color = true; }
                 if (has_color)
                     ImGui::PushStyleColor(ImGuiCol_Text, color);
                 ImGui::TextUnformatted(item.c_str());
@@ -87,22 +99,6 @@ namespace staywalk {
                     ImGui::PopStyleColor();
             }
 
-            // 检测鼠标交互
-            if (ImGui::IsWindowHovered() && ImGui::IsMouseClicked(0)) {
-                selecting = true;
-                // 获取鼠标开始选中的位置 (简化示例：基于屏幕坐标)
-                startIdx = ImGui::GetMousePos().x;
-            }
-            else if (ImGui::IsMouseReleased(0) && selecting) {
-                selecting = false;
-                // 获取鼠标结束选中的位置
-                endIdx = ImGui::GetMousePos().x;
-
-                // 模拟选中文本（具体需按字符位置处理）
-                if (startIdx >= 0 && endIdx > startIdx) {
-                    ImGui::SetClipboardText(text.substr(startIdx, endIdx - startIdx).c_str());
-                }
-            }
 
             // Keep up at the bottom of the scroll region if we were already at the bottom at the beginning of the frame.
             // Using a scrollbar or mouse-wheel will take away from the bottom edge.
@@ -117,26 +113,33 @@ namespace staywalk {
 
         // Command-line
         bool reclaim_focus = false;
-        ImGuiInputTextFlags input_text_flags = ImGuiInputTextFlags_EnterReturnsTrue | ImGuiInputTextFlags_EscapeClearsAll | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory;
-        //if (ImGui::InputText("Input", InputBuf, IM_ARRAYSIZE(InputBuf), input_text_flags, nullptr, (void*)this))
-        //{
-        //    char* s = InputBuf;
-        //    //Strtrim(s);
-        //    if (s[0])
-        //        exec_cmd(s);
-        //    strcpy(s, "");
-        //    reclaim_focus = true;
-        //}
-
+        ImGuiInputTextFlags input_text_flags = ImGuiInputTextFlags_EnterReturnsTrue /*| ImGuiInputTextFlags_EscapeClearsAll*//* | ImGuiInputTextFlags_CallbackCompletion | ImGuiInputTextFlags_CallbackHistory*/;
+        ImGui::Text(" py ");
+        ImGui::SameLine();
+        if (HistoryPos != -1) {
+            auto pos = int(History.size()) - 1 - HistoryPos;
+            strcpy(InputBuf, History[pos].c_str());
+        }
+        if (ImGui::InputText("##Input", InputBuf, IM_ARRAYSIZE(InputBuf), input_text_flags)){
+            char* s = InputBuf;
+            if (s[0]) exec_cmd(s);
+            strcpy(s, "");
+            ImGui::SetKeyboardFocusHere();
+            reclaim_focus = true;
+        }
         // Auto-focus on window apparition
-        ImGui::SetItemDefaultFocus();
-        if (reclaim_focus)
-            ImGui::SetKeyboardFocusHere(-1); // Auto focus previous widget
-
+        //ImGui::SetItemDefaultFocus();
+        //if (reclaim_focus)
+        //     // Auto focus previous widget
+        ImGui::PopFont();
         ImGui::End();
     }
 
     void Console::exec_cmd(const std::string& cmd){
-        add_log("# " + cmd);
+        //add_log("# " + cmd);
+        staywalk::log(cmd);
+        Py::run(cmd);
+        History.push_back(cmd);
+        HistoryPos = -1;
     }
 }

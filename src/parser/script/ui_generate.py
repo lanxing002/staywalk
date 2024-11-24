@@ -1,6 +1,6 @@
 import logging
 
-from parse_class import ClassNode, NoClassField, FuncParam
+from parse_class import ClassNode, NoClassField, get_sw_labels
 import clang.cindex
 import os
 from mylog import *
@@ -129,6 +129,11 @@ def generate(nodes: list[ClassNode], reflect_dir):
         for node in nodes:
             if not node.labeled():
                 continue
+
+            labels = get_sw_labels(node._node)
+            if 'nogui' in labels:
+                continue
+
             snode = UIHelper(node)
             logging.log(logging.INFO, f'start generate ui code for {node._node.spelling}')
             _, impl_code = snode.generate_code()
