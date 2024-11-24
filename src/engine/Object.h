@@ -5,7 +5,7 @@
 namespace staywalk{
 	class sw_Class()  Object {
 	public:
-		Object(const string& name = "0-obj");
+		sw_Func() Object(const string& name = "0-obj");
 		Object(idtype load_id, const string& name = "0-obj");
 		virtual ~Object() = default;
 
@@ -14,7 +14,7 @@ namespace staywalk{
 		Object& operator=(const Object&) = delete;
 		Object& operator=(Object&&) = delete;
 		
-		sw_Func()  idtype get_guid() { return guid_; }
+		sw_Func(nopy;)  idtype get_guid() { return guid_; }
 
 		void construct_ui(bool read_only);
 

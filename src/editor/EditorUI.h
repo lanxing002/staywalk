@@ -2,6 +2,7 @@
 #include "rhi.h"
 #include "Console.h"
 #include "PopInput.h"
+#include "TextEditor.h"
 #include <list>
 
 
@@ -28,10 +29,11 @@ private:
     void show_content();
 
 private:
-    std::list<PopTextInput> pop_inputs_;
+    std::shared_ptr<TextEditor> text_editor_{nullptr};
 
-    bool m_worldObjectsOpen = true;
-    bool m_detailsOpen = true;
-    bool m_consoleOpen = true;
-    bool m_fileContentOpen = true;
+    bool world_open_ = true;
+    bool details_open_ = true;
+    bool console_open_ = true;
+    bool content_open_ = true;
+    bool misc_open_ = true;
 };

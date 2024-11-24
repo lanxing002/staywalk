@@ -34,19 +34,36 @@ set_target_properties(engine PROPERTIES
 
 ##  setup reflect  ##
 set(reflect_src_dir ${CMAKE_CURRENT_SOURCE_DIR}/src/reflect)
+set(script_src_dir ${CMAKE_CURRENT_SOURCE_DIR}/src/script)
 target_include_directories(engine PRIVATE ${reflect_src_dir})
+target_include_directories(engine PRIVATE ${script_src_dir})
 
 file(GLOB REFLECT_SRC_FILES "${reflect_src_dir}/*.cpp" "${reflect_src_dir}/*.h")
+file(GLOB SCRIPT_SRC_FILES "${script_src_dir}/*.cpp" "${script_src_dir}/*.h")
 file(GLOB GENERATED_SRC_FILES "${reflect_src_dir}/generated/*.cpp" "${reflect_src_dir}/generated/*.h")
 target_sources(engine PRIVATE ${REFLECT_SRC_FILES})
 target_sources(engine PRIVATE ${GENERATED_SRC_FILES})
+target_sources(engine PRIVATE ${SCRIPT_SRC_FILES})
 source_group("reflect" FILES ${REFLECT_SRC_FILES})
 source_group("generated" FILES ${GENERATED_SRC_FILES})
+source_group("script" FILES ${SCRIPT_SRC_FILES})
 ##  end setup reflect  ##
 
 ## auto generate code ##
 add_executable(generate_code ${CMAKE_CURRENT_SOURCE_DIR}/src/parser/setup.cpp)
 set_target_properties(generate_code PROPERTIES FOLDER "staywalk")
+
+# set(ALL_LIB)
+# function(AppendLib)
+#     message(STATUS "-=-=-=${ARGV}")
+#     foreach(arg ${ARGV})
+#         get_target_property(alib_include ${arg} INCLUDE_DIRECTORIES)
+#         message(STATUS "_+_+_+_+_+ ${arg}---${alib_include}")
+#         list(APPEND ${ALL_LIB} ${alib_include})
+#     endforeach()
+# endfunction()
+# AppendLib(glfw glm imgui pybind11_headers fmt assimp glad stbimage RapidJSON)
+# message(STATUS "--------->? ${ALL_LIB}")
 
 set(py_exe ${CMAKE_CURRENT_SOURCE_DIR}/3rdparty/cpython/PCbuild/amd64/python.exe)
 set(py_parse_code ${CMAKE_CURRENT_SOURCE_DIR}/src/parser/script/startup.py)

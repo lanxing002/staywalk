@@ -19,7 +19,7 @@ namespace staywalk {
 
         void add_log(const std::string& log, LogLevel level = LogLevel::Info);
 
-        void draw(const std::string& log);
+        void draw(const std::string& log, bool* b_open);
 
         void exec_cmd(const std::string& log);
 
@@ -28,7 +28,8 @@ namespace staywalk {
         //int TextEditCallback(ImGuiInputTextCallbackData* data);
 
     private:
-        char                  InputBuf[256];
+        char                  InputBuf[1024];
+        ImFont* font_;
         vector<std::pair<LogLevel, string>>         Items;
         vector<string>          Commands;
         vector<string>       History;

@@ -94,12 +94,16 @@ Loader::Loader(fs::path file_name)
     json_str_ = std::string(std::istreambuf_iterator<char>(ifs), std::istreambuf_iterator<char>());
 
     doc_ = json::Document();
-    if (doc_.Parse(json_str_.data()).HasParseError()) 
+    if (doc_.Parse(json_str_.data()).HasParseError()) {
         log(fmt::format("parse json data error: [{}]", file_name.u8string()), LogLevel::Error);
-    assert(doc_.IsObject());
+    }
 }
 
 void Loader::load(World& world) {
+    if (!doc_.IsObject()) {
+        log(fmt::format("load world failed"), LogLevel::Warn);
+        return;
+    }
     auto actors_it = doc_.FindMember("actors");
     auto cameras_it = doc_.FindMember("cameras");
     auto lights_it = doc_.FindMember("lights");
