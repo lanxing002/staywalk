@@ -10,7 +10,7 @@ namespace staywalk
 		sw_Func()  GameObject(const string& name = "0-game-obj")
 			:Object(name) {}
 
-		sw_Func()  virtual void tick(float delta) {}
+		sw_Func(nopy;)  virtual void tick(float delta) {}
 
 		sw_Prop() Transform transform = Identity;
 
