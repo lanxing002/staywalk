@@ -47,16 +47,27 @@ namespace staywalk{
 		return world;
 	}
 
+	void World::stash_object(Ref<Object> obj) {
+		if (obj) {
+			auto it = id2objs_.find(obj->get_guid());
+			if (it != id2objs_.end()) {
+				id2objs_[obj->get_guid()] = obj;
+				stash_objs_.push_back(obj);
+			}
+			else
+				log(fmt::format("objet {} had been stashed"), LogLevel::Warn);
+		}
+	}
+
 	void World::add_actor(shared_ptr<Actor> actor){
 		if (actor == nullptr) return;
-		auto it = id2actors_.find(actor->get_guid());
-		if (it != id2actors_.end()) {
-			auto idx = it->second;
-			actors_[idx] = actor;
-		}
-		else {
-			id2actors_[actor->get_guid()] = actors_.size();
+		if (actor->get_meta_info().tname != "staywalk::Actor")
+			return;
+
+		auto it = id2objs_.find(actor->get_guid());
+		if (it == id2objs_.end()) {
 			actors_.push_back(actor);
+			id2objs_[actor->get_guid()] = actor;
 		}
 	}
 
@@ -66,11 +77,12 @@ namespace staywalk{
 	}
 
 	void World::remove_actor(idtype id){
-		auto it = id2actors_.find(id);
-		if (it != id2actors_.end()) {
-			actors_.erase(actors_.begin() + it->first);
-			id2actors_.erase(it);
+		auto it = id2objs_.find(id);
+		if (it != id2objs_.end()) {
+			id2objs_.erase(it);
 		}
+		actors_.erase(std::remove_if(actors_.begin(), actors_.end(), 
+			[id](Ref<Actor>& a) {return a->get_guid() == id; }));
 	}
 }
 

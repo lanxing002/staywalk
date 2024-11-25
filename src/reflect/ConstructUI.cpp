@@ -1,5 +1,6 @@
 #include "ConstructUI.h"
 #include "Logger.h"
+#include "Engine.h"
 
 #include <glm/gtc/quaternion.hpp>
 
@@ -120,3 +121,4 @@ void UIHelper::construct_enum_ui(const string& label, int& data, const std::vect
     ImGui::EndDisabled();
     TableEndCommon();
 }
+

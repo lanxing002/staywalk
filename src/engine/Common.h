@@ -15,6 +15,7 @@
 #include <array>
 #include <filesystem>
 #include <cassert>
+#include <set>
 
 #ifdef _IN_REFLECT
 #define sw_Prop(...) __attribute__((annotate("__sw;" #__VA_ARGS__)))
@@ -47,6 +48,9 @@ namespace staywalk
 
 	template<typename TKey, typename TVal>
 	using map = std::map<TKey, TVal>;
+
+	template<typename TKey>
+	using set = std::set<TKey>;
 
 	template<typename T, typename VT>
 	using hashtable = std::unordered_map<T, VT>;
@@ -105,6 +109,6 @@ public:																			\
 	virtual void dump(rapidjson::Value&, staywalk::reflect::Dumper&) const;		\
 	virtual void load(rapidjson::Value&, staywalk::reflect::Loader&);			\
 	virtual void construct_basic_ui(bool read_only);							\
-	virtual void construct_obj_ui(bool read_only);
+	virtual void construct_obj_ui(bool read_only);								
 	//virtual void construct_ui();	
 

@@ -121,11 +121,14 @@ void Loader::load(World& world) {
     read(world.cameras_, cameras_it->value);
     read(world.lights_, lights_it->value);
     read(world.stash_objs_, stashs_it->value);
+
+    for (auto& [k, v] : ref_cache_)
+        world.id2objs_[v->get_guid()] = v;
+
     clear();
 }
 
 void staywalk::reflect::Loader::clear(){
-    
 }
 
 shared_ptr<Object> Loader::load_obj_impl(const std::string& id)

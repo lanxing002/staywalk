@@ -60,6 +60,8 @@ namespace staywalk{
 	public:
 		Tex2d(const string& name = "0-Tex2d");
 
+
+
 		unsigned char* data = nullptr;
 		int width = -1;
 		int height = -1;
@@ -84,7 +86,6 @@ namespace staywalk{
 	protected:
 		uint glid = kGlSickId;  // for opgnel id, -1 is invalid
 	};
-
 
 	class sw_Class()  RTex : public RObject {
 	public:

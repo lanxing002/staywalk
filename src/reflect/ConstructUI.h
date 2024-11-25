@@ -4,16 +4,22 @@
 #include "reflect.h"
 #include "imgui.h"
 #include "fmt/format.h"
+#include "Engine.h"
 #include <type_traits>
 
 namespace staywalk{
 	namespace reflect {
 		namespace UIHelper {
+			constexpr std::string_view kChooseObjPop = "--ChooseObjPop";
+			
+			template<typename T>
+			void choice_object(Ref<T>& obj);
+
 			template<typename T>
 			void construct_ui(const string& label, T& data, bool read_only);
 			
 			template<typename T>
-			void construct_ui(const string& label, Ref<T> data, bool read_only);
+			void construct_ui(const string& label, Ref<T>& data, bool read_only);
 
 			template<typename T>
 			void construct_ui(const string& label, vector<T>& data, bool read_only);
@@ -36,7 +42,6 @@ namespace staywalk{
 
 			template <typename T>
 			struct is_public_field<T, std::void_t<decltype(std::declval<T>().name)>> : std::true_type {};
-
 		};
 	}
 }
@@ -69,17 +74,23 @@ namespace staywalk {
 		}
 
 		template<typename T>
-		void UIHelper::construct_ui(const string& label, Ref<T> data, bool read_only) {
+		void UIHelper::construct_ui(const string& label, Ref<T>& data, bool read_only) {
 			constexpr bool is_obj = std::is_same_v<T, staywalk::Object>
 				|| std::is_base_of_v<staywalk::Object, T>;
 			static_assert(is_obj && "must drived from staywalk::object");
 			if (data == nullptr) return;
 			auto tname = data->get_meta_info().tname;
 			tname.remove_prefix(10);
+			ImVec4 textColor = ImVec4(0.12f, 0.8f, 0.1f, 1.0f);
+			ImGui::PushStyleColor(ImGuiCol_Text, textColor);
 			if (ImGui::TreeNode(fmt::format("{}<{}>", label, tname).c_str())) {
+				ImGui::PopStyleColor();
+				UIHelper::choice_object(data);
 				data->construct_ui(read_only);
 				ImGui::TreePop();
 			}
+			else { ImGui::PopStyleColor(); }
+
 		}
 
 		template<>
@@ -123,6 +134,27 @@ namespace staywalk {
 					construct_ui(fmt::format("{}-{}", label, key), value, read_only);
 				}
 				ImGui::TreePop();
+			}
+		}
+
+		template<typename T>
+		void UIHelper::choice_object(Ref<T>& obj) {
+			if (ImGui::BeginPopupContextItem("##change--obj"))
+			{
+				auto title = std::string(obj->get_meta_info().tname) + " List";
+				ImGui::TextColored(ImVec4(1.0, 1.01, 1.0, 1.0), title.c_str());
+				for (auto& [_, v] : Engine::get_engine()->get_world()->get_all_objects()) {
+					if (v->get_meta_info().tname == obj->get_meta_info().tname) {
+						ImGui::PushID(v->get_guid());
+						if (ImGui::Selectable(v->name.c_str())) {
+							Ref<T> target = pcast<T>(v);
+							if (target) obj = target;
+						}
+						ImGui::PopID();
+					}
+				}
+
+				ImGui::EndPopup();
 			}
 		}
 	}

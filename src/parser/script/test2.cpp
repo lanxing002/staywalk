@@ -6,9 +6,11 @@
 //};
 //
 //Vector<DE> cc;
-enum class ShaderType : unsigned char {
-    None,
-    VS = 10,
-    FS,
-    CS,
+
+class A{
+    static int d = 12;
+    int* const dd = 12;
+    const int& ddd = 12;
+
+    int c;
 };

@@ -34,6 +34,9 @@ namespace staywalk {
 		sw_Func() const vector<PActor>& get_actors() { return actors_; }
 		sw_Func() const vector<PCamera>& get_cameras() { return cameras_; }
 		sw_Func() const vector<PLight>& get_lights() { return lights_; }
+		sw_Func() const hashtable<idtype, Ref<Object>>& get_all_objects() { return id2objs_; }
+
+		sw_Func() void stash_object(Ref<Object> obj);
 
 		sw_Func() void add_actor(shared_ptr<Actor> actor);
 		sw_Func() void remove_actor(shared_ptr<Actor> actor);
@@ -42,6 +45,7 @@ namespace staywalk {
 		sw_Func() const string& get_name() { return name_; }
 		sw_Func() void set_name(const string& name) { name_ = name; }
 
+		sw_Func() bool in_world(idtype id) { return id2objs_.find(id) != id2objs_.end(); }
 
 	private:
 		string name_{"empty-world"};
@@ -51,7 +55,7 @@ namespace staywalk {
 		vector<PCamera> cameras_;
 		vector<PObject> stash_objs_;
 
-		hashtable<idtype, size_t> id2actors_;
+		hashtable<idtype, Ref<Object>> id2objs_;
 
 		friend class reflect::Dumper;
 		friend class reflect::Loader;

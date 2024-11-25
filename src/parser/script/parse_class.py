@@ -11,6 +11,7 @@ def get_sw_labels(cnode: NodeT):
     return labels
 
 
+
 class NoClassField:
     def __init__(self, node: NodeT, namespaces: list[NodeT], outer_classes: list[NodeT]) -> None:
         self._node = node

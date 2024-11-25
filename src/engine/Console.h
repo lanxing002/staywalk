@@ -23,12 +23,14 @@ namespace staywalk {
 
         void exec_cmd(const std::string& log);
 
+        int edit_callback(ImGuiInputTextCallbackData* data);
+
         // In C++11 you'd be better off using lambdas for this sort of forwarding callbacks
         //static int TextEditCallbackStub(ImGuiInputTextCallbackData* data);
         //int TextEditCallback(ImGuiInputTextCallbackData* data);
 
     private:
-        char                  InputBuf[1024];
+        char                  InputBuf[2048];
         ImFont* font_;
         vector<std::pair<LogLevel, string>>         Items;
         vector<string>          Commands;
