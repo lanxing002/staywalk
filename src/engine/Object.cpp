@@ -11,6 +11,29 @@ namespace staywalk{
 	Object::Object(idtype load_id, const string& name)
 		: guid_(load_id), name(name){
 	}
+
+
+	Object::Object(const Object& rhs)
+	:guid_(Utility::get_random_id()), name(rhs.name) {
+	}
+
+	Object::Object(Object&& rhs)
+	:guid_(rhs.guid_), name(rhs.name){
+		rhs.guid_ = kInvalidId;
+	}
+
+	Object& Object::operator=(const Object& rhs) {
+		guid_ = Utility::get_random_id();
+		name = rhs.name;
+		return *this;
+	}
+
+	Object& Object::operator=(Object&& rhs) {
+		guid_ = rhs.guid_;
+		name = rhs.name;
+		rhs.guid_ = kInvalidId;
+		return *this;
+	}
 	
 	void Object::construct_ui(bool read_only) {
         if (ImGui::BeginTable("##properties", 2, ImGuiTableFlags_Resizable))

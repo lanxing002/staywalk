@@ -9,10 +9,10 @@ namespace staywalk{
 		Object(idtype load_id, const string& name = "0-obj");
 		virtual ~Object() = default;
 
-		Object(const Object&) = delete;
-		Object(Object&&) = delete;
-		Object& operator=(const Object&) = delete;
-		Object& operator=(Object&&) = delete;
+		Object(const Object&);
+		Object(Object&&);
+		Object& operator=(const Object&);
+		Object& operator=(Object&&);
 		
 		sw_Func(nopy;)  idtype get_guid() { return guid_; }
 
