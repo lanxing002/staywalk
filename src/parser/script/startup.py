@@ -11,14 +11,14 @@ import py_bind_generate
 
 if __name__ == '__main__':
     print('===============start up parse for reflect=================')
-    if len(sys.argv) < 2:
+    code_src_path = ''
+    if len(sys.argv) > 1:
         print('Usage: python startup.py [include-directory]')
-        exit(0)
-
-    code_src_path = sys.argv[1]
-    # code_src_path = R'C:\Users\lanxi\Documents\lanxing\codes\ErJiu\staywalk\src'
+        code_src_path = sys.argv[1]
+    code_src_path = R'C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src'
     if not os.path.isdir(code_src_path):
         print(f'Wrong src directory {code_src_path}')
+        exit(0)
 
     other_path = os.path.join(code_src_path, '..', '3rdparty')
     other_include_path = list()
