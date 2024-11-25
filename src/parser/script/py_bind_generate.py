@@ -29,7 +29,6 @@ class BindClass(object):
         self._constructors: list[FuncParam] = []
         self._funcs = []
         self._members = []
-        self._static_members = []
         self._full_name = '::' + '::'.join(self._namespaces) + '::' + '::'.join(
             self.outer_classes) + self._node.spelling
 
@@ -69,8 +68,11 @@ class BindClass(object):
                     overload_str = f'''py::overload_cast<{','.join(params.param_ts)}>'''
                     result += f'''\t.{def_s}("{name}", {overload_str}(&{self._name}::{name}){', py::return_value_policy::reference' if is_pointer else ''})\n'''
 
-        # for func, is_pointer in self._funcs:
-        #     result += f'''\t.def("{func}", &{self._name}::{func}{', py::return_value_policy::reference' if is_pointer else ''})\n'''
+        for name, is_const, is_public, is_static in self._members:
+            def_code = ('def_readwrite' if (not is_const) and is_public else 'def_readonly')\
+                        + ("_static" if is_static and is_const else '')
+            result += f'''\t.{def_code}("{name}", &{self._name}::{name})\n'''
+
         result += ';'
         return result
 
@@ -114,20 +116,18 @@ class BindClass(object):
                 if member.kind == clang.cindex.CursorKind.CONSTRUCTOR:
                     cons = BindClass._parse_parameters(member)
                     self._constructors.append(cons)
-                elif member.kind == clang.cindex.CursorKind.FIELD_DECL:
-                    self._members.append(member.spelling)
                 elif member.kind == clang.cindex.CursorKind.CXX_METHOD:
                     return_type = member.result_type
                     is_pointer = return_type.kind == clang.cindex.TypeKind.POINTER
                     params = BindClass._parse_parameters(member)
                     self._funcs.append((member.spelling, params, is_pointer, member.is_static_method()))
-                    #
-                    # if member.is_static_method():
-                    #     self._static_funcs.append((member.spelling, params, is_pointer))
-                    # else:
-                    #     self._funcs.append((member.spelling, params, is_pointer))
-                elif member.kind == clang.cindex.CursorKind.VAR_DECL and member.storage_class == clang.cindex.StorageClass.STATIC:
-                    self._static_members.append(member.spelling)
+
+            if member.access_specifier == clang.cindex.AccessSpecifier.PUBLIC:
+                is_public = member.access_specifier == clang.cindex.AccessSpecifier.PUBLIC
+                if member.kind == clang.cindex.CursorKind.VAR_DECL and member.storage_class == clang.cindex.StorageClass.STATIC:
+                    self._members.append((member.spelling, member.type.is_const_qualified(), is_public, True))
+                elif member.kind == clang.cindex.CursorKind.FIELD_DECL:
+                    self._members.append((member.spelling, member.type.is_const_qualified(), is_public, False))
 
 
 def generate(nodes: list[ClassNode], reflect_dir):
