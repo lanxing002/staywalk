@@ -59,5 +59,6 @@ private:
     int             line_count_ = 0;
 
     bool modify_open_;
+    bool modify_pop_ = false;
     staywalk::Ref<staywalk::Object> modify_obj_{nullptr};
 };

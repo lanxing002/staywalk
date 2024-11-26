@@ -188,8 +188,7 @@ void AssetsBrowser::draw(const char* title, bool* p_open){
                     ImGui::Selectable("", item_is_selected, ImGuiSelectableFlags_None, item_size_);
 
                     if (ImGui::IsItemHovered() && ImGui::IsMouseDoubleClicked(0)) {
-                        ImGui::OpenPopup("asset-modify-object");
-                        modify_open_ = true;
+                        modify_pop_ = true;
                         modify_obj_ = item;
                     }
 
@@ -224,6 +223,22 @@ void AssetsBrowser::draw(const char* title, bool* p_open){
                 }
             }
         }
+
+        if (modify_pop_ && modify_obj_) {
+            ImGui::SetNextWindowSize(ImVec2(530, 400));
+            ImGui::OpenPopup("##assetmodifyobject");
+            modify_pop_ = false;
+            modify_open_ = true;
+        }
+
+        if (ImGui::BeginPopupModal("##assetmodifyobject", &modify_open_ /*,ImGuiWindowFlags_AlwaysAutoResize*/)) {
+            ImGui::Text("Modify :", modify_obj_->name.c_str());
+            if (modify_obj_) modify_obj_->construct_ui(true);
+            //ImGui::CloseCurrentPopup();
+            ImGui::Separator();
+            ImGui::EndPopup();
+        }
+        
         clipper.End();
         ImGui::PopStyleVar(); // ImGuiStyleVar_ItemSpacing
 
@@ -274,17 +289,6 @@ void AssetsBrowser::draw(const char* title, bool* p_open){
         }
     }
     
-    if (ImGui::BeginPopupModal("asset-modify-object", nullptr,
-        ImGuiWindowFlags_AlwaysAutoResize | ImGuiPopupFlags_AnyPopup)) {
-        ImGui::Text("world name:");
-        if (modify_obj_) modify_obj_->construct_ui(false);
-        //ImGui::CloseCurrentPopup();
-        ImGui::SameLine();
-        if (ImGui::Button(" Cancel ")) ImGui::CloseCurrentPopup();
-
-        ImGui::EndPopup();
-    }
-
     ImGui::EndChild();
 
     ImGui::Text("Selected: %d/%d items", selection_.Size, (int)items_.size());
