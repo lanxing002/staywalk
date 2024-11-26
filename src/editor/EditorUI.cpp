@@ -2,6 +2,7 @@
 #include "World.h"
 #include "Engine.h"
 #include "Actor.h"
+#include "Event.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -35,6 +36,8 @@ void EditorUI::initialize(GLFWwindow* window){
 
     setup_style();
     text_editor_ = std::make_shared<TextEditor>();
+    assets_browser_ = std::make_shared<AssetsBrowser>();
+    Event::World_AssetChanged();
 }
 
 void EditorUI::render(){
@@ -42,7 +45,6 @@ void EditorUI::render(){
     ImGui_ImplGlfw_NewFrame();
     ImGui::NewFrame();
     show_main_menu();
-
 
     bool editing = text_editor_ && text_editor_->isEditing();
     if (editing) {
@@ -127,7 +129,7 @@ void EditorUI::build_dock_space(){
 
         {
             ImGuiID rightTemp, topTemp;
-            ImGui::DockBuilderSplitNode(center, ImGuiDir_Down, 0.35f, &bottom, &topTemp);
+            ImGui::DockBuilderSplitNode(center, ImGuiDir_Down, 0.65f, &bottom, &topTemp);
             ImGui::DockBuilderSplitNode(topTemp, ImGuiDir_Left, 0.18f, &left, &rightTemp);
             ImGui::DockBuilderSplitNode(rightTemp, ImGuiDir_Right, 0.30f, &right, nullptr);
         }
@@ -278,13 +280,6 @@ void EditorUI::show_console(){
 }
 
 void EditorUI::show_content(){
-    if (!ImGui::Begin("content", &content_open_))
-    {
-        ImGui::End();
-        return;
-    }
-
-    ImGui::Text("FileContent window text");
-    ImGui::End();
+    assets_browser_->draw("content" ,&content_open_);
 }
 
