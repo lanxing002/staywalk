@@ -14,6 +14,8 @@
 // For the console example, we are using a more C++ like approach of declaring a class to hold both data and functions.
 
 namespace staywalk {
+    vector<std::pair<string, LogLevel>> Console::log_cache_;
+
     Console::Console() {
         clear_log();
         memset(InputBuf, 0, sizeof(InputBuf));
@@ -29,6 +31,7 @@ namespace staywalk {
 
         ImGuiIO& io = ImGui::GetIO();
         font_ = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/consola.ttf", 18.0f);
+        for (auto& [s, l] : log_cache_) add_log(s, l);
     }
 
     Console::~Console() {

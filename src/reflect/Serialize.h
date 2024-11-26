@@ -324,8 +324,15 @@ namespace staywalk {
 			if (!ivalue.IsObject()) return;
 			for (auto& m : ivalue.GetObject()) {
 				TKey k; TVal v;
-				read(k, m.name);
+				std::string strk;
+				read(strk, m.name);
 				read(v, m.value);
+				if constexpr (std::is_same_v<TKey, string>) {
+					k = strk;
+				}
+				else {
+					k = (TKey)(std::stoll(strk));
+				}
 				data.emplace(k, v);
 			}
 		}

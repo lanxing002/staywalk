@@ -28,7 +28,6 @@ Window::Window(int width, int height)
         log(std::string("Failed to initialize GLAD!!"), LogLevel::Error);
         terminate();
     }
-    editor_ui_.initialize(window_);
 }
 
 Window::~Window(){
@@ -37,7 +36,10 @@ Window::~Window(){
 }
 
 void Window::run(){
-    Engine::get_engine();
+    auto engine = Engine::get_engine();
+    editor_ui_.initialize(window_);
+    engine->init_editor_data();
+
     while (!shold_close()){
         frame_count_++;
         process_evnet();

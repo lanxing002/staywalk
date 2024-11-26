@@ -19,12 +19,14 @@ namespace staywalk{
 		sw_Func() static shared_ptr<Engine> get_engine();
 		sw_Func() static shared_ptr<World> get_world() { return Engine::get_engine()->world_; }
 		sw_Func() static void set_world(Ref<World> world) { if (world) Engine::get_engine()->world_ = world; }
-		sw_Func() static Ref<Console> get_console();
+		sw_Func() static Ref<Console> get_console() { return Engine::get_engine()->console_; }
 
 		~Engine();
 		//end of engine functions
 
 		sw_Func() void load_world(const string& name);
+
+		void init_editor_data();
 
 	public:
 		//editor function
@@ -34,6 +36,9 @@ namespace staywalk{
 		// end of editor function
 
 	private:
+		/**
+		* @load necessary data
+		*/
 		Engine();
 
 	private:

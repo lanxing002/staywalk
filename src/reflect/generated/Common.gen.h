@@ -23,6 +23,8 @@ namespace staywalk{ namespace reflect{
 		Engine, 
 }; }}
 
+constexpr int kObjectTypeCount = 19;
+
 
 template<>
 std::vector<std::pair<int, std::string>>

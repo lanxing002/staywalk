@@ -76,7 +76,7 @@ typeo_code1 = '''
 ::staywalk::reflect::MetaInfo {cur_type}::get_meta_info() const {{'''
 
 typeo_code2 = '''
-    return ::staywalk::reflect::MetaInfo{{"{cur_type_enum}"}};
+    return ::staywalk::reflect::MetaInfo{{::staywalk::reflect::ObjectType::{simple_name}, "{cur_type_enum}"}};
 '''
 
 typeo_code3 = '''
@@ -147,7 +147,7 @@ class SerializeBind(object):
     def _typeo_code(self):
         code = ''
         code += typeo_code1.format(cur_type=self._full_name[2:])
-        code += typeo_code2.format(cur_type_enum=self._full_name[2:])
+        code += typeo_code2.format(simple_name=self.name, cur_type_enum=self._full_name[2:])
         code += typeo_code3
         return typeo_declare, code
 
