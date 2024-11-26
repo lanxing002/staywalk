@@ -28,6 +28,7 @@ namespace staywalk {
         // In C++11 you'd be better off using lambdas for this sort of forwarding callbacks
         //static int TextEditCallbackStub(ImGuiInputTextCallbackData* data);
         //int TextEditCallback(ImGuiInputTextCallbackData* data);
+        static vector<std::pair<string, LogLevel>> log_cache_;
 
     private:
         char                  InputBuf[2048];

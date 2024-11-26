@@ -16,6 +16,9 @@ namespace staywalk{
 			void choice_object(Ref<T>& obj);
 
 			template<typename T>
+			void drag_target(Ref<T>& obj);
+
+			template<typename T>
 			void construct_ui(const string& label, T& data, bool read_only);
 			
 			template<typename T>
@@ -90,7 +93,6 @@ namespace staywalk {
 				ImGui::TreePop();
 			}
 			else { ImGui::PopStyleColor(); }
-
 		}
 
 		template<>
@@ -142,10 +144,10 @@ namespace staywalk {
 			if (ImGui::BeginPopupContextItem("##change--obj"))
 			{
 				auto title = std::string(obj->get_meta_info().tname) + " List";
-				ImGui::TextColored(ImVec4(1.0, 1.01, 1.0, 1.0), title.c_str());
-				for (auto& [_, v] : Engine::get_engine()->get_world()->get_all_objects()) {
+				ImGui::TextColored(ImVec4(1.0f, 1.01f, 1.0f, 1.0f), title.c_str());
+				for (auto& [_, v] : Engine::get_engine()->get_world()->get_all_assets()) {
 					if (v->get_meta_info().tname == obj->get_meta_info().tname) {
-						ImGui::PushID(v->get_guid());
+						ImGui::PushID((ImGuiID)v->get_guid());
 						if (ImGui::Selectable(v->name.c_str())) {
 							Ref<T> target = pcast<T>(v);
 							if (target) obj = target;
@@ -157,6 +159,28 @@ namespace staywalk {
 				ImGui::EndPopup();
 			}
 		}
+
+		template<typename T>
+		void UIHelper::drag_target(Ref<T>& obj) {
+			if (ImGui::BeginDragDropTarget()) {
+				log(fmt::format("begin is mouse down: {}", ImGui::IsMouseDown(0)));
+				log("drag .... ");
+
+				//ImGuiDragDropFlags drop_target_flags = ImGuiDragDropFlags_AcceptBeforeDelivery | ImGuiDragDropFlags_AcceptNoPreviewTooltip;
+				if (const ImGuiPayload* payload = ImGui::AcceptDragDropPayload("ASSETS_IDS")) {
+					if (payload->Data != nullptr) {
+						const ImVector<ImGuiID>* receive = static_cast<const ImVector<ImGuiID>*>(payload->Data);
+						for (int i = 0; i < receive->size(); i++) {
+							auto id = (int)(*receive)[i];
+							log(fmt::format("drag {} to current", id));
+						}
+					}
+				}
+				ImGui::EndDragDropTarget();
+				log(fmt::format("end is mouse down: {}", ImGui::IsMouseDown(0)));
+			}
+		}
+
 	}
 }
 

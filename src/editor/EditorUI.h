@@ -3,6 +3,8 @@
 #include "Console.h"
 #include "PopInput.h"
 #include "TextEditor.h"
+#include "AssetBrowser.h"
+
 #include <list>
 
 
@@ -30,6 +32,7 @@ private:
 
 private:
     std::shared_ptr<TextEditor> text_editor_{nullptr};
+    std::shared_ptr<AssetsBrowser> assets_browser_{nullptr};
 
     bool world_open_ = true;
     bool details_open_ = true;
