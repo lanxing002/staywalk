@@ -3,12 +3,15 @@
 #include <fmt/format.h>
 
 namespace staywalk{
-	enum LogLevel {
+	class Console;
+	enum class LogLevel {
 		Debug, 
 		Info,
 		Warn,
 		Error
 	};
+
+	void log_register_console(Ref<Console> console);
 
 	void log(const string& text, LogLevel level = LogLevel::Info, bool new_line = true);
 

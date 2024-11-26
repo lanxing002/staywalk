@@ -146,13 +146,16 @@ def generate(nodes: list[ClassNode], enums: list[NoClassField],  reflect_dir):
     with open(common_target_file, 'w') as common:
         common.write('#pragma once\n\n')
         common.write('namespace staywalk{ namespace reflect{\n\tenum class ObjectType : unsigned int{\n')
+        type_count = 0
         for node in nodes:
             if not node.labeled():
                 continue
             common.write('\t\t' + node.name + ', \n')
-        common.write('}; }}')
+            type_count += 1
 
+        common.write('}; }}')
         common.write('\n\n')
+        common.write(f'constexpr int kObjectTypeCount = {type_count};\n\n')
         common.write(enum_code_declare)
         common.write('\n\n')
 

@@ -12,7 +12,7 @@ add_subdirectory(3rdparty)
 set(engine_src_dir ${CMAKE_CURRENT_SOURCE_DIR}/src/engine)
 add_executable(engine ${engine_src_dir}/main.cpp)
 set_target_properties(engine PROPERTIES FOLDER staywalk)
-target_link_libraries(engine PRIVATE glfw glm imgui pybind11_headers fmt assimp glad stbimage)
+target_link_libraries(engine PRIVATE glfw glm imgui pybind11_headers fmt assimp glad stbimage eventpp)
 
 target_include_directories(engine PRIVATE ${engine_src_dir})
 set_target_properties(engine PROPERTIES FOLDER "staywalk")

@@ -39,7 +39,7 @@ true && ::staywalk::Comparer::equal(this->name, rhs.name) && ::staywalk::Compare
 
 
 ::staywalk::reflect::MetaInfo staywalk::Object::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::Object"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Object, "staywalk::Object"};
 
 }
 
@@ -78,7 +78,7 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->transform, rhs.tra
 
 
 ::staywalk::reflect::MetaInfo staywalk::GameObject::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::GameObject"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::GameObject, "staywalk::GameObject"};
 
 }
 
@@ -108,7 +108,7 @@ Object::operator==(rhs) ;
 
 
 ::staywalk::reflect::MetaInfo staywalk::GameComponent::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::GameComponent"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::GameComponent, "staywalk::GameComponent"};
 
 }
 
@@ -156,7 +156,7 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->source, rhs.source
 
 
 ::staywalk::reflect::MetaInfo staywalk::Resource::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::Resource"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Resource, "staywalk::Resource"};
 
 }
 
@@ -204,7 +204,7 @@ Resource::operator==(rhs)  && ::staywalk::Comparer::equal(this->code, rhs.code) 
 
 
 ::staywalk::reflect::MetaInfo staywalk::Shader::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::Shader"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Shader, "staywalk::Shader"};
 
 }
 
@@ -234,7 +234,7 @@ Resource::operator==(rhs) ;
 
 
 ::staywalk::reflect::MetaInfo staywalk::Tex2d::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::Tex2d"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Tex2d, "staywalk::Tex2d"};
 
 }
 
@@ -264,7 +264,7 @@ Object::operator==(rhs) ;
 
 
 ::staywalk::reflect::MetaInfo staywalk::RObject::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::RObject"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::RObject, "staywalk::RObject"};
 
 }
 
@@ -348,7 +348,7 @@ RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->tex, rhs.tex) && 
 
 
 ::staywalk::reflect::MetaInfo staywalk::RTex::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::RTex"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::RTex, "staywalk::RTex"};
 
 }
 
@@ -378,7 +378,7 @@ RObject::operator==(rhs) ;
 
 
 ::staywalk::reflect::MetaInfo staywalk::RShader::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::RShader"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::RShader, "staywalk::RShader"};
 
 }
 
@@ -408,7 +408,7 @@ RObject::operator==(rhs) ;
 
 
 ::staywalk::reflect::MetaInfo staywalk::RProgram::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::RProgram"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::RProgram, "staywalk::RProgram"};
 
 }
 
@@ -438,7 +438,7 @@ RObject::operator==(rhs) ;
 
 
 ::staywalk::reflect::MetaInfo staywalk::RUniform::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::RUniform"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::RUniform, "staywalk::RUniform"};
 
 }
 
@@ -495,7 +495,7 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->shader_, rhs.shade
 
 
 ::staywalk::reflect::MetaInfo staywalk::Material::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::Material"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Material, "staywalk::Material"};
 
 }
 
@@ -552,7 +552,7 @@ RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->vertices, rhs.ver
 
 
 ::staywalk::reflect::MetaInfo staywalk::RMesh::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::RMesh"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::RMesh, "staywalk::RMesh"};
 
 }
 
@@ -591,7 +591,7 @@ GameComponent::operator==(rhs)  && ::staywalk::Comparer::equal(this->meshs, rhs.
 
 
 ::staywalk::reflect::MetaInfo staywalk::StaticMeshComponent::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::StaticMeshComponent"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::StaticMeshComponent, "staywalk::StaticMeshComponent"};
 
 }
 
@@ -648,7 +648,7 @@ GameObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->sm_comp, rhs.s
 
 
 ::staywalk::reflect::MetaInfo staywalk::Actor::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::Actor"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Actor, "staywalk::Actor"};
 
 }
 
@@ -678,7 +678,7 @@ GameObject::operator==(rhs) ;
 
 
 ::staywalk::reflect::MetaInfo staywalk::Camera::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::Camera"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Camera, "staywalk::Camera"};
 
 }
 
@@ -708,7 +708,7 @@ GameObject::operator==(rhs) ;
 
 
 ::staywalk::reflect::MetaInfo staywalk::Light::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{"staywalk::Light"};
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Light, "staywalk::Light"};
 
 }
 

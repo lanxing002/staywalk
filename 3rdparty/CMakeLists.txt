@@ -72,3 +72,7 @@ if(NOT TARGET RapidJSON)
     add_subdirectory(rapidjson)
 endif()
 
+
+if(NOT TARGET eventpp)
+    add_subdirectory(eventpp)
+endif()

@@ -3,6 +3,7 @@
 #include "Utility.h"
 #include "Serialize.h"
 #include "Logger.h"
+#include "Event.h"
 
 namespace staywalk{
 	World::~World() {
@@ -33,6 +34,9 @@ namespace staywalk{
 		actor->sm_comp = sm;
 		auto world = std::make_shared<World>();
 		world->name_ = "marry-world";
+		
+		world->add_asset(sm);
+		world->add_asset(actor);
 		world->add_actor(actor);
 		return world;
 	}
@@ -44,45 +48,34 @@ namespace staywalk{
 		auto loader = reflect::Loader(world_file);
 		loader.load(*world);
 		world->set_name(name);
+		Event::World_AssetChanged();
 		return world;
 	}
 
-	void World::stash_object(Ref<Object> obj) {
-		if (obj) {
-			auto it = id2objs_.find(obj->get_guid());
-			if (it != id2objs_.end()) {
-				id2objs_[obj->get_guid()] = obj;
-				stash_objs_.push_back(obj);
-			}
-			else
-				log(fmt::format("objet {} had been stashed"), LogLevel::Warn);
-		}
-	}
 
 	void World::add_actor(shared_ptr<Actor> actor){
-		if (actor == nullptr) return;
-		if (actor->get_meta_info().tname != "staywalk::Actor")
-			return;
-
-		auto it = id2objs_.find(actor->get_guid());
-		if (it == id2objs_.end()) {
+		if (actor)
 			actors_.push_back(actor);
-			id2objs_[actor->get_guid()] = actor;
-		}
+		else
+			log(fmt::format("add_acotr: add nullptr"), LogLevel::Warn);
 	}
 
-	void World::remove_actor(shared_ptr<Actor> actor){
-		if(actor)
-			remove_actor(actor->get_guid());
-	}
 
 	void World::remove_actor(idtype id){
-		auto it = id2objs_.find(id);
-		if (it != id2objs_.end()) {
-			id2objs_.erase(it);
-		}
 		actors_.erase(std::remove_if(actors_.begin(), actors_.end(), 
 			[id](Ref<Actor>& a) {return a->get_guid() == id; }));
+	}
+
+	void World::add_asset(Ref<Object> obj) {
+		if (obj){
+			assets_[obj->get_guid()] = obj;
+			Event::World_AssetChanged();
+		}
+	}
+	
+	void World::remove_asset(idtype id) {
+		assets_.erase(id);
+		Event::World_AssetChanged();
 	}
 }
 

@@ -4,7 +4,14 @@
 
 namespace staywalk {
 	namespace reflect {
+		enum class ObjectType :unsigned int;
+	}
+}
+
+namespace staywalk {
+	namespace reflect {
 		struct MetaInfo {
+			ObjectType otype;  // use for type check and equal operation, dump maybe wrong
 			std::string_view tname;
 		};
 
