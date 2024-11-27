@@ -225,19 +225,24 @@ void AssetsBrowser::draw(const char* title, bool* p_open){
         }
 
         if (modify_pop_ && modify_obj_) {
-            ImGui::SetNextWindowSize(ImVec2(530, 400));
-            ImGui::OpenPopup("##assetmodifyobject");
+            //    ImGui::Text("Modify :", modify_obj_->name.c_str());
+            //    if (modify_obj_) modify_obj_->construct_ui(true);
+            //    //ImGui::CloseCurrentPopup();
+            //    ImGui::Separator();
+            //    ImGui::EndPopup();
+            //ImGui::SetNextWindowSize(ImVec2(530, 400));
+            //ImGui::OpenPopup("##assetmodifyobject");
             modify_pop_ = false;
             modify_open_ = true;
         }
 
-        if (ImGui::BeginPopupModal("##assetmodifyobject", &modify_open_ /*,ImGuiWindowFlags_AlwaysAutoResize*/)) {
-            ImGui::Text("Modify :", modify_obj_->name.c_str());
-            if (modify_obj_) modify_obj_->construct_ui(true);
-            //ImGui::CloseCurrentPopup();
-            ImGui::Separator();
-            ImGui::EndPopup();
-        }
+        //if (ImGui::BeginPopupModal("##assetmodifyobject", &modify_open_ /*,ImGuiWindowFlags_AlwaysAutoResize*/)) {
+        //    ImGui::Text("Modify :", modify_obj_->name.c_str());
+        //    if (modify_obj_) modify_obj_->construct_ui(true);
+        //    //ImGui::CloseCurrentPopup();
+        //    ImGui::Separator();
+        //    ImGui::EndPopup();
+        //}
         
         clipper.End();
         ImGui::PopStyleVar(); // ImGuiStyleVar_ItemSpacing

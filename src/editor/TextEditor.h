@@ -1,4 +1,7 @@
 #pragma once
+#include "SimpleType.h"
+
+#include "imgui.h"
 
 #include <string>
 #include <vector>
@@ -8,7 +11,6 @@
 #include <unordered_map>
 #include <map>
 #include <regex>
-#include "imgui.h"
 
 class TextEditor
 {
@@ -194,8 +196,9 @@ public:
 	void SetErrorMarkers(const ErrorMarkers& aMarkers) { mErrorMarkers = aMarkers; }
 	void SetBreakpoints(const Breakpoints& aMarkers) { mBreakpoints = aMarkers; }
 
-	void Render(const char* aTitle, const ImVec2& aSize = ImVec2(), bool aBorder = false);
+	void Render(const char* aTitle,  bool* bopen, const ImVec2& aSize = ImVec2(), bool aBorder = false);
 	void SetText(const std::string& aText);
+	void SetCode(const staywalk::SWCodeRef aText);
 	std::string GetText() const;
 
 	void SetTextLines(const std::vector<std::string>& aLines);
@@ -261,9 +264,6 @@ public:
 	bool CanRedo() const;
 	void Undo(int aSteps = 1);
 	void Redo(int aSteps = 1);
-
-	void startEdit() { mEditing = true; }
-	bool isEditing() { return mEditing; }
 
 	static const Palette& GetDarkPalette();
 	static const Palette& GetLightPalette();
@@ -356,6 +356,7 @@ private:
 	EditorState mState;
 	UndoBuffer mUndoBuffer;
 	int mUndoIndex;
+	staywalk::SWCodeRef mCode{ nullptr };
 
 	int mTabSize;
 	bool mOverwrite;
@@ -374,7 +375,6 @@ private:
 	bool mHandleMouseInputs;
 	bool mIgnoreImGuiChild;
 	bool mShowWhitespaces;
-	bool mEditing;
 
 	Palette mPaletteBase;
 	Palette mPalette;

@@ -108,7 +108,7 @@ public:																			\
 	virtual staywalk::reflect::MetaInfo get_meta_info() const;					\
 	virtual void dump(rapidjson::Value&, staywalk::reflect::Dumper&) const;		\
 	virtual void load(rapidjson::Value&, staywalk::reflect::Loader&);			\
-	virtual void construct_basic_ui(bool read_only);							\
-	virtual void construct_obj_ui(bool read_only);								
+	virtual void construct_basic_ui(bool can_modify);							\
+	virtual void construct_obj_ui(bool can_modify);								
 	//virtual void construct_ui();	
 
