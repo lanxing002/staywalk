@@ -1,7 +1,6 @@
 #pragma once
 #include "Common.h"
 
-
 namespace staywalk{
 	class sw_Class()  Object {
 	public:
@@ -16,7 +15,7 @@ namespace staywalk{
 		
 		sw_Func(nopy;)  idtype get_guid() { return guid_; }
 
-		void construct_ui(bool read_only);
+		void construct_ui(bool can_modify);
 
 		sw_Prop() string name;
 

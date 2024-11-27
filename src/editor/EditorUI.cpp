@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "Actor.h"
 #include "Event.h"
+#include "EditorCommon.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -13,11 +14,18 @@
 #include <algorithm>
 
 using namespace staywalk;
+
 EditorUI::EditorUI(){
+    edit_code_hanlder_ = Event::Editor_EditCode.append([this](SWCodeRef code) {
+        auto text_editor = std::make_shared<TextEditor>();
+        text_editor->SetCode(code);
+        text_editors_.emplace_back(true, text_editor);
+    });
 }
 
 EditorUI::~EditorUI()
 {
+    Event::Editor_EditCode.remove(edit_code_hanlder_);
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
@@ -35,9 +43,11 @@ void EditorUI::initialize(GLFWwindow* window){
     io.ConfigFlags |= ImGuiConfigFlags_ViewportsEnable;
 
     setup_style();
-    text_editor_ = std::make_shared<TextEditor>();
     assets_browser_ = std::make_shared<AssetsBrowser>();
     Event::World_AssetChanged();
+
+    auto codefont = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/consola.ttf", 20.0f);
+    EditorCommon::font_table["consola"] = codefont;
 }
 
 void EditorUI::render(){
@@ -46,11 +56,15 @@ void EditorUI::render(){
     ImGui::NewFrame();
     show_main_menu();
 
-    bool editing = text_editor_ && text_editor_->isEditing();
-    if (editing) {
-        text_editor_->Render("text-editor");
-        //ImGui::BeginDisabled();
+    for(int i = 0; i < text_editors_.size(); i++){
+        std::string title = "shader##" + std::to_string(i);
+        auto& [open, e] = text_editors_[i];
+        e->Render(title.c_str(), &open);
     }
+
+    //if(text_editors_.size() > 0)
+    //    text_editors_.erase(std::remove_if(text_editors_.begin(), text_editors_.end(),
+    //        [](const auto& e) {return !e.first; }));
 
     build_dock_space();
     show_world();
@@ -109,6 +123,7 @@ void EditorUI::setup_style(){
 
     style.ButtonTextAlign = ImVec2(0.5, 0.5);
     style.SelectableTextAlign = ImVec2(0.0, 0.5);
+    style.IndentSpacing = 12;
 }
 
 void EditorUI::build_dock_space(){
@@ -235,9 +250,9 @@ void EditorUI::show_misc()
                 memcpy(buffer, world_name.c_str(), world_name.size());
         }
 
-        if (ImGui::Button("editor-test")) {
-            if (text_editor_) text_editor_->startEdit();
-        }
+        //if (ImGui::Button("editor-test")) {
+        //    if (text_editor_) text_editor_->startEdit();
+        //}
 
         
         if (ImGui::BeginPopupModal("rename-world", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
@@ -268,7 +283,7 @@ void EditorUI::show_detail(){
         return;
     }
     auto selected = Engine::get_engine()->get_selected();
-    if (selected) selected->construct_ui(false);
+    if (selected) selected->construct_ui(true);
 
 
     ImGui::End();

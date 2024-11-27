@@ -33,7 +33,7 @@ private:
 
     // Options
     bool            show_type_overlay_ = true;
-    bool            allow_sorting_ = true;
+    bool            allow_sorting_ = false;
     bool            allow_drag_unselected_ = false;
     bool            allow_box_select_ = true;
     float           icon_size_ = 52.0f;

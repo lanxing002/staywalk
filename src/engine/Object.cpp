@@ -35,14 +35,14 @@ namespace staywalk{
 		return *this;
 	}
 	
-	void Object::construct_ui(bool read_only) {
+	void Object::construct_ui(bool can_modify) {
         if (ImGui::BeginTable("##properties", 2, ImGuiTableFlags_Resizable))
         {
             ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthFixed);
             ImGui::TableSetupColumn("", ImGuiTableColumnFlags_WidthStretch, 1.0f);
-			construct_basic_ui(read_only);
+			construct_basic_ui(can_modify);
             ImGui::EndTable();
         }
-		construct_obj_ui(read_only);
+		construct_obj_ui(can_modify);
 	}
 }

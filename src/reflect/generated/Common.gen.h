@@ -6,7 +6,6 @@ namespace staywalk{ namespace reflect{
 		GameObject, 
 		GameComponent, 
 		Resource, 
-		Shader, 
 		Tex2d, 
 		RObject, 
 		RTex, 
@@ -23,11 +22,23 @@ namespace staywalk{ namespace reflect{
 		Engine, 
 }; }}
 
-constexpr int kObjectTypeCount = 19;
+constexpr int kObjectTypeCount = 18;
 
 
 template<>
 std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>();
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>();
+
+template<>
+std::vector<std::pair<int, std::string>>
 staywalk::reflect::get_enum_label<::staywalk::ShaderType>();
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlWrap>();
 
 

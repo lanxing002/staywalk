@@ -2,6 +2,7 @@
 #include "Logger.h"
 #include "World.h"
 #include "Actor.h"
+#include "SimpleType.h"
 
 #include <rapidjson/prettywriter.h>
 #include <sstream>
@@ -194,7 +195,7 @@ void staywalk::Transform::load(rapidjson::Value& value, staywalk::reflect::Loade
 
 void Vertex::dump(rapidjson::Value& value, staywalk::reflect::Dumper& dumper) const {
     static_assert(std::is_trivial_v<Vertex> && "vertex must be trivial");
-    constexpr auto size = sizeof Vertex / sizeof(float);
+    //constexpr auto size = sizeof Vertex / sizeof(float);
     //dumper.write_array<const float*, size>(reinterpret_cast<const float*>(this), value);
 }
 
@@ -202,6 +203,40 @@ void Vertex::load(rapidjson::Value& value, staywalk::reflect::Loader& loader) {
 
 }
 
+void SWCode::__SWCode::load(rapidjson::Value& value, staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    itr = value.FindMember("code");
+    if (itr != value.MemberEnd()) {
+        loader.read(code, itr->value);
+    }
+
+    itr = value.FindMember("code_type");
+    if (itr != value.MemberEnd()) {
+        int codet = -1;
+        loader.read(codet, itr->value);
+        assert(codet > -1);
+        code_type = static_cast<CodeType>(codet);
+    }
+}
+
+
+void SWCode::__SWCode::dump(rapidjson::Value& value, staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+    {
+        json::Value prop;
+        dumper.write(code, prop);
+        value.AddMember("code", prop, dumper.get_doc().GetAllocator());
+    }
+
+    {
+        json::Value prop;
+        int codet = (int)code_type;
+        dumper.write(codet, prop);
+        value.AddMember("code_type", prop, dumper.get_doc().GetAllocator());
+    }
+}
 
 //void staywalk::Object::dump(rapidjson::Value& value, staywalk::reflect::Dumper& dumper) const {
 //    assert(value.IsObject());

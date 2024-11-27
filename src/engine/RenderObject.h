@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "SimpleType.h"
 #define gltype int
 #include "glad/glad.h"
 
@@ -39,28 +40,10 @@ namespace staywalk{
 		MetaRegister(Resource);
 	};
 
-	enum class sw_Class()  ShaderType : unsigned char {
-		None,
-		VS,
-		FS,
-		CS,
-	};
-
-	class sw_Class()  Shader : public Resource {
-	public:
-		Shader(const string& name = "0-shader");
-
-		sw_Prop() string code;
-		sw_Prop() ShaderType shader_type{ ShaderType::None };
-
-		MetaRegister(Shader);
-	};
 
 	class sw_Class()  Tex2d : public Resource {
 	public:
 		Tex2d(const string& name = "0-Tex2d");
-
-
 
 		unsigned char* data = nullptr;
 		int width = -1;
@@ -87,6 +70,26 @@ namespace staywalk{
 		uint glid = kGlSickId;  // for opgnel id, -1 is invalid
 	};
 
+	enum class sw_Class() GlWrap : int {
+			CLAMP_TO_EDGE			= GL_CLAMP_TO_EDGE,
+			MIRRORED_REPEAT			= GL_MIRRORED_REPEAT,
+			REPEAT					= GL_REPEAT,
+	};
+
+	enum class sw_Class() GlMinFilter : int {
+			NEAREST					= GL_NEAREST,
+			LINEAR					= GL_LINEAR,
+			NEAREST_MIPMAP_NEAREST	= GL_NEAREST_MIPMAP_NEAREST,
+			LINEAR_MIPMAP_NEAREST	= GL_LINEAR_MIPMAP_NEAREST,
+			NEAREST_MIPMAP_LINEAR	= GL_NEAREST_MIPMAP_LINEAR,
+			LINEAR_MIPMAP_LINEAR	= GL_LINEAR_MIPMAP_LINEAR,
+	};
+
+	enum class sw_Class() GlMagFilter : int {
+			NEAREST					= GL_NEAREST,
+			LINEAR					= GL_LINEAR,
+	};
+
 	class sw_Class()  RTex : public RObject {
 	public:
 		RTex(const string& name = "0-rtex");
@@ -98,23 +101,35 @@ namespace staywalk{
 	public:
 		sw_Prop() Tex2d tex;
 		sw_Prop() bool mipmap = true;
-		sw_Prop() gltype wrap_s = GL_REPEAT;
-		sw_Prop() gltype wrap_t = GL_REPEAT;
-		sw_Prop() gltype min_filter = GL_LINEAR_MIPMAP_LINEAR;
-		sw_Prop() gltype mag_filter = GL_LINEAR;
+		sw_Prop() GlWrap wrap_s = GlWrap::REPEAT;
+		sw_Prop() GlWrap wrap_t = GlWrap::REPEAT;
+		sw_Prop() GlMinFilter min_filter = GlMinFilter::LINEAR;
+		sw_Prop() GlMagFilter mag_filter = GlMagFilter::LINEAR;
 		
 		MetaRegister(RTex);
 	};
 
+	enum class sw_Class()  ShaderType : unsigned char {
+		None,
+		VS,
+		FS,
+		CS,
+	};
+
 	class sw_Class()  RShader : public RObject {
 	public:
+		RShader(const string& name = "shader-0");
+		sw_Prop() ShaderType shadertype = ShaderType::None;
+		sw_Prop() SWCodeRef code;
 
 		MetaRegister(RShader);
 	};
 
-
 	class sw_Class()  RProgram : public RObject {
 	public:
+		RProgram(const string& name = "program-0");
+		sw_Prop() RShader vs;
+		sw_Prop() RShader fs;
 
 		MetaRegister(RProgram);
 	};
