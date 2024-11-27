@@ -1,27 +1,27 @@
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Object.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\GameObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\GameComponent.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Material.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RMesh.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\StaticMeshComponent.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Actor.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Camera.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Light.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "Object.h"
+#include "GameObject.h"
+#include "GameComponent.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "Material.h"
+#include "RMesh.h"
+#include "StaticMeshComponent.h"
+#include "Actor.h"
+#include "Camera.h"
+#include "Light.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src\reflect\reflect.h"
+#include "reflect\reflect.h"
 using namespace staywalk;
 shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
     if (false) { return nullptr; }
@@ -66,21 +66,14 @@ shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::ShaderType>() {
+staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>() {
     return { 
-        {static_cast<int>(::staywalk::ShaderType::None), "None"},
-        {static_cast<int>(::staywalk::ShaderType::VS), "VS"},
-        {static_cast<int>(::staywalk::ShaderType::FS), "FS"},
-        {static_cast<int>(::staywalk::ShaderType::CS), "CS"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>() {
-    return { 
-        {static_cast<int>(::staywalk::GlMagFilter::NEAREST), "NEAREST"},
-        {static_cast<int>(::staywalk::GlMagFilter::LINEAR), "LINEAR"},
+        {static_cast<int>(::staywalk::GlMinFilter::NEAREST), "NEAREST"},
+        {static_cast<int>(::staywalk::GlMinFilter::LINEAR), "LINEAR"},
+        {static_cast<int>(::staywalk::GlMinFilter::NEAREST_MIPMAP_NEAREST), "NEAREST_MIPMAP_NEAREST"},
+        {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_NEAREST), "LINEAR_MIPMAP_NEAREST"},
+        {static_cast<int>(::staywalk::GlMinFilter::NEAREST_MIPMAP_LINEAR), "NEAREST_MIPMAP_LINEAR"},
+        {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_LINEAR), "LINEAR_MIPMAP_LINEAR"},
     };
 }
 
@@ -96,13 +89,20 @@ staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>() {
+staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>() {
     return { 
-        {static_cast<int>(::staywalk::GlMinFilter::NEAREST), "NEAREST"},
-        {static_cast<int>(::staywalk::GlMinFilter::LINEAR), "LINEAR"},
-        {static_cast<int>(::staywalk::GlMinFilter::NEAREST_MIPMAP_NEAREST), "NEAREST_MIPMAP_NEAREST"},
-        {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_NEAREST), "LINEAR_MIPMAP_NEAREST"},
-        {static_cast<int>(::staywalk::GlMinFilter::NEAREST_MIPMAP_LINEAR), "NEAREST_MIPMAP_LINEAR"},
-        {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_LINEAR), "LINEAR_MIPMAP_LINEAR"},
+        {static_cast<int>(::staywalk::GlMagFilter::NEAREST), "NEAREST"},
+        {static_cast<int>(::staywalk::GlMagFilter::LINEAR), "LINEAR"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::ShaderType>() {
+    return { 
+        {static_cast<int>(::staywalk::ShaderType::None), "None"},
+        {static_cast<int>(::staywalk::ShaderType::VS), "VS"},
+        {static_cast<int>(::staywalk::ShaderType::FS), "FS"},
+        {static_cast<int>(::staywalk::ShaderType::CS), "CS"},
     };
 }

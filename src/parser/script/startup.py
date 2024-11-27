@@ -8,6 +8,8 @@ import serialize_generate
 import ui_generate
 import common_generate
 import py_bind_generate
+import common
+from pathlib import Path
 
 if __name__ == '__main__':
     print('===============start up parse for reflect=================')
@@ -15,7 +17,8 @@ if __name__ == '__main__':
     if len(sys.argv) > 1:
         print('Usage: python startup.py [include-directory]')
         code_src_path = sys.argv[1]
-    #code_src_path = R'C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src'
+    # code_src_path = R'C:\Users\Lenovo\Documents\gly\git_stars\gl\staywalk\src'
+    common.src_path = Path(os.path.join(code_src_path, 'engine')).as_posix() + '/'
     if not os.path.isdir(code_src_path):
         print(f'Wrong src directory {code_src_path}')
         exit(0)

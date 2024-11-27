@@ -1,24 +1,24 @@
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src\reflect\Script.h"
+#include "reflect\Script.h"
 namespace py = pybind11;
 using namespace staywalk;
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Object.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\GameObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\GameComponent.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Material.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RMesh.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\StaticMeshComponent.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Actor.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Camera.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Light.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\World.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Engine.h"
+#include "Object.h"
+#include "GameObject.h"
+#include "GameComponent.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "Material.h"
+#include "RMesh.h"
+#include "StaticMeshComponent.h"
+#include "Actor.h"
+#include "Camera.h"
+#include "Light.h"
+#include "World.h"
+#include "Engine.h"
 
 
 PYBIND11_MODULE(staywalk, __module){
@@ -75,6 +75,7 @@ py::class_<::staywalk::Material,Object, std::shared_ptr<::staywalk::Material>>(_
 	.def(py::init<shared_ptr<RShader>,const string &>())
 	.def("add_tex", &Material::add_tex)
 	.def("add_uniform", &Material::add_uniform)
+	.def("is_same", &Material::is_same)
 	.def_readwrite("program", &Material::program)
 ;
 

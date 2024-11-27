@@ -18,8 +18,8 @@ namespace staywalk {
 	
 	Engine::Engine(){
 		////world_ = World::create_empty_world("default");
-		world_ = World::load_marry_world();
-		//world_ = World::load("marry-world");
+		//world_ = World::load_marry_world();
+		world_ = World::load("marry-world");
 		console_ = nullptr;
 		Py::run("");
 	}
