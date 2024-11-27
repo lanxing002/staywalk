@@ -16,6 +16,11 @@ namespace staywalk {
 
 		sw_Prop() RProgram program;
 
+		/**
+		* @ same effect
+		*/
+		sw_Func() bool is_same(Ref<Material> rhs);
+
 	protected:
 		sw_Prop() std::map<string, shared_ptr<RUniform>> uniforms_;
 		sw_Prop() std::map<string, shared_ptr<RTex>> texs_;

@@ -1,27 +1,27 @@
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Object.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\GameObject.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\GameComponent.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Material.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RMesh.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\StaticMeshComponent.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Actor.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Camera.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Light.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Object.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\GameObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\GameComponent.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Material.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RMesh.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\StaticMeshComponent.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Actor.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Camera.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Light.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
 
 
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src\reflect\reflect.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src\reflect\reflect.h"
 using namespace staywalk;
 shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
     if (false) { return nullptr; }
@@ -66,10 +66,31 @@ shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
 
 template<>
 std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::ShaderType>() {
+    return { 
+        {static_cast<int>(::staywalk::ShaderType::None), "None"},
+        {static_cast<int>(::staywalk::ShaderType::VS), "VS"},
+        {static_cast<int>(::staywalk::ShaderType::FS), "FS"},
+        {static_cast<int>(::staywalk::ShaderType::CS), "CS"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
 staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>() {
     return { 
         {static_cast<int>(::staywalk::GlMagFilter::NEAREST), "NEAREST"},
         {static_cast<int>(::staywalk::GlMagFilter::LINEAR), "LINEAR"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
+    return { 
+        {static_cast<int>(::staywalk::GlWrap::CLAMP_TO_EDGE), "CLAMP_TO_EDGE"},
+        {static_cast<int>(::staywalk::GlWrap::MIRRORED_REPEAT), "MIRRORED_REPEAT"},
+        {static_cast<int>(::staywalk::GlWrap::REPEAT), "REPEAT"},
     };
 }
 
@@ -83,26 +104,5 @@ staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>() {
         {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_NEAREST), "LINEAR_MIPMAP_NEAREST"},
         {static_cast<int>(::staywalk::GlMinFilter::NEAREST_MIPMAP_LINEAR), "NEAREST_MIPMAP_LINEAR"},
         {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_LINEAR), "LINEAR_MIPMAP_LINEAR"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::ShaderType>() {
-    return { 
-        {static_cast<int>(::staywalk::ShaderType::None), "None"},
-        {static_cast<int>(::staywalk::ShaderType::VS), "VS"},
-        {static_cast<int>(::staywalk::ShaderType::FS), "FS"},
-        {static_cast<int>(::staywalk::ShaderType::CS), "CS"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
-    return { 
-        {static_cast<int>(::staywalk::GlWrap::CLAMP_TO_EDGE), "CLAMP_TO_EDGE"},
-        {static_cast<int>(::staywalk::GlWrap::MIRRORED_REPEAT), "MIRRORED_REPEAT"},
-        {static_cast<int>(::staywalk::GlWrap::REPEAT), "REPEAT"},
     };
 }

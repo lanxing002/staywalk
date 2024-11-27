@@ -124,6 +124,7 @@ private:
 namespace staywalk{
     const string Utility::kObjExt = ".swobj";
     const string Utility::kWorldExt = ".sworld";
+    const string Utility::kMeshExt = ".swmesh";
 
     idtype Utility::get_random_id(){
         using snowflake_t = snowflake<1534832906275L>;
@@ -241,6 +242,21 @@ namespace staywalk{
         }
         // retrieve the directory path of the filepath
         process_node(scene->mRootNode, scene);
+
+        vector<PRMesh> merge_meshes;
+        for (auto& m : meshes_) {
+            bool merged = false;
+            for (auto& tm : merge_meshes) {
+                if (m->mat->is_same(tm->mat)) {
+                    tm->vertices.insert(tm->vertices.end(), m->vertices.begin(), m->vertices.end());
+                    tm->indices.insert(tm->indices.end(), m->indices.begin(), m->indices.end());
+                    merged = true;
+                    break;
+                }
+            }
+            if (!merged) merge_meshes.push_back(m);
+        }
+        meshes_ = merge_meshes;
     }
 
 

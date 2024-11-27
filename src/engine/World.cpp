@@ -26,7 +26,7 @@ namespace staywalk{
 	}
 	
 	PWorld World::load_marry_world(){
-		auto meshload = MeshLoader(R"(E:\gly\codes\LearnOpenGL\resources\objects\backpack\backpack.obj)");
+		auto meshload = MeshLoader(R"(C:\Users\lanxi\Documents\lanxing\codes\ErJiu\games202-hw\homework0\assets\mary\Marry.obj)");
 
 		shared_ptr<Actor> actor = std::make_shared<Actor>("marry");
 		Ref<StaticMeshComponent> sm = std::make_shared<StaticMeshComponent>();

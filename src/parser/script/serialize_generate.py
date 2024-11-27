@@ -21,6 +21,10 @@ dump_code3 = '''
     }}'''
 
 dump_code4 = '''
+    this->dump_post();'''
+
+
+dump_code_end = '''
 }
 '''
 
@@ -46,6 +50,9 @@ load_code3 = '''
     }}'''
 
 load_code4 = '''
+    this->load_post();'''
+
+load_code_end = '''
 }
 '''
 
@@ -98,6 +105,7 @@ class SerializeBind(object):
             self.outer_classes) + self._node.spelling
         self._props = []
         self._parse()
+        self.labels = get_sw_labels(self._node)
 
     @property
     def name(self):
@@ -117,7 +125,8 @@ class SerializeBind(object):
         code += dump_code2.format(base_type=self._base_names) if self._base_names else ''
         for p in self._props:
             code += dump_code3.format(dump_prop=p)
-        code += dump_code4
+        code += dump_code4 if 'jsonpost' in self.labels else ''
+        code += dump_code_end
         declare = dump_declare.format(cur_type=self._full_name)
         return declare, code
 
@@ -127,7 +136,8 @@ class SerializeBind(object):
         code += load_code2.format(base_type=self._base_names) if self._base_names else ''
         for p in self._props:
             code += load_code3.format(load_prop=p)
-        code += load_code4
+        code += load_code4 if 'jsonpost' in self.labels else ''
+        code += load_code_end
         declare = load_declare.format(cur_type=self._full_name)
         return declare, code
 
