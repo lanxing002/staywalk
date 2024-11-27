@@ -1,5 +1,5 @@
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src\reflect\ConstructUI.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Object.h"
+#include "reflect\ConstructUI.h"
+#include "Object.h"
 
 void ::staywalk::Object::construct_basic_ui(bool can_modify) {
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(name)>()) 
@@ -19,7 +19,7 @@ void ::staywalk::Object::construct_obj_ui(bool can_modify) {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\GameObject.h"
+#include "GameObject.h"
 
 void ::staywalk::GameObject::construct_basic_ui(bool can_modify) {
     Object::construct_basic_ui(can_modify);
@@ -41,7 +41,7 @@ void ::staywalk::GameObject::construct_obj_ui(bool can_modify) {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\GameComponent.h"
+#include "GameComponent.h"
 
 void ::staywalk::GameComponent::construct_basic_ui(bool can_modify) {
     Object::construct_basic_ui(can_modify);
@@ -55,7 +55,7 @@ void ::staywalk::GameComponent::construct_obj_ui(bool can_modify) {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "RenderObject.h"
 
 void ::staywalk::Resource::construct_basic_ui(bool can_modify) {
     Object::construct_basic_ui(can_modify);
@@ -85,7 +85,7 @@ void ::staywalk::Resource::construct_obj_ui(bool can_modify) {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "RenderObject.h"
 
 void ::staywalk::Tex2d::construct_basic_ui(bool can_modify) {
     Resource::construct_basic_ui(can_modify);
@@ -99,7 +99,7 @@ void ::staywalk::Tex2d::construct_obj_ui(bool can_modify) {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "RenderObject.h"
 
 void ::staywalk::RObject::construct_basic_ui(bool can_modify) {
     Object::construct_basic_ui(can_modify);
@@ -113,7 +113,7 @@ void ::staywalk::RObject::construct_obj_ui(bool can_modify) {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "RenderObject.h"
 
 void ::staywalk::RTex::construct_basic_ui(bool can_modify) {
     RObject::construct_basic_ui(can_modify);
@@ -175,7 +175,7 @@ void ::staywalk::RTex::construct_obj_ui(bool can_modify) {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "RenderObject.h"
 
 void ::staywalk::RShader::construct_basic_ui(bool can_modify) {
     RObject::construct_basic_ui(can_modify);
@@ -205,7 +205,7 @@ void ::staywalk::RShader::construct_obj_ui(bool can_modify) {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "RenderObject.h"
 
 void ::staywalk::RProgram::construct_basic_ui(bool can_modify) {
     RObject::construct_basic_ui(can_modify);
@@ -235,7 +235,7 @@ void ::staywalk::RProgram::construct_obj_ui(bool can_modify) {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
+#include "RenderObject.h"
 
 void ::staywalk::RUniform::construct_basic_ui(bool can_modify) {
     RObject::construct_basic_ui(can_modify);
@@ -249,7 +249,7 @@ void ::staywalk::RUniform::construct_obj_ui(bool can_modify) {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Material.h"
+#include "Material.h"
 
 void ::staywalk::Material::construct_basic_ui(bool can_modify) {
     Object::construct_basic_ui(can_modify);
@@ -287,7 +287,7 @@ void ::staywalk::Material::construct_obj_ui(bool can_modify) {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RMesh.h"
+#include "RMesh.h"
 
 void ::staywalk::RMesh::construct_basic_ui(bool can_modify) {
     RObject::construct_basic_ui(can_modify);
@@ -309,7 +309,7 @@ void ::staywalk::RMesh::construct_obj_ui(bool can_modify) {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\StaticMeshComponent.h"
+#include "StaticMeshComponent.h"
 
 void ::staywalk::StaticMeshComponent::construct_basic_ui(bool can_modify) {
     GameComponent::construct_basic_ui(can_modify);
@@ -331,7 +331,7 @@ void ::staywalk::StaticMeshComponent::construct_obj_ui(bool can_modify) {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Actor.h"
+#include "Actor.h"
 
 void ::staywalk::Actor::construct_basic_ui(bool can_modify) {
     GameObject::construct_basic_ui(can_modify);
@@ -369,7 +369,7 @@ void ::staywalk::Actor::construct_obj_ui(bool can_modify) {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Camera.h"
+#include "Camera.h"
 
 void ::staywalk::Camera::construct_basic_ui(bool can_modify) {
     GameObject::construct_basic_ui(can_modify);
@@ -383,7 +383,7 @@ void ::staywalk::Camera::construct_obj_ui(bool can_modify) {
 
 
 
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Light.h"
+#include "Light.h"
 
 void ::staywalk::Light::construct_basic_ui(bool can_modify) {
     GameObject::construct_basic_ui(can_modify);

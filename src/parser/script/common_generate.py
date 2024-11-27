@@ -2,6 +2,8 @@ from parse_class import ClassNode, NoClassField, get_sw_labels
 import clang.cindex
 import os
 from mylog import *
+from pathlib import Path
+import common
 
 # ---------------create code start------------------
 create_obj_code1 = '''
@@ -66,7 +68,8 @@ class CommonBind(object):
 
     @property
     def header(self):
-        return str(self._node.extent.start.file.name)
+        p = Path(str(self._node.extent.start.file.name)).as_posix().replace(common.src_path, '')
+        return p
 
 
 class EnumBind(CommonBind):
@@ -135,7 +138,7 @@ def generate(nodes: list[ClassNode], enums: list[NoClassField],  reflect_dir):
 
     with open(common_imp_target_file, 'w') as common:
         common.write(all_include_code + '\n\n\n')
-        common.write(include_code.format(os.path.join(reflect_dir, 'reflect.h')))
+        common.write(include_code.format(os.path.join('reflect', 'reflect.h')))
         common.write(create_obj_code1)
         common.write(create_code)
         common.write(create_obj_code3)

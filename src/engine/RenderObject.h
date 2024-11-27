@@ -90,7 +90,7 @@ namespace staywalk{
 			LINEAR					= GL_LINEAR,
 	};
 
-	class sw_Class()  RTex : public RObject {
+	class sw_Class(jsonpost;)  RTex : public RObject {
 	public:
 		RTex(const string& name = "0-rtex");
 
