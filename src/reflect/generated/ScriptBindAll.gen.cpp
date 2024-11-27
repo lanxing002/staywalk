@@ -1,25 +1,24 @@
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src\reflect\Script.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src\reflect\Script.h"
 namespace py = pybind11;
 using namespace staywalk;
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Object.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\GameObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\GameComponent.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RenderObject.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Material.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\RMesh.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\StaticMeshComponent.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Actor.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Camera.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Light.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\World.h"
-#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/engine\Engine.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Object.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\GameObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\GameComponent.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Material.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\RMesh.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\StaticMeshComponent.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Actor.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Camera.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Light.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\World.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/gl/staywalk/src/engine\Engine.h"
 
 
 PYBIND11_MODULE(staywalk, __module){
@@ -43,11 +42,6 @@ py::class_<::staywalk::Resource,Object, std::shared_ptr<::staywalk::Resource>>(_
 	.def_readwrite("dump_dir", &Resource::dump_dir)
 ;
 
-py::class_<::staywalk::Shader,Resource, std::shared_ptr<::staywalk::Shader>>(__module, "Shader")
-	.def_readwrite("code", &Shader::code)
-	.def_readwrite("shader_type", &Shader::shader_type)
-;
-
 py::class_<::staywalk::Tex2d,Resource, std::shared_ptr<::staywalk::Tex2d>>(__module, "Tex2d")
 ;
 
@@ -65,9 +59,13 @@ py::class_<::staywalk::RTex,RObject, std::shared_ptr<::staywalk::RTex>>(__module
 ;
 
 py::class_<::staywalk::RShader,RObject, std::shared_ptr<::staywalk::RShader>>(__module, "RShader")
+	.def_readwrite("shadertype", &RShader::shadertype)
+	.def_readwrite("code", &RShader::code)
 ;
 
 py::class_<::staywalk::RProgram,RObject, std::shared_ptr<::staywalk::RProgram>>(__module, "RProgram")
+	.def_readwrite("vs", &RProgram::vs)
+	.def_readwrite("fs", &RProgram::fs)
 ;
 
 py::class_<::staywalk::RUniform,RObject, std::shared_ptr<::staywalk::RUniform>>(__module, "RUniform")
@@ -77,6 +75,7 @@ py::class_<::staywalk::Material,Object, std::shared_ptr<::staywalk::Material>>(_
 	.def(py::init<shared_ptr<RShader>,const string &>())
 	.def("add_tex", &Material::add_tex)
 	.def("add_uniform", &Material::add_uniform)
+	.def_readwrite("program", &Material::program)
 ;
 
 py::class_<::staywalk::RMesh,RObject, std::shared_ptr<::staywalk::RMesh>>(__module, "RMesh")

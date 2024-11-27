@@ -8,25 +8,25 @@ from enum import Enum
 
 # --------------dump code start-----------------
 bind_basic_func_code = '''
-void {cur_type}::construct_basic_ui(bool read_only) {{'''
+void {cur_type}::construct_basic_ui(bool can_modify) {{'''
 
 bind_base_basic = '''
-    {base_type}::construct_basic_ui(read_only);'''
+    {base_type}::construct_basic_ui(can_modify);'''
 
 bind_basic = '''
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype({prop})>()) 
-        staywalk::reflect::UIHelper::construct_ui("{prop}", {prop}, read_only || {read_only});'''
+        staywalk::reflect::UIHelper::construct_ui("{prop}", {prop}, can_modify || {can_modify});'''
 
 bind_obj_func_code = '''
-void {cur_type}::construct_obj_ui(bool read_only) {{'''
+void {cur_type}::construct_obj_ui(bool can_modify) {{'''
 
 bind_base_obj = '''
-    {base_type}::construct_obj_ui(read_only);'''
+    {base_type}::construct_obj_ui(can_modify);'''
 
 bind_obj = '''
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype({prop})>()){{ 
         //if (ImGui::TreeNode("{prop}")){{
-            staywalk::reflect::UIHelper::construct_ui("{prop}", {prop}, read_only || {read_only});
+            staywalk::reflect::UIHelper::construct_ui("{prop}", {prop}, can_modify || {can_modify});
             //ImGui::TreePop();
         //}}    
     }}'''
@@ -73,14 +73,14 @@ class UIHelper(object):
         code += bind_basic_func_code.format(cur_type=self._full_name)
         code += bind_base_basic.format(base_type=self._base_names) if self._base_names else ''
         for p, accessor in self._props:
-            code += bind_basic.format(prop=p, read_only='false' if accessor == Accessor.PUBLIC else 'true')
+            code += bind_basic.format(prop=p, can_modify='true' if accessor == Accessor.PUBLIC else 'false')
         code += bind_end_code
         code += '\n\n'
 
         code += bind_obj_func_code.format(cur_type=self._full_name)
         code += bind_base_obj.format(base_type=self._base_names) if self._base_names else ''
         for p, accessor in self._props:
-            code += bind_obj.format(prop=p, read_only='false' if accessor == Accessor.PUBLIC else 'true')
+            code += bind_obj.format(prop=p, can_modify='true' if accessor == Accessor.PUBLIC else 'false')
         code += bind_end_code
         code += '\n\n'
 

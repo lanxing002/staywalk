@@ -2,9 +2,11 @@
 
 #ifndef _IN_REFLECT
 #include "reflect.h"
+#include "Engine.h"
+#include "SimpleType.h"
+
 #include "imgui.h"
 #include "fmt/format.h"
-#include "Engine.h"
 #include <type_traits>
 
 namespace staywalk{
@@ -19,24 +21,26 @@ namespace staywalk{
 			void drag_target(Ref<T>& obj);
 
 			template<typename T>
-			void construct_ui(const string& label, T& data, bool read_only);
+			void construct_ui(const string& label, T& data, bool can_modify);
 			
 			template<typename T>
-			void construct_ui(const string& label, Ref<T>& data, bool read_only);
+			void construct_ui(const string& label, Ref<T>& data, bool can_modify);
 
 			template<typename T>
-			void construct_ui(const string& label, vector<T>& data, bool read_only);
+			void construct_ui(const string& label, vector<T>& data, bool can_modify);
 
 			template<typename TKey, typename TVal>
-			void construct_ui(const string& label, map<TKey, TVal>& data, bool read_only);
+			void construct_ui(const string& label, map<TKey, TVal>& data, bool can_modify);
 
-			void construct_enum_ui(const string& label, int& data, const std::vector<std::pair<int, std::string>>& enum_labels, bool read_only);
+			void construct_enum_ui(const string& label, int& data, const std::vector<std::pair<int, std::string>>& enum_labels, bool can_modify);
 
 			template<typename T>
 			constexpr bool is_basic() {
-				if constexpr (std::is_trivial_v<T> || 
-					std::is_same_v<T, std::string> ||
-					std::is_same_v<T, fs::path>) return true;
+				if constexpr (std::is_trivial_v<T> 
+					|| std::is_same_v<T, std::string> 
+					|| std::is_same_v<T, fs::path> 
+					|| std::is_same_v<T, SWCodeRef>
+				)return true;
 				else return false;
 			}
 
@@ -54,30 +58,30 @@ namespace staywalk{
 namespace staywalk {
 	namespace reflect {
 		template<typename T>
-		void UIHelper::construct_ui(const string& label, T& data, bool read_only) {
+		void UIHelper::construct_ui(const string& label, T& data, bool can_modify) {
 			constexpr bool is_obj = std::is_same_v<T, staywalk::Object> 
 				|| std::is_base_of_v<staywalk::Object, T>;
 			//static_assert(is_obj && "must drived from staywalk::object");
 			if constexpr (std::is_enum_v<T>){
 				int idata = static_cast<int>(data);
-				construct_enum_ui(label, idata, get_enum_label<T>(), read_only);
+				construct_enum_ui(label, idata, get_enum_label<T>(), can_modify);
 				data = static_cast<T>(idata);
 			}
 			else if (!is_obj) {
-				construct_ui(label, data, read_only);
+				construct_ui(label, data, can_modify);
 			}
 			else {
 				auto tname = data.get_meta_info().tname;
 				tname.remove_prefix(10);
 				if (ImGui::TreeNode(fmt::format("{}<{}>", label, tname).c_str())) {
-					data.construct_ui(read_only);
+					data.construct_ui(can_modify);
 					ImGui::TreePop();
 				}
 			}
 		}
 
 		template<typename T>
-		void UIHelper::construct_ui(const string& label, Ref<T>& data, bool read_only) {
+		void UIHelper::construct_ui(const string& label, Ref<T>& data, bool can_modify) {
 			constexpr bool is_obj = std::is_same_v<T, staywalk::Object>
 				|| std::is_base_of_v<staywalk::Object, T>;
 			static_assert(is_obj && "must drived from staywalk::object");
@@ -89,51 +93,54 @@ namespace staywalk {
 			if (ImGui::TreeNode(fmt::format("{}<{}>", label, tname).c_str())) {
 				ImGui::PopStyleColor();
 				UIHelper::choice_object(data);
-				data->construct_ui(read_only);
+				data->construct_ui(can_modify);
 				ImGui::TreePop();
 			}
 			else { ImGui::PopStyleColor(); }
 		}
 
 		template<>
-		void UIHelper::construct_ui(const string& label, string& str, bool read_only);
+		void UIHelper::construct_ui(const string& label, string& str, bool can_modify);
 
 		template<>
-		void UIHelper::construct_ui(const string& label, fs::path& path, bool read_only);
+		void UIHelper::construct_ui(const string& label, fs::path& path, bool can_modify);
 
 		template<>
-		void UIHelper::construct_ui(const string& label, bool& bb, bool read_only);
+		void UIHelper::construct_ui(const string& label, SWCodeRef& code, bool can_modify);
 
 		template<>
-		void UIHelper::construct_ui(const string& label, int& ii, bool read_only);
+		void UIHelper::construct_ui(const string& label, bool& bb, bool can_modify);
 
 		template<>
-		void UIHelper::construct_ui(const string& label, float& ff, bool read_only);
+		void UIHelper::construct_ui(const string& label, int& ii, bool can_modify);
 
 		template<>
-		void UIHelper::construct_ui(const string& label, Transform& tf, bool read_only);
+		void UIHelper::construct_ui(const string& label, float& ff, bool can_modify);
 
 		template<>
-		void UIHelper::construct_ui(const string& label, vec3& tf, bool read_only);
+		void UIHelper::construct_ui(const string& label, Transform& tf, bool can_modify);
 
 		template<>
-		void UIHelper::construct_ui(const string& label, quat& q, bool read_only);
+		void UIHelper::construct_ui(const string& label, vec3& tf, bool can_modify);
+
+		template<>
+		void UIHelper::construct_ui(const string& label, quat& q, bool can_modify);
 
 		template<typename T>
-		void UIHelper::construct_ui(const string& label, vector<T>& data, bool read_only) {
+		void UIHelper::construct_ui(const string& label, vector<T>& data, bool can_modify) {
 			if (ImGui::TreeNode(fmt::format("{}<vector>", label).c_str())) {
 				for (int i = 0; i < data.size(); i++) {
-					construct_ui(fmt::format("{}-{}", label, i), data[i], read_only);
+					construct_ui(fmt::format("{}-{}", label, i), data[i], can_modify);
 				}
 				ImGui::TreePop();
 			}
 		}
 
 		template<typename TKey, typename TVal>
-		void UIHelper::construct_ui(const string& label, map<TKey, TVal>& data, bool read_only) {
+		void UIHelper::construct_ui(const string& label, map<TKey, TVal>& data, bool can_modify) {
 			if (ImGui::TreeNode(fmt::format("{}<map>", label).c_str())) {
 				for (auto& [key, value] : data){
-					construct_ui(fmt::format("{}-{}", label, key), value, read_only);
+					construct_ui(fmt::format("{}-{}", label, key), value, can_modify);
 				}
 				ImGui::TreePop();
 			}

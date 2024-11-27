@@ -3,6 +3,7 @@
 #ifndef _IN_REFLECT
 //#include "Common.gen.h"
 #include "reflect.h"
+
 #include "rapidjson/document.h"
 #include "fmt/format.h"
 
@@ -66,7 +67,13 @@ namespace staywalk {
 			}
 
 			template<typename T, size_t N>
-			void write_array(const T& data, json::Value& value);
+			void write_array(const T& data, json::Value& value); 
+
+			template<>
+			void Dumper::write(const SWCodeRef& obj, json::Value& value) {
+				value.SetObject();
+				obj->dump(value, *this);
+			}
 
 			json::Document& get_doc() { return doc_; }
 
@@ -167,6 +174,9 @@ namespace staywalk {
 				idtype id; read(id, ivalue);
 				data = (id == kInvalidId) ? nullptr : pcast<T>(load_obj_impl(std::to_string(id)));
 			}
+
+			template<>
+			void read(SWCodeRef& obj, json::Value& value) { obj->load(value, *this); }
 
 			template<typename T, size_t N>
 			void read_array(T& data, json::Value& ivalue);

@@ -4,8 +4,11 @@
 #include "PopInput.h"
 #include "TextEditor.h"
 #include "AssetBrowser.h"
+#include "Event.h"
 
-#include <list>
+#include <map>
+#include <utility>
+#include <vector>
 
 
 class EditorUI
@@ -31,8 +34,10 @@ private:
     void show_content();
 
 private:
-    std::shared_ptr<TextEditor> text_editor_{nullptr};
+    std::vector<std::pair<bool, std::shared_ptr<TextEditor>>> text_editors_;
     std::shared_ptr<AssetsBrowser> assets_browser_{nullptr};
+
+    decltype(staywalk::Event::Editor_EditCode)::Handle edit_code_hanlder_;
 
     bool world_open_ = true;
     bool details_open_ = true;

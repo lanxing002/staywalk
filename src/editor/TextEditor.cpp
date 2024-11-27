@@ -1,13 +1,15 @@
+#include "TextEditor.h"
+#include "EditorUI.h"
+#include "EditorCommon.h"
+
+#define IMGUI_DEFINE_MATH_OPERATORS
+#include "imgui.h" // for imGui::GetCurrentWindow()
+
 #include <algorithm>
 #include <chrono>
 #include <string>
 #include <regex>
 #include <cmath>
-
-#include "TextEditor.h"
-
-#define IMGUI_DEFINE_MATH_OPERATORS
-#include "imgui.h" // for imGui::GetCurrentWindow()
 
 // TODO
 // - multiline comments vs single-line: latter is blocking start of a ML
@@ -47,14 +49,16 @@ TextEditor::TextEditor()
 	, mHandleMouseInputs(true)
 	, mIgnoreImGuiChild(false)
 	, mShowWhitespaces(true)
-	, mEditing(false)
 	, mStartTime(std::chrono::duration_cast<std::chrono::milliseconds>(std::chrono::system_clock::now().time_since_epoch()).count())
 {
 	SetPalette(GetDarkPalette());
 	SetLanguageDefinition(LanguageDefinition::HLSL());
 	mLines.push_back(Line());
-	ImGuiIO& io = ImGui::GetIO();
-	mCodeFont = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/consola.ttf", 20.0f);
+
+	mCodeFont = nullptr;
+	auto it = EditorCommon::font_table.find("consola");
+	if (it != EditorCommon::font_table.end())
+		mCodeFont = it->second;
 }
 
 TextEditor::~TextEditor()
@@ -1121,25 +1125,36 @@ void TextEditor::Render()
 	}
 }
 
-void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
+void TextEditor::Render(const char* aTitle, bool* bopen, const ImVec2& aSize, bool aBorder)
 {
 	mWithinRender = true;
 	mTextChanged = false;
 	mCursorPositionChanged = false;
-
+	std::string tip = "...";
+	if (!(*bopen)) return;
 	ImGui::SetNextWindowSize(ImVec2(600, 800), ImGuiCond_Once);
-	if (!ImGui::Begin(aTitle, &mEditing, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar | ImGuiWindowFlags_NoDocking)) {
+	if (!ImGui::Begin(aTitle, bopen, ImGuiWindowFlags_MenuBar | ImGuiWindowFlags_NoDocking)) {
 		ImGui::End();
 		return;
 	}
+	
+	if (ImGui::BeginMenuBar()) {
+		if (ImGui::Button("Save")) {
+			if (mCode) {
+				mCode->code = GetText();
+				tip = "save to {} success ...";
+			}
 
+		}
+		ImGui::EndMenuBar();
+	}
+
+	ImVec2 available_size = ImGui::GetContentRegionAvail();
+	available_size.y -= 30;
+	ImGui::BeginChild("Child Window", available_size, aBorder, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar | ImGuiWindowFlags_NoMove);
 	ImGui::PushStyleColor(ImGuiCol_ChildBg, ImGui::ColorConvertU32ToFloat4(mPalette[(int)PaletteIndex::Background]));
 	ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(0.0f, 0.0f));
 	ImGui::PushFont(mCodeFont);
-
-
-	//if (!mIgnoreImGuiChild)
-		//ImGui::BeginChild(aTitle, aSize, aBorder, ImGuiWindowFlags_HorizontalScrollbar | ImGuiWindowFlags_AlwaysHorizontalScrollbar | ImGuiWindowFlags_NoMove);
 
 	if (mHandleKeyboardInputs)
 	{
@@ -1156,15 +1171,14 @@ void TextEditor::Render(const char* aTitle, const ImVec2& aSize, bool aBorder)
 	if (mHandleKeyboardInputs)
 		ImGui::PopAllowKeyboardFocus();
 
-	//if (!mIgnoreImGuiChild)
-	//	ImGui::EndChild();
-
 	ImGui::PopFont();
 	ImGui::PopStyleVar();
 	ImGui::PopStyleColor();
 
 	mWithinRender = false;
+	ImGui::EndChild();
 
+	ImGui::Text(tip.c_str());
 	ImGui::End();
 }
 
@@ -1193,6 +1207,11 @@ void TextEditor::SetText(const std::string& aText)
 	mUndoIndex = 0;
 
 	Colorize();
+}
+
+void TextEditor::SetCode(const staywalk::SWCodeRef code){
+	mCode = code;
+	SetText(code->code);
 }
 
 void TextEditor::SetTextLines(const std::vector<std::string>& aLines)
