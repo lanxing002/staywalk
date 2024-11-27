@@ -6,7 +6,7 @@ namespace staywalk {
 	const string Material::AoKey = "ao";
 
 	Material::Material(shared_ptr<RShader> shader, const string& name)
-		: Object(name), shader_(shader) {
+		: Object(name) {
 	}
 
 }

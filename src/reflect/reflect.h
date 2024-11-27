@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+#include "SimpleType.h"
 #include "Utility.h"
 
 namespace staywalk {
