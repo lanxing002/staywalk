@@ -1,5 +1,7 @@
 from parse_class import ClassNode, NoClassField, get_sw_labels
 import clang.cindex
+from pathlib import Path
+import common
 import os
 from mylog import *
 
@@ -117,7 +119,8 @@ class SerializeBind(object):
 
     @property
     def header(self):
-        return str(self._node.extent.start.file.name)
+        p = Path(str(self._node.extent.start.file.name)).as_posix().replace(common.src_path, '')
+        return p
 
     def _dump_code(self):
         code = ''
@@ -205,7 +208,7 @@ def generate(nodes: list[ClassNode], reflect_dir):
     with open(declare_target_file, 'w') as decl:
         with open(impl_target_file, 'w') as impl:
 
-            impl.write(include_code.format(os.path.join(reflect_dir, 'Serialize.h')))
+            impl.write(include_code.format(os.path.join('reflect', 'Serialize.h')))
             impl.write('\n')
 
             for node in nodes:

@@ -4,6 +4,8 @@ from parse_class import ClassNode, NoClassField, get_sw_labels
 import os
 from mylog import *
 import clang.cindex
+from pathlib import Path
+import common
 
 
 class FuncParam:
@@ -44,7 +46,8 @@ class BindClass(object):
 
     @property
     def header(self):
-        return str(self._node.extent.start.file.name)
+        p = Path(str(self._node.extent.start.file.name)).as_posix().replace(common.src_path, '')
+        return p
 
     def __repr__(self):
         result = f'''py::class_<{self.full_name}{','.join([''] + self._base_names)}, std::shared_ptr<{self.full_name}>>(__module, "{self.name}")\n'''
@@ -138,7 +141,7 @@ def generate(nodes: list[ClassNode], reflect_dir):
     include_code = '#include "{}"\n'
     with open(declare_target_file, 'w') as decl:
         with open(impl_target_file, 'w') as impl:
-            impl.write(include_code.format(os.path.join(reflect_dir, 'Script.h')))
+            impl.write(include_code.format(os.path.join('reflect', 'Script.h')))
             impl.write('namespace py = pybind11;\n')
             impl.write('using namespace staywalk;\n')
 
