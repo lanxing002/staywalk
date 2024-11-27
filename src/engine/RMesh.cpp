@@ -1,4 +1,6 @@
 #include "RMesh.h"
+#include "Utility.h"
+
 using namespace staywalk;
 RMesh::RMesh(const string& name)
 	:RObject(name) {
@@ -39,8 +41,50 @@ void staywalk::RMesh::organize(){
 }
 
 void staywalk::RMesh::disband(){
+
 }
 
 bool staywalk::RMesh::load_resource(){
 	return vertices.size() > 0 && indices.size() > 0;
+}
+
+void staywalk::RMesh::load_post() {
+	auto path = Utility::get_objects_dir() / (name + Utility::kMeshExt);
+	auto ifs = ifstream(path, std::ios::binary);
+	bool status = false;
+	if (ifs) {
+		size_t vsize = 0;
+		size_t isize = 0;
+
+		ifs.read(reinterpret_cast<char*>(&vsize), sizeof(vsize));
+		ifs.read(reinterpret_cast<char*>(&isize), sizeof(isize));
+
+		vertices.resize(vsize);
+		indices.resize(isize);
+
+		ifs.read(reinterpret_cast<char*>(vertices.data()), vsize * sizeof(Vertex));
+		ifs.read(reinterpret_cast<char*>(indices.data()), isize * sizeof(unsigned int));
+		status = true;
+	}
+	log(fmt::format("load_post to {}, status: {}", path.u8string(), status),
+		status ? LogLevel::Info : LogLevel::Warn);
+}
+
+void staywalk::RMesh::dump_post() const {
+	size_t vsize = vertices.size();
+	size_t isize = indices.size();
+	auto path = Utility::get_objects_dir() / (name + Utility::kMeshExt);
+	auto ofs = ofstream(path, std::ios::binary | std::ios::trunc);
+	bool status = false;
+	if (ofs) {
+		ofs.write(reinterpret_cast<char*>(&vsize), sizeof(vsize));
+		ofs.write(reinterpret_cast<char*>(&isize), sizeof(isize));
+
+		ofs.write(reinterpret_cast<const char*>(vertices.data()), vsize * sizeof(Vertex));
+		ofs.write(reinterpret_cast<const char*>(indices.data()), isize * sizeof(unsigned int));
+		status = true;
+	}
+
+	log(fmt::format("dump_post to {}, status: {}", path.u8string(), status),
+		status ? LogLevel::Info : LogLevel::Warn);
 }

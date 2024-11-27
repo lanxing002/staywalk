@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "RenderObject.h"
 #include "RMesh.h"
+#include "Logger.h"
 
 #include <type_traits>
 #include <xutility>
@@ -18,6 +19,7 @@ namespace staywalk{
 	class Utility{
 	public:
 		static const string kObjExt;
+		static const string kMeshExt;
 		static const string kWorldExt;
 
 		static idtype get_random_id();
