@@ -48,7 +48,7 @@ shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
 
     else if (minfo.tname == "staywalk::Material"){return std::make_shared<::staywalk::Material>();}
 
-    else if (minfo.tname == "staywalk::RMesh"){return std::make_shared<::staywalk::RMesh>();}
+    else if (minfo.tname == "staywalk::Mesh"){return std::make_shared<::staywalk::Mesh>();}
 
     else if (minfo.tname == "staywalk::StaticMeshComponent"){return std::make_shared<::staywalk::StaticMeshComponent>();}
 
@@ -66,11 +66,12 @@ shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
+staywalk::reflect::get_enum_label<::staywalk::ShaderType>() {
     return { 
-        {static_cast<int>(::staywalk::GlWrap::CLAMP_TO_EDGE), "CLAMP_TO_EDGE"},
-        {static_cast<int>(::staywalk::GlWrap::MIRRORED_REPEAT), "MIRRORED_REPEAT"},
-        {static_cast<int>(::staywalk::GlWrap::REPEAT), "REPEAT"},
+        {static_cast<int>(::staywalk::ShaderType::None), "None"},
+        {static_cast<int>(::staywalk::ShaderType::VS), "VS"},
+        {static_cast<int>(::staywalk::ShaderType::FS), "FS"},
+        {static_cast<int>(::staywalk::ShaderType::CS), "CS"},
     };
 }
 
@@ -85,6 +86,16 @@ staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>() {
 
 template<>
 std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
+    return { 
+        {static_cast<int>(::staywalk::GlWrap::CLAMP_TO_EDGE), "CLAMP_TO_EDGE"},
+        {static_cast<int>(::staywalk::GlWrap::MIRRORED_REPEAT), "MIRRORED_REPEAT"},
+        {static_cast<int>(::staywalk::GlWrap::REPEAT), "REPEAT"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
 staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>() {
     return { 
         {static_cast<int>(::staywalk::GlMinFilter::NEAREST), "NEAREST"},
@@ -93,16 +104,5 @@ staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>() {
         {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_NEAREST), "LINEAR_MIPMAP_NEAREST"},
         {static_cast<int>(::staywalk::GlMinFilter::NEAREST_MIPMAP_LINEAR), "NEAREST_MIPMAP_LINEAR"},
         {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_LINEAR), "LINEAR_MIPMAP_LINEAR"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::ShaderType>() {
-    return { 
-        {static_cast<int>(::staywalk::ShaderType::None), "None"},
-        {static_cast<int>(::staywalk::ShaderType::VS), "VS"},
-        {static_cast<int>(::staywalk::ShaderType::FS), "FS"},
-        {static_cast<int>(::staywalk::ShaderType::CS), "CS"},
     };
 }

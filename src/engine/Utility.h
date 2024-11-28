@@ -59,10 +59,10 @@ namespace staywalk{
 	{
 	public:
 		MeshLoader(const string& mesh_name);
-		const vector<PRMesh>& get_meshes() { return meshes_; }
+		const vector<pair<MeshRef, MaterialRef>>& get_meshes() { return meshes_; }
 
 	private:
-		PRMesh construct_mesh(aiMesh* mesh, const aiScene* scene);
+		pair<MeshRef, MaterialRef> construct_mesh(aiMesh* mesh, const aiScene* scene);
 		void process_node(aiNode* node, const aiScene* scene);
 		shared_ptr<RTex> find_material_tex(aiMaterial* mat, aiTextureType type);
 		/**
@@ -71,7 +71,7 @@ namespace staywalk{
 		PRTex make_tex(fs::path path);
 
 		map<fs::path, PRTex> loaded_texs_;
-		vector<PRMesh> meshes_;
+		vector<pair<MeshRef, MaterialRef>> meshes_;
 		fs::path mesh_name_;
 		fs::path load_dir_;
 	};

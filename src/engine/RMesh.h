@@ -4,30 +4,36 @@
 
 
 namespace staywalk{
-	class sw_Class(jsonpost;)  RMesh : public RObject {
+	class sw_Class(jsonpost;)  Mesh : public RObject {
 	public:
-		sw_Func()  RMesh(const string& name = "mesh-0");
+		sw_Func()  Mesh(const string& name = "mesh-0");
 
-		sw_Func()  RMesh(const vector<Vertex>& vv, const vector<unsigned int>& ii, const string& name = "0-mesh");
+		sw_Func()  Mesh(const vector<Vertex>& vv, const vector<unsigned int>& ii, const string& name = "0-mesh");
+
+		~Mesh();
 
 		void organize() override;
 		void disband() override;
 		bool load_resource() override;
 
+		void draw();
+
 	public:
 		sw_Prop(nojson;nogui;) vector<Vertex> vertices;
 		sw_Prop(nojson;nogui;) vector<unsigned int> indices;
-		sw_Prop() shared_ptr<Material> mat;
 
 		uint vbo = kGlSickId;
+		uint ebo = kGlSickId;
 
-		MetaRegister(RMesh);
+		MetaRegister(Mesh);
 
 	private:
+		void disband_impl();
+
 		void load_post();
 		void dump_post() const;
 	};
 
-	using PRMesh = shared_ptr<RMesh>;
+	using MeshRef = shared_ptr<Mesh>;
 }
 

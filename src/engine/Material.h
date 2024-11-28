@@ -21,12 +21,16 @@ namespace staywalk {
 		*/
 		sw_Func() bool is_same(Ref<Material> rhs);
 
+		void use();
+
 	protected:
 		sw_Prop() std::map<string, shared_ptr<RUniform>> uniforms_;
 		sw_Prop() std::map<string, shared_ptr<RTex>> texs_;
 
 		MetaRegister(Material);
 	};
+
+	using MaterialRef = shared_ptr<Material>;
 }
 
 

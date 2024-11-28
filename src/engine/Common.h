@@ -53,6 +53,9 @@ namespace staywalk
 	template<typename TKey, typename TVal>
 	using map = std::map<TKey, TVal>;
 
+	template<typename TKey, typename TVal>
+	using pair = std::pair<TKey, TVal>;
+
 	template<typename TKey>
 	using set = std::set<TKey>;
 

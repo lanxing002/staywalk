@@ -13,7 +13,7 @@ namespace staywalk{ namespace reflect{
 		RProgram, 
 		RUniform, 
 		Material, 
-		RMesh, 
+		Mesh, 
 		StaticMeshComponent, 
 		Actor, 
 		Camera, 
@@ -27,7 +27,7 @@ constexpr int kObjectTypeCount = 18;
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlWrap>();
+staywalk::reflect::get_enum_label<::staywalk::ShaderType>();
 
 template<>
 std::vector<std::pair<int, std::string>>
@@ -35,10 +35,10 @@ staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>();
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>();
+staywalk::reflect::get_enum_label<::staywalk::GlWrap>();
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::ShaderType>();
+staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>();
 
 

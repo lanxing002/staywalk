@@ -4,6 +4,8 @@
 #include "Utility.h"
 #include "World.h"
 #include "Console.h"
+#include "Light.h"
+#include "Camera.h"
 
 //#include <memory>
 //#include <unordered_map>
@@ -24,9 +26,16 @@ namespace staywalk{
 		~Engine();
 		//end of engine functions
 
-		sw_Func() void load_world(const string& name);
+		void set_world(WorldRef	world);
 
 		void init_editor_data();
+
+
+		sw_Func() void set_camera(CameraRef camera);
+
+		sw_Func() mat4 get_camera() { return camera_mat_; }
+
+		RLight& get_light_mgr() { return light_mgr_; }
 
 	public:
 		//editor function
@@ -42,15 +51,16 @@ namespace staywalk{
 		Engine();
 
 	private:
-		shared_ptr<World> world_;
-		//friend class std::shared_ptr<Engine>;
+		shared_ptr<World> world_{ nullptr };
 
-		// memeber for editor
-		Ref<GameObject> selelcted_;
-
-		Ref<Console> console_;
-
+		// member for editor
+		Ref<GameObject> selelcted_{nullptr};
+		Ref<Console> console_{nullptr};
 		// end member for editor
+
+
+		RLight light_mgr_;
+		mat4 camera_mat_;
 	};
 }
 
