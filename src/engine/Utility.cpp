@@ -243,24 +243,24 @@ namespace staywalk{
         // retrieve the directory path of the filepath
         process_node(scene->mRootNode, scene);
 
-        vector<PRMesh> merge_meshes;
-        for (auto& m : meshes_) {
+        vector<pair<MeshRef, MaterialRef>> merge_meshes;
+        for (auto& [mesh, mat] : meshes_) {
             bool merged = false;
-            for (auto& tm : merge_meshes) {
-                if (m->mat->is_same(tm->mat)) {
-                    tm->vertices.insert(tm->vertices.end(), m->vertices.begin(), m->vertices.end());
-                    tm->indices.insert(tm->indices.end(), m->indices.begin(), m->indices.end());
+            for (auto& [tmesh, tmat] : merge_meshes) {
+                if (mat->is_same(tmat)) {
+                    tmesh->vertices.insert(tmesh->vertices.end(), mesh->vertices.begin(), mesh->vertices.end());
+                    tmesh->indices.insert(tmesh->indices.end(), mesh->indices.begin(), mesh->indices.end());
                     merged = true;
                     break;
                 }
             }
-            if (!merged) merge_meshes.push_back(m);
+            if (!merged) merge_meshes.emplace_back(mesh, mat);
         }
         meshes_ = merge_meshes;
     }
 
 
-    PRMesh MeshLoader::construct_mesh(aiMesh* mesh, const aiScene* scene)
+    pair<MeshRef, MaterialRef> MeshLoader::construct_mesh(aiMesh* mesh, const aiScene* scene)
     {
         // 1. process mesh
         vector<Vertex> vertices;
@@ -287,7 +287,7 @@ namespace staywalk{
 
             vertices.push_back(vertex);
         }
-        // now wak through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
+        // now walk through each of the mesh's faces (a face is a mesh its triangle) and retrieve the corresponding vertex indices.
         for (unsigned int i = 0; i < mesh->mNumFaces; i++)
         {
             aiFace face = mesh->mFaces[i];
@@ -302,9 +302,8 @@ namespace staywalk{
         shared_ptr<Material> mat = std::make_shared<Material>();
         mat->add_tex(Material::DiffuseKey, diffuseMaps);
 
-        auto result = std::make_shared<RMesh>(vertices, indices);
-        result->mat = mat;
-        return result;
+        auto result = std::make_shared<Mesh>(vertices, indices);
+        return {result, mat};
     }
 
     void MeshLoader::process_node(aiNode* node, const aiScene* scene)

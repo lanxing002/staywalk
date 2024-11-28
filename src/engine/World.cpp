@@ -4,6 +4,7 @@
 #include "Serialize.h"
 #include "Logger.h"
 #include "Event.h"
+#include "Engine.h"
 
 namespace staywalk{
 	World::~World() {
@@ -15,7 +16,7 @@ namespace staywalk{
 		dumper.dump_world(*this);
 	}
 
-	PWorld World::create_empty_world(const string& world_name){
+	WorldRef World::create_empty_world(const string& world_name){
 		auto world = std::make_shared<World>();
 		world->set_name(world_name);
 		auto a1 = std::make_shared<Actor>("actor 1");
@@ -25,8 +26,8 @@ namespace staywalk{
 		return world;
 	}
 	
-	PWorld World::load_marry_world(){
-		auto meshload = MeshLoader(R"(C:\Users\lanxi\Documents\lanxing\codes\ErJiu\games202-hw\homework0\assets\mary\Marry.obj)");
+	WorldRef World::load_marry_world(){
+		auto meshload = MeshLoader(R"(E:\gly\codes\LearnOpenGL\resources\objects\backpack\backpack.obj)");
 
 		shared_ptr<Actor> actor = std::make_shared<Actor>("marry");
 		Ref<StaticMeshComponent> sm = std::make_shared<StaticMeshComponent>();
@@ -66,6 +67,45 @@ namespace staywalk{
 			[id](Ref<Actor>& a) {return a->get_guid() == id; }));
 	}
 
+	void World::add_camera(CameraRef camera){
+		if (camera == nullptr) return;
+		auto cid = camera->get_guid();
+		auto it = find_if(cameras_.begin(), cameras_.end(), [cid](CameraRef& cam) {return cam->get_guid() == cid; });
+
+		cameras_.push_back(camera);
+	}
+
+	void World::remove_camera(idtype cid){
+		auto it = find_if(cameras_.begin(), cameras_.end(), [cid](CameraRef& cam) {return cam->get_guid() == cid; });
+		if (it != cameras_.end()) cameras_.erase(it);
+	}
+
+	void World::activate_camera(idtype cid){
+		auto it = find_if(cameras_.begin(), cameras_.end(), [cid](CameraRef& cam) {return cam->get_guid() == cid; });
+		if (it != cameras_.end()) {
+			activate_camera_ = *it;
+			camera_dirty_ = true;
+		}
+	}
+
+	void World::add_light(LightRef light) {
+		if (light == nullptr) return;
+		auto lid = light->get_guid();
+		auto it = find_if(lights_.begin(), lights_.end(), [lid](LightRef& lig) {return lig->get_guid() == lid; });
+		if (it != lights_.end()) {
+			lights_.push_back(light);
+			light_dirty_ = true;
+		}
+	}
+	
+	void World::remove_light(idtype lid) {
+		auto it = find_if(lights_.begin(), lights_.end(), [lid](LightRef& lig) {return lig->get_guid() == lid; });
+		if (it != lights_.end()) {
+			lights_.erase(it);
+			light_dirty_ = true;
+		}
+	}
+
 	void World::add_asset(Ref<Object> obj) {
 		if (obj){
 			assets_[obj->get_guid()] = obj;
@@ -77,5 +117,23 @@ namespace staywalk{
 		assets_.erase(id);
 		Event::World_AssetChanged();
 	}
+
+	void World::logic_update(){
+
+	}
+
+	void World::render_update(){
+		auto engine = Engine::get_engine();
+		assert(engine->get_world().get() == this);
+		
+		if (camera_dirty_) {
+
+		}
+
+		if (light_dirty_) {
+
+		}
+	}
+
 }
 

@@ -491,42 +491,33 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->program, rhs.progr
 
 #include "RMesh.h"
 
-void ::staywalk::RMesh::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+void ::staywalk::Mesh::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
     RObject::dump(value, dumper);
 
-    {
-        json::Value prop;
-        dumper.write(this->mat, prop);
-        value.AddMember("mat", prop, dumper.get_doc().GetAllocator()); 
-    }
     this->dump_post();
 }
 
 
-void ::staywalk::RMesh::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+void ::staywalk::Mesh::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
     RObject::load(value, loader);
 
-    itr = value.FindMember("mat");
-    if(itr != value.MemberEnd()){
-        loader.read(this->mat, itr->value);
-    }
     this->load_post();
 }
 
 
-bool ::staywalk::RMesh::operator==(const ::staywalk::RMesh& rhs) const {
+bool ::staywalk::Mesh::operator==(const ::staywalk::Mesh& rhs) const {
     return 
-RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->mat, rhs.mat);
+RObject::operator==(rhs) ;
 }
 
 
-::staywalk::reflect::MetaInfo staywalk::RMesh::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::RMesh, "staywalk::RMesh"};
+::staywalk::reflect::MetaInfo staywalk::Mesh::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Mesh, "staywalk::Mesh"};
 
 }
 

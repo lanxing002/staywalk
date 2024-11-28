@@ -57,6 +57,9 @@ namespace staywalk {
 			template<typename TK, typename TV>
 			void write(const std::map<TK, TV>& data, json::Value& value) { this->write_map<TK, TV>(data, value); }
 
+			template<typename TK, typename TV>
+			void write(const std::pair<TK, TV>& data, json::Value& value);
+
 			template<typename T>
 			void write(const std::shared_ptr<T>& obj, json::Value& value) {
 				static_assert((std::is_base_of_v<staywalk::Object, T> || std::is_same_v<staywalk::Object, T>)
@@ -94,7 +97,6 @@ namespace staywalk {
 			void write_vector(const vector<T>& data, json::Value& value);
 			template<typename TKey, typename TVal>
 			void write_map(const map<TKey, TVal>& data, json::Value& value);
-
 
 			void write_single(const string& str, rapidjson::Value& value) {
 				value = json::StringRef(str.c_str());
@@ -166,6 +168,9 @@ namespace staywalk {
 
 			template<typename TK, typename TV>
 			void read(std::map<TK, TV>& data, json::Value& ivalue) { this->read_map<TK, TV>(data, ivalue); }
+
+			template<typename TK, typename TV>
+			void read(std::pair<TK, TV>& data, json::Value& ivalue);
 
 			template<typename T>
 			void read(std::shared_ptr<T>& data, json::Value& ivalue) {
@@ -287,6 +292,17 @@ namespace staywalk {
 			}
 		}
 
+		template<typename TKey, typename TVal>
+		void Dumper::write(const pair<TKey, TVal>& data, rapidjson::Value& value) {
+			value.SetObject();
+			json::Value vfirst;
+			json::Value vsecond;
+			this->write(data.first, vfirst);
+			this->write(data.second, vsecond);
+			value.AddMember("first", vfirst, doc_.GetAllocator());
+			value.AddMember("second", vsecond, doc_.GetAllocator());
+		}
+		
 		template<typename T, size_t N>
 		void Dumper::write_array(const T& data, json::Value& value) {
 			value.SetArray();
@@ -345,6 +361,15 @@ namespace staywalk {
 				}
 				data.emplace(k, v);
 			}
+		}
+
+		template<typename TKey, typename TVal>
+		void Loader::read(std::pair<TKey, TVal>& data, json::Value& ivalue) {
+			if (!ivalue.IsObject()) return;
+			auto first_it = ivalue.FindMember("first");
+			auto second_it = ivalue.FindMember("second");
+			if (first_it != ivalue.MemberEnd()) read(data.first, first_it->value);
+			if (second_it != ivalue.MemberEnd()) read(data.second, second_it->value);
 		}
 
 		template<typename T, size_t N>

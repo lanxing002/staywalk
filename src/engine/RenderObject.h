@@ -143,6 +143,7 @@ namespace staywalk{
 		MetaRegister(RUniform);
 	};
 
+
 	using PRObject = shared_ptr<RObject>;
 	using PRTex = shared_ptr<RTex>;
 	using PRShader = shared_ptr<RShader>;
