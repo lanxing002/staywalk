@@ -1,4 +1,4 @@
-#include "reflect\Script.h"
+#include "Script.h"
 namespace py = pybind11;
 using namespace staywalk;
 #include "Object.h"

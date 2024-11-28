@@ -15,9 +15,6 @@ namespace staywalk {
 		: Object(name) {
 	}
 
-	RTex::RTex(const string& name)
-		:RObject(name){
-	}
 
 	RShader::RShader(const string& name)
 		: RObject(name) {
@@ -27,6 +24,11 @@ namespace staywalk {
 	RProgram::RProgram(const string& name)
 		: RObject(name) {
 	}
+
+	RTex::RTex(const string& name)
+		: RObject(name) {
+	}
+
 	void RTex::organize() {
 		if (!load_resource()) return;
 		
@@ -55,8 +57,15 @@ namespace staywalk {
 		glid = kGlSickId;
 	}
 
-	bool RTex::load_resource(){
-		if (nullptr != tex.data) return false;
-		return Utility::load_tex_resource(*this);
+	void RTex::load_post() {
+		auto status = Utility::load_tex_resource(*this);
+
+		log(fmt::format("RTex::load_post from {}, status: {}", tex.name, status),
+			status ? LogLevel::Info : LogLevel::Warn);
+	}
+
+	void RTex::dump_post() const {
+		// editor cannot modify texture, so need not dump texture file
+		// may dump render-target,
 	}
 }

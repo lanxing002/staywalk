@@ -208,7 +208,7 @@ def generate(nodes: list[ClassNode], reflect_dir):
     with open(declare_target_file, 'w') as decl:
         with open(impl_target_file, 'w') as impl:
 
-            impl.write(include_code.format(os.path.join('reflect', 'Serialize.h')))
+            impl.write(include_code.format('Serialize.h'))
             impl.write('\n')
 
             for node in nodes:

@@ -1,4 +1,4 @@
-#include "reflect/Serialize.h"
+#include "Serialize.h"
 #include "Object.h"
 
 void ::staywalk::Object::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
@@ -498,16 +498,6 @@ void ::staywalk::RMesh::dump(rapidjson::Value& value, ::staywalk::reflect::Dumpe
 
     {
         json::Value prop;
-        dumper.write(this->vertices, prop);
-        value.AddMember("vertices", prop, dumper.get_doc().GetAllocator()); 
-    }
-    {
-        json::Value prop;
-        dumper.write(this->indices, prop);
-        value.AddMember("indices", prop, dumper.get_doc().GetAllocator()); 
-    }
-    {
-        json::Value prop;
         dumper.write(this->mat, prop);
         value.AddMember("mat", prop, dumper.get_doc().GetAllocator()); 
     }
@@ -521,14 +511,6 @@ void ::staywalk::RMesh::load(rapidjson::Value& value, ::staywalk::reflect::Loade
 
     RObject::load(value, loader);
 
-    itr = value.FindMember("vertices");
-    if(itr != value.MemberEnd()){
-        loader.read(this->vertices, itr->value);
-    }
-    itr = value.FindMember("indices");
-    if(itr != value.MemberEnd()){
-        loader.read(this->indices, itr->value);
-    }
     itr = value.FindMember("mat");
     if(itr != value.MemberEnd()){
         loader.read(this->mat, itr->value);
@@ -539,7 +521,7 @@ void ::staywalk::RMesh::load(rapidjson::Value& value, ::staywalk::reflect::Loade
 
 bool ::staywalk::RMesh::operator==(const ::staywalk::RMesh& rhs) const {
     return 
-RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->vertices, rhs.vertices) && ::staywalk::Comparer::equal(this->indices, rhs.indices) && ::staywalk::Comparer::equal(this->mat, rhs.mat);
+RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->mat, rhs.mat);
 }
 
 
