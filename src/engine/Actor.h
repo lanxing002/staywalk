@@ -16,7 +16,7 @@ namespace staywalk {
 		MetaRegister(Actor);
 	};
 
-	using PActor = shared_ptr<Actor>;
+	using ActorRef = shared_ptr<Actor>;
 }
 
 

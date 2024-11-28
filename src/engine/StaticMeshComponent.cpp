@@ -1,10 +1,15 @@
 #include "StaticMeshComponent.h"
 #include "Utility.h"
-void staywalk::StaticMeshComponent::draw(){
-}
+
 namespace staywalk {
 	StaticMeshComponent::StaticMeshComponent(const string& name)
 		:GameComponent(name) {
+	}
 
+	void StaticMeshComponent::draw() {
+		for (auto& [mesh, mat] : meshs) {
+			if(mat) mat->use();
+			if(mesh) mesh->draw();
+		}
 	}
 }
