@@ -138,7 +138,7 @@ def generate(nodes: list[ClassNode], enums: list[NoClassField],  reflect_dir):
 
     with open(common_imp_target_file, 'w') as common:
         common.write(all_include_code + '\n\n\n')
-        common.write(include_code.format(os.path.join('reflect', 'reflect.h')))
+        common.write(include_code.format('reflect.h'))
         common.write(create_obj_code1)
         common.write(create_code)
         common.write(create_obj_code3)

@@ -21,9 +21,13 @@
 #define sw_Prop(...) __attribute__((annotate("__sw;" #__VA_ARGS__)))
 #define sw_Func(...) __attribute__((annotate("__sw;" #__VA_ARGS__)))
 #define sw_Class(...) __attribute__((annotate("__sw;" #__VA_ARGS__)))
+#elif __INTELLISENSE__
+#define sw_Prop(...)   
+#define sw_Func(...)   
+#define sw_Class(...)  
 #else
-#define sw_Prop(...)
-#define sw_Func(...)
+#define sw_Prop(...)   
+#define sw_Func(...)   
 #define sw_Class(...)
 #endif // _IN_REFLECT
 
@@ -101,7 +105,7 @@ namespace staywalk
 	constexpr static Transform Identity = Transform{vec3(.0), vec3(1.0), quat(0.0, .0, .0, 1.0)};
 }
 
-#define MetaRegister(TypeName)													\
+#define __MetaRegisterBase(TypeName)													\
 public:																			\
 	bool operator==(const TypeName&) const;										\
 	friend class staywalk::reflect::Serializer<TypeName>;						\
@@ -110,5 +114,15 @@ public:																			\
 	virtual void load(rapidjson::Value&, staywalk::reflect::Loader&);			\
 	virtual void construct_basic_ui(bool can_modify);							\
 	virtual void construct_obj_ui(bool can_modify);								
+
+#define MetaRegister(TypeName)													\
+public:																			\
+	bool operator==(const TypeName&) const;										\
+	friend class staywalk::reflect::Serializer<TypeName>;						\
+	staywalk::reflect::MetaInfo get_meta_info() const override;					\
+	void dump(rapidjson::Value&, staywalk::reflect::Dumper&) const override;	\
+	void load(rapidjson::Value&, staywalk::reflect::Loader&) override;			\
+	void construct_basic_ui(bool can_modify) override;							\
+	void construct_obj_ui(bool can_modify) override;								
 	//virtual void construct_ui();	
 

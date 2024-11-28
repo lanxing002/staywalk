@@ -1,7 +1,6 @@
 #pragma once
 #include "Object.h"
 #include "SimpleType.h"
-#define gltype int
 #include "glad/glad.h"
 
 namespace staywalk{
@@ -67,7 +66,7 @@ namespace staywalk{
 		MetaRegister(RObject);
 
 	protected:
-		uint glid = kGlSickId;  // for opgnel id, -1 is invalid
+		uint glid = kGlSickId;  // for opengl id, -1 is invalid
 	};
 
 	enum class sw_Class() GlWrap : int {
@@ -92,11 +91,10 @@ namespace staywalk{
 
 	class sw_Class(jsonpost;)  RTex : public RObject {
 	public:
-		RTex(const string& name = "0-rtex");
+		RTex(const string& name = "tex-0");
 
 		void organize() override;
 		void disband() override;
-		bool load_resource() override;
 
 	public:
 		sw_Prop() Tex2d tex;
@@ -107,6 +105,10 @@ namespace staywalk{
 		sw_Prop() GlMagFilter mag_filter = GlMagFilter::LINEAR;
 		
 		MetaRegister(RTex);
+
+	private:
+		void load_post();
+		void dump_post() const;
 	};
 
 	enum class sw_Class()  ShaderType : unsigned char {

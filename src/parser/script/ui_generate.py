@@ -127,7 +127,7 @@ def generate(nodes: list[ClassNode], reflect_dir):
     include_code = '#include "{}"'
 
     with open(impl_target_file, 'w') as impl:
-        impl.write(include_code.format(os.path.join('reflect', 'ConstructUI.h')))
+        impl.write(include_code.format('ConstructUI.h'))
         impl.write('\n')
         for node in nodes:
             if not node.labeled():
