@@ -11,15 +11,12 @@ namespace staywalk {
 		return engine;
 	}
 
-
-	void Engine::load_world(const string& name){
-		world_ = World::load(name);
-	}
 	
 	Engine::Engine(){
 		//world_ = World::create_empty_world("default");
 		//world_ = World::load_marry_world();
-		world_ = World::load("marry-world");
+		//world_ = World::load("marry-world");
+		world_ = nullptr;
 		console_ = nullptr;
 		Py::run("");
 	}
@@ -27,9 +24,17 @@ namespace staywalk {
 	Engine::~Engine(){
 	}
 
-	void Engine::init_editor_data(){
+	void Engine::set_world(WorldRef	world){
+		// setup light
+
+	}
+
+	void Engine::init_editor_data() {
 		console_ = std::make_shared<Console>();
 		log_register_console(console_);
+	}
+	void set_camera(CameraRef camera)
+	{
 	}
 }
 

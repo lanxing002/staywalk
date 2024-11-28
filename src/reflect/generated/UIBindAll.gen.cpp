@@ -289,22 +289,14 @@ void ::staywalk::Material::construct_obj_ui(bool can_modify) {
 
 #include "RMesh.h"
 
-void ::staywalk::RMesh::construct_basic_ui(bool can_modify) {
+void ::staywalk::Mesh::construct_basic_ui(bool can_modify) {
     RObject::construct_basic_ui(can_modify);
-    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(mat)>()) 
-        staywalk::reflect::UIHelper::construct_ui("mat", mat, can_modify || true);
 }
 
 
 
-void ::staywalk::RMesh::construct_obj_ui(bool can_modify) {
+void ::staywalk::Mesh::construct_obj_ui(bool can_modify) {
     RObject::construct_obj_ui(can_modify);
-    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(mat)>()){ 
-        //if (ImGui::TreeNode("mat")){
-            staywalk::reflect::UIHelper::construct_ui("mat", mat, can_modify || true);
-            //ImGui::TreePop();
-        //}    
-    }
 }
 
 

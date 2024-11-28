@@ -32,6 +32,9 @@ namespace staywalk{
 			template<typename TKey, typename TVal>
 			void construct_ui(const string& label, map<TKey, TVal>& data, bool can_modify);
 
+			template<typename TKey, typename TVal>
+			void construct_ui(const string& label, pair<TKey, TVal>& data, bool can_modify);
+
 			void construct_enum_ui(const string& label, int& data, const std::vector<std::pair<int, std::string>>& enum_labels, bool can_modify);
 
 			template<typename T>
@@ -144,6 +147,12 @@ namespace staywalk {
 				}
 				ImGui::TreePop();
 			}
+		}
+
+		template<typename TKey, typename TVal>
+		void UIHelper::construct_ui(const string& label, pair<TKey, TVal>& data, bool can_modify) {
+			construct_ui(label, data.first, can_modify);
+			construct_ui(label, data.second, can_modify);
 		}
 
 		template<typename T>

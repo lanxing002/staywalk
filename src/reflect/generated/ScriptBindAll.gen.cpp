@@ -79,12 +79,11 @@ py::class_<::staywalk::Material,Object, std::shared_ptr<::staywalk::Material>>(_
 	.def_readwrite("program", &Material::program)
 ;
 
-py::class_<::staywalk::RMesh,RObject, std::shared_ptr<::staywalk::RMesh>>(__module, "RMesh")
+py::class_<::staywalk::Mesh,RObject, std::shared_ptr<::staywalk::Mesh>>(__module, "Mesh")
 	.def(py::init<const string &>())
 	.def(py::init<const vector<Vertex> &,const vector<unsigned int> &,const string &>())
-	.def_readwrite("vertices", &RMesh::vertices)
-	.def_readwrite("indices", &RMesh::indices)
-	.def_readwrite("mat", &RMesh::mat)
+	.def_readwrite("vertices", &Mesh::vertices)
+	.def_readwrite("indices", &Mesh::indices)
 ;
 
 py::class_<::staywalk::StaticMeshComponent,GameComponent, std::shared_ptr<::staywalk::StaticMeshComponent>>(__module, "StaticMeshComponent")

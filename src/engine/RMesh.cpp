@@ -2,16 +2,16 @@
 #include "Utility.h"
 
 using namespace staywalk;
-RMesh::RMesh(const string& name)
+Mesh::Mesh(const string& name)
 	:RObject(name) {
 
 }
 
-RMesh::RMesh(const vector<Vertex>& vv, const vector<unsigned int>& ii, const string& name) 
+Mesh::Mesh(const vector<Vertex>& vv, const vector<unsigned int>& ii, const string& name) 
 	: RObject(name), vertices(vv), indices(ii){
 }
 
-void RMesh::organize(){
+void Mesh::organize(){
 	if (!load_resource()) return;
 
 	glGenVertexArrays(1, &glid);
@@ -23,32 +23,37 @@ void RMesh::organize(){
 	constexpr auto vertex_size = sizeof(decltype(vertices)::value_type);
 	auto size_byte = vertices.size() * vertex_size;
 	glBufferData(GL_ARRAY_BUFFER, size_byte, vertices.data(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &ebo);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(decltype(indices)::value_type), indices.data(), GL_STATIC_DRAW);
 	
 	glEnableVertexAttribArray(0); // position
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)0);
 	
 	glEnableVertexAttribArray(1); // normal
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)(3 * sizeof(float)));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(Vertex, position));
 
 	glEnableVertexAttribArray(2); // texcoords
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertex_size, (void*)(6 * sizeof(float)));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(Vertex, texcoords));
 
 	glEnableVertexAttribArray(3); // tangent
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)(8 * sizeof(float)));
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(Vertex, tangent));
 
 	glEnableVertexAttribArray(4); // bitangent
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)(11 * sizeof(float)));
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(Vertex, bitangent));
+	glBindVertexArray(0);
 }
 
-void RMesh::disband(){
-
+void Mesh::disband(){
+	disband_impl();
 }
 
-bool RMesh::load_resource(){
+bool Mesh::load_resource(){
 	return vertices.size() > 0 && indices.size() > 0;
 }
 
-void RMesh::load_post() {
+void Mesh::load_post() {
 	auto path = Utility::get_objects_dir() / (name + Utility::kMeshExt);
 	auto ifs = ifstream(path, std::ios::binary);
 	bool status = false;
@@ -70,7 +75,7 @@ void RMesh::load_post() {
 		status ? LogLevel::Info : LogLevel::Warn);
 }
 
-void RMesh::dump_post() const {
+void Mesh::dump_post() const {
 	size_t vsize = vertices.size();
 	size_t isize = indices.size();
 	auto path = Utility::get_objects_dir() / (name + Utility::kMeshExt);
@@ -87,4 +92,20 @@ void RMesh::dump_post() const {
 
 	log(fmt::format("dump_post to {}, status: {}", path.u8string(), status),
 		status ? LogLevel::Info : LogLevel::Warn);
+}
+
+staywalk::Mesh::~Mesh()
+{
+	if (valid()) disband_impl();
+}
+
+void staywalk::Mesh::draw(){
+	if (!valid()) organize();
+	glBindVertexArray(glid);
+	glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+}
+
+void staywalk::Mesh::disband_impl(){
+	glid = kGlSickId;
 }

@@ -30,4 +30,9 @@ namespace staywalk {
 		return true;
 	}
 
+	void Material::use()
+	{
+
+	}
+
 }

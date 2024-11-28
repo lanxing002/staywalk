@@ -44,6 +44,12 @@ void Window::run(){
         frame_count_++;
         process_evnet();
         
+        auto world = Engine::get_world();
+        if (world) {
+            world->logic_update();
+            world->render_update();
+        }
+
         render_frame();
         
         swap_buffer();
