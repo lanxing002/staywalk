@@ -27,15 +27,15 @@ constexpr int kObjectTypeCount = 18;
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>();
-
-template<>
-std::vector<std::pair<int, std::string>>
 staywalk::reflect::get_enum_label<::staywalk::GlWrap>();
 
 template<>
 std::vector<std::pair<int, std::string>>
 staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>();
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>();
 
 template<>
 std::vector<std::pair<int, std::string>>

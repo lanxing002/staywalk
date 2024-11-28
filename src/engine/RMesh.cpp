@@ -11,7 +11,7 @@ RMesh::RMesh(const vector<Vertex>& vv, const vector<unsigned int>& ii, const str
 	: RObject(name), vertices(vv), indices(ii){
 }
 
-void staywalk::RMesh::organize(){
+void RMesh::organize(){
 	if (!load_resource()) return;
 
 	glGenVertexArrays(1, &glid);
@@ -40,15 +40,15 @@ void staywalk::RMesh::organize(){
 	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)(11 * sizeof(float)));
 }
 
-void staywalk::RMesh::disband(){
+void RMesh::disband(){
 
 }
 
-bool staywalk::RMesh::load_resource(){
+bool RMesh::load_resource(){
 	return vertices.size() > 0 && indices.size() > 0;
 }
 
-void staywalk::RMesh::load_post() {
+void RMesh::load_post() {
 	auto path = Utility::get_objects_dir() / (name + Utility::kMeshExt);
 	auto ifs = ifstream(path, std::ios::binary);
 	bool status = false;
@@ -70,7 +70,7 @@ void staywalk::RMesh::load_post() {
 		status ? LogLevel::Info : LogLevel::Warn);
 }
 
-void staywalk::RMesh::dump_post() const {
+void RMesh::dump_post() const {
 	size_t vsize = vertices.size();
 	size_t isize = indices.size();
 	auto path = Utility::get_objects_dir() / (name + Utility::kMeshExt);

@@ -141,7 +141,7 @@ def generate(nodes: list[ClassNode], reflect_dir):
     include_code = '#include "{}"\n'
     with open(declare_target_file, 'w') as decl:
         with open(impl_target_file, 'w') as impl:
-            impl.write(include_code.format(os.path.join('reflect', 'Script.h')))
+            impl.write(include_code.format('Script.h'))
             impl.write('namespace py = pybind11;\n')
             impl.write('using namespace staywalk;\n')
 
