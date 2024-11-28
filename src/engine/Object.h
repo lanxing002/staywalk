@@ -22,7 +22,7 @@ namespace staywalk{
 	protected:
 		sw_Prop(nogui) idtype guid_;
 
-		MetaRegister(Object);
+		__MetaRegisterBase(Object);
 	};
 }
 
