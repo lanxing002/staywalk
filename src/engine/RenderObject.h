@@ -1,10 +1,18 @@
 #pragma once
 #include "Object.h"
+#include "Light.h"
 #include "SimpleType.h"
 #include "glad/glad.h"
 
+
+
 namespace staywalk{
 	
+	struct Drawable {
+	public:
+		virtual void draw(RenderInfo& info) = 0;
+	};
+
 	static constexpr uint kMaxBoueInfluence = 4;
 	struct Vertex {
 		vec3 position;
@@ -111,44 +119,38 @@ namespace staywalk{
 		void dump_post() const;
 	};
 
-	enum class sw_Class()  ShaderType : unsigned char {
-		None,
-		VS,
-		FS,
-		CS,
+	// engine use this struct to manage light
+	struct RLight {
+		static constexpr unsigned int kMaxLights = 20;
+
+		struct __LightBlock {
+			vec3 position;
+			float intensity;
+			vec3 color;
+			float __padding;
+		};
+
+		struct __LightBuffer {
+			int light_count;
+			std::array<float, 3> __padding;
+			std::array<__LightBlock, kMaxLights> light_data;
+		};
+
+		void sync_to_gpu();
+
+		void organize();
+
+		void disband();
+
+		__LightBuffer light_buffer;
+
+	private:
+		RLight();
+		~RLight();
+
+		uint ubo_ = kGlSickId;
+		friend class Renderer;
 	};
-
-	class sw_Class()  RShader : public RObject {
-	public:
-		RShader(const string& name = "shader-0");
-		sw_Prop() ShaderType shadertype = ShaderType::None;
-		sw_Prop() SWCodeRef code;
-
-		MetaRegister(RShader);
-	};
-
-	class sw_Class()  RProgram : public RObject {
-	public:
-		RProgram(const string& name = "program-0");
-		sw_Prop() RShader vs;
-		sw_Prop() RShader fs;
-
-		MetaRegister(RProgram);
-	};
-
-
-	class sw_Class()  RUniform : public RObject {
-	public:
-
-		MetaRegister(RUniform);
-	};
-
-
-	using PRObject = shared_ptr<RObject>;
-	using PRTex = shared_ptr<RTex>;
-	using PRShader = shared_ptr<RShader>;
-	using PRProgram = shared_ptr<RProgram>;
-	using PUniform = shared_ptr<RUniform>;
 }
 
 

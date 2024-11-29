@@ -3,7 +3,7 @@
 #include <glm/glm.hpp>
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/quaternion.hpp>
-
+#include <glm/gtc/type_ptr.hpp>
 #include "rapidjson/document.h"
 
 #include <unordered_map>
@@ -129,3 +129,42 @@ public:																			\
 	void construct_obj_ui(bool can_modify) override;								
 	//virtual void construct_ui();	
 
+
+// forward declare 
+namespace staywalk{
+	class World;
+	class Object;
+	class GameObject;
+	class Actor;
+	class GameComponent;
+	class StatimeMeshComponent;
+	
+	class RProgram;
+	class RShader;
+	class Material;
+	class Light;
+	class Camera;
+	class RTex;
+	class Mesh;
+	class RUniform;
+
+	using WorldRef  = shared_ptr<World>;
+	using ObjectRef = shared_ptr<Object>;
+	using GameObjectRef = shared_ptr<GameObject>;
+	using ActorRef = shared_ptr<Actor>;
+	using GameComponentRef = shared_ptr<GameComponent>;
+	using StatimeMeshComponentRef = shared_ptr<StatimeMeshComponent>;
+
+	using RProgramRef = shared_ptr<RProgram>;
+	using RShaderRef = shared_ptr<RShader>;
+	using MaterialRef = shared_ptr<Material>;
+	using LightRef = shared_ptr<Light>;
+	using RTexRef = shared_ptr<RTex>;
+	using MeshRef = shared_ptr<Mesh>;
+	using UniformRef = shared_ptr<RUniform>;
+
+	using CameraRef = shared_ptr<Camera>;
+
+	struct RenderInfo;
+	class Renderer;
+}

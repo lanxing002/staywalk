@@ -72,7 +72,7 @@ void Py::__init(){
 	if (!init) {
         auto py_home = Utility::get_py_home().wstring();
         Py_SetPythonHome(py_home.c_str());
-		reflect::py_bind();
+		reflect::py_bind_startup();
 		PyImport_AppendInittab("__sw_stdout", create_stdout);
 		PyImport_AppendInittab("__sw_stderr", create_stderr);
 		py::initialize_interpreter();
@@ -97,6 +97,17 @@ void Py::run(const string& code){
 
 	try {
 		py::exec(code);
+	}
+	catch (const py::error_already_set& e) {
+		staywalk::log(e.what(), LogLevel::Error);
+	}
+}
+
+void Py::run_file(const fs::path& path){
+	Py::__init();
+
+	try {
+		py::eval_file(path.u8string());
 	}
 	catch (const py::error_already_set& e) {
 		staywalk::log(e.what(), LogLevel::Error);

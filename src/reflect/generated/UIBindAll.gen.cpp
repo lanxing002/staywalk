@@ -55,6 +55,20 @@ void ::staywalk::GameComponent::construct_obj_ui(bool can_modify) {
 
 
 
+#include "Light.h"
+
+void ::staywalk::Light::construct_basic_ui(bool can_modify) {
+    GameObject::construct_basic_ui(can_modify);
+}
+
+
+
+void ::staywalk::Light::construct_obj_ui(bool can_modify) {
+    GameObject::construct_obj_ui(can_modify);
+}
+
+
+
 #include "RenderObject.h"
 
 void ::staywalk::Resource::construct_basic_ui(bool can_modify) {
@@ -307,6 +321,8 @@ void ::staywalk::StaticMeshComponent::construct_basic_ui(bool can_modify) {
     GameComponent::construct_basic_ui(can_modify);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(meshs)>()) 
         staywalk::reflect::UIHelper::construct_ui("meshs", meshs, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(transform)>()) 
+        staywalk::reflect::UIHelper::construct_ui("transform", transform, can_modify || true);
 }
 
 
@@ -316,6 +332,12 @@ void ::staywalk::StaticMeshComponent::construct_obj_ui(bool can_modify) {
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(meshs)>()){ 
         //if (ImGui::TreeNode("meshs")){
             staywalk::reflect::UIHelper::construct_ui("meshs", meshs, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(transform)>()){ 
+        //if (ImGui::TreeNode("transform")){
+            staywalk::reflect::UIHelper::construct_ui("transform", transform, can_modify || true);
             //ImGui::TreePop();
         //}    
     }
@@ -365,26 +387,52 @@ void ::staywalk::Actor::construct_obj_ui(bool can_modify) {
 
 void ::staywalk::Camera::construct_basic_ui(bool can_modify) {
     GameObject::construct_basic_ui(can_modify);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(porject_type)>()) 
+        staywalk::reflect::UIHelper::construct_ui("porject_type", porject_type, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(fov)>()) 
+        staywalk::reflect::UIHelper::construct_ui("fov", fov, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(aspect)>()) 
+        staywalk::reflect::UIHelper::construct_ui("aspect", aspect, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(near)>()) 
+        staywalk::reflect::UIHelper::construct_ui("near", near, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(far)>()) 
+        staywalk::reflect::UIHelper::construct_ui("far", far, can_modify || true);
 }
 
 
 
 void ::staywalk::Camera::construct_obj_ui(bool can_modify) {
     GameObject::construct_obj_ui(can_modify);
-}
-
-
-
-#include "Light.h"
-
-void ::staywalk::Light::construct_basic_ui(bool can_modify) {
-    GameObject::construct_basic_ui(can_modify);
-}
-
-
-
-void ::staywalk::Light::construct_obj_ui(bool can_modify) {
-    GameObject::construct_obj_ui(can_modify);
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(porject_type)>()){ 
+        //if (ImGui::TreeNode("porject_type")){
+            staywalk::reflect::UIHelper::construct_ui("porject_type", porject_type, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(fov)>()){ 
+        //if (ImGui::TreeNode("fov")){
+            staywalk::reflect::UIHelper::construct_ui("fov", fov, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(aspect)>()){ 
+        //if (ImGui::TreeNode("aspect")){
+            staywalk::reflect::UIHelper::construct_ui("aspect", aspect, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(near)>()){ 
+        //if (ImGui::TreeNode("near")){
+            staywalk::reflect::UIHelper::construct_ui("near", near, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(far)>()){ 
+        //if (ImGui::TreeNode("far")){
+            staywalk::reflect::UIHelper::construct_ui("far", far, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
 }
 
 

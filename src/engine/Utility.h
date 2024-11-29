@@ -1,7 +1,5 @@
 #pragma once
 #include "Common.h"
-#include "RenderObject.h"
-#include "RMesh.h"
 #include "Logger.h"
 
 #include <type_traits>
@@ -47,6 +45,8 @@ namespace staywalk{
 
 		static fs::path create_temp_dir();
 
+		static fs::path get_script_dir(); 
+
 		/***********************************************/
 		/*****************render object*****************/
 		/***********************************************/
@@ -68,9 +68,9 @@ namespace staywalk{
 		/**
 		* @brief copy source image file and make texture, if loaded then return cache object
 		*/
-		PRTex make_tex(fs::path path);
+		RTexRef make_tex(fs::path path);
 
-		map<fs::path, PRTex> loaded_texs_;
+		map<fs::path, RTexRef> loaded_texs_;
 		vector<pair<MeshRef, MaterialRef>> meshes_;
 		fs::path mesh_name_;
 		fs::path load_dir_;

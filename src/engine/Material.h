@@ -1,5 +1,6 @@
 #pragma once
 #include "RenderObject.h"
+#include "RProgram.h"
 #include <map>
 
 namespace staywalk {
@@ -11,8 +12,8 @@ namespace staywalk {
 	public:
 		sw_Func()  Material(shared_ptr<RShader> shader = nullptr, const string& name="0-material");
 
-		sw_Func()  void add_tex(const string& name, PRTex tex) { texs_[name] = tex; }
-		sw_Func()  void add_uniform(const string& name, PUniform uniform) { uniforms_[name] = uniform; }
+		sw_Func()  void add_tex(const string& name, RTexRef tex) { texs_[name] = tex; }
+		sw_Func()  void add_uniform(const string& name, UniformRef uniform) { uniforms_[name] = uniform; }
 
 		sw_Prop() RProgram program;
 
@@ -29,8 +30,6 @@ namespace staywalk {
 
 		MetaRegister(Material);
 	};
-
-	using MaterialRef = shared_ptr<Material>;
 }
 
 
