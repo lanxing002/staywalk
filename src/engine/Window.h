@@ -26,7 +26,7 @@ private:
 
 private:
 	EditorUI editor_ui_;
-	Renderer renderer_;
+	staywalk::Renderer renderer_;
 
 	GLFWwindow* window_;
 	const int width_ = 1280;

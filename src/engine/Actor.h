@@ -5,7 +5,8 @@ namespace staywalk {
 	class sw_Class()  Actor : public GameObject{
 	public:
 	 	sw_Func()  Actor(const string& name = "0-actor");
-		sw_Func(nopy;)  void tick(float delta) override;
+		
+		void tick(float delta) override;
 		
 		sw_Prop() shared_ptr<StaticMeshComponent> sm_comp{ nullptr };
 
@@ -15,8 +16,6 @@ namespace staywalk {
 
 		MetaRegister(Actor);
 	};
-
-	using ActorRef = shared_ptr<Actor>;
 }
 
 
