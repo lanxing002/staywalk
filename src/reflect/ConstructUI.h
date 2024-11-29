@@ -4,6 +4,7 @@
 #include "reflect.h"
 #include "Engine.h"
 #include "SimpleType.h"
+#include "World.h"
 
 #include "imgui.h"
 #include "fmt/format.h"

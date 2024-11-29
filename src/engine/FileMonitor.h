@@ -7,6 +7,7 @@
 #include <mutex>
 
 namespace staywalk {
+	class Engine;
 	struct FileMonitor {
 		using CallbackType = std::function<void(const string&)>;
 		using Key = pair<idtype, fs::path>;
@@ -32,6 +33,8 @@ namespace staywalk {
 		std::thread thread_;
 		std::mutex mutex_;
 		bool stop_ = false;
+
+		friend class Engine;
 	};
 }
 

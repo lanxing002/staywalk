@@ -1,7 +1,7 @@
 #pragma once
 #include "Common.h"
-#include "RenderObject.h"
 #include "RenderInfo.h"
+#include "RenderObject.h"
 
 namespace staywalk {
 	class Renderer {

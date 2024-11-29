@@ -1,6 +1,7 @@
 #pragma once
 
-#include "Material.h"
+#include "RenderObject.h"
+#include "RenderInfo.h"
 
 
 namespace staywalk{

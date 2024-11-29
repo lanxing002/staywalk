@@ -6,6 +6,7 @@
 #include "World.h"
 #include "RenderObject.h"
 #include "RenderInfo.h"
+#include "StaticMeshComponent.h"
 
 int entry()
 {

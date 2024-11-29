@@ -32,8 +32,6 @@ namespace staywalk{
 
 		static Ref<__SWCode> create_code() { return std::shared_ptr<__SWCode>(new __SWCode()); }
 	}
-
-
 	using SWCodeRef = Ref<SWCode::__SWCode>;
 }
 

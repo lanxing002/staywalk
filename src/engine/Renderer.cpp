@@ -1,6 +1,8 @@
 #include "Renderer.h"
 #include "Engine.h"
 #include "Actor.h"
+#include "World.h"
+#include "StaticMeshComponent.h"
 
 using namespace staywalk;
 

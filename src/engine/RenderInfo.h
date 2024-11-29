@@ -1,7 +1,5 @@
 #pragma once
-
 #include "Common.h"
-#include "RenderObject.h"
 
 namespace staywalk {
 	enum class sw_Class() ProgramType : int {

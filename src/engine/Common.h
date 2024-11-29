@@ -137,8 +137,9 @@ namespace staywalk{
 	class GameObject;
 	class Actor;
 	class GameComponent;
-	class StatimeMeshComponent;
+	class StaticMeshComponent;
 	
+	class RObject;
 	class RProgram;
 	class RShader;
 	class Material;
@@ -153,7 +154,7 @@ namespace staywalk{
 	using GameObjectRef = shared_ptr<GameObject>;
 	using ActorRef = shared_ptr<Actor>;
 	using GameComponentRef = shared_ptr<GameComponent>;
-	using StatimeMeshComponentRef = shared_ptr<StatimeMeshComponent>;
+	using StaticMeshComponentRef = shared_ptr<StaticMeshComponent>;
 
 	using RProgramRef = shared_ptr<RProgram>;
 	using RShaderRef = shared_ptr<RShader>;
@@ -164,7 +165,4 @@ namespace staywalk{
 	using UniformRef = shared_ptr<RUniform>;
 
 	using CameraRef = shared_ptr<Camera>;
-
-	struct RenderInfo;
-	class Renderer;
 }

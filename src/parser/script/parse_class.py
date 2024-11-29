@@ -34,6 +34,9 @@ class NoClassField:
     def is_enum(self):
         return self._node.kind == clang.cindex.CursorKind.ENUM_DECL
 
+    def is_definition(self):
+        return self._node.is_definition()
+
     def __str__(self):
         return self.__repr__()
 
@@ -69,6 +72,9 @@ class ClassNode:
     @property
     def outer_classes(self):
         return self._outer_classes
+
+    def is_definition(self):
+        return self._node.is_definition()
 
     def labeled(self) -> bool:
         if not self._node:

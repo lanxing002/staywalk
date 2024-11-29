@@ -3,6 +3,7 @@
 #include "PyEnv.h"
 #include "rhi.h"
 #include "Event.h"
+#include "World.h"
 
 namespace staywalk {
 	shared_ptr<Engine> Engine::get_engine(){
@@ -21,6 +22,7 @@ namespace staywalk {
 		world_ = nullptr;
 		console_ = nullptr;
 		Py::run("");
+		file_monitor_.start();
 	}
 	
 	Engine::~Engine(){
@@ -44,6 +46,17 @@ namespace staywalk {
 
 	void Engine::logic_update(float delta){
 		if (world_) world_->logic_update();
+	}
+
+
+	void monitor_file(FileMonitor::Key key, const FileMonitor::CallbackType& cb)
+	{
+		return void();
+	}
+
+	void cancel_monitor_file(FileMonitor::Key key)
+	{
+		return void();
 	}
 
 }

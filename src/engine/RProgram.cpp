@@ -1,5 +1,7 @@
 #include "RProgram.h"
 #include "Utility.h"
+#include "SimpleType.h"
+
 
 using namespace staywalk;
 

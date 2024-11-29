@@ -3,7 +3,6 @@
 #ifndef _IN_REFLECT
 //#include "Common.gen.h"
 #include "reflect.h"
-
 #include "rapidjson/document.h"
 #include "fmt/format.h"
 
