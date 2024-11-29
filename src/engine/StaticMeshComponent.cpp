@@ -1,4 +1,5 @@
 #include "StaticMeshComponent.h"
+#include "Material.h"
 #include "Utility.h"
 
 namespace staywalk {

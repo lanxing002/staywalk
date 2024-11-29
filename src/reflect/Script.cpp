@@ -1,4 +1,5 @@
 #include "Script.h"
+#include "RenderObject.h"
 
 // define python module
 PYBIND11_MODULE(staywalk, __module) {

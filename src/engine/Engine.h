@@ -2,10 +2,9 @@
 
 #include "Common.h"
 #include "Utility.h"
-#include "World.h"
 #include "Console.h"
-#include "Light.h"
-#include "Camera.h"
+#include "RenderInfo.h"
+#include "FileMonitor.h"
 
 //#include <memory>
 //#include <unordered_map>
@@ -20,6 +19,9 @@ namespace staywalk{
 		sw_Func() static shared_ptr<Engine> get_engine();
 		sw_Func() static shared_ptr<World> get_world() { return Engine::get_engine()->world_; }
 		sw_Func() static Ref<Console> get_console() { return Engine::get_engine()->console_; }
+
+		sw_Func() static void monitor_file(FileMonitor::Key key, const FileMonitor::CallbackType& cb);
+		sw_Func() static void cancel_monitor_file(FileMonitor::Key key);
 
 		~Engine();
 		//end of engine functions
@@ -51,6 +53,7 @@ namespace staywalk{
 
 		Ref<GameObject> selelcted_{nullptr};
 		Ref<Console> console_{nullptr};
+		FileMonitor file_monitor_;
 	};
 }
 

@@ -1,9 +1,10 @@
 #pragma once
 
 #include "RenderObject.h"
+#include "SimpleType.h"
 
 namespace staywalk{
-	enum class sw_Class()  ShaderType : unsigned char {
+	enum class sw_Class()  ShaderType : int {
 		None,
 			VS,
 			FS,

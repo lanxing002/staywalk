@@ -1,5 +1,6 @@
 #include "World.h"
 #include "Actor.h"
+#include "StaticMeshComponent.h"
 #include "Utility.h"
 #include "Serialize.h"
 #include "Logger.h"

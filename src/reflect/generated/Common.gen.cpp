@@ -1,22 +1,23 @@
 #include "Object.h"
 #include "GameObject.h"
-#include "GameComponent.h"
-#include "Light.h"
+#include "Actor.h"
 #include "RenderObject.h"
 #include "RenderObject.h"
 #include "RenderObject.h"
 #include "RenderObject.h"
-#include "RenderObject.h"
-#include "RenderObject.h"
-#include "RenderObject.h"
+#include "RProgram.h"
+#include "RProgram.h"
+#include "RProgram.h"
 #include "Material.h"
+#include "Camera.h"
+#include "Light.h"
+#include "GameComponent.h"
 #include "RMesh.h"
 #include "StaticMeshComponent.h"
-#include "Actor.h"
-#include "Camera.h"
 #include "RenderObject.h"
+#include "RenderInfo.h"
+#include "RProgram.h"
 #include "Camera.h"
-#include "RenderObject.h"
 #include "RenderObject.h"
 #include "RenderObject.h"
 
@@ -31,9 +32,7 @@ shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
 
     else if (minfo.tname == "staywalk::GameObject"){return std::make_shared<::staywalk::GameObject>();}
 
-    else if (minfo.tname == "staywalk::GameComponent"){return std::make_shared<::staywalk::GameComponent>();}
-
-    else if (minfo.tname == "staywalk::Light"){return std::make_shared<::staywalk::Light>();}
+    else if (minfo.tname == "staywalk::Actor"){return std::make_shared<::staywalk::Actor>();}
 
     else if (minfo.tname == "staywalk::Resource"){return std::make_shared<::staywalk::Resource>();}
 
@@ -45,25 +44,47 @@ shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
 
     else if (minfo.tname == "staywalk::RShader"){return std::make_shared<::staywalk::RShader>();}
 
-    else if (minfo.tname == "staywalk::RProgram"){return std::make_shared<::staywalk::RProgram>();}
-
     else if (minfo.tname == "staywalk::RUniform"){return std::make_shared<::staywalk::RUniform>();}
 
+    else if (minfo.tname == "staywalk::RProgram"){return std::make_shared<::staywalk::RProgram>();}
+
     else if (minfo.tname == "staywalk::Material"){return std::make_shared<::staywalk::Material>();}
+
+    else if (minfo.tname == "staywalk::Camera"){return std::make_shared<::staywalk::Camera>();}
+
+    else if (minfo.tname == "staywalk::Light"){return std::make_shared<::staywalk::Light>();}
+
+    else if (minfo.tname == "staywalk::GameComponent"){return std::make_shared<::staywalk::GameComponent>();}
 
     else if (minfo.tname == "staywalk::Mesh"){return std::make_shared<::staywalk::Mesh>();}
 
     else if (minfo.tname == "staywalk::StaticMeshComponent"){return std::make_shared<::staywalk::StaticMeshComponent>();}
-
-    else if (minfo.tname == "staywalk::Actor"){return std::make_shared<::staywalk::Actor>();}
-
-    else if (minfo.tname == "staywalk::Camera"){return std::make_shared<::staywalk::Camera>();}
 
     else {assert(false); return nullptr;}
 
 }
 
 
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
+    return { 
+        {static_cast<int>(::staywalk::GlWrap::CLAMP_TO_EDGE), "CLAMP_TO_EDGE"},
+        {static_cast<int>(::staywalk::GlWrap::MIRRORED_REPEAT), "MIRRORED_REPEAT"},
+        {static_cast<int>(::staywalk::GlWrap::REPEAT), "REPEAT"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::ProgramType>() {
+    return { 
+        {static_cast<int>(::staywalk::ProgramType::PBR), "PBR"},
+        {static_cast<int>(::staywalk::ProgramType::Shadow), "Shadow"},
+        {static_cast<int>(::staywalk::ProgramType::_Count), "_Count"},
+    };
+}
 
 template<>
 std::vector<std::pair<int, std::string>>
@@ -87,15 +108,6 @@ staywalk::reflect::get_enum_label<::staywalk::ProjectType>() {
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>() {
-    return { 
-        {static_cast<int>(::staywalk::GlMagFilter::NEAREST), "NEAREST"},
-        {static_cast<int>(::staywalk::GlMagFilter::LINEAR), "LINEAR"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
 staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>() {
     return { 
         {static_cast<int>(::staywalk::GlMinFilter::NEAREST), "NEAREST"},
@@ -109,10 +121,9 @@ staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>() {
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
+staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>() {
     return { 
-        {static_cast<int>(::staywalk::GlWrap::CLAMP_TO_EDGE), "CLAMP_TO_EDGE"},
-        {static_cast<int>(::staywalk::GlWrap::MIRRORED_REPEAT), "MIRRORED_REPEAT"},
-        {static_cast<int>(::staywalk::GlWrap::REPEAT), "REPEAT"},
+        {static_cast<int>(::staywalk::GlMagFilter::NEAREST), "NEAREST"},
+        {static_cast<int>(::staywalk::GlMagFilter::LINEAR), "LINEAR"},
     };
 }
