@@ -124,13 +124,18 @@ def generate(nodes: list[ClassNode], enums: list[NoClassField],  reflect_dir):
 
     enum_code_declare = ''
     enum_code_impl = ''
+    enum_include_code = ''
     for e in enums:
         if not e.labeled():
+            continue
+
+        if not e.is_definition():
             continue
 
         snode = EnumBind(e)
         logging.log(logging.INFO, f'start generate {snode.fullname}')
         all_include_code += include_code.format(snode.header) + '\n'
+        enum_include_code += include_code.format(snode.header) + '\n'
         declare, impl = snode.generate_code()
         enum_code_declare += declare + '\n'
         enum_code_impl += impl + '\n'
@@ -148,6 +153,7 @@ def generate(nodes: list[ClassNode], enums: list[NoClassField],  reflect_dir):
 
     with open(common_target_file, 'w') as common:
         common.write('#pragma once\n\n')
+        common.write(enum_include_code)
         common.write('namespace staywalk{ namespace reflect{\n\tenum class ObjectType : unsigned int{\n')
         type_count = 0
         for node in nodes:

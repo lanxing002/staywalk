@@ -1,29 +1,43 @@
 #pragma once
 
+#include "RenderObject.h"
+#include "RenderInfo.h"
+#include "RProgram.h"
+#include "Camera.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
 namespace staywalk{ namespace reflect{
 	enum class ObjectType : unsigned int{
 		Object, 
 		GameObject, 
-		GameComponent, 
-		Light, 
+		Actor, 
 		Resource, 
 		Tex2d, 
 		RObject, 
 		RTex, 
 		RShader, 
-		RProgram, 
 		RUniform, 
+		RProgram, 
 		Material, 
+		Camera, 
+		Light, 
+		Engine, 
+		World, 
+		GameComponent, 
 		Mesh, 
 		StaticMeshComponent, 
-		Actor, 
-		Camera, 
-		World, 
-		Engine, 
 }; }}
 
 constexpr int kObjectTypeCount = 18;
 
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlWrap>();
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::ProgramType>();
 
 template<>
 std::vector<std::pair<int, std::string>>
@@ -35,14 +49,10 @@ staywalk::reflect::get_enum_label<::staywalk::ProjectType>();
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>();
-
-template<>
-std::vector<std::pair<int, std::string>>
 staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>();
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlWrap>();
+staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>();
 
 

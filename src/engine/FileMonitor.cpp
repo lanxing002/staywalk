@@ -56,7 +56,8 @@ void staywalk::FileMonitor::unwatch_file(idtype id, fs::path file_name){
 	auto k = make_key(id, file_name);
 	auto it = cb_table_.find(k);
 	if (it != cb_table_.end()){
-		log(fmt::format("unwatch_file failed: {}, {} have not been watched", id, file_name), LogLevel::Warn);
+		log(fmt::format("unwatch_file failed: {}, {} have not been watched", id, file_name.u8string()),
+			LogLevel::Warn);
 		return;
 	}
 
