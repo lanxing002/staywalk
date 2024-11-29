@@ -89,8 +89,6 @@ class BindClass(object):
             param_type = arg.type.spelling
             param_name = arg.spelling
             result.append_arg(param_type, param_name)
-        print(str(node.spelling) + '-----')
-        print(result)
         return result
 
     def generate_code(self):

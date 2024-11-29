@@ -1,6 +1,7 @@
 #include "AssetBrowser.h"
 #include "reflect.h"
 #include "Engine.h"
+#include "World.h"
 
 #include <fmt/format.h>
 

@@ -1,13 +1,29 @@
 #pragma once
 #include "Object.h"
-#include "Light.h"
-#include "SimpleType.h"
+#include "RenderInfo.h"
 #include "glad/glad.h"
 
-
-
 namespace staywalk{
-	
+	enum class sw_Class() GlWrap : int {
+		CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
+			MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
+			REPEAT = GL_REPEAT,
+	};
+
+	enum class sw_Class() GlMinFilter : int {
+		NEAREST = GL_NEAREST,
+			LINEAR = GL_LINEAR,
+			NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
+			LINEAR_MIPMAP_NEAREST = GL_LINEAR_MIPMAP_NEAREST,
+			NEAREST_MIPMAP_LINEAR = GL_NEAREST_MIPMAP_LINEAR,
+			LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR,
+	};
+
+	enum class sw_Class() GlMagFilter : int {
+		NEAREST = GL_NEAREST,
+			LINEAR = GL_LINEAR,
+	};
+
 	struct Drawable {
 	public:
 		virtual void draw(RenderInfo& info) = 0;
@@ -77,26 +93,7 @@ namespace staywalk{
 		uint glid = kGlSickId;  // for opengl id, -1 is invalid
 	};
 
-	enum class sw_Class() GlWrap : int {
-			CLAMP_TO_EDGE			= GL_CLAMP_TO_EDGE,
-			MIRRORED_REPEAT			= GL_MIRRORED_REPEAT,
-			REPEAT					= GL_REPEAT,
-	};
-
-	enum class sw_Class() GlMinFilter : int {
-			NEAREST					= GL_NEAREST,
-			LINEAR					= GL_LINEAR,
-			NEAREST_MIPMAP_NEAREST	= GL_NEAREST_MIPMAP_NEAREST,
-			LINEAR_MIPMAP_NEAREST	= GL_LINEAR_MIPMAP_NEAREST,
-			NEAREST_MIPMAP_LINEAR	= GL_NEAREST_MIPMAP_LINEAR,
-			LINEAR_MIPMAP_LINEAR	= GL_LINEAR_MIPMAP_LINEAR,
-	};
-
-	enum class sw_Class() GlMagFilter : int {
-			NEAREST					= GL_NEAREST,
-			LINEAR					= GL_LINEAR,
-	};
-
+	
 	class sw_Class(jsonpost;)  RTex : public RObject {
 	public:
 		RTex(const string& name = "tex-0");

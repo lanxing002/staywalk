@@ -1,5 +1,6 @@
 #pragma once
 #include "Object.h"
+
 namespace staywalk{
 	class sw_Class()  GameComponent : public Object{
 	public:
