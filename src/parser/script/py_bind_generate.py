@@ -154,7 +154,7 @@ def generate(nodes: list[ClassNode], reflect_dir):
             [impl.write(include_code.format(x.header)) for x in bind_classes]
             impl.write('\n\n')
 
-            module_code = '''PYBIND11_MODULE(staywalk, __module){{\n{bind_code}\n}}'''
+            module_code = '''static void bind_auto(py::module& __module){{\n{bind_code}\n}}'''
             bind_code = ''
             for bind_obj in bind_classes:
                 logging.log(logging.INFO, f'start generate {bind_obj.name}')
@@ -165,6 +165,6 @@ def generate(nodes: list[ClassNode], reflect_dir):
                 # decl.write(decl_code + '\n')
             impl.write(module_code.format(bind_code=bind_code))
             impl.write('\n')
-            impl.write('''void ::staywalk::reflect::py_bind() { PyImport_AppendInittab("staywalk", PyInit_staywalk);} ''')
+            impl.write('''void ::staywalk::reflect::py_bind_auto(py::module& __module) { bind_auto(__module);}  ''')
             impl.write('\n\n')
 

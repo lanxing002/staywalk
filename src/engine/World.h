@@ -2,6 +2,7 @@
 #include "Common.h"
 #include "Light.h"
 #include "Camera.h"
+#include "rhi.h"
 
 namespace staywalk {
 	class Object;
@@ -11,7 +12,6 @@ namespace staywalk {
 	using ObjectRef = Ref<Object>;
 	using ActorRef = Ref<Actor>;
 	using CameraRef = Ref<Camera>;
-	using LightRef = Ref<Light>;
 
 	using WorldRef = Ref<World>;
 
@@ -43,6 +43,7 @@ namespace staywalk {
 		sw_Func() void add_camera(CameraRef camera);
 		sw_Func() void remove_camera(idtype cid);
 		sw_Func() void activate_camera(idtype cid);
+		sw_Func() CameraRef get_activated_camera() { return activate_camera_; }
 
 		sw_Func() void add_light(LightRef light);
 		sw_Func() void remove_light(idtype lid);
@@ -53,8 +54,6 @@ namespace staywalk {
 		sw_Func() void remove_asset(idtype id);
 
 		void logic_update();  // game tick
-
-		void render_update();
 
 	private:
 		string name_{"empty-world"};

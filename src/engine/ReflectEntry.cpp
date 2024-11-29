@@ -4,6 +4,8 @@
 #include "Light.h"
 #include "Engine.h"
 #include "World.h"
+#include "RenderObject.h"
+#include "RenderInfo.h"
 
 int entry()
 {

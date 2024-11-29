@@ -38,20 +38,15 @@ Window::~Window(){
 void Window::run(){
     auto engine = Engine::get_engine();
     editor_ui_.initialize(window_);
+    renderer_.initialize();
     engine->init_editor_data();
 
     while (!shold_close()){
         frame_count_++;
         process_evnet();
         
-        auto world = Engine::get_world();
-        if (world) {
-            world->logic_update();
-            world->render_update();
-        }
-
+        Engine::get_engine()->logic_update(1.0);
         render_frame();
-        
         swap_buffer();
         poll_events();
     }

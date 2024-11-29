@@ -13,7 +13,9 @@
 namespace py = pybind11;
 namespace staywalk {
 	namespace reflect {
-		void py_bind();
+		void py_bind_startup();
+
+		void py_bind_auto(py::module& __module);
 	}
 }
 

@@ -49,7 +49,6 @@ namespace staywalk{
 		auto loader = reflect::Loader(world_file);
 		loader.load(*world);
 		world->set_name(name);
-		Event::World_AssetChanged();
 		return world;
 	}
 
@@ -119,21 +118,17 @@ namespace staywalk{
 	}
 
 	void World::logic_update(){
-
-	}
-
-	void World::render_update(){
-		auto engine = Engine::get_engine();
-		assert(engine->get_world().get() == this);
-		
-		if (camera_dirty_) {
-
+		for (auto& cam : cameras_) {
+			if (cam) cam->tick(1.0);
 		}
 
-		if (light_dirty_) {
+		for (auto& actor : actors_) {
+			if (actor) actor->tick(1.0);
+		}
 
+		for (auto& light : lights_) {
+			if (light) light->tick(1.0);
 		}
 	}
-
 }
 

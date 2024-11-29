@@ -5,6 +5,7 @@ namespace staywalk{ namespace reflect{
 		Object, 
 		GameObject, 
 		GameComponent, 
+		Light, 
 		Resource, 
 		Tex2d, 
 		RObject, 
@@ -17,7 +18,6 @@ namespace staywalk{ namespace reflect{
 		StaticMeshComponent, 
 		Actor, 
 		Camera, 
-		Light, 
 		World, 
 		Engine, 
 }; }}
@@ -31,14 +31,18 @@ staywalk::reflect::get_enum_label<::staywalk::ShaderType>();
 
 template<>
 std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::ProjectType>();
+
+template<>
+std::vector<std::pair<int, std::string>>
 staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>();
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlWrap>();
+staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>();
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>();
+staywalk::reflect::get_enum_label<::staywalk::GlWrap>();
 
 

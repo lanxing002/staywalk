@@ -4,6 +4,7 @@ using namespace staywalk;
 #include "Object.h"
 #include "GameObject.h"
 #include "GameComponent.h"
+#include "Light.h"
 #include "RenderObject.h"
 #include "RenderObject.h"
 #include "RenderObject.h"
@@ -16,12 +17,11 @@ using namespace staywalk;
 #include "StaticMeshComponent.h"
 #include "Actor.h"
 #include "Camera.h"
-#include "Light.h"
 #include "World.h"
 #include "Engine.h"
 
 
-PYBIND11_MODULE(staywalk, __module){
+static void bind_auto(py::module& __module){
 py::class_<::staywalk::Object, std::shared_ptr<::staywalk::Object>>(__module, "Object")
 	.def(py::init<const string &>())
 	.def_readwrite("name", &Object::name)
@@ -33,6 +33,10 @@ py::class_<::staywalk::GameObject,Object, std::shared_ptr<::staywalk::GameObject
 ;
 
 py::class_<::staywalk::GameComponent,Object, std::shared_ptr<::staywalk::GameComponent>>(__module, "GameComponent")
+	.def(py::init<const string &>())
+;
+
+py::class_<::staywalk::Light,GameObject, std::shared_ptr<::staywalk::Light>>(__module, "Light")
 	.def(py::init<const string &>())
 ;
 
@@ -79,16 +83,17 @@ py::class_<::staywalk::Material,Object, std::shared_ptr<::staywalk::Material>>(_
 	.def_readwrite("program", &Material::program)
 ;
 
-py::class_<::staywalk::Mesh,RObject, std::shared_ptr<::staywalk::Mesh>>(__module, "Mesh")
+py::class_<::staywalk::Mesh,RObject,Drawable, std::shared_ptr<::staywalk::Mesh>>(__module, "Mesh")
 	.def(py::init<const string &>())
 	.def(py::init<const vector<Vertex> &,const vector<unsigned int> &,const string &>())
 	.def_readwrite("vertices", &Mesh::vertices)
 	.def_readwrite("indices", &Mesh::indices)
 ;
 
-py::class_<::staywalk::StaticMeshComponent,GameComponent, std::shared_ptr<::staywalk::StaticMeshComponent>>(__module, "StaticMeshComponent")
+py::class_<::staywalk::StaticMeshComponent,GameComponent,Drawable, std::shared_ptr<::staywalk::StaticMeshComponent>>(__module, "StaticMeshComponent")
 	.def(py::init<const string &>())
 	.def_readwrite("meshs", &StaticMeshComponent::meshs)
+	.def_readwrite("transform", &StaticMeshComponent::transform)
 ;
 
 py::class_<::staywalk::Actor,GameObject, std::shared_ptr<::staywalk::Actor>>(__module, "Actor")
@@ -100,10 +105,11 @@ py::class_<::staywalk::Actor,GameObject, std::shared_ptr<::staywalk::Actor>>(__m
 
 py::class_<::staywalk::Camera,GameObject, std::shared_ptr<::staywalk::Camera>>(__module, "Camera")
 	.def(py::init<const string &>())
-;
-
-py::class_<::staywalk::Light,GameObject, std::shared_ptr<::staywalk::Light>>(__module, "Light")
-	.def(py::init<const string &>())
+	.def_readwrite("porject_type", &Camera::porject_type)
+	.def_readwrite("fov", &Camera::fov)
+	.def_readwrite("aspect", &Camera::aspect)
+	.def_readwrite("near", &Camera::near)
+	.def_readwrite("far", &Camera::far)
 ;
 
 py::class_<::staywalk::World, std::shared_ptr<::staywalk::World>>(__module, "World")
@@ -117,6 +123,12 @@ py::class_<::staywalk::World, std::shared_ptr<::staywalk::World>>(__module, "Wor
 	.def("get_lights", &World::get_lights)
 	.def("add_actor", &World::add_actor)
 	.def("remove_actor", &World::remove_actor)
+	.def("add_camera", &World::add_camera)
+	.def("remove_camera", &World::remove_camera)
+	.def("activate_camera", &World::activate_camera)
+	.def("get_activated_camera", &World::get_activated_camera)
+	.def("add_light", &World::add_light)
+	.def("remove_light", &World::remove_light)
 	.def("get_all_assets", &World::get_all_assets)
 	.def("add_asset", &World::add_asset)
 	.def("remove_asset", &World::remove_asset)
@@ -125,14 +137,13 @@ py::class_<::staywalk::World, std::shared_ptr<::staywalk::World>>(__module, "Wor
 py::class_<::staywalk::Engine, std::shared_ptr<::staywalk::Engine>>(__module, "Engine")
 	.def_static("get_engine", &Engine::get_engine)
 	.def_static("get_world", &Engine::get_world)
-	.def_static("set_world", &Engine::set_world)
 	.def_static("get_console", &Engine::get_console)
-	.def("load_world", &Engine::load_world)
+	.def("set_world", &Engine::set_world)
 	.def("select", &Engine::select)
 	.def("get_selected", &Engine::get_selected)
 ;
 
 
 }
-void ::staywalk::reflect::py_bind() { PyImport_AppendInittab("staywalk", PyInit_staywalk);} 
+void ::staywalk::reflect::py_bind_auto(py::module& __module) { bind_auto(__module);}  
 

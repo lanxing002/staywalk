@@ -4,6 +4,7 @@
 #include "Actor.h"
 #include "Event.h"
 #include "EditorCommon.h"
+#include "PyEnv.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -44,7 +45,6 @@ void EditorUI::initialize(GLFWwindow* window){
 
     setup_style();
     assets_browser_ = std::make_shared<AssetsBrowser>();
-    Event::World_AssetChanged();
 
     auto codefont = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/consola.ttf", 20.0f);
     EditorCommon::font_table["consola"] = codefont;
@@ -161,7 +161,7 @@ void EditorUI::build_dock_space(){
     host_window_flags |= ImGuiWindowFlags_NoTitleBar | ImGuiWindowFlags_NoCollapse | ImGuiWindowFlags_NoResize | ImGuiWindowFlags_NoMove | ImGuiWindowFlags_NoDocking;
     host_window_flags |= ImGuiWindowFlags_NoBringToFrontOnFocus | ImGuiWindowFlags_NoNavFocus | ImGuiWindowFlags_NoBackground;
 
-    ImGui::Begin("hostost-window", nullptr, host_window_flags);
+    ImGui::Begin("host-window", nullptr, host_window_flags);
     ImGui::PopStyleVar(1);
     ImGui::DockSpace(mainDock, ImVec2(0, 0), ImGuiDockNodeFlags_NoDockingOverCentralNode | ImGuiDockNodeFlags_PassthruCentralNode);
     ImGui::End();
@@ -177,7 +177,8 @@ void EditorUI::show_main_menu(){
                     if (it.path().has_filename()) {
                         auto name = it.path().filename().u8string();
                         if(ImGui::MenuItem(name.c_str())) {
-                            Engine::get_engine()->load_world(it.path().filename().stem().u8string());
+                            auto world = World::load(it.path().filename().stem().u8string());
+                            Engine::get_engine()->set_world(world);
                         }
                     }
                 }
@@ -198,33 +199,35 @@ void EditorUI::show_world(){
      }
 
      auto world = Engine::get_world();
-     auto selected = Engine::get_engine()->get_selected();
+     if (world) {
+		 auto selected = Engine::get_engine()->get_selected();
 
-     if (ImGui::TreeNode("actor")) {
-         for (auto a : world->get_actors()) {
-             if (ImGui::Selectable(a->name.c_str(), selected == a)) {
-                 Engine::get_engine()->select(a);
-             }
-         }
-         ImGui::TreePop();
-     }
+		 if (ImGui::TreeNode("actor")) {
+			 for (auto a : world->get_actors()) {
+				 if (ImGui::Selectable(a->name.c_str(), selected == a)) {
+					 Engine::get_engine()->select(a);
+				 }
+			 }
+			 ImGui::TreePop();
+		 }
 
-     if (ImGui::TreeNode("camera")) {
-         for (auto a : world->get_cameras()) {
-             if (ImGui::Selectable(a->name.c_str(), selected == a)) {
-                 Engine::get_engine()->select(a);
-             }
-         }
-         ImGui::TreePop();
-     }
+		 if (ImGui::TreeNode("camera")) {
+			 for (auto a : world->get_cameras()) {
+				 if (ImGui::Selectable(a->name.c_str(), selected == a)) {
+					 Engine::get_engine()->select(a);
+				 }
+			 }
+			 ImGui::TreePop();
+		 }
 
-     if (ImGui::TreeNode("light")) {
-         for (auto a : world->get_lights()) {
-             if (ImGui::Selectable(a->name.c_str(), selected == a)) {
-                 Engine::get_engine()->select(a);
-             }
-         }
-         ImGui::TreePop();
+		 if (ImGui::TreeNode("light")) {
+			 for (auto a : world->get_lights()) {
+				 if (ImGui::Selectable(a->name.c_str(), selected == a)) {
+					 Engine::get_engine()->select(a);
+				 }
+			 }
+			 ImGui::TreePop();
+		 }
      }
 
      ImGui::End();
@@ -269,6 +272,20 @@ void EditorUI::show_misc()
             if (ImGui::Button(" Cancel ")) ImGui::CloseCurrentPopup(); 
             
             ImGui::EndPopup();
+        }
+        ImGui::TreePop();
+    }
+
+    if (ImGui::TreeNode("Py")) {
+        auto dir = Utility::get_script_dir();
+        for (auto it : fs::directory_iterator(dir)) {
+            if (it.path().has_filename() && it.path().has_extension()) {
+                if (it.path().extension().u8string() != ".py") continue;
+                auto name = it.path().stem().u8string();
+                if (ImGui::Button(name.c_str())) {
+                    Py::run_file(it.path());
+                }
+            }
         }
         ImGui::TreePop();
     }

@@ -7,6 +7,8 @@ namespace staywalk {
 	namespace reflect {
 		enum class ObjectType :unsigned int;
 	}
+
+	enum class ProjectType : int;
 }
 
 namespace staywalk {

@@ -2,6 +2,8 @@
 #include "Utility.h"
 #include "Material.h"
 
+#include "rhi.h"
+
 namespace staywalk {
 	Resource::Resource(const string& name)
 		:Object(name){
@@ -15,15 +17,6 @@ namespace staywalk {
 		: Object(name) {
 	}
 
-
-	RShader::RShader(const string& name)
-		: RObject(name) {
-		code = SWCode::create_code();
-	}
-
-	RProgram::RProgram(const string& name)
-		: RObject(name) {
-	}
 
 	RTex::RTex(const string& name)
 		: RObject(name) {
@@ -67,5 +60,26 @@ namespace staywalk {
 	void RTex::dump_post() const {
 		// editor cannot modify texture, so need not dump texture file
 		// may dump render-target,
+	}
+
+	/****************************************/
+	/****************************************/
+	RLight::RLight() {
+		light_buffer.light_count = 0;
+	}
+
+	RLight::~RLight() {
+		light_buffer.light_count = 0;
+	}
+
+	void RLight::sync_to_gpu() {
+	}
+
+	void RLight::organize() {
+
+	}
+
+	void RLight::disband() {
+
 	}
 }

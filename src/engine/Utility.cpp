@@ -8,6 +8,7 @@
 #include "World.h"
 #include "Material.h"
 #include "Serialize.h"
+#include "RMesh.h"
 
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb_image.h>
@@ -222,7 +223,12 @@ namespace staywalk{
     }
 
     
-    MeshLoader::MeshLoader(const string& mname)
+	staywalk::fs::path Utility::get_script_dir()
+	{
+		return fs::path("resource/script");
+	}
+
+	MeshLoader::MeshLoader(const string& mname)
     :mesh_name_(mname){
         if (fs::is_directory(mesh_name_) ||  !fs::exists(mesh_name_)) {
             log(fmt::format("MeshLoader --> mesh ({}) not exists!", mesh_name_.u8string()), LogLevel::Warn);
@@ -298,7 +304,7 @@ namespace staywalk{
         // 2. process materials
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
         //TODO: read texs and unforms to consturct staywalk::Material
-        PRTex diffuseMaps = find_material_tex(material, aiTextureType_DIFFUSE);
+        RTexRef diffuseMaps = find_material_tex(material, aiTextureType_DIFFUSE);
         shared_ptr<Material> mat = std::make_shared<Material>();
         mat->add_tex(Material::DiffuseKey, diffuseMaps);
 
@@ -320,7 +326,7 @@ namespace staywalk{
 
     // checks all material textures of a given type and loads the textures if they're not loaded yet.
 // the required info is returned as a Texture struct.
-    PRTex MeshLoader::find_material_tex(aiMaterial* mat, aiTextureType type)
+    RTexRef MeshLoader::find_material_tex(aiMaterial* mat, aiTextureType type)
     {
         if (mat->GetTextureCount(type) > 0) {
             aiString str;
@@ -328,10 +334,10 @@ namespace staywalk{
             fs::path tex_path = load_dir_ / fs::path{ str.C_Str()};
             return make_tex(tex_path);
         }
-        return PRTex{ nullptr };
+        return RTexRef{ nullptr };
     }
 
-    PRTex MeshLoader::make_tex(fs::path path)
+    RTexRef MeshLoader::make_tex(fs::path path)
     {
         auto it = loaded_texs_.find(path);
         if(it != loaded_texs_.end()) return it->second;
@@ -358,7 +364,7 @@ namespace staywalk{
             return result;
         }
 
-        return PRTex(nullptr);
+        return RTexRef(nullptr);
     }
 
 }
