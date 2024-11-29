@@ -1,6 +1,8 @@
 #include "Engine.h"
 #include "Logger.h"
 #include "PyEnv.h"
+#include "rhi.h"
+#include "Event.h"
 
 namespace staywalk {
 	shared_ptr<Engine> Engine::get_engine(){
@@ -26,15 +28,23 @@ namespace staywalk {
 
 	void Engine::set_world(WorldRef	world){
 		// setup light
-
+		world_ = world;
+		selelcted_ = nullptr;
+		Event::World_AssetChanged();
 	}
 
 	void Engine::init_editor_data() {
 		console_ = std::make_shared<Console>();
 		log_register_console(console_);
 	}
-	void set_camera(CameraRef camera)
-	{
+
+	void Engine::render_update(RenderInfo& info){
+
 	}
+
+	void Engine::logic_update(float delta){
+		if (world_) world_->logic_update();
+	}
+
 }
 

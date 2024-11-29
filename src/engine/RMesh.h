@@ -4,7 +4,7 @@
 
 
 namespace staywalk{
-	class sw_Class(jsonpost;)  Mesh : public RObject {
+	class sw_Class(jsonpost;)  Mesh : public RObject, public Drawable {
 	public:
 		sw_Func()  Mesh(const string& name = "mesh-0");
 
@@ -16,7 +16,7 @@ namespace staywalk{
 		void disband() override;
 		bool load_resource() override;
 
-		void draw();
+		void draw(RenderInfo & info) override;
 
 	public:
 		sw_Prop(nojson;nogui;) vector<Vertex> vertices;
@@ -33,7 +33,5 @@ namespace staywalk{
 		void load_post();
 		void dump_post() const;
 	};
-
-	using MeshRef = shared_ptr<Mesh>;
 }
 

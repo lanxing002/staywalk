@@ -112,6 +112,36 @@ Object::operator==(rhs) ;
 
 }
 
+#include "Light.h"
+
+void ::staywalk::Light::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+
+    GameObject::dump(value, dumper);
+
+}
+
+
+void ::staywalk::Light::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    GameObject::load(value, loader);
+
+}
+
+
+bool ::staywalk::Light::operator==(const ::staywalk::Light& rhs) const {
+    return 
+GameObject::operator==(rhs) ;
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::Light::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Light, "staywalk::Light"};
+
+}
+
 #include "RenderObject.h"
 
 void ::staywalk::Resource::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
@@ -533,6 +563,11 @@ void ::staywalk::StaticMeshComponent::dump(rapidjson::Value& value, ::staywalk::
         dumper.write(this->meshs, prop);
         value.AddMember("meshs", prop, dumper.get_doc().GetAllocator()); 
     }
+    {
+        json::Value prop;
+        dumper.write(this->transform, prop);
+        value.AddMember("transform", prop, dumper.get_doc().GetAllocator()); 
+    }
 }
 
 
@@ -546,12 +581,16 @@ void ::staywalk::StaticMeshComponent::load(rapidjson::Value& value, ::staywalk::
     if(itr != value.MemberEnd()){
         loader.read(this->meshs, itr->value);
     }
+    itr = value.FindMember("transform");
+    if(itr != value.MemberEnd()){
+        loader.read(this->transform, itr->value);
+    }
 }
 
 
 bool ::staywalk::StaticMeshComponent::operator==(const ::staywalk::StaticMeshComponent& rhs) const {
     return 
-GameComponent::operator==(rhs)  && ::staywalk::Comparer::equal(this->meshs, rhs.meshs);
+GameComponent::operator==(rhs)  && ::staywalk::Comparer::equal(this->meshs, rhs.meshs) && ::staywalk::Comparer::equal(this->transform, rhs.transform);
 }
 
 
@@ -624,6 +663,31 @@ void ::staywalk::Camera::dump(rapidjson::Value& value, ::staywalk::reflect::Dump
 
     GameObject::dump(value, dumper);
 
+    {
+        json::Value prop;
+        dumper.write(this->porject_type, prop);
+        value.AddMember("porject_type", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->fov, prop);
+        value.AddMember("fov", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->aspect, prop);
+        value.AddMember("aspect", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->near, prop);
+        value.AddMember("near", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->far, prop);
+        value.AddMember("far", prop, dumper.get_doc().GetAllocator()); 
+    }
 }
 
 
@@ -633,47 +697,37 @@ void ::staywalk::Camera::load(rapidjson::Value& value, ::staywalk::reflect::Load
 
     GameObject::load(value, loader);
 
+    itr = value.FindMember("porject_type");
+    if(itr != value.MemberEnd()){
+        loader.read(this->porject_type, itr->value);
+    }
+    itr = value.FindMember("fov");
+    if(itr != value.MemberEnd()){
+        loader.read(this->fov, itr->value);
+    }
+    itr = value.FindMember("aspect");
+    if(itr != value.MemberEnd()){
+        loader.read(this->aspect, itr->value);
+    }
+    itr = value.FindMember("near");
+    if(itr != value.MemberEnd()){
+        loader.read(this->near, itr->value);
+    }
+    itr = value.FindMember("far");
+    if(itr != value.MemberEnd()){
+        loader.read(this->far, itr->value);
+    }
 }
 
 
 bool ::staywalk::Camera::operator==(const ::staywalk::Camera& rhs) const {
     return 
-GameObject::operator==(rhs) ;
+GameObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->porject_type, rhs.porject_type) && ::staywalk::Comparer::equal(this->fov, rhs.fov) && ::staywalk::Comparer::equal(this->aspect, rhs.aspect) && ::staywalk::Comparer::equal(this->near, rhs.near) && ::staywalk::Comparer::equal(this->far, rhs.far);
 }
 
 
 ::staywalk::reflect::MetaInfo staywalk::Camera::get_meta_info() const {
     return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Camera, "staywalk::Camera"};
-
-}
-
-#include "Light.h"
-
-void ::staywalk::Light::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
-    assert(value.IsObject());
-
-    GameObject::dump(value, dumper);
-
-}
-
-
-void ::staywalk::Light::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
-    assert(value.IsObject());
-    json::Value::MemberIterator itr;
-
-    GameObject::load(value, loader);
-
-}
-
-
-bool ::staywalk::Light::operator==(const ::staywalk::Light& rhs) const {
-    return 
-GameObject::operator==(rhs) ;
-}
-
-
-::staywalk::reflect::MetaInfo staywalk::Light::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Light, "staywalk::Light"};
 
 }
 

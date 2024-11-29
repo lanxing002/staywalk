@@ -99,7 +99,7 @@ staywalk::Mesh::~Mesh()
 	if (valid()) disband_impl();
 }
 
-void staywalk::Mesh::draw(){
+void staywalk::Mesh::draw(RenderInfo& info) {
 	if (!valid()) organize();
 	glBindVertexArray(glid);
 	glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);

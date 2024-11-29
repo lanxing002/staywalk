@@ -121,6 +121,9 @@ namespace staywalk {
 		void UIHelper::construct_ui(const string& label, float& ff, bool can_modify);
 
 		template<>
+		void UIHelper::construct_ui(const string& label, double& ff, bool can_modify);
+
+		template<>
 		void UIHelper::construct_ui(const string& label, Transform& tf, bool can_modify);
 
 		template<>

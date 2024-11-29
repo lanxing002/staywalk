@@ -6,10 +6,10 @@ namespace staywalk {
 		:GameComponent(name) {
 	}
 
-	void StaticMeshComponent::draw() {
+	void StaticMeshComponent::draw(RenderInfo& info) {
 		for (auto& [mesh, mat] : meshs) {
 			if(mat) mat->use();
-			if(mesh) mesh->draw();
+			if(mesh) mesh->draw(info);
 		}
 	}
 }

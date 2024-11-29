@@ -4,11 +4,11 @@
 #include "RMesh.h"
 
 namespace staywalk{
-	class sw_Class()  StaticMeshComponent : public GameComponent {
+	class sw_Class()  StaticMeshComponent : public GameComponent, public Drawable {
 	public:
 		sw_Func() StaticMeshComponent(const string & name = "sm-comp-0");
 
-		sw_Func(nopy;)  virtual void draw();
+		void draw(RenderInfo& info) override;
 
 		sw_Prop() vector<pair<MeshRef, MaterialRef>> meshs;
 
