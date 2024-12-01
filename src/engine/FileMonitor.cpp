@@ -1,5 +1,6 @@
-#include "rhi.h"
 #include "FileMonitor.h"
+#include "rhi.h"
+#include "Utility.h"
 #include "Logger.h"
 
 #include <chrono>
@@ -15,12 +16,11 @@ void FileMonitor::start(){
 					if (fs::exists(k.second)) continue;
 					auto new_time = fs::last_write_time(k.second);
 					if (new_time == last_time) continue;
-
-					ifstream ifs = ifstream(k.second, std::ios::in);
-					if(!ifs) continue;
-					std::string content((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
-					new_content_[k] = content;
-					last_time = new_time;
+					string content;
+					if (Utility::load_text(k.second, content)) {
+						new_content_[k] = content;
+						last_time = new_time;
+					}
 				}
 			}
 			std::this_thread::sleep_for(std::chrono::milliseconds(30));
@@ -28,13 +28,12 @@ void FileMonitor::start(){
 	});
 }
 
-void FileMonitor::watch_file(idtype id, fs::path file_name, CallbackType callback){
+void FileMonitor::watch_file(const Key& key, const CallbackType& callback){
 
 	fs::file_time_type modify_time;
-	if (fs::exists(file_name)) {
-		modify_time = fs::last_write_time(file_name);
+	if (fs::exists(key.second)) {
+		modify_time = fs::last_write_time(key.second);
 	}
-	auto key = make_key(id, file_name);
 	cb_table_[key] = callback;
 	{
 		auto lock = std::lock_guard<std::mutex>(mutex_);
@@ -52,17 +51,17 @@ void FileMonitor::effect(){
 	new_content_.clear();
 }
 
-void staywalk::FileMonitor::unwatch_file(idtype id, fs::path file_name){
-	auto k = make_key(id, file_name);
-	auto it = cb_table_.find(k);
+void staywalk::FileMonitor::unwatch_file(const Key& key){
+	auto it = cb_table_.find(key);
 	if (it != cb_table_.end()){
-		log(fmt::format("unwatch_file failed: {}, {} have not been watched", id, file_name.u8string()),
+		log(fmt::format("unwatch_file failed: {}, {} have not been watched", key
+			.first, key.second.u8string()),
 			LogLevel::Warn);
 		return;
 	}
 
 	cb_table_.erase(it);
-	modify_table_.erase(k);
+	modify_table_.erase(key);
 }
 
 staywalk::FileMonitor::~FileMonitor(){

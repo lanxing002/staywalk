@@ -56,6 +56,24 @@
                         "code": "",
                         "code_type": 0
                     }
+                },
+                "gs": {
+                    "name": "geom",
+                    "guid_": 831297345965522948,
+                    "shadertype": 0,
+                    "code": {
+                        "code": "",
+                        "code_type": 0
+                    }
+                },
+                "cs": {
+                    "name": "cs",
+                    "guid_": 831297345965522949,
+                    "shadertype": 0,
+                    "code": {
+                        "code": "",
+                        "code_type": 0
+                    }
                 }
             },
             "uniforms_": {},
