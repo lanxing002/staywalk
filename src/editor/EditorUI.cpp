@@ -5,6 +5,8 @@
 #include "Event.h"
 #include "EditorCommon.h"
 #include "PyEnv.h"
+#include "Renderer.h"
+#include "RProgram.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -288,6 +290,17 @@ void EditorUI::show_misc()
             }
         }
         ImGui::TreePop();
+    }
+
+    if (ImGui::TreeNode("shader")) {
+
+        for (auto i = 0; i < static_cast<int>(staywalk::ProgramType::_Count); i++) {
+            auto pt = static_cast<staywalk::ProgramType>(i);
+            auto p = Engine::get_engine()->query_program(pt);
+            p->construct_ui(true);
+        }
+
+		ImGui::TreePop();
     }
 
     ImGui::End();
