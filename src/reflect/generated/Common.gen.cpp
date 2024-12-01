@@ -15,11 +15,11 @@
 #include "RMesh.h"
 #include "StaticMeshComponent.h"
 #include "RenderObject.h"
-#include "RenderInfo.h"
-#include "RProgram.h"
 #include "Camera.h"
 #include "RenderObject.h"
+#include "RenderInfo.h"
 #include "RenderObject.h"
+#include "RProgram.h"
 
 
 
@@ -68,11 +68,32 @@ shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
+staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>() {
     return { 
-        {static_cast<int>(::staywalk::GlWrap::CLAMP_TO_EDGE), "CLAMP_TO_EDGE"},
-        {static_cast<int>(::staywalk::GlWrap::MIRRORED_REPEAT), "MIRRORED_REPEAT"},
-        {static_cast<int>(::staywalk::GlWrap::REPEAT), "REPEAT"},
+        {static_cast<int>(::staywalk::GlMinFilter::NEAREST), "NEAREST"},
+        {static_cast<int>(::staywalk::GlMinFilter::LINEAR), "LINEAR"},
+        {static_cast<int>(::staywalk::GlMinFilter::NEAREST_MIPMAP_NEAREST), "NEAREST_MIPMAP_NEAREST"},
+        {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_NEAREST), "LINEAR_MIPMAP_NEAREST"},
+        {static_cast<int>(::staywalk::GlMinFilter::NEAREST_MIPMAP_LINEAR), "NEAREST_MIPMAP_LINEAR"},
+        {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_LINEAR), "LINEAR_MIPMAP_LINEAR"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::ProjectType>() {
+    return { 
+        {static_cast<int>(::staywalk::ProjectType::Persepective), "Persepective"},
+        {static_cast<int>(::staywalk::ProjectType::Ortho), "Ortho"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>() {
+    return { 
+        {static_cast<int>(::staywalk::GlMagFilter::NEAREST), "NEAREST"},
+        {static_cast<int>(::staywalk::GlMagFilter::LINEAR), "LINEAR"},
     };
 }
 
@@ -88,42 +109,21 @@ staywalk::reflect::get_enum_label<::staywalk::ProgramType>() {
 
 template<>
 std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
+    return { 
+        {static_cast<int>(::staywalk::GlWrap::CLAMP_TO_EDGE), "CLAMP_TO_EDGE"},
+        {static_cast<int>(::staywalk::GlWrap::MIRRORED_REPEAT), "MIRRORED_REPEAT"},
+        {static_cast<int>(::staywalk::GlWrap::REPEAT), "REPEAT"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
 staywalk::reflect::get_enum_label<::staywalk::ShaderType>() {
     return { 
         {static_cast<int>(::staywalk::ShaderType::None), "None"},
         {static_cast<int>(::staywalk::ShaderType::VS), "VS"},
         {static_cast<int>(::staywalk::ShaderType::FS), "FS"},
         {static_cast<int>(::staywalk::ShaderType::CS), "CS"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::ProjectType>() {
-    return { 
-        {static_cast<int>(::staywalk::ProjectType::Persepective), "Persepective"},
-        {static_cast<int>(::staywalk::ProjectType::Ortho), "Ortho"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>() {
-    return { 
-        {static_cast<int>(::staywalk::GlMinFilter::NEAREST), "NEAREST"},
-        {static_cast<int>(::staywalk::GlMinFilter::LINEAR), "LINEAR"},
-        {static_cast<int>(::staywalk::GlMinFilter::NEAREST_MIPMAP_NEAREST), "NEAREST_MIPMAP_NEAREST"},
-        {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_NEAREST), "LINEAR_MIPMAP_NEAREST"},
-        {static_cast<int>(::staywalk::GlMinFilter::NEAREST_MIPMAP_LINEAR), "NEAREST_MIPMAP_LINEAR"},
-        {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_LINEAR), "LINEAR_MIPMAP_LINEAR"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>() {
-    return { 
-        {static_cast<int>(::staywalk::GlMagFilter::NEAREST), "NEAREST"},
-        {static_cast<int>(::staywalk::GlMagFilter::LINEAR), "LINEAR"},
     };
 }

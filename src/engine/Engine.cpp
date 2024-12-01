@@ -35,13 +35,20 @@ namespace staywalk {
 		Event::World_AssetChanged();
 	}
 
-	void Engine::init_editor_data() {
-		console_ = std::make_shared<Console>();
-		log_register_console(console_);
+	staywalk::RProgramRef Engine::query_program(ProgramType pt)
+	{
+		return renderer_.query_program(pt);
 	}
 
-	void Engine::render_update(RenderInfo& info){
+	void Engine::initialize() {
+		console_ = std::make_shared<Console>();
+		log_register_console(console_);
 
+		renderer_.initialize();
+	}
+
+	void Engine::render_update(){
+		renderer_.render(1.0, 0);
 	}
 
 	void Engine::logic_update(float delta){
@@ -49,14 +56,12 @@ namespace staywalk {
 	}
 
 
-	void monitor_file(FileMonitor::Key key, const FileMonitor::CallbackType& cb)
-	{
-		return void();
+	void Engine::monitor_file(FileMonitor::Key key, const FileMonitor::CallbackType& cb){
+		file_monitor_.watch_file(key, cb);
 	}
 
-	void cancel_monitor_file(FileMonitor::Key key)
-	{
-		return void();
+	void Engine::cancel_monitor_file(FileMonitor::Key key){
+		file_monitor_.unwatch_file(key);
 	}
 
 }

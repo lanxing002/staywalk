@@ -19,14 +19,11 @@ private:
 	void poll_events() { glfwPollEvents(); }
 	void swap_buffer() { glfwSwapBuffers(window_); }
 	
-	void render_frame();
-
 	static Window* curr_window;
 	static void handle_resize(GLFWwindow* window, int width, int height);
 
 private:
 	EditorUI editor_ui_;
-	staywalk::Renderer renderer_;
 
 	GLFWwindow* window_;
 	const int width_ = 1280;

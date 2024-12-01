@@ -2,6 +2,7 @@
 #include "Engine.h"
 #include "Actor.h"
 #include "World.h"
+#include "RProgram.h"
 #include "StaticMeshComponent.h"
 
 using namespace staywalk;
@@ -12,7 +13,12 @@ RProgramRef Renderer::query_program(ProgramType pt){
 }
 
 void Renderer::initialize(){
-
+	RProgramRef pbr = std::make_shared<RProgram>("pbr");
+	RProgramRef shadow = std::make_shared<RProgram>("shadow");
+	pbr->load_post();
+	shadow->load_post();
+	program_table_[static_cast<int>(ProgramType::PBR)] = pbr;
+	program_table_[static_cast<int>(ProgramType::Shadow)] = shadow;
 }
 
 void Renderer::render(double delta, unsigned long long count)
