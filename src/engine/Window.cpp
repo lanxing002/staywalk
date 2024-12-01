@@ -38,15 +38,19 @@ Window::~Window(){
 void Window::run(){
     auto engine = Engine::get_engine();
     editor_ui_.initialize(window_);
-    renderer_.initialize();
-    engine->init_editor_data();
+    engine->initialize();
 
     while (!shold_close()){
         frame_count_++;
         process_evnet();
         
-        Engine::get_engine()->logic_update(1.0);
-        render_frame();
+        auto engine = Engine::get_engine();
+		engine->logic_update(1.0);
+		engine->render_update();
+        {  // render editor ui
+            editor_ui_.render();
+            editor_ui_.render_post();
+        }
         swap_buffer();
         poll_events();
     }
@@ -65,9 +69,4 @@ void Window::process_evnet() {
         glfwSetWindowShouldClose(window_, true);
 }
 
-void Window::render_frame(){
-    editor_ui_.render();
-    renderer_.render(1.0, frame_count_);
-    editor_ui_.render_post();
-}
 

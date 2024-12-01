@@ -70,6 +70,8 @@ py::class_<::staywalk::RUniform,RObject, std::shared_ptr<::staywalk::RUniform>>(
 py::class_<::staywalk::RProgram,RObject, std::shared_ptr<::staywalk::RProgram>>(__module, "RProgram")
 	.def_readwrite("vs", &RProgram::vs)
 	.def_readwrite("fs", &RProgram::fs)
+	.def_readwrite("gs", &RProgram::gs)
+	.def_readwrite("cs", &RProgram::cs)
 ;
 
 py::class_<::staywalk::Material,Object, std::shared_ptr<::staywalk::Material>>(__module, "Material")
@@ -97,7 +99,10 @@ py::class_<::staywalk::Engine, std::shared_ptr<::staywalk::Engine>>(__module, "E
 	.def_static("get_engine", &Engine::get_engine)
 	.def_static("get_world", &Engine::get_world)
 	.def_static("get_console", &Engine::get_console)
+	.def("monitor_file", &Engine::monitor_file)
+	.def("cancel_monitor_file", &Engine::cancel_monitor_file)
 	.def("set_world", &Engine::set_world)
+	.def("query_program", &Engine::query_program)
 	.def("select", &Engine::select)
 	.def("get_selected", &Engine::get_selected)
 ;

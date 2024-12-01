@@ -228,6 +228,23 @@ namespace staywalk{
 		return fs::path("resource/script");
 	}
 
+	bool Utility::load_text(const fs::path& file_name, std::string text){
+        if (!fs::exists(file_name)) return false;
+
+		ifstream ifs = ifstream(file_name, std::ios::in);
+		if (!ifs) return false;
+		std::string content((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+        text = content;
+        return true;
+	}
+
+	bool Utility::dump_text(const fs::path& file_name, const std::string& text){
+        ofstream ofs = ofstream(file_name, std::ios::out | std::ios::trunc);
+        if (!ofs) return false;
+        ofs.write(text.c_str(), text.size());
+        return static_cast<bool>(ofs);
+	}
+
 	MeshLoader::MeshLoader(const string& mname)
     :mesh_name_(mname){
         if (fs::is_directory(mesh_name_) ||  !fs::exists(mesh_name_)) {

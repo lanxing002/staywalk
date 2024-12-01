@@ -410,6 +410,17 @@ void ::staywalk::RProgram::dump(rapidjson::Value& value, ::staywalk::reflect::Du
         dumper.write(this->fs, prop);
         value.AddMember("fs", prop, dumper.get_doc().GetAllocator()); 
     }
+    {
+        json::Value prop;
+        dumper.write(this->gs, prop);
+        value.AddMember("gs", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->cs, prop);
+        value.AddMember("cs", prop, dumper.get_doc().GetAllocator()); 
+    }
+    this->dump_post();
 }
 
 
@@ -427,12 +438,21 @@ void ::staywalk::RProgram::load(rapidjson::Value& value, ::staywalk::reflect::Lo
     if(itr != value.MemberEnd()){
         loader.read(this->fs, itr->value);
     }
+    itr = value.FindMember("gs");
+    if(itr != value.MemberEnd()){
+        loader.read(this->gs, itr->value);
+    }
+    itr = value.FindMember("cs");
+    if(itr != value.MemberEnd()){
+        loader.read(this->cs, itr->value);
+    }
+    this->load_post();
 }
 
 
 bool ::staywalk::RProgram::operator==(const ::staywalk::RProgram& rhs) const {
     return 
-RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->vs, rhs.vs) && ::staywalk::Comparer::equal(this->fs, rhs.fs);
+RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->vs, rhs.vs) && ::staywalk::Comparer::equal(this->fs, rhs.fs) && ::staywalk::Comparer::equal(this->gs, rhs.gs) && ::staywalk::Comparer::equal(this->cs, rhs.cs);
 }
 
 

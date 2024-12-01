@@ -5,6 +5,7 @@
 #include "Console.h"
 #include "RenderInfo.h"
 #include "FileMonitor.h"
+#include "Renderer.h"
 
 //#include <memory>
 //#include <unordered_map>
@@ -20,17 +21,19 @@ namespace staywalk{
 		sw_Func() static shared_ptr<World> get_world() { return Engine::get_engine()->world_; }
 		sw_Func() static Ref<Console> get_console() { return Engine::get_engine()->console_; }
 
-		sw_Func() static void monitor_file(FileMonitor::Key key, const FileMonitor::CallbackType& cb);
-		sw_Func() static void cancel_monitor_file(FileMonitor::Key key);
+		sw_Func() void monitor_file(FileMonitor::Key key, const FileMonitor::CallbackType& cb);
+		sw_Func() void cancel_monitor_file(FileMonitor::Key key);
 
 		~Engine();
 		//end of engine functions
 
 		sw_Func() void set_world(WorldRef world);
 
-		void init_editor_data();
+		sw_Func() RProgramRef query_program(ProgramType pt);
 
-		void render_update(RenderInfo& info);
+		void initialize();
+
+		void render_update();
 
 		void logic_update(float delta);
 
@@ -49,6 +52,7 @@ namespace staywalk{
 		Engine();
 
 	private:
+		Renderer renderer_;
 		WorldRef world_{ nullptr };
 
 		Ref<GameObject> selelcted_{nullptr};
