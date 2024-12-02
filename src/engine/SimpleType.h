@@ -17,11 +17,11 @@ namespace staywalk{
 			__SWCode() {}
 
 		public:
-			string code;
+			string text;
 			CodeType code_type = CodeType::Shader;
 
 			bool operator==(const __SWCode& rhs) const {
-				return code == rhs.code && code_type == rhs.code_type;
+				return text == rhs.text && code_type == rhs.code_type;
 			}
 
 			void dump(rapidjson::Value&, staywalk::reflect::Dumper&) const;

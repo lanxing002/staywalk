@@ -71,7 +71,6 @@ py::class_<::staywalk::RProgram,RObject, std::shared_ptr<::staywalk::RProgram>>(
 	.def_readwrite("vs", &RProgram::vs)
 	.def_readwrite("fs", &RProgram::fs)
 	.def_readwrite("gs", &RProgram::gs)
-	.def_readwrite("cs", &RProgram::cs)
 ;
 
 py::class_<::staywalk::Material,Object, std::shared_ptr<::staywalk::Material>>(__module, "Material")
