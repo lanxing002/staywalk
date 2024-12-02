@@ -228,7 +228,7 @@ namespace staywalk{
 		return fs::path("resource/script");
 	}
 
-	bool Utility::load_text(const fs::path& file_name, std::string text){
+	bool Utility::load_text(const fs::path& file_name, std::string& text){
         if (!fs::exists(file_name)) return false;
 
 		ifstream ifs = ifstream(file_name, std::ios::in);

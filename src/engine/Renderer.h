@@ -7,11 +7,13 @@ namespace staywalk {
 	class Renderer {
 	public:
 		Renderer() {}
-		~Renderer() {}
+		~Renderer();
 
 		RProgramRef query_program(ProgramType pt);
 
 		void initialize();
+
+		void destroy();
 
 		virtual void render(double delta, unsigned long long count);
 

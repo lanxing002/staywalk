@@ -86,11 +86,14 @@ namespace staywalk{
 		virtual bool load_resource() { return false; }
 
 		virtual bool valid() { return glid != kGlSickId; }
+		virtual void mark_dirty() { dirty_ = true; }
+		virtual bool is_dirty() { return dirty_; }
 
 		MetaRegister(RObject);
 
 	protected:
-		uint glid = kGlSickId;  // for opengl id, -1 is invalid
+		GLuint glid = kGlSickId;  // for opengl id, -1 is invalid
+		bool dirty_ = true;
 	};
 
 	

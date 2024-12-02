@@ -32,6 +32,8 @@ Window::Window(int width, int height)
 
 Window::~Window(){
     curr_window = nullptr;
+    auto engine = Engine::get_engine();
+    engine->shutdown();
     glfwTerminate();
 }
 
