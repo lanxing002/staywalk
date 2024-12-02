@@ -297,7 +297,9 @@ void EditorUI::show_misc()
         for (auto i = 0; i < static_cast<int>(staywalk::ProgramType::_Count); i++) {
             auto pt = static_cast<staywalk::ProgramType>(i);
             auto p = Engine::get_engine()->query_program(pt);
+            ImGui::PushID((ImGuiID)p->get_guid());
             p->construct_ui(true);
+            ImGui::PopID();
         }
 
 		ImGui::TreePop();

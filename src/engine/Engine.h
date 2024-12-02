@@ -24,6 +24,7 @@ namespace staywalk{
 		sw_Func() void monitor_file(FileMonitor::Key key, const FileMonitor::CallbackType& cb);
 		sw_Func() void cancel_monitor_file(FileMonitor::Key key);
 
+		void shutdown();
 		~Engine();
 		//end of engine functions
 
@@ -52,12 +53,13 @@ namespace staywalk{
 		Engine();
 
 	private:
-		Renderer renderer_;
-		WorldRef world_{ nullptr };
-
-		Ref<GameObject> selelcted_{nullptr};
 		Ref<Console> console_{nullptr};
 		FileMonitor file_monitor_;
+		Renderer renderer_;
+
+		GameObjectRef selelcted_{ nullptr };
+		WorldRef world_{ nullptr };
+
 	};
 }
 

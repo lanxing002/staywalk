@@ -19,6 +19,9 @@ void Renderer::initialize(){
 	shadow->load_post();
 	program_table_[static_cast<int>(ProgramType::PBR)] = pbr;
 	program_table_[static_cast<int>(ProgramType::Shadow)] = shadow;
+
+	RProgram::monitor(program_table_[static_cast<int>(ProgramType::PBR)]);
+	RProgram::monitor(program_table_[static_cast<int>(ProgramType::Shadow)]);
 }
 
 void Renderer::render(double delta, unsigned long long count)
@@ -42,6 +45,7 @@ void Renderer::render(double delta, unsigned long long count)
 			buffer.light_data[i].position = lights[i]->transform.location;
 		}
 		buffer.light_count = real_count;
+		light_mgr_.sync_to_gpu();
 	}
 
 	RenderInfo render_info;
@@ -49,6 +53,16 @@ void Renderer::render(double delta, unsigned long long count)
 		render_info.view = cam->view;
 		render_info.projection = cam->projection;
 	}
+
+	// setup shader
+	{
+		auto program = program_table_[(int)ProgramType::PBR];
+		program->set_uniform("view", render_info.view);
+		program->set_uniform("projection", render_info.projection);
+		program->use();
+		render_info.program = program;
+	}
+
 	
 	// render mesh
 	{
@@ -57,4 +71,13 @@ void Renderer::render(double delta, unsigned long long count)
 			actor->sm_comp->draw(render_info);
 		}
 	}
+}
+
+staywalk::Renderer::~Renderer(){
+
+}
+
+void staywalk::Renderer::destroy(){
+	RProgram::monitor(program_table_[static_cast<int>(ProgramType::PBR)], false);
+	RProgram::monitor(program_table_[static_cast<int>(ProgramType::Shadow)], false);
 }

@@ -24,8 +24,13 @@ namespace staywalk {
 		Py::run("");
 		file_monitor_.start();
 	}
-	
-	Engine::~Engine(){
+
+	void Engine::shutdown()
+	{
+		renderer_.destroy();
+	}
+
+	Engine::~Engine() {
 	}
 
 	void Engine::set_world(WorldRef	world){
@@ -52,6 +57,7 @@ namespace staywalk {
 	}
 
 	void Engine::logic_update(float delta){
+		file_monitor_.effect();
 		if (world_) world_->logic_update();
 	}
 

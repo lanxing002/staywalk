@@ -1141,7 +1141,7 @@ void TextEditor::Render(const char* aTitle, bool* bopen, const ImVec2& aSize, bo
 	if (ImGui::BeginMenuBar()) {
 		if (ImGui::Button("Save")) {
 			if (mCode) {
-				mCode->code = GetText();
+				mCode->text = GetText();
 				tip = "save to {} success ...";
 			}
 
@@ -1211,7 +1211,7 @@ void TextEditor::SetText(const std::string& aText)
 
 void TextEditor::SetCode(const staywalk::SWCodeRef code){
 	mCode = code;
-	SetText(code->code);
+	SetText(code->text);
 }
 
 void TextEditor::SetTextLines(const std::vector<std::string>& aLines)

@@ -47,7 +47,7 @@ namespace staywalk{
 
 		static fs::path get_script_dir(); 
 
-		static bool load_text(const fs::path& file_name, std::string text);
+		static bool load_text(const fs::path& file_name, std::string& text);
 
 		static bool dump_text(const fs::path& file_name, const std::string& text);
 

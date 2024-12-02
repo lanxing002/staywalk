@@ -209,7 +209,7 @@ void SWCode::__SWCode::load(rapidjson::Value& value, staywalk::reflect::Loader& 
 
     itr = value.FindMember("code");
     if (itr != value.MemberEnd()) {
-        loader.read(code, itr->value);
+        loader.read(text, itr->value);
     }
 
     itr = value.FindMember("code_type");
@@ -226,7 +226,7 @@ void SWCode::__SWCode::dump(rapidjson::Value& value, staywalk::reflect::Dumper& 
     assert(value.IsObject());
     {
         json::Value prop;
-        dumper.write(code, prop);
+        dumper.write(text, prop);
         value.AddMember("code", prop, dumper.get_doc().GetAllocator());
     }
 

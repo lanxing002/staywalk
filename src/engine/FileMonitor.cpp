@@ -13,7 +13,7 @@ void FileMonitor::start(){
 			{
 				auto lock = std::lock_guard<std::mutex>(mutex_);
 				for(auto& [k, last_time] : modify_table_){
-					if (fs::exists(k.second)) continue;
+					if (!fs::exists(k.second)) continue;
 					auto new_time = fs::last_write_time(k.second);
 					if (new_time == last_time) continue;
 					string content;

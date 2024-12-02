@@ -237,8 +237,6 @@ void ::staywalk::RProgram::construct_basic_ui(bool can_modify) {
         staywalk::reflect::UIHelper::construct_ui("fs", fs, can_modify || true);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(gs)>()) 
         staywalk::reflect::UIHelper::construct_ui("gs", gs, can_modify || true);
-    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(cs)>()) 
-        staywalk::reflect::UIHelper::construct_ui("cs", cs, can_modify || true);
 }
 
 
@@ -260,12 +258,6 @@ void ::staywalk::RProgram::construct_obj_ui(bool can_modify) {
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(gs)>()){ 
         //if (ImGui::TreeNode("gs")){
             staywalk::reflect::UIHelper::construct_ui("gs", gs, can_modify || true);
-            //ImGui::TreePop();
-        //}    
-    }
-    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(cs)>()){ 
-        //if (ImGui::TreeNode("cs")){
-            staywalk::reflect::UIHelper::construct_ui("cs", cs, can_modify || true);
             //ImGui::TreePop();
         //}    
     }
