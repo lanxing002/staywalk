@@ -85,9 +85,9 @@ void UIHelper::construct_ui(const string& label, float& data, bool can_modify) {
 
 template<>
 void UIHelper::construct_ui(const string& label, Transform& tf, bool can_modify) {
-    UIHelper::construct_ui<vec3>("position", tf.location, !can_modify);
-    UIHelper::construct_ui<vec3>("scale", tf.scale, !can_modify);
-    UIHelper::construct_ui<quat>("rotation", tf.rotation, !can_modify);
+    UIHelper::construct_ui<vec3>("position", tf.location, can_modify);
+    UIHelper::construct_ui<vec3>("scale", tf.scale, can_modify);
+    UIHelper::construct_ui<quat>("rotation", tf.rotation, can_modify);
 }
 
 template<>

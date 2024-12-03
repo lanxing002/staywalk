@@ -116,39 +116,43 @@ namespace staywalk{
 
 		COUNT
 	};
+
+	enum class EventType : int {
+		Key,		// key press release
+		Mouse,		// mouse click
+		Move,		// mouse move
+		Scroll,		// wheel scroll
+	};
 };
 
 namespace staywalk {
 	struct InputEvent
 	{
-		InputDeviceType device;
+		EventType etype;
 
 		Keyboard keyboard;
-		uint8_t press;
-
 		Mouse mouse;
-		uint8_t click; // 1, press 2, release
 
-		glm::ivec2 pos;
-		int wheel;
+		uint8_t click;
+
+		glm::vec2 pos;
 	};
 
 	class InputManager;
-
 	class MouseDevice {
-
 	private:
-		MouseDevice();
+		MouseDevice() {}
 		void clear();
 		bool state_[3][2];
-		int wheel = 0;
 		vec2 pos = vec2(0, 0);
+		vec2 mouse_offset = vec2(.0, .0);
+		vec2 wheel_offset = vec2(.0, .0);
 		friend class InputManager;
 	};
 
 	class KeyBoardDevice {
 	private:
-		KeyBoardDevice();
+		KeyBoardDevice() {}
 		void clear();
 		bool state_[(int)Keyboard::COUNT][2];
 		friend class InputManager;

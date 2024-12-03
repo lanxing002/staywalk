@@ -280,6 +280,10 @@ namespace staywalk{
             if (!merged) merge_meshes.emplace_back(mesh, mat);
         }
         meshes_ = merge_meshes;
+
+        for (auto& [mesh, mat] : meshes_) {
+            if (mesh) mesh->compute_aabb();
+        }
     }
 
 
