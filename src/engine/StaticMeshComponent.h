@@ -10,6 +10,10 @@ namespace staywalk{
 
 		void draw(RenderInfo& info) override;
 
+		void tick(float delta) override {}
+
+		sw_Func() AABB get_aabb() const;
+
 		sw_Prop() vector<pair<MeshRef, MaterialRef>> meshs;
 
 		sw_Prop() Transform transform = Identity;

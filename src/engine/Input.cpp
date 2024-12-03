@@ -5,6 +5,9 @@ void staywalk::MouseDevice::clear(){
 		state_[i][0] = false;
 		state_[i][1] = false;
 	}
+
+	mouse_offset = vec2(.0, .0);
+	wheel_offset = vec2(.0, .0);
 }
 
 void staywalk::KeyBoardDevice::clear(){

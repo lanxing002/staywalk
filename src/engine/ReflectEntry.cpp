@@ -7,6 +7,7 @@
 #include "RenderObject.h"
 #include "RenderInfo.h"
 #include "StaticMeshComponent.h"
+#include "InputManager.h"
 
 int entry()
 {

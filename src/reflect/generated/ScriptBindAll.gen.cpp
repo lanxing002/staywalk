@@ -34,6 +34,7 @@ py::class_<::staywalk::GameObject,Object, std::shared_ptr<::staywalk::GameObject
 
 py::class_<::staywalk::Actor,GameObject, std::shared_ptr<::staywalk::Actor>>(__module, "Actor")
 	.def(py::init<const string &>())
+	.def("get_aabb", &Actor::get_aabb)
 	.def_readwrite("sm_comp", &Actor::sm_comp)
 ;
 
@@ -102,6 +103,9 @@ py::class_<::staywalk::Engine, std::shared_ptr<::staywalk::Engine>>(__module, "E
 	.def("cancel_monitor_file", &Engine::cancel_monitor_file)
 	.def("set_world", &Engine::set_world)
 	.def("query_program", &Engine::query_program)
+	.def("get_input_mgr", &Engine::get_input_mgr, py::return_value_policy::reference_internal)
+	.def("get_view_size", &Engine::get_view_size)
+	.def("set_view_size", &Engine::set_view_size)
 	.def("select", &Engine::select)
 	.def("get_selected", &Engine::get_selected)
 ;
@@ -110,11 +114,11 @@ py::class_<::staywalk::World, std::shared_ptr<::staywalk::World>>(__module, "Wor
 	.def_static("create_empty_world", &World::create_empty_world)
 	.def_static("load_marry_world", &World::load_marry_world)
 	.def_static("load", &World::load)
-	.def("get_name", &World::get_name)
+	.def("get_name", &World::get_name, py::return_value_policy::reference_internal)
 	.def("set_name", &World::set_name)
-	.def("get_actors", &World::get_actors)
-	.def("get_cameras", &World::get_cameras)
-	.def("get_lights", &World::get_lights)
+	.def("get_actors", &World::get_actors, py::return_value_policy::reference_internal)
+	.def("get_cameras", &World::get_cameras, py::return_value_policy::reference_internal)
+	.def("get_lights", &World::get_lights, py::return_value_policy::reference_internal)
 	.def("add_actor", &World::add_actor)
 	.def("remove_actor", &World::remove_actor)
 	.def("add_camera", &World::add_camera)
@@ -123,7 +127,7 @@ py::class_<::staywalk::World, std::shared_ptr<::staywalk::World>>(__module, "Wor
 	.def("get_activated_camera", &World::get_activated_camera)
 	.def("add_light", &World::add_light)
 	.def("remove_light", &World::remove_light)
-	.def("get_all_assets", &World::get_all_assets)
+	.def("get_all_assets", &World::get_all_assets, py::return_value_policy::reference_internal)
 	.def("add_asset", &World::add_asset)
 	.def("remove_asset", &World::remove_asset)
 ;
@@ -135,12 +139,15 @@ py::class_<::staywalk::GameComponent,Object, std::shared_ptr<::staywalk::GameCom
 py::class_<::staywalk::Mesh,RObject,Drawable, std::shared_ptr<::staywalk::Mesh>>(__module, "Mesh")
 	.def(py::init<const string &>())
 	.def(py::init<const vector<Vertex> &,const vector<unsigned int> &,const string &>())
+	.def("get_aabb", &Mesh::get_aabb)
+	.def("compute_aabb", &Mesh::compute_aabb)
 	.def_readwrite("vertices", &Mesh::vertices)
 	.def_readwrite("indices", &Mesh::indices)
 ;
 
 py::class_<::staywalk::StaticMeshComponent,GameComponent,Drawable, std::shared_ptr<::staywalk::StaticMeshComponent>>(__module, "StaticMeshComponent")
 	.def(py::init<const string &>())
+	.def("get_aabb", &StaticMeshComponent::get_aabb)
 	.def_readwrite("meshs", &StaticMeshComponent::meshs)
 	.def_readwrite("transform", &StaticMeshComponent::transform)
 ;
