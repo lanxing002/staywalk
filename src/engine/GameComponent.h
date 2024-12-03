@@ -7,6 +7,8 @@ namespace staywalk{
 		sw_Func()  GameComponent(const string& name = "0-comp")
 			:Object(name) {}
 
+		virtual void tick(float delta) {}
+
 		MetaRegister(GameComponent);
 	};
 }

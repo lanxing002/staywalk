@@ -193,6 +193,36 @@ void staywalk::Transform::load(rapidjson::Value& value, staywalk::reflect::Loade
     }
 }
 
+void  AABB::dump(rapidjson::Value& value, staywalk::reflect::Dumper& dumper) const {
+	assert(value.IsObject());
+	{
+		json::Value prop;
+		dumper.write(min, prop);
+		value.AddMember("min", prop, dumper.get_doc().GetAllocator());
+	}
+
+	{
+		json::Value prop;
+		dumper.write(max, prop);
+		value.AddMember("max", prop, dumper.get_doc().GetAllocator());
+	}
+}
+
+void AABB::load(rapidjson::Value& value, staywalk::reflect::Loader& loader) {
+	assert(value.IsObject());
+	json::Value::MemberIterator itr;
+
+	itr = value.FindMember("min");
+	if (itr != value.MemberEnd()) {
+		loader.read(min, itr->value);
+	}
+
+	itr = value.FindMember("max");
+	if (itr != value.MemberEnd()) {
+		loader.read(max, itr->value);
+	}
+}
+
 void Vertex::dump(rapidjson::Value& value, staywalk::reflect::Dumper& dumper) const {
     static_assert(std::is_trivial_v<Vertex> && "vertex must be trivial");
     //constexpr auto size = sizeof Vertex / sizeof(float);
