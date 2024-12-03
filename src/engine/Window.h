@@ -13,7 +13,6 @@ public:
 
 	void run();
 
-private:
 	bool shold_close();
 	void process_evnet();
 	void poll_events() { glfwPollEvents(); }
@@ -22,13 +21,11 @@ private:
 	static Window* curr_window;
 	static void handle_resize(GLFWwindow* window, int width, int height);
 
-private:
 	EditorUI editor_ui_;
-
 	GLFWwindow* window_;
-	const int width_ = 1280;
-	const int height_ = 720;
 
+	int width_ = 1280;
+	int height_ = 720;
 	unsigned long long frame_count_;
 };
 

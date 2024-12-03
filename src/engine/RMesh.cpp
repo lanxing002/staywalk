@@ -71,6 +71,7 @@ void Mesh::load_post() {
 		ifs.read(reinterpret_cast<char*>(indices.data()), isize * sizeof(unsigned int));
 		status = true;
 	}
+	compute_aabb();
 	log(fmt::format("load_post to {}, status: {}", path.u8string(), status),
 		status ? LogLevel::Info : LogLevel::Warn);
 }
@@ -92,6 +93,16 @@ void Mesh::dump_post() const {
 
 	log(fmt::format("dump_post to {}, status: {}", path.u8string(), status),
 		status ? LogLevel::Info : LogLevel::Warn);
+}
+
+staywalk::AABB staywalk::Mesh::get_aabb(){
+	return aabb_;
+}
+
+staywalk::AABB staywalk::Mesh::compute_aabb() {
+	for (const auto& v : vertices)
+		aabb_.expand(v.position);
+	return aabb_;
 }
 
 staywalk::Mesh::~Mesh()

@@ -62,14 +62,26 @@ class BindClass(object):
 
         for key, value in funcs_dict.items():
             if len(value) == 1:
-                name, _, is_pointer, is_static = value[0]
+                name, _, pointer_ref, is_static = value[0]
+                is_pointer, is_reference = pointer_ref
                 def_s = 'def_static' if is_static else 'def'
-                result += f'''\t.{def_s}("{name}", &{self._name}::{name}{', py::return_value_policy::reference' if is_pointer else ''})\n'''
+                return_policy = ''
+                if is_pointer:
+                    return_policy = ', py::return_value_policy::reference'
+                if is_reference:
+                    return_policy = ', py::return_value_policy::reference_internal'
+                result += f'''\t.{def_s}("{name}", &{self._name}::{name}{return_policy})\n'''
             elif len(value) > 1:
-                for name, params, is_pointer, is_static in value:
+                for name, params, pointer_ref, is_static in value:
+                    is_pointer, is_reference = pointer_ref
                     def_s = 'def_static' if is_static else 'def'
                     overload_str = f'''py::overload_cast<{','.join(params.param_ts)}>'''
-                    result += f'''\t.{def_s}("{name}", {overload_str}(&{self._name}::{name}){', py::return_value_policy::reference' if is_pointer else ''})\n'''
+                    return_policy = ''
+                    if is_pointer:
+                        return_policy = ', py::return_value_policy::reference'
+                    if is_reference:
+                        return_policy = ', py::return_value_policy::reference_internal'
+                    result += f'''\t.{def_s}("{name}", {overload_str}(&{self._name}::{name}){return_policy})\n'''
 
         for name, is_const, is_public, is_static in self._members:
             def_code = ('def_readwrite' if (not is_const) and is_public else 'def_readonly')\
@@ -120,8 +132,9 @@ class BindClass(object):
                 elif member.kind == clang.cindex.CursorKind.CXX_METHOD:
                     return_type = member.result_type
                     is_pointer = return_type.kind == clang.cindex.TypeKind.POINTER
+                    is_reference = return_type.kind == clang.cindex.TypeKind.LVALUEREFERENCE
                     params = BindClass._parse_parameters(member)
-                    self._funcs.append((member.spelling, params, is_pointer, member.is_static_method()))
+                    self._funcs.append((member.spelling, params, (is_pointer, is_reference), member.is_static_method()))
 
             if member.access_specifier == clang.cindex.AccessSpecifier.PUBLIC:
                 is_public = member.access_specifier == clang.cindex.AccessSpecifier.PUBLIC

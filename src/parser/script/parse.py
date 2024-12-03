@@ -4,6 +4,13 @@ from parse_class import ClassNode, NoClassField
 
 def display_traverse(root, depth):
     print("%s%s %s" % ("|   " * depth, str(root.kind), root.displayname))
+
+    if root.kind == clang.cindex.CursorKind.FUNCTION_DECL:
+        return_type = root.result_type
+        is_pointer = return_type.kind == clang.cindex.TypeKind.POINTER
+        is_reference = return_type.kind == clang.cindex.TypeKind.LVALUEREFERENCE
+        print('--', root.displayname, is_pointer, is_reference)
+
     for n in root.get_children():
         display_traverse(n, depth + 1)
 

@@ -11,6 +11,7 @@ namespace staywalk {
 
 	struct RenderInfo
 	{
+		staywalk::mat4 model;
 		staywalk::mat4 view;
 		staywalk::mat4 projection;
 		staywalk::RProgramRef program{ nullptr };

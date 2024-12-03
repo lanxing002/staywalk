@@ -6,6 +6,7 @@
 #include "RenderInfo.h"
 #include "FileMonitor.h"
 #include "Renderer.h"
+#include "InputManager.h"
 
 //#include <memory>
 //#include <unordered_map>
@@ -29,22 +30,19 @@ namespace staywalk{
 		//end of engine functions
 
 		sw_Func() void set_world(WorldRef world);
-
 		sw_Func() RProgramRef query_program(ProgramType pt);
+		sw_Func() InputManager& get_input_mgr() { return input_mgr_; }
+		InputManager* get_input_mgr_raw() { return &input_mgr_; }
+		sw_Func() vec2 get_view_size() { return view_size_; }
+		sw_Func() void set_view_size(vec2 value) { view_size_ = value; }
 
 		void initialize();
-
 		void render_update();
-
 		void logic_update(float delta);
 
-
 	public:
-		//editor function
 		sw_Func() void select(Ref<GameObject> target) { selelcted_ = target; }
 		sw_Func() Ref<GameObject> get_selected() { return selelcted_; }
-
-		// end of editor function
 
 	private:
 		/**
@@ -56,10 +54,12 @@ namespace staywalk{
 		Ref<Console> console_{nullptr};
 		FileMonitor file_monitor_;
 		Renderer renderer_;
+		InputManager input_mgr_;
 
 		GameObjectRef selelcted_{ nullptr };
 		WorldRef world_{ nullptr };
 
+		vec2 view_size_;
 	};
 }
 

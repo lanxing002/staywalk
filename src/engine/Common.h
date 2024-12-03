@@ -88,24 +88,6 @@ namespace staywalk
 		class Dumper;
 		class Loader;
 	}
-
-	struct Transform {
-		vec3 location ;
-		vec3 scale;
-		quat rotation ;
-
-		bool operator==(const Transform& rhs) const {
-			return location == rhs.location &&
-				scale == rhs.scale &&
-				rotation == rhs.rotation;
-		}
-
-		void dump(rapidjson::Value&, staywalk::reflect::Dumper&) const;
-
-		void load(rapidjson::Value&, staywalk::reflect::Loader&);
-	};
-
-	constexpr static Transform Identity = Transform{vec3(.0), vec3(1.0), quat(0.0, .0, .0, 1.0)};
 }
 
 #define __MetaRegisterBase(TypeName)													\
@@ -165,4 +147,6 @@ namespace staywalk{
 	using UniformRef = shared_ptr<RUniform>;
 
 	using CameraRef = shared_ptr<Camera>;
+
+	class Engine;
 }

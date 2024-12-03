@@ -1,4 +1,5 @@
 #include "InputManager.h"
+#include <iostream>
 
 using namespace staywalk;
 
@@ -13,17 +14,21 @@ namespace staywalk {
 	}
 
 	void InputManager::set_event(const InputEvent& e){
-		if (e.device == InputDeviceType::KEYBOARD) {
-			if (e.press) keyboard_.state_[(int)e.keyboard][0] = true;
-			else keyboard_.state_[(int)e.keyboard][1] = true;
+		if (e.etype == EventType::Key) {
+			keyboard_.state_[(int)e.keyboard][e.click] = true;
 		}
-		else if (e.device == InputDeviceType::MOUSE) {
-			if (e.click == 1) mouse_.state_[(int)e.mouse][0] = true;
-			if (e.click == 2) mouse_.state_[(int)e.mouse][1] = true;
-			
-			if (e.pos.x > 0) mouse_.pos = e.pos;
-			if (e.wheel > 0) mouse_.wheel = e.wheel;
+		else if (e.etype == EventType::Mouse) {
+			mouse_.state_[(int)e.mouse][e.click] = true;
 		}
+		else if (e.etype == EventType::Move) {
+			mouse_.mouse_offset = e.pos - mouse_.pos;
+			mouse_.pos = e.pos;
+		}
+		else if (e.etype == EventType::Scroll) {
+			mouse_.wheel_offset = e.pos;
+			std::cout << "wheel " << e.pos.x << " " << e.pos.y << std::endl;
+		}
+
 	}
 }
 

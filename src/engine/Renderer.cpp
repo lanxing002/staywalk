@@ -67,6 +67,7 @@ void Renderer::render(double delta, unsigned long long count)
 	// render mesh
 	{
 		for (auto& actor : world->get_actors()) {
+			render_info.model = actor->transform.matrix();
 			if (nullptr == actor->sm_comp) continue;
 			actor->sm_comp->draw(render_info);
 		}

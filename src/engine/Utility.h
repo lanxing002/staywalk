@@ -1,5 +1,6 @@
 #pragma once
 #include "Common.h"
+#include "SimpleType.h"
 #include "Logger.h"
 
 #include <type_traits>
