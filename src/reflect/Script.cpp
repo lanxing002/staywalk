@@ -126,6 +126,14 @@ void py_bind_glm(py::module& __module) {
 		.def(py::self == py::self)
 		.def("__repr__", [](const AABB& vec) {return fmt::format("{}", vec); })
 		;
+
+	py::class_<staywalk::Vertex>(__module, "Vertex")
+		.def(py::init<>())
+		.def_readwrite("position", &Vertex::position)
+		.def_readwrite("normal", &Vertex::normal)
+		.def_readwrite("texcoords", &Vertex::texcoords)
+		.def_readwrite("tangent", &Vertex::tangent)
+		.def_readwrite("bitangent", &Vertex::bitangent);
 }
 
 static
