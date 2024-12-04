@@ -215,9 +215,22 @@ void EditorUI::show_world(){
 
 		 if (ImGui::TreeNode("camera")) {
 			 for (auto a : world->get_cameras()) {
+                 auto acticated_cam = world->get_activated_camera();
+                 bool activated = (a.get() == acticated_cam.get());
+                 ImGui::PushID(a->get_guid());
+                 if (activated) ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.12f, 0.8f, 0.1f, 1.0f));
 				 if (ImGui::Selectable(a->name.c_str(), selected == a)) {
 					 Engine::get_engine()->select(a);
 				 }
+                 if(activated) ImGui::PopStyleColor();
+
+				 if (ImGui::BeginPopupContextItem("##activate-camera")) {
+					 if (ImGui::Selectable("activate")) {
+						 world->activate_camera(a->get_guid());
+					 }
+					 ImGui::EndPopup();
+				 }
+                 ImGui::PopID();
 			 }
 			 ImGui::TreePop();
 		 }
@@ -258,7 +271,6 @@ void EditorUI::show_misc()
         //if (ImGui::Button("editor-test")) {
         //    if (text_editor_) text_editor_->startEdit();
         //}
-
         
         if (ImGui::BeginPopupModal("rename-world", nullptr, ImGuiWindowFlags_AlwaysAutoResize)) {
             ImGui::Text("world name:");

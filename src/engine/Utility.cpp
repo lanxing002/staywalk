@@ -266,20 +266,20 @@ namespace staywalk{
         // retrieve the directory path of the filepath
         process_node(scene->mRootNode, scene);
 
-        vector<pair<MeshRef, MaterialRef>> merge_meshes;
-        for (auto& [mesh, mat] : meshes_) {
-            bool merged = false;
-            for (auto& [tmesh, tmat] : merge_meshes) {
-                if (mat->is_same(tmat)) {
-                    tmesh->vertices.insert(tmesh->vertices.end(), mesh->vertices.begin(), mesh->vertices.end());
-                    tmesh->indices.insert(tmesh->indices.end(), mesh->indices.begin(), mesh->indices.end());
-                    merged = true;
-                    break;
-                }
-            }
-            if (!merged) merge_meshes.emplace_back(mesh, mat);
-        }
-        meshes_ = merge_meshes;
+        //vector<pair<MeshRef, MaterialRef>> merge_meshes;
+        //for (auto& [mesh, mat] : meshes_) {
+        //    bool merged = false;
+        //    for (auto& [tmesh, tmat] : merge_meshes) {
+        //        if (mat->is_same(tmat)) {
+        //            tmesh->vertices.insert(tmesh->vertices.end(), mesh->vertices.begin(), mesh->vertices.end());
+        //            tmesh->indices.insert(tmesh->indices.end(), mesh->indices.begin(), mesh->indices.end());
+        //            merged = true;
+        //            break;
+        //        }
+        //    }
+        //    if (!merged) merge_meshes.emplace_back(mesh, mat);
+        //}
+        //meshes_ = merge_meshes;
 
         for (auto& [mesh, mat] : meshes_) {
             if (mesh) mesh->compute_aabb();

@@ -11,8 +11,6 @@ namespace staywalk {
 		sw_Prop() StaticMeshComponentRef sm_comp{ nullptr };
 		sw_Prop() AABB get_aabb();
 
-		sw_Prop() 
-
 		MetaRegister(Actor);
 
 	private:
