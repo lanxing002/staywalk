@@ -84,6 +84,7 @@ py::class_<::staywalk::Material,Object, std::shared_ptr<::staywalk::Material>>(_
 
 py::class_<::staywalk::Camera,GameObject, std::shared_ptr<::staywalk::Camera>>(__module, "Camera")
 	.def(py::init<const string &>())
+	.def("look_actor", &Camera::look_actor)
 	.def_readwrite("porject_type", &Camera::porject_type)
 	.def_readwrite("fov", &Camera::fov)
 	.def_readwrite("aspect", &Camera::aspect)
@@ -139,6 +140,7 @@ py::class_<::staywalk::GameComponent,Object, std::shared_ptr<::staywalk::GameCom
 py::class_<::staywalk::Mesh,RObject,Drawable, std::shared_ptr<::staywalk::Mesh>>(__module, "Mesh")
 	.def(py::init<const string &>())
 	.def(py::init<const vector<Vertex> &,const vector<unsigned int> &,const string &>())
+	.def_static("create_simple_mesh", &Mesh::create_simple_mesh)
 	.def("get_aabb", &Mesh::get_aabb)
 	.def("compute_aabb", &Mesh::compute_aabb)
 	.def_readwrite("vertices", &Mesh::vertices)
@@ -147,6 +149,7 @@ py::class_<::staywalk::Mesh,RObject,Drawable, std::shared_ptr<::staywalk::Mesh>>
 
 py::class_<::staywalk::StaticMeshComponent,GameComponent,Drawable, std::shared_ptr<::staywalk::StaticMeshComponent>>(__module, "StaticMeshComponent")
 	.def(py::init<const string &>())
+	.def("add_mesh", &StaticMeshComponent::add_mesh)
 	.def("get_aabb", &StaticMeshComponent::get_aabb)
 	.def_readwrite("meshs", &StaticMeshComponent::meshs)
 	.def_readwrite("transform", &StaticMeshComponent::transform)

@@ -27,6 +27,9 @@ AssetsBrowser::~AssetsBrowser(){
 
 void AssetsBrowser::update_items(){
     items_.clear();
+    auto w = Engine::get_world();
+    if (w == nullptr) return;
+
     for (auto [_, obj] : Engine::get_world()->get_all_assets()) {
         items_.push_back(obj);
     }

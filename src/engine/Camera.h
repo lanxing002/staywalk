@@ -13,6 +13,7 @@ namespace staywalk{
 		sw_Func()  Camera(const string& name = "camera-0");
 
 		void tick(float delta) override;
+		sw_Prop() void look_actor(ActorRef actor);
 
 		sw_Prop() ProjectType porject_type;
 		sw_Prop() float fov{60.0f};

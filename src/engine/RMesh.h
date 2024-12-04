@@ -8,6 +8,9 @@
 namespace staywalk{
 	class sw_Class(jsonpost;)  Mesh : public RObject, public Drawable {
 	public:
+		sw_Func() static MeshRef create_simple_mesh();
+
+	public:
 		sw_Func()  Mesh(const string& name = "mesh-0");
 		sw_Func()  Mesh(const vector<Vertex>&vv, const vector<unsigned int>&ii, const string & name = "0-mesh");
 		~Mesh();
