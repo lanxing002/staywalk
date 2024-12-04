@@ -26,6 +26,7 @@ void Mesh::organize(){
 
 	glGenBuffers(1, &ebo);
 	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	constexpr int dd = sizeof(decltype(indices)::value_type);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices.size() * sizeof(decltype(indices)::value_type), indices.data(), GL_STATIC_DRAW);
 	
 	glEnableVertexAttribArray(0); // position
@@ -103,6 +104,23 @@ staywalk::AABB staywalk::Mesh::compute_aabb() {
 	for (const auto& v : vertices)
 		aabb_.expand(v.position);
 	return aabb_;
+}
+
+staywalk::MeshRef staywalk::Mesh::create_simple_mesh(){
+	auto result = std::make_shared<Mesh>();
+	Vertex v1;
+	Vertex v2; 
+	Vertex v3;
+	Vertex v4;
+	v1.position = vec3(-0.5, 0.0, 0.0);
+	v2.position = vec3(0.5, 0.0, 0.0);
+	v3.position = vec3(0.0, 1.0, 0.0);
+	v4.position = vec3(0.0, 0.0, 1.0);
+
+	result->vertices = vector<Vertex>{ v1, v2, v3, v4 };
+	result->indices = vector<unsigned int>{0, 1, 2, 0, 1, 3};
+	result->compute_aabb();
+	return result;
 }
 
 staywalk::Mesh::~Mesh()

@@ -52,6 +52,8 @@ namespace staywalk{
 
 		static bool dump_text(const fs::path& file_name, const std::string& text);
 
+		static MeshRef create_simple_triangle();
+
 		/***********************************************/
 		/*****************render object*****************/
 		/***********************************************/

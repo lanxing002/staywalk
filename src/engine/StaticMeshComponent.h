@@ -7,6 +7,9 @@ namespace staywalk{
 	class sw_Class()  StaticMeshComponent : public GameComponent, public Drawable {
 	public:
 		sw_Func() StaticMeshComponent(const string & name = "sm-comp-0");
+		sw_Func() void add_mesh(MeshRef mesh) {
+			if (mesh) meshs.emplace_back(mesh, nullptr); 
+		}
 
 		void draw(RenderInfo& info) override;
 

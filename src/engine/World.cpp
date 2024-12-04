@@ -28,7 +28,7 @@ namespace staywalk{
 	}
 	
 	WorldRef World::load_marry_world(){
-		auto meshload = MeshLoader(R"(E:\gly\codes\LearnOpenGL\resources\objects\backpack\backpack.obj)");
+		auto meshload = MeshLoader(R"(E:\gly\codes\LearnOpenGL\resources\objects\rock\rock.obj)");
 
 		shared_ptr<Actor> actor = std::make_shared<Actor>("marry");
 		Ref<StaticMeshComponent> sm = std::make_shared<StaticMeshComponent>();
@@ -50,6 +50,9 @@ namespace staywalk{
 		auto loader = reflect::Loader(world_file);
 		loader.load(*world);
 		world->set_name(name);
+		if (world->cameras_.size() > 0 && world->cameras_[0]) {
+			world->activate_camera(world->cameras_[0]->get_guid());
+		}
 		return world;
 	}
 

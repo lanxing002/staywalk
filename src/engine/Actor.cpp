@@ -18,9 +18,11 @@ namespace staywalk {
 		if (sm_comp) {
 			auto sm_aabb = sm_comp->get_aabb();
 			if (!sm_aabb.valid()) return aabb;
-			aabb = AABB{mat * vec4(sm_aabb.min, 1.0), mat * vec4(sm_aabb.max, 1.0)};
+			aabb.expand(mat * vec4(sm_aabb.min, 1.0));
+			aabb.expand(mat * vec4(sm_aabb.max, 1.0));
 		}
 		return aabb;
 	}
+
 }
 
