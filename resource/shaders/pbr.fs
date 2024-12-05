@@ -13,8 +13,9 @@ out vec4 frag_color;
 // shader code
 
 void main(){
-    frag_color.x = norm.x;
-    frag_color.y = texcoord.x;
-    frag_color.z = tangent.x;
-    frag_color.w = bitangent.x;
+    vec3 n = normalize(norm);   
+    //float factor = dot(n, vec3(1, 1, 0.5));
+    //frag_color.xyz = vec3(1.0, 1.0, 1.0);
+    frag_color.xyz = norm;
+    frag_color.w = 1.0;
 }
