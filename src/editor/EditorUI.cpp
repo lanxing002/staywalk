@@ -91,6 +91,15 @@ void EditorUI::render_post(){
     //ImGui::UpdatePlatformWindows();
 }
 
+void EditorUI::show_hide_cursor(bool show_flag){
+    ImGuiIO& io = ImGui::GetIO();
+    if (!show_flag) io.ConfigFlags |= ImGuiConfigFlags_NoMouseCursorChange;
+    else io.ConfigFlags &= ~ImGuiConfigFlags_NoMouseCursorChange;
+
+    io.WantCaptureKeyboard = show_flag;
+    io.WantCaptureMouse = show_flag;
+}
+
 void EditorUI::setup_style(){
     ImGuiIO& io = ImGui::GetIO();
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls

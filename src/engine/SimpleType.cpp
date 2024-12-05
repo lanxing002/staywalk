@@ -11,7 +11,7 @@ using namespace staywalk;
 mat4 staywalk::Transform::matrix() const{
 	auto result = glm::mat4(1.0);
 	result = glm::scale(result, scale);
-	result = glm::toMat4(rotation) * result;
+	result = glm::mat4_cast(glm::quat(glm::radians(rotation))) * result;
 	result = glm::translate(result, location);
 	return result;
 }

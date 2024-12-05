@@ -11,5 +11,7 @@ namespace staywalk {
 		static eventpp::CallbackList<void(SWCodeRef)> Editor_EditCode;
 
 		static eventpp::CallbackList<void(SWCodeRef)> Editor_EditCodeDone;
+
+		static eventpp::CallbackList<void(bool)> Editor_ShowHideCursor;
 	};
 }

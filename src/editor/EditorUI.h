@@ -21,6 +21,8 @@ public:
     void render();
     void render_post();
 
+    void show_hide_cursor(bool show_flag);
+
 private:
     void setup_style();
     void build_dock_space();
