@@ -59,7 +59,6 @@ namespace staywalk {
 	void Engine::logic_update(float delta){
 		file_monitor_.effect();
 		if (world_) world_->logic_update();
-		input_mgr_.clear();
 	}
 
 

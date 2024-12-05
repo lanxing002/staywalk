@@ -258,7 +258,7 @@ void scroll_callback(GLFWwindow* window, double xoffset, double yoffset){
 void mouse_button_callback(GLFWwindow* window, int button, int action, int mods){
     if (input_mgr == nullptr) return;
     InputEvent e;
-
+	e.etype = EventType::Mouse;
 	switch (button)
 	{
 	case GLFW_MOUSE_BUTTON_LEFT:
@@ -346,6 +346,7 @@ void Window::run(){
             editor_ui_.render_post();
         }
         swap_buffer();
+		engine->event_clear();
         poll_events();
     }
 }
