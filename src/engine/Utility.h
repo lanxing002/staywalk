@@ -54,6 +54,8 @@ namespace staywalk{
 
 		static MeshRef create_simple_triangle();
 
+		static void check_gl_error(const std::string& file_line);
+
 		/***********************************************/
 		/*****************render object*****************/
 		/***********************************************/

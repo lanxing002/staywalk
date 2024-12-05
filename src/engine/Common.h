@@ -111,6 +111,8 @@ public:																			\
 	void construct_obj_ui(bool can_modify) override;								
 	//virtual void construct_ui();	
 
+#define GLCheck(__invoke_code)\
+	__invoke_code; Utility::check_gl_error(fmt::format("flie: {} --> line: {}", __FILE__, __LINE__));
 
 // forward declare 
 namespace staywalk{
