@@ -15,10 +15,10 @@ namespace staywalk {
 
 	void InputManager::set_event(const InputEvent& e){
 		if (e.etype == EventType::Key) {
-			keyboard_.state_[(int)e.keyboard][e.click] = true;
+			keyboard_.state_[(int)e.keyboard] = e.pressed;
 		}
 		else if (e.etype == EventType::Mouse) {
-			mouse_.state_[(int)e.mouse][e.click] = true;
+			mouse_.state_[(int)e.mouse] = e.pressed;
 		}
 		else if (e.etype == EventType::Move) {
 			mouse_.mouse_offset = e.pos - mouse_.pos;
@@ -26,7 +26,6 @@ namespace staywalk {
 		}
 		else if (e.etype == EventType::Scroll) {
 			mouse_.wheel_offset = e.pos;
-			std::cout << "wheel " << e.pos.x << " " << e.pos.y << std::endl;
 		}
 
 	}

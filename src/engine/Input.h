@@ -133,7 +133,7 @@ namespace staywalk {
 		Keyboard keyboard;
 		Mouse mouse;
 
-		uint8_t click;
+		bool pressed;
 
 		glm::vec2 pos;
 	};
@@ -141,9 +141,9 @@ namespace staywalk {
 	class InputManager;
 	class MouseDevice {
 	private:
-		MouseDevice() {}
+		MouseDevice();
 		void clear();
-		bool state_[3][2];
+		bool state_[3];
 		vec2 pos = vec2(0, 0);
 		vec2 mouse_offset = vec2(.0, .0);
 		vec2 wheel_offset = vec2(.0, .0);
@@ -152,9 +152,9 @@ namespace staywalk {
 
 	class KeyBoardDevice {
 	private:
-		KeyBoardDevice() {}
-		void clear();
-		bool state_[(int)Keyboard::COUNT][2];
+		KeyBoardDevice();
+		void clear() {}
+		bool state_[(int)Keyboard::COUNT];
 		friend class InputManager;
 	};
 }

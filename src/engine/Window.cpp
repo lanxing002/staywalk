@@ -2,7 +2,7 @@
 #include "Logger.h"
 #include "Engine.h"
 #include "InputManager.h"
-
+#include "Event.h"
 #include <iostream>
 
 using namespace staywalk;
@@ -26,6 +26,7 @@ void window_size_callback(GLFWwindow* window, int width, int height) {
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
 	if (input_mgr == nullptr) return;
 	InputEvent e;
+	e.etype = EventType::Key;
     switch (key)
     {
 	case GLFW_KEY_A:
@@ -227,10 +228,10 @@ void key_callback(GLFWwindow* window, int key, int scancode, int action, int mod
 	switch (action)
 	{
 	case GLFW_PRESS:
-		e.click = 0;
+		e.pressed = true;
 		break;
 	case GLFW_RELEASE:
-		e.click = 1;
+		e.pressed = false;
 		break;
 	default:
 		return;
@@ -277,10 +278,10 @@ void mouse_button_callback(GLFWwindow* window, int button, int action, int mods)
     switch (action)
     {
     case GLFW_PRESS:
-        e.click = 0;
+        e.pressed = true;
 		break;
     case GLFW_RELEASE:
-        e.click = 1;
+		e.pressed = false;
 		break;
     default:
         return;
@@ -317,6 +318,13 @@ Window::Window(int width, int height)
         log(std::string("Failed to initialize GLAD!!"), LogLevel::Error);
         terminate();
     }
+
+	Event::Editor_ShowHideCursor.append([this](bool show_flag) {
+		if (show_flag) glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_NORMAL);
+		else glfwSetInputMode(window_, GLFW_CURSOR, GLFW_CURSOR_DISABLED);
+
+		editor_ui_.show_hide_cursor(show_flag);
+	});
 }
 
 Window::~Window(){
@@ -342,8 +350,8 @@ void Window::run(){
 		engine->logic_update(1.0);
 		engine->render_update();
         {  // render editor ui
-            editor_ui_.render();
-            editor_ui_.render_post();
+			editor_ui_.render();
+			editor_ui_.render_post();
         }
         swap_buffer();
 		engine->event_clear();
