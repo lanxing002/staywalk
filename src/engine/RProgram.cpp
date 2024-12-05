@@ -18,7 +18,8 @@ void staywalk::RShader::organize(){
 	if (shadertype == ShaderType::None) {
 		log(fmt::format("RShader::organize --> shader {} has None shadetype", name), LogLevel::Warn);
 	}
-	glid = glCreateShader((GLenum)shadertype);
+	if(glid == kGlSickId)
+		glid = glCreateShader((GLenum)shadertype);
 	auto source = code->text.c_str();
 	glShaderSource(glid, 1, &source, NULL);
 	glCompileShader(glid);
@@ -103,7 +104,7 @@ void staywalk::RProgram::use() {
 		dirty_ = false;
 	}
 
-	if (vs.is_dirty() || fs.is_dirty() || gs.is_dirty()) {
+	if (vs.is_dirty() || fs.is_dirty() /*|| gs.is_dirty()*/) {
 		if (vs.is_dirty())  glAttachShader(glid, vs.get_updated_id());
 		if (fs.is_dirty()) glAttachShader(glid, fs.get_updated_id());
 		//if (gs.is_dirty()) glAttachShader(glid, gs.get_updated_id());
@@ -120,7 +121,7 @@ void staywalk::RProgram::check_link_error(){
 	GLchar info[1024];
 	glGetProgramiv(glid, GL_LINK_STATUS, &success);
 	if (!success){
-		glGetShaderInfoLog(glid, 1024, NULL, info);
+		glGetProgramInfoLog(glid, 1024, NULL, info);
 		log(fmt::format("RProgram::Link Failed --> {}", info), LogLevel::Warn);
 	}
 }
