@@ -39,6 +39,7 @@ namespace staywalk{
 		void initialize();
 		void render_update();
 		void logic_update(float delta);
+		void event_clear() { input_mgr_.clear(); }
 
 	public:
 		sw_Func() void select(Ref<GameObject> target) { selelcted_ = target; }
