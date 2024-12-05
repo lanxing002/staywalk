@@ -5,15 +5,15 @@
 namespace staywalk {
 	class  InputManager {
 	public:
-		bool press(Keyboard id) const { return keyboard_.state_[(int)id][0]; }
-		bool release(Keyboard id) const { return  keyboard_.state_[(int)id][1]; }
+		bool press(Keyboard id) const { return keyboard_.state_[(int)id]; }
+		bool release(Keyboard id) const { return  !keyboard_.state_[(int)id]; }
 
-		bool left_click()	const	{ return mouse_.state_[(int)Mouse::LEFT][0]; }
-		bool left_relase()	const	{ return mouse_.state_[(int)Mouse::LEFT][1]; }
-		bool right_click()	const	{ return mouse_.state_[(int)Mouse::RIGHT][0]; }
-		bool right_relase() const	{ return mouse_.state_[(int)Mouse::RIGHT][1]; }
-		bool middle_click() const	{ return mouse_.state_[(int)Mouse::MIDDLE][0]; }
-		bool middle_relase() const	{ return mouse_.state_[(int)Mouse::MIDDLE][1]; }
+		bool left_click()	const	{ return mouse_.state_[(int)Mouse::LEFT]; }
+		bool left_relase()	const	{ return !mouse_.state_[(int)Mouse::LEFT]; }
+		bool right_click()	const	{ return mouse_.state_[(int)Mouse::RIGHT]; }
+		bool right_relase() const	{ return !mouse_.state_[(int)Mouse::RIGHT]; }
+		bool middle_click() const	{ return mouse_.state_[(int)Mouse::MIDDLE]; }
+		bool middle_relase() const	{ return !mouse_.state_[(int)Mouse::MIDDLE]; }
 
 
 		vec2 pos() const { return mouse_.pos; }

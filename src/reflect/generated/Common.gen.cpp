@@ -14,12 +14,12 @@
 #include "GameComponent.h"
 #include "RMesh.h"
 #include "StaticMeshComponent.h"
-#include "RenderObject.h"
 #include "Camera.h"
-#include "RenderInfo.h"
 #include "RenderObject.h"
 #include "RenderObject.h"
 #include "RProgram.h"
+#include "RenderObject.h"
+#include "RenderInfo.h"
 
 
 
@@ -68,30 +68,10 @@ shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
-    return { 
-        {static_cast<int>(::staywalk::GlWrap::CLAMP_TO_EDGE), "CLAMP_TO_EDGE"},
-        {static_cast<int>(::staywalk::GlWrap::MIRRORED_REPEAT), "MIRRORED_REPEAT"},
-        {static_cast<int>(::staywalk::GlWrap::REPEAT), "REPEAT"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
 staywalk::reflect::get_enum_label<::staywalk::ProjectType>() {
     return { 
         {static_cast<int>(::staywalk::ProjectType::Persepective), "Persepective"},
         {static_cast<int>(::staywalk::ProjectType::Ortho), "Ortho"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::ProgramType>() {
-    return { 
-        {static_cast<int>(::staywalk::ProgramType::PBR), "PBR"},
-        {static_cast<int>(::staywalk::ProgramType::Shadow), "Shadow"},
-        {static_cast<int>(::staywalk::ProgramType::_Count), "_Count"},
     };
 }
 
@@ -126,5 +106,25 @@ staywalk::reflect::get_enum_label<::staywalk::ShaderType>() {
         {static_cast<int>(::staywalk::ShaderType::FS), "FS"},
         {static_cast<int>(::staywalk::ShaderType::GS), "GS"},
         {static_cast<int>(::staywalk::ShaderType::CS), "CS"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
+    return { 
+        {static_cast<int>(::staywalk::GlWrap::CLAMP_TO_EDGE), "CLAMP_TO_EDGE"},
+        {static_cast<int>(::staywalk::GlWrap::MIRRORED_REPEAT), "MIRRORED_REPEAT"},
+        {static_cast<int>(::staywalk::GlWrap::REPEAT), "REPEAT"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::ProgramType>() {
+    return { 
+        {static_cast<int>(::staywalk::ProgramType::PBR), "PBR"},
+        {static_cast<int>(::staywalk::ProgramType::Shadow), "Shadow"},
+        {static_cast<int>(::staywalk::ProgramType::_Count), "_Count"},
     };
 }
