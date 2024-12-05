@@ -8,7 +8,7 @@ namespace staywalk{
 	struct Transform {
 		vec3 location;
 		vec3 scale;
-		quat rotation;
+		vec3 rotation;
 
 		bool operator==(const Transform& rhs) const {
 			return location == rhs.location &&
@@ -57,7 +57,7 @@ namespace staywalk{
 	};
 
 
-	constexpr static Transform Identity = Transform{ vec3(.0), vec3(1.0), quat(0.0, .0, .0, 1.0) };
+	constexpr static Transform Identity = Transform{ vec3(.0), vec3(1.0), vec3(1.0) };
 
 
 	enum class CodeType : int{
