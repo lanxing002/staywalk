@@ -160,7 +160,41 @@ namespace staywalk{
         return true;
     }
 
-    shared_ptr<RTex> Utility::make_texture(fs::path tex_name){
+	void Utility::check_gl_error(const std::string& file_line){
+		GLenum error;
+        while ((error = glGetError()) != GL_NO_ERROR){
+            string info;
+            switch (error)
+            {
+            case GL_INVALID_ENUM:
+                info = "GL_INVALID_ENUM";
+                break;
+            case GL_INVALID_VALUE:
+                info = "GL_INVALID_VALUE";
+                break;
+            case GL_INVALID_OPERATION:
+                info = "GL_INVALID_OPERATION";
+                break;
+            case GL_INVALID_FRAMEBUFFER_OPERATION:
+                info = "GL_INVALID_FRAMEBUFFER_OPERATION";
+                break;
+            case GL_OUT_OF_MEMORY:
+                info = "GL_OUT_OF_MEMORY";
+                break;
+            case GL_STACK_UNDERFLOW:
+                info = "GL_STACK_UNDERFLOW";
+                break;
+            case GL_STACK_OVERFLOW:
+                info = "GL_STACK_OVERFLOW";
+                break;
+            default:
+                break;
+            }
+            log(fmt::format("opengl::error --> {}, {}", info, file_line), LogLevel::Error);
+		}
+	}
+
+	shared_ptr<RTex> Utility::make_texture(fs::path tex_name) {
         auto result = std::make_shared<RTex>();
         result->tex.name = tex_name.u8string();
         load_tex_resource(*result);

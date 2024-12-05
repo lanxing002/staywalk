@@ -22,6 +22,11 @@ void Renderer::initialize(){
 
 	RProgram::monitor(program_table_[static_cast<int>(ProgramType::PBR)]);
 	RProgram::monitor(program_table_[static_cast<int>(ProgramType::Shadow)]);
+
+	glEnable(GL_DEPTH_TEST);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
 void Renderer::render(double delta, unsigned long long count)
@@ -57,12 +62,11 @@ void Renderer::render(double delta, unsigned long long count)
 	// setup shader
 	{
 		auto program = program_table_[(int)ProgramType::PBR];
+		program->use();
 		program->set_uniform("view", render_info.view);
 		program->set_uniform("projection", render_info.projection);
-		program->use();
 		render_info.program = program;
 	}
-
 	
 	// render mesh
 	{
