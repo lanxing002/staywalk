@@ -26,7 +26,7 @@ using namespace staywalk;
 static void bind_auto(py::module& __module){
 py::class_<::staywalk::Object, std::shared_ptr<::staywalk::Object>>(__module, "Object")
 	.def(py::init<const string &>())
-	.def_readwrite("name", &Object::name)
+	.def_readwrite("name_", &Object::name_)
 ;
 
 py::class_<::staywalk::GameObject,Object, std::shared_ptr<::staywalk::GameObject>>(__module, "GameObject")
