@@ -20,39 +20,6 @@
         "833224903237828608": 833224903237828608
     },
     "__real_objects": {
-        "832885763652714501": {
-            "__object_type_": "staywalk::Mesh",
-            "name_": "mesh-0",
-            "guid_": 832885763652714501
-        },
-        "832885763652714503": {
-            "__object_type_": "staywalk::StaticMeshComponent",
-            "name_": "sm-comp-0",
-            "guid_": 832885763652714503,
-            "meshs": [
-                {
-                    "first": 832885763652714501,
-                    "second": 18446744073709551615
-                }
-            ],
-            "transform": {
-                "location": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "scale": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "rotation": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            }
-        },
         "832885763652714502": {
             "__object_type_": "staywalk::Actor",
             "name_": "rock",
@@ -74,12 +41,57 @@
                     0.0
                 ]
             },
-            "sm_comp": 832885763652714503
+            "sm_comp": 18446744073709551615
         },
-        "833224903237828608": {
-            "__object_type_": "staywalk::Mesh",
+        "833067916273385472": {
+            "__object_type_": "staywalk::Terrain",
             "name_": "terrain",
-            "guid_": 833224903237828608
+            "guid_": 833067916273385472,
+            "transform": {
+                "location": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    32.0,
+                    20.0,
+                    1.0
+                ],
+                "rotation": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "sm_comp": 18446744073709551615
+        },
+        "832885806002601984": {
+            "__object_type_": "staywalk::Camera",
+            "name_": "camera-0",
+            "guid_": 832885806002601984,
+            "transform": {
+                "location": [
+                    35.284427642822266,
+                    12.154633522033691,
+                    52.954559326171875
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    -13.487981796264648,
+                    -27.296340942382813,
+                    0.0
+                ]
+            },
+            "porject_type": 1,
+            "fov": 60.0,
+            "aspect": 1.0,
+            "near": 0.5,
+            "far": 738.0
         },
         "833115297245298688": {
             "__object_type_": "staywalk::RProgram",
@@ -113,6 +125,84 @@
                 }
             }
         },
+        "832885763652714496": {
+            "__object_type_": "staywalk::Material",
+            "name_": "0-material",
+            "guid_": 832885763652714496,
+            "program": 833115297245298688,
+            "uniforms_": [],
+            "texs_": [],
+            "vecce": [
+                1,
+                2
+            ]
+        },
+        "832885763652714501": {
+            "__object_type_": "staywalk::Mesh",
+            "name_": "mesh-0",
+            "guid_": 832885763652714501
+        },
+        "832885763652714503": {
+            "__object_type_": "staywalk::StaticMeshComponent",
+            "name_": "sm-comp-0",
+            "guid_": 832885763652714503,
+            "meshs": [
+                {
+                    "first": 832885763652714501,
+                    "second": 18446744073709551615
+                }
+            ],
+            "transform": {
+                "location": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "833224903237828608": {
+            "__object_type_": "staywalk::Mesh",
+            "name_": "terrain",
+            "guid_": 833224903237828608
+        },
+        "833067916285968384": {
+            "__object_type_": "staywalk::StaticMeshComponent",
+            "name_": "sm",
+            "guid_": 833067916285968384,
+            "meshs": [
+                {
+                    "first": 833224903237828608,
+                    "second": 18446744073709551615
+                }
+            ],
+            "transform": {
+                "location": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
         "833194332528836608": {
             "__object_type_": "staywalk::RTex",
             "name_": "tex-0",
@@ -142,96 +232,6 @@
                 }
             ],
             "vecce": []
-        },
-        "833067916285968384": {
-            "__object_type_": "staywalk::StaticMeshComponent",
-            "name_": "sm",
-            "guid_": 833067916285968384,
-            "meshs": [
-                {
-                    "first": 833224903237828608,
-                    "second": 833132674825584640
-                }
-            ],
-            "transform": {
-                "location": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "scale": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "rotation": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            }
-        },
-        "833067916273385472": {
-            "__object_type_": "staywalk::Terrain",
-            "name_": "terrain",
-            "guid_": 833067916273385472,
-            "transform": {
-                "location": [
-                    0.0,
-                    0.0,
-                    0.0
-                ],
-                "scale": [
-                    32.0,
-                    20.0,
-                    1.0
-                ],
-                "rotation": [
-                    1.0,
-                    1.0,
-                    1.0
-                ]
-            },
-            "sm_comp": 833067916285968384
-        },
-        "832885806002601984": {
-            "__object_type_": "staywalk::Camera",
-            "name_": "camera-0",
-            "guid_": 832885806002601984,
-            "transform": {
-                "location": [
-                    35.284427642822266,
-                    12.154633522033691,
-                    52.954559326171875
-                ],
-                "scale": [
-                    1.0,
-                    1.0,
-                    1.0
-                ],
-                "rotation": [
-                    -13.487981796264648,
-                    -27.296340942382813,
-                    0.0
-                ]
-            },
-            "porject_type": 1,
-            "fov": 60.0,
-            "aspect": 1.0,
-            "near": 0.5,
-            "far": 738.0
-        },
-        "832885763652714496": {
-            "__object_type_": "staywalk::Material",
-            "name_": "0-material",
-            "guid_": 832885763652714496,
-            "program": 833115297245298688,
-            "uniforms_": [],
-            "texs_": [],
-            "vecce": [
-                1,
-                2
-            ]
         },
         "833221380844552192": {
             "__object_type_": "staywalk::Mesh",
