@@ -56,7 +56,7 @@ bool Mesh::load_resource(){
 }
 
 void Mesh::load_post() {
-	auto path = Utility::get_objects_dir() / (name + Utility::kMeshExt);
+	auto path = Utility::get_objects_dir() / (name_ + Utility::kMeshExt);
 	auto ifs = ifstream(path, std::ios::binary);
 	bool status = false;
 	if (ifs) {
@@ -81,7 +81,7 @@ void Mesh::load_post() {
 void Mesh::dump_post() const {
 	size_t vsize = vertices.size();
 	size_t isize = indices.size();
-	auto path = Utility::get_objects_dir() / (name + Utility::kMeshExt);
+	auto path = Utility::get_objects_dir() / (name_ + Utility::kMeshExt);
 	auto ofs = ofstream(path, std::ios::binary | std::ios::trunc);
 	bool status = false;
 	if (ofs) {
@@ -146,7 +146,7 @@ staywalk::MeshRef staywalk::Mesh::create_plane(int row, int column){
 			//         |      |
 			//         d------c
 			// c is current
-			auto c_idx = j;
+			auto c_idx = j + (column + 1) * i;
 			auto a_idx = (column + 1) * (i - 1) + j - 1;
 			auto b_idx = a_idx + 1;
 			auto d_idx = c_idx - 1;

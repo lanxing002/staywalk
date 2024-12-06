@@ -58,7 +58,7 @@ namespace staywalk {
 			transform.location = pos;
 			transform.rotation = glm::degrees(glm::eulerAngles(glm::quat_cast(glm::mat3(mat))));
 			transform.rotation.z = .0;
-			log(fmt::format("Camera::look_actor --> look to {}", actor->name));
+			log(fmt::format("Camera::look_actor --> look to {}", actor->name_));
 		}
 	}
 
