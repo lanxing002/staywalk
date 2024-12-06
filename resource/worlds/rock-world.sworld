@@ -14,57 +14,16 @@
         "833067916285968384": 833067916285968384,
         "833115297245298688": 833115297245298688,
         "833132674825584640": 833132674825584640,
-        "833194332528836608": 833194332528836608
+        "833194332528836608": 833194332528836608,
+        "833221380844552192": 833221380844552192,
+        "833224095310020608": 833224095310020608,
+        "833224903237828608": 833224903237828608
     },
     "__real_objects": {
         "832885763652714501": {
             "__object_type_": "staywalk::Mesh",
             "name": "0-mesh",
             "guid_": 832885763652714501
-        },
-        "833115297245298688": {
-            "__object_type_": "staywalk::RProgram",
-            "name": "terrain",
-            "guid_": 833115297245298688,
-            "vs": {
-                "name": "vertex",
-                "guid_": 833115297245298689,
-                "shadertype": 35633,
-                "code": {
-                    "code": "#version 330 core\n\n// input data layout\nlayout(location = 0) in vec3 in_pos;\nlayout(location = 1) in vec3 in_norm;\nlayout(location = 2) in vec2 in_texcoord;\nlayout(location = 3) in vec3 in_tangent;\nlayout(location = 4) in vec3 in_bitangent;\n// layout(location = 5) in ivec4 boneIds; \n// layout(location = 6) in vec4 weights;\n\n// out data layout\nout vec3 norm;\nout vec2 texcoord;\nout vec3 tangent;\nout vec3 bitangent;\n\n\n// uniform \nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\n\n\n// shader code\nvoid main(){\n    norm = in_norm;\n    texcoord = in_texcoord;\n    tangent = in_tangent;\n    bitangent = in_bitangent;\n    gl_Position = projection * view * model * vec4(in_pos, 1.0);\n}\n\n",
-                    "code_type": 0
-                }
-            },
-            "fs": {
-                "name": "fragment",
-                "guid_": 833115297245298690,
-                "shadertype": 35632,
-                "code": {
-                    "code": "#version 330 core\n\n// input data layout\nin vec3 norm;\nin vec2 texcoord;\nin vec3 tangent;\nin vec3 bitangent;\n\n// output data layout\nout vec4 frag_color;  \n\n\n// shader code\n\nvoid main(){\n    vec3 n = normalize(norm);   \n    //float factor = dot(n, vec3(1, 1, 0.5));\n    //frag_color.xyz = vec3(1.0, 1.0, 1.0);\n    frag_color.xyz = norm * 0.8;\n    frag_color.w = 1.0;\n}",
-                    "code_type": 0
-                }
-            },
-            "gs": {
-                "name": "geom",
-                "guid_": 833115297245298691,
-                "shadertype": 36313,
-                "code": {
-                    "code": "",
-                    "code_type": 0
-                }
-            }
-        },
-        "832885763652714496": {
-            "__object_type_": "staywalk::Material",
-            "name": "basic",
-            "guid_": 832885763652714496,
-            "program": 833115297245298688,
-            "uniforms_": [],
-            "texs_": [],
-            "vecce": [
-                1,
-                2
-            ]
         },
         "832885763652714503": {
             "__object_type_": "staywalk::StaticMeshComponent",
@@ -73,7 +32,7 @@
             "meshs": [
                 {
                     "first": 832885763652714501,
-                    "second": 832885763652714496
+                    "second": 18446744073709551615
                 }
             ],
             "transform": {
@@ -117,10 +76,42 @@
             },
             "sm_comp": 832885763652714503
         },
-        "833067916273385473": {
+        "833224903237828608": {
             "__object_type_": "staywalk::Mesh",
-            "name": "plane",
-            "guid_": 833067916273385473
+            "name": "sm_terrain",
+            "guid_": 833224903237828608
+        },
+        "833115297245298688": {
+            "__object_type_": "staywalk::RProgram",
+            "name": "terrain",
+            "guid_": 833115297245298688,
+            "vs": {
+                "name": "vertex",
+                "guid_": 833115297245298689,
+                "shadertype": 35633,
+                "code": {
+                    "code": "#version 330 core\n\n// input data layout\nlayout(location = 0) in vec3 in_pos;\nlayout(location = 1) in vec3 in_norm;\nlayout(location = 2) in vec2 in_texcoord;\nlayout(location = 3) in vec3 in_tangent;\nlayout(location = 4) in vec3 in_bitangent;\n// layout(location = 5) in ivec4 boneIds; \n// layout(location = 6) in vec4 weights;\n\n// out data layout\nout vec3 norm;\nout vec2 texcoord;\nout vec3 tangent;\nout vec3 bitangent;\nuniform sampler2D height;\n\n// uniform \nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\n\n\n// shader code\nvoid main(){\n    float h = texture(height, texcoord).x;\n    norm = in_norm;\n    texcoord = in_texcoord;\n    tangent = in_tangent;\n    bitangent = in_bitangent;\n    vec4 world_pos = model * vec4(in_pos, 1.0);\n    world_pos.z = sin((in_pos.x + in_pos.y) * 4) * 100.0;\n    world_pos.z = h * 10.0;\n    gl_Position = projection * view * world_pos;\n}\n\n",
+                    "code_type": 0
+                }
+            },
+            "fs": {
+                "name": "fragment",
+                "guid_": 833115297245298690,
+                "shadertype": 35632,
+                "code": {
+                    "code": "#version 330 core\n\n// input data layout\nin vec3 norm;\nin vec2 texcoord;\nin vec3 tangent;\nin vec3 bitangent;\n\n// output data layout\nout vec4 frag_color;  \n// uniform sampler2D height;\n\n\n// shader code\n\nvoid main(){\n    vec3 n = normalize(norm);\n    // vec3 color = texture(height, texcoord).rgb;\n    //float factor = dot(n, vec3(1, 1, 0.5));\n    //frag_color.xyz = vec3(1.0, 1.0, 1.0);\n    // frag_color.xyz = color * 0.2;\n    frag_color.z = .0;\n    frag_color.xy = texcoord;\n    frag_color.w = 1.0;\n}",
+                    "code_type": 0
+                }
+            },
+            "gs": {
+                "name": "geom",
+                "guid_": 833115297245298691,
+                "shadertype": 36313,
+                "code": {
+                    "code": "",
+                    "code_type": 0
+                }
+            }
         },
         "833194332528836608": {
             "__object_type_": "staywalk::RTex",
@@ -135,7 +126,7 @@
             "mipmap": true,
             "wrap_s": 10497,
             "wrap_t": 10497,
-            "min_filter": 9729,
+            "min_filter": 9987,
             "mag_filter": 9729
         },
         "833132674825584640": {
@@ -158,7 +149,7 @@
             "guid_": 833067916285968384,
             "meshs": [
                 {
-                    "first": 833067916273385473,
+                    "first": 833224903237828608,
                     "second": 833132674825584640
                 }
             ],
@@ -191,8 +182,8 @@
                     0.0
                 ],
                 "scale": [
-                    100.0,
-                    100.0,
+                    32.0,
+                    20.0,
                     1.0
                 ],
                 "rotation": [
@@ -209,9 +200,9 @@
             "guid_": 832885806002601984,
             "transform": {
                 "location": [
-                    4.880000114440918,
-                    1.5709999799728394,
-                    125.45700073242188
+                    35.284427642822266,
+                    12.154633522033691,
+                    52.954559326171875
                 ],
                 "scale": [
                     1.0,
@@ -219,16 +210,38 @@
                     1.0
                 ],
                 "rotation": [
-                    -10.223945617675781,
-                    10.743562698364258,
+                    -13.487981796264648,
+                    -27.296340942382813,
                     0.0
                 ]
             },
-            "porject_type": 0,
+            "porject_type": 1,
             "fov": 60.0,
             "aspect": 1.0,
-            "near": 0.10000000149011612,
-            "far": 1000.0
+            "near": 0.5,
+            "far": 738.0
+        },
+        "832885763652714496": {
+            "__object_type_": "staywalk::Material",
+            "name": "basic",
+            "guid_": 832885763652714496,
+            "program": 833115297245298688,
+            "uniforms_": [],
+            "texs_": [],
+            "vecce": [
+                1,
+                2
+            ]
+        },
+        "833221380844552192": {
+            "__object_type_": "staywalk::Mesh",
+            "name": "simple-plane",
+            "guid_": 833221380844552192
+        },
+        "833224095310020608": {
+            "__object_type_": "staywalk::Mesh",
+            "name": "terrain",
+            "guid_": 833224095310020608
         }
     }
 }

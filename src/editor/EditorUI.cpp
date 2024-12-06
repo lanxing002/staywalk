@@ -215,7 +215,7 @@ void EditorUI::show_world(){
 
 		 if (ImGui::TreeNode("actor")) {
 			 for (auto a : world->get_actors()) {
-				 if (ImGui::Selectable(a->name.c_str(), selected == a)) {
+				 if (ImGui::Selectable(a->name_.c_str(), selected == a)) {
 					 Engine::get_engine()->select(a);
 				 }
 			 }
@@ -228,7 +228,7 @@ void EditorUI::show_world(){
                  bool activated = (a.get() == acticated_cam.get());
                  ImGui::PushID(a->get_guid());
                  if (activated) ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.12f, 0.8f, 0.1f, 1.0f));
-				 if (ImGui::Selectable(a->name.c_str(), selected == a)) {
+				 if (ImGui::Selectable(a->name_.c_str(), selected == a)) {
 					 Engine::get_engine()->select(a);
 				 }
                  if(activated) ImGui::PopStyleColor();
@@ -246,7 +246,7 @@ void EditorUI::show_world(){
 
 		 if (ImGui::TreeNode("light")) {
 			 for (auto a : world->get_lights()) {
-				 if (ImGui::Selectable(a->name.c_str(), selected == a)) {
+				 if (ImGui::Selectable(a->name_.c_str(), selected == a)) {
 					 Engine::get_engine()->select(a);
 				 }
 			 }

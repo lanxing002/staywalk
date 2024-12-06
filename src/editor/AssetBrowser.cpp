@@ -248,7 +248,7 @@ void AssetsBrowser::draw(const char* title, bool* p_open){
                         if (display_label){
                             ImU32 label_col = ImGui::GetColorU32(item_is_selected ? ImGuiCol_Text : ImGuiCol_TextDisabled);
                             draw_list->AddText(ImVec2(box_min.x, box_max.y - ImGui::GetFontSize()), label_col, 
-                                item->name.c_str());
+                                item->name_.c_str());
                         }
                     }
 
@@ -265,7 +265,7 @@ void AssetsBrowser::draw(const char* title, bool* p_open){
         }
 
         if (ImGui::BeginPopupModal("##assetmodifyobject", &modify_open_ /*,ImGuiWindowFlags_AlwaysAutoResize*/)) {
-            ImGui::Text("Modify :", modify_obj_->name.c_str());
+            ImGui::Text("Modify :", modify_obj_->name_.c_str());
             if (modify_obj_) modify_obj_->construct_ui(true);
             //ImGui::CloseCurrentPopup();
             ImGui::Separator();

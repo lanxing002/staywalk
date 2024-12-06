@@ -55,7 +55,7 @@ namespace staywalk {
 	void RTex::load_post() {
 		auto status = Utility::load_tex_resource(*this);
 		dirty_ = true;
-		log(fmt::format("RTex::load_post from {}, status: {}", tex.name, status),
+		log(fmt::format("RTex::load_post from {}, status: {}", tex.name_, status),
 			status ? LogLevel::Info : LogLevel::Warn);
 	}
 

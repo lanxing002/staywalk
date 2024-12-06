@@ -6,8 +6,8 @@ void ::staywalk::Object::dump(rapidjson::Value& value, ::staywalk::reflect::Dump
 
     {
         json::Value prop;
-        dumper.write(this->name, prop);
-        value.AddMember("name", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->name_, prop);
+        value.AddMember("name_", prop, dumper.get_doc().GetAllocator()); 
     }
     {
         json::Value prop;
@@ -21,9 +21,9 @@ void ::staywalk::Object::load(rapidjson::Value& value, ::staywalk::reflect::Load
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
-    itr = value.FindMember("name");
+    itr = value.FindMember("name_");
     if(itr != value.MemberEnd()){
-        loader.read(this->name, itr->value);
+        loader.read(this->name_, itr->value);
     }
     itr = value.FindMember("guid_");
     if(itr != value.MemberEnd()){
@@ -34,7 +34,7 @@ void ::staywalk::Object::load(rapidjson::Value& value, ::staywalk::reflect::Load
 
 bool ::staywalk::Object::operator==(const ::staywalk::Object& rhs) const {
     return 
-true && ::staywalk::Comparer::equal(this->name, rhs.name) && ::staywalk::Comparer::equal(this->guid_, rhs.guid_);
+true && ::staywalk::Comparer::equal(this->name_, rhs.name_) && ::staywalk::Comparer::equal(this->guid_, rhs.guid_);
 }
 
 

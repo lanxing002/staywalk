@@ -54,7 +54,7 @@ namespace staywalk {
 			if (it1->first != it2->first) return false;
 			if (it1->second || it2->second) {
 				if (it1->second && it2->second) {
-					if (it1->second->name != it2->second->name) return false;
+					if (it1->second->name_ != it2->second->name_) return false;
 				}
 				else return false;
 			}
@@ -72,7 +72,7 @@ namespace staywalk {
 
 			for (auto& [n, u] : uniforms_) {
 				if (u)
-					program->set_uniform(name, u);
+					program->set_uniform(name_, u);
 			}
 
 			int idx = 0;
@@ -83,7 +83,7 @@ namespace staywalk {
 				
 				glActiveTexture(GL_TEXTURE0 + idx);
 				glBindTexture(GL_TEXTURE_2D, t->get_glid());
-				program->set_uniform(name, 0);
+				program->set_uniform(n, 0);
 				idx++;
 			}
 		}

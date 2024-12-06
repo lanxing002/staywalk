@@ -254,7 +254,7 @@ namespace staywalk {
 				auto target_cast = pcast<T>(v);
 				if (target_cast) {
 					ImGui::PushID((ImGuiID)v->get_guid());
-					if (ImGui::Selectable(v->name.c_str())) {
+					if (ImGui::Selectable(v->name_.c_str())) {
 						target = target_cast;
 					}
 					ImGui::PopID();

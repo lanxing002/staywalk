@@ -196,14 +196,14 @@ namespace staywalk{
 
 	shared_ptr<RTex> Utility::make_texture(fs::path tex_name) {
         auto result = std::make_shared<RTex>();
-        result->tex.name = tex_name.u8string();
+        result->tex.name_ = tex_name.u8string();
         load_tex_resource(*result);
         return result;
     }
 
     bool Utility::load_tex_resource(RTex& rtex)
     {
-        auto path = get_textures_dir() / fs::path(rtex.tex.name);
+        auto path = get_textures_dir() / fs::path(rtex.tex.name_);
         if (fs::is_directory(path) || !fs::exists(path)) {
             log(fmt::format("Utility --> load_texture : not find target ({})", path.u8string()), LogLevel::Error);
             return false;

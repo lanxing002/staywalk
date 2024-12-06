@@ -17,7 +17,7 @@ namespace staywalk{
 
 		void construct_ui(bool can_modify);
 
-		sw_Prop() string name;
+		sw_Prop() string name_;
 
 	protected:
 		sw_Prop(nogui) idtype guid_;

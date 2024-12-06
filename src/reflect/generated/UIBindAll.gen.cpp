@@ -2,16 +2,16 @@
 #include "Object.h"
 
 void ::staywalk::Object::construct_basic_ui(bool can_modify) {
-    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(name)>()) 
-        staywalk::reflect::UIHelper::construct_ui("name", name, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(name_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("name_", name_, can_modify || true);
 }
 
 
 
 void ::staywalk::Object::construct_obj_ui(bool can_modify) {
-    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(name)>()){ 
-        //if (ImGui::TreeNode("name")){
-            staywalk::reflect::UIHelper::construct_ui("name", name, can_modify || true);
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(name_)>()){ 
+        //if (ImGui::TreeNode("name_")){
+            staywalk::reflect::UIHelper::construct_ui("name_", name_, can_modify || true);
             //ImGui::TreePop();
         //}    
     }
