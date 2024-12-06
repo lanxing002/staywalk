@@ -7,6 +7,18 @@ namespace staywalk {
 		:GameComponent(name) {
 	}
 
+	void StaticMeshComponent::update_material(idtype id, MaterialRef mat){
+		bool status = false;
+		for (auto& [mesh, target] : meshs) {
+			if (mesh->get_guid() == id) {
+				target = mat;
+				status = true;
+				return;
+			}
+		}
+		//if (status) log("StaticMeshComponent::update_material success");
+	}
+
 	void StaticMeshComponent::draw(RenderInfo& info) {
 		auto mat_backup = info.model;
 		info.model = info.model * transform.matrix();

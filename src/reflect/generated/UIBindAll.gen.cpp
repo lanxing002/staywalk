@@ -429,3 +429,17 @@ void ::staywalk::StaticMeshComponent::construct_obj_ui(bool can_modify) {
 
 
 
+#include "Terrain.h"
+
+void ::staywalk::Terrain::construct_basic_ui(bool can_modify) {
+    Actor::construct_basic_ui(can_modify);
+}
+
+
+
+void ::staywalk::Terrain::construct_obj_ui(bool can_modify) {
+    Actor::construct_obj_ui(can_modify);
+}
+
+
+

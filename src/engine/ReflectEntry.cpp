@@ -8,6 +8,7 @@
 #include "RenderInfo.h"
 #include "StaticMeshComponent.h"
 #include "InputManager.h"
+#include "Terrain.h"
 
 int entry()
 {

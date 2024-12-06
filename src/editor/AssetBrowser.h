@@ -29,7 +29,8 @@ public:
 private:
     decltype(staywalk::Event::World_AssetChanged)::Handle asset_changed_handler_;
 
-    std::vector<ImU32> type_icon_colors_;
+	std::vector<ImU32> type_icon_colors_;
+	std::map<int, std::string> type_icon_labels_;
 
     // Options
     bool            show_type_overlay_ = true;

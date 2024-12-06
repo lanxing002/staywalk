@@ -112,7 +112,6 @@ void staywalk::RProgram::use() {
 		check_link_error();
 	}
 
-
 	glUseProgram(glid);
 }
 
