@@ -5,6 +5,7 @@ using namespace staywalk;
 Mesh::Mesh(const string& name)
 	:RObject(name) {
 
+	
 }
 
 Mesh::Mesh(const vector<Vertex>& vv, const vector<unsigned int>& ii, const string& name) 
@@ -33,7 +34,7 @@ void Mesh::organize(){
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)0);
 	
 	glEnableVertexAttribArray(1); // normal
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(Vertex, position));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(Vertex, normal));
 
 	glEnableVertexAttribArray(2); // texcoords
 	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(Vertex, texcoords));
@@ -120,6 +121,43 @@ staywalk::MeshRef staywalk::Mesh::create_simple_mesh(){
 	result->vertices = vector<Vertex>{ v1, v2, v3, v4 };
 	result->indices = vector<unsigned int>{0, 1, 2, 0, 1, 3};
 	result->compute_aabb();
+	return result;
+}
+
+staywalk::MeshRef staywalk::Mesh::create_plane(int row, int column){
+	if (row < 1 || column < 1) {
+		log(fmt::format("Mesh::create_plane failed --> wrong parameter: {}, {}", row, column), LogLevel::Error);
+	}
+	MeshRef result = std::make_shared<Mesh>("plane");
+	float xstep = 1.0 / row;
+	float ystep = 1.0 / column;
+	
+	for(int i = 0; i <= row; i++)
+		for (int j = 0; j <= column; j++) {
+			Vertex v;
+			v.position = vec3(i * xstep, j * ystep, .0);
+			v.normal = vec3(.0, .0, 1.0);
+			v.texcoords = vec2(i * xstep, j * ystep);
+			v.tangent = vec3(1.0, .0, .0);
+			v.bitangent = vec3(.0, 1.0, .0);
+			result->vertices.push_back(v);
+			if(i == 0 || j == 0) continue;
+			//         a------b
+			//         |      |
+			//         d------c
+			// c is current
+			auto c_idx = j;
+			auto a_idx = (column + 1) * (i - 1) + j - 1;
+			auto b_idx = a_idx + 1;
+			auto d_idx = c_idx - 1;
+			result->indices.push_back(a_idx);
+			result->indices.push_back(b_idx);
+			result->indices.push_back(c_idx);
+			result->indices.push_back(a_idx);
+			result->indices.push_back(c_idx);
+			result->indices.push_back(d_idx);
+		}
+
 	return result;
 }
 

@@ -16,7 +16,10 @@ namespace staywalk{
 			constexpr std::string_view kChooseObjPop = "--ChooseObjPop";
 			
 			template<typename T>
-			void choice_object(Ref<T>& obj);
+			void object_menu_common(Ref<T>& target, Ref<T>& reference);
+
+			template<typename T>
+			void choice_object(Ref<T>& target, Ref<T>& reference);
 
 			template<typename T>
 			void drag_target(Ref<T>& obj);
@@ -89,14 +92,27 @@ namespace staywalk {
 			constexpr bool is_obj = std::is_same_v<T, staywalk::Object>
 				|| std::is_base_of_v<staywalk::Object, T>;
 			static_assert(is_obj && "must drived from staywalk::object");
-			if (data == nullptr) return;
+			static Ref<T> _null_obj = std::make_shared<T>();
+			if (data == nullptr) {
+				ImVec4 textColor = ImVec4(0.46f, 0.36f, 0.02f, 1.0f);
+				ImGui::PushStyleColor(ImGuiCol_Text, textColor);
+				auto obj_type_name = _null_obj->get_meta_info().tname;
+				obj_type_name.remove_prefix(10);
+				if (ImGui::TreeNode(fmt::format("{}<{}:null>", label, obj_type_name).c_str())) {
+					ImGui::PopStyleColor();
+					UIHelper::object_menu_common(data, _null_obj);
+					ImGui::TreePop();
+				}
+				else ImGui::PopStyleColor();
+				return;
+			}
 			auto tname = data->get_meta_info().tname;
 			tname.remove_prefix(10);
 			ImVec4 textColor = ImVec4(0.12f, 0.8f, 0.1f, 1.0f);
 			ImGui::PushStyleColor(ImGuiCol_Text, textColor);
 			if (ImGui::TreeNode(fmt::format("{}<{}>", label, tname).c_str())) {
 				ImGui::PopStyleColor();
-				UIHelper::choice_object(data);
+				UIHelper::object_menu_common(data, _null_obj);
 				data->construct_ui(can_modify);
 				ImGui::TreePop();
 			}
@@ -155,28 +171,44 @@ namespace staywalk {
 
 		template<typename TKey, typename TVal>
 		void UIHelper::construct_ui(const string& label, pair<TKey, TVal>& data, bool can_modify) {
-			construct_ui(label, data.first, can_modify);
-			construct_ui(label, data.second, can_modify);
+			construct_ui(label + "<Pair:Key>", data.first, can_modify);
+			construct_ui(label + "<Pair:Value>", data.second, can_modify);
+		}
+
+
+		template<typename T>
+		void UIHelper::object_menu_common(Ref<T>& target, Ref<T>& reference) {
+			if (ImGui::BeginPopupContextItem("##change--obj")){
+				if (ImGui::Button("Add To Asset")) {
+					Engine::get_world()->add_asset(target);
+				}
+				
+				if (ImGui::Button("Reset To Null")) {
+					target = nullptr;
+				}
+
+				ImGui::Separator();
+				choice_object(target, reference);
+				ImGui::EndPopup();
+			}
 		}
 
 		template<typename T>
-		void UIHelper::choice_object(Ref<T>& obj) {
-			if (ImGui::BeginPopupContextItem("##change--obj"))
-			{
-				auto title = std::string(obj->get_meta_info().tname) + " List";
-				ImGui::TextColored(ImVec4(1.0f, 1.01f, 1.0f, 1.0f), title.c_str());
-				for (auto& [_, v] : Engine::get_engine()->get_world()->get_all_assets()) {
-					if (v->get_meta_info().tname == obj->get_meta_info().tname) {
-						ImGui::PushID((ImGuiID)v->get_guid());
-						if (ImGui::Selectable(v->name.c_str())) {
-							Ref<T> target = pcast<T>(v);
-							if (target) obj = target;
-						}
-						ImGui::PopID();
+		void UIHelper::choice_object(Ref<T>& target, Ref<T>& reference) {
+			assert(reference != nullptr);
+			auto type_name = reference->get_meta_info().tname;
+			type_name.remove_prefix(10);
+			auto title = std::string(type_name) + " List";
+			ImGui::TextColored(ImVec4(1.0f, 1.01f, 1.0f, 1.0f), title.c_str());
+			for (auto& [_, v] : Engine::get_engine()->get_world()->get_all_assets()) {
+				auto target_cast = pcast<T>(v);
+				if (target_cast) {
+					ImGui::PushID((ImGuiID)v->get_guid());
+					if (ImGui::Selectable(v->name.c_str())) {
+						target = target_cast;
 					}
+					ImGui::PopID();
 				}
-
-				ImGui::EndPopup();
 			}
 		}
 

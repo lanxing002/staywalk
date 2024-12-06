@@ -19,6 +19,28 @@ AssetsBrowser::AssetsBrowser(){
         IM_COL32(10, 120, 80, 255),
         IM_COL32(220, 110, 70, 255),
     };
+
+    type_icon_labels_ = {
+		{(int)reflect::ObjectType::Object,                  "Obj"   },
+		{(int)reflect::ObjectType::GameObject,              "G-Obj" },
+		{(int)reflect::ObjectType::Actor,                   "Actor" },
+		{(int)reflect::ObjectType::Resource,                "Res"   },
+		{(int)reflect::ObjectType::Tex2d,                   "Tex2"  },
+		{(int)reflect::ObjectType::RObject,                 "RObj"  },
+		{(int)reflect::ObjectType::RTex,                    "RTex"  },
+		{(int)reflect::ObjectType::RShader,                 "Shader"},
+		{(int)reflect::ObjectType::RUniform,                "Unif"  },
+		{(int)reflect::ObjectType::RProgram,                "Prog"  },
+		{(int)reflect::ObjectType::Material,                "Mat"   },
+		{(int)reflect::ObjectType::Camera,                  "Cam"   },
+		{(int)reflect::ObjectType::Light,                   "Light" },
+		{(int)reflect::ObjectType::Engine,                  "E-"    },
+		{(int)reflect::ObjectType::World,                   "W-"    },
+		{(int)reflect::ObjectType::GameComponent,           "Comp"  },
+		{(int)reflect::ObjectType::Mesh,                    "Mesh"  },
+		{(int)reflect::ObjectType::StaticMeshComponent,     "SM"    },
+		{(int)reflect::ObjectType::Terrain,                 "Terr"  }
+	};
 }
 
 AssetsBrowser::~AssetsBrowser(){
@@ -215,6 +237,13 @@ void AssetsBrowser::draw(const char* title, bool* p_open){
                         if (show_type_overlay_){
                             ImU32 type_col = type_icon_colors_[otype % type_icon_colors_.size()];
                             draw_list->AddRectFilled(ImVec2(box_max.x - 2 - icon_type_overlay_size.x, box_min.y + 2), ImVec2(box_max.x - 2, box_min.y + 2 + icon_type_overlay_size.y), type_col);
+                            string ttname = "Unk";
+                            auto it = type_icon_labels_.find((int)otype);
+                            if (it != type_icon_labels_.end()) {
+                                ttname = it->second;
+                            }
+                            draw_list->AddText(ImVec2(box_min.x + 4, box_min.y + 6), type_col,
+                                ttname.c_str());
                         }
                         if (display_label){
                             ImU32 label_col = ImGui::GetColorU32(item_is_selected ? ImGuiCol_Text : ImGuiCol_TextDisabled);
@@ -229,24 +258,19 @@ void AssetsBrowser::draw(const char* title, bool* p_open){
         }
 
         if (modify_pop_ && modify_obj_) {
-            //    ImGui::Text("Modify :", modify_obj_->name.c_str());
-            //    if (modify_obj_) modify_obj_->construct_ui(true);
-            //    //ImGui::CloseCurrentPopup();
-            //    ImGui::Separator();
-            //    ImGui::EndPopup();
-            //ImGui::SetNextWindowSize(ImVec2(530, 400));
-            //ImGui::OpenPopup("##assetmodifyobject");
+            ImGui::SetNextWindowSize(ImVec2(530, 400));
+            ImGui::OpenPopup("##assetmodifyobject");
             modify_pop_ = false;
             modify_open_ = true;
         }
 
-        //if (ImGui::BeginPopupModal("##assetmodifyobject", &modify_open_ /*,ImGuiWindowFlags_AlwaysAutoResize*/)) {
-        //    ImGui::Text("Modify :", modify_obj_->name.c_str());
-        //    if (modify_obj_) modify_obj_->construct_ui(true);
-        //    //ImGui::CloseCurrentPopup();
-        //    ImGui::Separator();
-        //    ImGui::EndPopup();
-        //}
+        if (ImGui::BeginPopupModal("##assetmodifyobject", &modify_open_ /*,ImGuiWindowFlags_AlwaysAutoResize*/)) {
+            ImGui::Text("Modify :", modify_obj_->name.c_str());
+            if (modify_obj_) modify_obj_->construct_ui(true);
+            //ImGui::CloseCurrentPopup();
+            ImGui::Separator();
+            ImGui::EndPopup();
+        }
         
         clipper.End();
         ImGui::PopStyleVar(); // ImGuiStyleVar_ItemSpacing

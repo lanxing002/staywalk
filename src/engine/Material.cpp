@@ -5,8 +5,12 @@ namespace staywalk {
 	const string Material::DiffuseKey = "diffuse";
 	const string Material::AoKey = "ao";
 
-	Material::Material(shared_ptr<RShader> shader, const string& name)
+	Material::Material(const string& name)
 		: Object(name) {
+	}
+
+	Material::~Material(){
+		if (program) RProgram::monitor(program, false);
 	}
 
 	bool Material::is_same(Ref<Material> rhs) {
@@ -31,5 +35,6 @@ namespace staywalk {
 	}
 
 	void Material::use(){
+		if(program) program->use();
 	}
 }

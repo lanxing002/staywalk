@@ -19,6 +19,7 @@ using namespace staywalk;
 #include "GameComponent.h"
 #include "RMesh.h"
 #include "StaticMeshComponent.h"
+#include "Terrain.h"
 
 
 static void bind_auto(py::module& __module){
@@ -69,13 +70,14 @@ py::class_<::staywalk::RUniform,RObject, std::shared_ptr<::staywalk::RUniform>>(
 ;
 
 py::class_<::staywalk::RProgram,RObject, std::shared_ptr<::staywalk::RProgram>>(__module, "RProgram")
+	.def(py::init<const string &>())
 	.def_readwrite("vs", &RProgram::vs)
 	.def_readwrite("fs", &RProgram::fs)
 	.def_readwrite("gs", &RProgram::gs)
 ;
 
 py::class_<::staywalk::Material,Object, std::shared_ptr<::staywalk::Material>>(__module, "Material")
-	.def(py::init<RShaderRef,const string &>())
+	.def(py::init<const string &>())
 	.def("add_tex", &Material::add_tex)
 	.def("add_uniform", &Material::add_uniform)
 	.def("is_same", &Material::is_same)
@@ -141,6 +143,7 @@ py::class_<::staywalk::Mesh,RObject,Drawable, std::shared_ptr<::staywalk::Mesh>>
 	.def(py::init<const string &>())
 	.def(py::init<const vector<Vertex> &,const vector<unsigned int> &,const string &>())
 	.def_static("create_simple_mesh", &Mesh::create_simple_mesh)
+	.def_static("create_plane", &Mesh::create_plane)
 	.def("get_aabb", &Mesh::get_aabb)
 	.def("compute_aabb", &Mesh::compute_aabb)
 	.def_readwrite("vertices", &Mesh::vertices)
@@ -150,9 +153,15 @@ py::class_<::staywalk::Mesh,RObject,Drawable, std::shared_ptr<::staywalk::Mesh>>
 py::class_<::staywalk::StaticMeshComponent,GameComponent,Drawable, std::shared_ptr<::staywalk::StaticMeshComponent>>(__module, "StaticMeshComponent")
 	.def(py::init<const string &>())
 	.def("add_mesh", &StaticMeshComponent::add_mesh)
+	.def("update_material", &StaticMeshComponent::update_material)
 	.def("get_aabb", &StaticMeshComponent::get_aabb)
 	.def_readwrite("meshs", &StaticMeshComponent::meshs)
 	.def_readwrite("transform", &StaticMeshComponent::transform)
+;
+
+py::class_<::staywalk::Terrain,Actor, std::shared_ptr<::staywalk::Terrain>>(__module, "Terrain")
+	.def(py::init<const string &>())
+	.def("init_with_plane", &Terrain::init_with_plane)
 ;
 
 

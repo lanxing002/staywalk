@@ -474,6 +474,7 @@ void ::staywalk::Material::dump(rapidjson::Value& value, ::staywalk::reflect::Du
         dumper.write(this->texs_, prop);
         value.AddMember("texs_", prop, dumper.get_doc().GetAllocator()); 
     }
+    this->dump_post();
 }
 
 
@@ -495,6 +496,7 @@ void ::staywalk::Material::load(rapidjson::Value& value, ::staywalk::reflect::Lo
     if(itr != value.MemberEnd()){
         loader.read(this->texs_, itr->value);
     }
+    this->load_post();
 }
 
 
@@ -721,6 +723,36 @@ GameComponent::operator==(rhs)  && ::staywalk::Comparer::equal(this->meshs, rhs.
 
 ::staywalk::reflect::MetaInfo staywalk::StaticMeshComponent::get_meta_info() const {
     return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::StaticMeshComponent, "staywalk::StaticMeshComponent"};
+
+}
+
+#include "Terrain.h"
+
+void ::staywalk::Terrain::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+
+    Actor::dump(value, dumper);
+
+}
+
+
+void ::staywalk::Terrain::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    Actor::load(value, loader);
+
+}
+
+
+bool ::staywalk::Terrain::operator==(const ::staywalk::Terrain& rhs) const {
+    return 
+Actor::operator==(rhs) ;
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::Terrain::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Terrain, "staywalk::Terrain"};
 
 }
 
