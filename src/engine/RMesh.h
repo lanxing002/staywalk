@@ -9,6 +9,7 @@ namespace staywalk{
 	class sw_Class(jsonpost;)  Mesh : public RObject, public Drawable {
 	public:
 		sw_Func() static MeshRef create_simple_mesh();
+		sw_Func() static MeshRef create_plane(int row = 100, int column = 100);
 
 	public:
 		sw_Func()  Mesh(const string& name = "mesh-0");
