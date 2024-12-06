@@ -31,6 +31,7 @@ namespace staywalk {
 	}
 
 	Engine::~Engine() {
+
 	}
 
 	void Engine::set_world(WorldRef	world){

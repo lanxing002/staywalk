@@ -368,8 +368,18 @@ RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->shadertype, rhs.s
 void ::staywalk::RUniform::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
-    RObject::dump(value, dumper);
+    Object::dump(value, dumper);
 
+    {
+        json::Value prop;
+        dumper.write(this->utype_, prop);
+        value.AddMember("utype_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->data_, prop);
+        value.AddMember("data_", prop, dumper.get_doc().GetAllocator()); 
+    }
 }
 
 
@@ -377,14 +387,22 @@ void ::staywalk::RUniform::load(rapidjson::Value& value, ::staywalk::reflect::Lo
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
-    RObject::load(value, loader);
+    Object::load(value, loader);
 
+    itr = value.FindMember("utype_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->utype_, itr->value);
+    }
+    itr = value.FindMember("data_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->data_, itr->value);
+    }
 }
 
 
 bool ::staywalk::RUniform::operator==(const ::staywalk::RUniform& rhs) const {
     return 
-RObject::operator==(rhs) ;
+Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->utype_, rhs.utype_) && ::staywalk::Comparer::equal(this->data_, rhs.data_);
 }
 
 
@@ -474,6 +492,11 @@ void ::staywalk::Material::dump(rapidjson::Value& value, ::staywalk::reflect::Du
         dumper.write(this->texs_, prop);
         value.AddMember("texs_", prop, dumper.get_doc().GetAllocator()); 
     }
+    {
+        json::Value prop;
+        dumper.write(this->vecce, prop);
+        value.AddMember("vecce", prop, dumper.get_doc().GetAllocator()); 
+    }
     this->dump_post();
 }
 
@@ -496,13 +519,17 @@ void ::staywalk::Material::load(rapidjson::Value& value, ::staywalk::reflect::Lo
     if(itr != value.MemberEnd()){
         loader.read(this->texs_, itr->value);
     }
+    itr = value.FindMember("vecce");
+    if(itr != value.MemberEnd()){
+        loader.read(this->vecce, itr->value);
+    }
     this->load_post();
 }
 
 
 bool ::staywalk::Material::operator==(const ::staywalk::Material& rhs) const {
     return 
-Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->program, rhs.program) && ::staywalk::Comparer::equal(this->uniforms_, rhs.uniforms_) && ::staywalk::Comparer::equal(this->texs_, rhs.texs_);
+Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->program, rhs.program) && ::staywalk::Comparer::equal(this->uniforms_, rhs.uniforms_) && ::staywalk::Comparer::equal(this->texs_, rhs.texs_) && ::staywalk::Comparer::equal(this->vecce, rhs.vecce);
 }
 
 

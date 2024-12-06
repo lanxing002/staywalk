@@ -16,6 +16,6 @@ void main(){
     vec3 n = normalize(norm);   
     //float factor = dot(n, vec3(1, 1, 0.5));
     //frag_color.xyz = vec3(1.0, 1.0, 1.0);
-    frag_color.xyz = norm * 0.2;
+    frag_color.xyz = norm * 0.8;
     frag_color.w = 1.0;
 }
