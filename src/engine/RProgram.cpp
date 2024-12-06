@@ -74,9 +74,9 @@ void RProgram::load_post(){
 
 void RProgram::dump_post() const{
 	auto p = Utility::get_shaders_dir();
-	auto vs_file = p / (name + ".vs"); string vs_code;
-	auto fs_file = p / (name + ".fs"); string fs_code;
-	auto gs_file = p / (name + ".gs"); string gs_code;
+	auto vs_file = p / (name + ".vs"); string vs_code = vs.code->text;
+	auto fs_file = p / (name + ".fs"); string fs_code = fs.code->text;
+	auto gs_file = p / (name + ".gs"); string gs_code = gs.code->text;
 
 	Utility::dump_text(vs_file, vs_code);
 	Utility::dump_text(fs_file, fs_code);
@@ -115,13 +115,49 @@ void staywalk::RProgram::use() {
 	glUseProgram(glid);
 }
 
+void staywalk::RProgram::set_uniform(const string& name, UniformRef uniform){
+	if (uniform == nullptr) return;
+	auto utype = uniform->utype_;
+	void* pdata = &uniform->data_[0][0];
+	switch (utype)
+	{
+	case staywalk::UniformType::U1f:
+		glUniform1f(get_uniform(name), *reinterpret_cast<float*>(pdata));
+		break;
+	case staywalk::UniformType::U2f:
+		glUniform2fv(get_uniform(name), 1,  reinterpret_cast<float*>(pdata));
+		break;
+	case staywalk::UniformType::U3f:
+		glUniform3fv(get_uniform(name), 1, reinterpret_cast<float*>(pdata));
+		break;
+	case staywalk::UniformType::U4f:
+		glUniform4fv(get_uniform(name), 1, reinterpret_cast<float*>(pdata));
+		break;
+	case staywalk::UniformType::U1i:
+		glUniform1i(get_uniform(name), *reinterpret_cast<int*>(pdata));
+		break;
+	case staywalk::UniformType::U2i:
+		break;
+	case staywalk::UniformType::U3i:
+		break;
+	case staywalk::UniformType::U4i:
+		break;
+	case staywalk::UniformType::UMat4:
+		glUniformMatrix4fv(get_uniform(name), 1, GL_FALSE, reinterpret_cast<float*>(pdata));
+		break;
+	default:
+		break;
+	}
+
+}
+
 void staywalk::RProgram::check_link_error(){
 	GLint success;
 	GLchar info[1024];
 	glGetProgramiv(glid, GL_LINK_STATUS, &success);
 	if (!success){
 		glGetProgramInfoLog(glid, 1024, NULL, info);
-		log(fmt::format("RProgram::Link Failed --> {}", info), LogLevel::Warn);
+		log(fmt::format("RProgram::Link {}: Failed --> {}", name, info), LogLevel::Warn);
 	}
 }
 

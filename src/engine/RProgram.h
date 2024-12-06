@@ -14,6 +14,18 @@ namespace staywalk{
 		CS = GL_COMPUTE_SHADER,
 	};
 
+	enum class sw_Class()  UniformType : int {
+			U1f,
+			U2f,
+			U3f,
+			U4f,
+			U1i,
+			U2i,
+			U3i,
+			U4i,
+			UMat4,
+	};
+
 	class sw_Class()  RShader : public RObject {
 	public:
 		RShader(const string& code_text = "", const string & name = "shader-0");
@@ -30,10 +42,32 @@ namespace staywalk{
 		void check_compile_error();
 	};
 
-	class sw_Class()  RUniform : public RObject {
+	class sw_Class()  RUniform : public Object {
 	public:
+		RUniform() {};
+		RUniform(int v) : utype_(UniformType::U1i) { update(v); }
+		RUniform(float v) : utype_(UniformType::U1f) { update(v); }
+		RUniform(vec2 v) : utype_(UniformType::U2f) { update(v);; }
+		RUniform(vec3 v) : utype_(UniformType::U3f) { update(v); }
+		RUniform(vec4 v) : utype_(UniformType::U4f) { update(v); }
+		RUniform(mat4 v) : utype_(UniformType::UMat4) { update(v); }
+
+		void update(int v) { __copy(v); }
+		void update(float v) { __copy(v); }
+		void update(vec2 v) { __copy(v[0]); }
+		void update(vec3 v) { __copy(v[0]); }
+		void update(vec4 v) { __copy(v[0]); }
+		void update(mat4 v) { __copy(v[0][0]); }
 
 		MetaRegister(RUniform);
+
+	private:
+		template<typename T>
+		inline void __copy(T v) { memcpy(&data_[0][0], &v, sizeof v); }
+
+		sw_Prop(nogui;) UniformType utype_;
+		sw_Prop(nogui;) mat4 data_;  // max storage for mat4
+		friend class RProgram;
 	};
 
 	class sw_Class(jsonpost;)  RProgram : public RObject {
@@ -64,6 +98,7 @@ namespace staywalk{
 
 		template<typename T>
 		void set_uniform(const string& name, T value) { static_assert(false && "not impl!!"); }
+		void set_uniform(const string& name, UniformRef uniform);
 		void check_link_error();
 
 

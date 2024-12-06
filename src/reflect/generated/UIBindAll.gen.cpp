@@ -216,13 +216,13 @@ void ::staywalk::RShader::construct_obj_ui(bool can_modify) {
 #include "RProgram.h"
 
 void ::staywalk::RUniform::construct_basic_ui(bool can_modify) {
-    RObject::construct_basic_ui(can_modify);
+    Object::construct_basic_ui(can_modify);
 }
 
 
 
 void ::staywalk::RUniform::construct_obj_ui(bool can_modify) {
-    RObject::construct_obj_ui(can_modify);
+    Object::construct_obj_ui(can_modify);
 }
 
 
@@ -275,6 +275,8 @@ void ::staywalk::Material::construct_basic_ui(bool can_modify) {
         staywalk::reflect::UIHelper::construct_ui("uniforms_", uniforms_, can_modify || false);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(texs_)>()) 
         staywalk::reflect::UIHelper::construct_ui("texs_", texs_, can_modify || false);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(vecce)>()) 
+        staywalk::reflect::UIHelper::construct_ui("vecce", vecce, can_modify || false);
 }
 
 
@@ -296,6 +298,12 @@ void ::staywalk::Material::construct_obj_ui(bool can_modify) {
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(texs_)>()){ 
         //if (ImGui::TreeNode("texs_")){
             staywalk::reflect::UIHelper::construct_ui("texs_", texs_, can_modify || false);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(vecce)>()){ 
+        //if (ImGui::TreeNode("vecce")){
+            staywalk::reflect::UIHelper::construct_ui("vecce", vecce, can_modify || false);
             //ImGui::TreePop();
         //}    
     }

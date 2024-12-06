@@ -9,6 +9,7 @@
 #include "StaticMeshComponent.h"
 #include "InputManager.h"
 #include "Terrain.h"
+#include "Utility.h"
 
 int entry()
 {

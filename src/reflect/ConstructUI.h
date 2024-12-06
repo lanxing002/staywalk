@@ -16,7 +16,13 @@ namespace staywalk{
 			constexpr std::string_view kChooseObjPop = "--ChooseObjPop";
 			
 			template<typename T>
-			void object_menu_common(Ref<T>& target, Ref<T>& reference);
+			void object_common_menu(Ref<T>& target, Ref<T>& reference);
+
+			template<typename T>
+			void container_modify_menu(vector<T>& target);
+
+			template<typename TKey, typename TVal>
+			void container_modify_menu(map<TKey, TVal>& target);
 
 			template<typename T>
 			void choice_object(Ref<T>& target, Ref<T>& reference);
@@ -100,7 +106,7 @@ namespace staywalk {
 				obj_type_name.remove_prefix(10);
 				if (ImGui::TreeNode(fmt::format("{}<{}:null>", label, obj_type_name).c_str())) {
 					ImGui::PopStyleColor();
-					UIHelper::object_menu_common(data, _null_obj);
+					UIHelper::object_common_menu(data, _null_obj);
 					ImGui::TreePop();
 				}
 				else ImGui::PopStyleColor();
@@ -112,8 +118,8 @@ namespace staywalk {
 			ImGui::PushStyleColor(ImGuiCol_Text, textColor);
 			if (ImGui::TreeNode(fmt::format("{}<{}>", label, tname).c_str())) {
 				ImGui::PopStyleColor();
-				UIHelper::object_menu_common(data, _null_obj);
-				data->construct_ui(can_modify);
+				UIHelper::object_common_menu(data, _null_obj);
+				if(data) data->construct_ui(can_modify);
 				ImGui::TreePop();
 			}
 			else { ImGui::PopStyleColor(); }
@@ -152,6 +158,7 @@ namespace staywalk {
 		template<typename T>
 		void UIHelper::construct_ui(const string& label, vector<T>& data, bool can_modify) {
 			if (ImGui::TreeNode(fmt::format("{}<vector>", label).c_str())) {
+				UIHelper::container_modify_menu(data);
 				for (int i = 0; i < data.size(); i++) {
 					construct_ui(fmt::format("{}-{}", label, i), data[i], can_modify);
 				}
@@ -162,6 +169,7 @@ namespace staywalk {
 		template<typename TKey, typename TVal>
 		void UIHelper::construct_ui(const string& label, map<TKey, TVal>& data, bool can_modify) {
 			if (ImGui::TreeNode(fmt::format("{}<map>", label).c_str())) {
+				UIHelper::container_modify_menu(data);
 				for (auto& [key, value] : data){
 					construct_ui(fmt::format("{}-{}", label, key), value, can_modify);
 				}
@@ -177,7 +185,7 @@ namespace staywalk {
 
 
 		template<typename T>
-		void UIHelper::object_menu_common(Ref<T>& target, Ref<T>& reference) {
+		void UIHelper::object_common_menu(Ref<T>& target, Ref<T>& reference) {
 			if (ImGui::BeginPopupContextItem("##change--obj")){
 				if (ImGui::Button("Add To Asset")) {
 					Engine::get_world()->add_asset(target);
@@ -189,6 +197,48 @@ namespace staywalk {
 
 				ImGui::Separator();
 				choice_object(target, reference);
+				ImGui::EndPopup();
+			}
+		}
+
+		template<typename T>
+		void UIHelper::container_modify_menu(vector<T>& container) {
+			if (ImGui::BeginPopupContextItem("##modify--vector")) {
+				if (ImGui::Button("Push Back")) {
+					container.push_back(T{});
+				}
+
+				if (ImGui::TreeNode("Remove")) {
+					int remove_idx = -1;
+					for (int i = 0; i < container.size(); i++) {
+						if (ImGui::Selectable(fmt::format("[{}]", i).c_str(), false)) {
+							remove_idx = i;
+						}
+					}
+					if (remove_idx >= 0) container.erase(container.begin() + remove_idx);
+					ImGui::TreePop();
+				}
+				ImGui::EndPopup();
+			}
+		}
+
+		template<typename TKey, typename TVal>
+		void UIHelper::container_modify_menu(map<TKey, TVal>& container) {
+			if (ImGui::BeginPopupContextItem("##modify--map")) {
+				if (ImGui::Button("Add")) {
+					container[TKey{}] = TVal{};
+				}
+
+				if (ImGui::TreeNode("Remove")) {
+					auto remove_it = container.end();
+					for (auto it = container.begin(); it != container.end(); it++) {
+						if (ImGui::Selectable(fmt::format("[{}]", it->first).c_str(), false)) {
+							remove_it = it;
+						}
+					}
+					if (remove_it != container.end()) container.erase(remove_it);
+					ImGui::TreePop();
+				}
 				ImGui::EndPopup();
 			}
 		}
