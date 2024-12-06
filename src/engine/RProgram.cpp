@@ -16,7 +16,7 @@ RShader::RShader(const string& code_text, const string& name)
 
 void staywalk::RShader::organize(){
 	if (shadertype == ShaderType::None) {
-		log(fmt::format("RShader::organize --> shader {} has None shadetype", name), LogLevel::Warn);
+		log(fmt::format("RShader::organize --> shader {} has None shadetype", name_), LogLevel::Warn);
 	}
 	if(glid == kGlSickId)
 		glid = glCreateShader((GLenum)shadertype);
@@ -64,9 +64,9 @@ RProgram::RProgram(const string& name)
 
 void RProgram::load_post(){
 	auto p = Utility::get_shaders_dir();
-	auto vs_file = p / (name + ".vs"); string vs_code;
-	auto fs_file = p / (name + ".fs"); string fs_code;
-	auto gs_file = p / (name + ".gs"); string gs_code;
+	auto vs_file = p / (name_ + ".vs"); string vs_code;
+	auto fs_file = p / (name_ + ".fs"); string fs_code;
+	auto gs_file = p / (name_ + ".gs"); string gs_code;
 	if (Utility::load_text(vs_file, vs_code)) vs.code->text = vs_code;
 	if (Utility::load_text(fs_file, fs_code)) fs.code->text = fs_code;
 	if (Utility::load_text(gs_file, gs_code)) gs.code->text = gs_code;
@@ -74,9 +74,9 @@ void RProgram::load_post(){
 
 void RProgram::dump_post() const{
 	auto p = Utility::get_shaders_dir();
-	auto vs_file = p / (name + ".vs"); string vs_code = vs.code->text;
-	auto fs_file = p / (name + ".fs"); string fs_code = fs.code->text;
-	auto gs_file = p / (name + ".gs"); string gs_code = gs.code->text;
+	auto vs_file = p / (name_ + ".vs"); string vs_code = vs.code->text;
+	auto fs_file = p / (name_ + ".fs"); string fs_code = fs.code->text;
+	auto gs_file = p / (name_ + ".gs"); string gs_code = gs.code->text;
 
 	Utility::dump_text(vs_file, vs_code);
 	Utility::dump_text(fs_file, fs_code);
@@ -113,6 +113,16 @@ void staywalk::RProgram::use() {
 	}
 
 	glUseProgram(glid);
+}
+
+GLint staywalk::RProgram::get_uniform(const string& u_name){
+	//auto it = uniforms_.find(name);
+	//if (it != uniforms_.end())
+		//return it->second;
+	GLint target = glGetUniformLocation(glid, u_name.c_str());
+	GLCheck(;);
+	//uniforms_[name] = target;
+	return target;
 }
 
 void staywalk::RProgram::set_uniform(const string& name, UniformRef uniform){
@@ -157,14 +167,14 @@ void staywalk::RProgram::check_link_error(){
 	glGetProgramiv(glid, GL_LINK_STATUS, &success);
 	if (!success){
 		glGetProgramInfoLog(glid, 1024, NULL, info);
-		log(fmt::format("RProgram::Link {}: Failed --> {}", name, info), LogLevel::Warn);
+		log(fmt::format("RProgram::Link {}: Failed --> {}", name_, info), LogLevel::Warn);
 	}
 }
 
 void staywalk::RProgram::monitor(RProgramRef program, bool flag /*= true*/){
 	if (program == nullptr) return;
 	auto p = Utility::get_shaders_dir();
-	auto name = program->name;
+	auto name = program->name_;
 	auto vs_file = p / (name + ".vs"); string vs_code;
 	auto fs_file = p / (name + ".fs"); string fs_code;
 	auto gs_file = p / (name + ".gs"); string gs_code;
@@ -177,21 +187,21 @@ void staywalk::RProgram::monitor(RProgramRef program, bool flag /*= true*/){
 			if (auto ref = weak_ref.lock()) { 
 				ref->vs.code->text = new_context;
 				ref->vs.mark_dirty();
-				log(fmt::format("vs::hotload {} --> suceess", ref->name));
+				log(fmt::format("vs::hotload {} --> suceess", ref->name_));
 			}
 		});
 		engine->monitor_file({ program->fs.get_guid(), fs_file }, [weak_ref](const string& new_context) {
 			if (auto ref = weak_ref.lock()) { 
 				ref->fs.code->text = new_context; 
 				ref->fs.mark_dirty();
-				log(fmt::format("fs::hotload {} --> suceess", ref->name));
+				log(fmt::format("fs::hotload {} --> suceess", ref->name_));
 			}
 		});
 		engine->monitor_file({ program->gs.get_guid(), gs_file }, [weak_ref](const string& new_context) {
 			if (auto ref = weak_ref.lock()) { 
 				ref->gs.code->text = new_context; 
 				ref->gs.mark_dirty();
-				log(fmt::format("gs::hotload {} --> suceess", ref->name));
+				log(fmt::format("gs::hotload {} --> suceess", ref->name_));
 			}
 		});
 	}

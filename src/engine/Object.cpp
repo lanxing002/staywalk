@@ -5,32 +5,32 @@
 
 namespace staywalk{
 	Object::Object(const string& name)
-		:guid_(Utility::get_random_id()), name(name) {
+		:guid_(Utility::get_random_id()), name_(name) {
 	}
 	
 	Object::Object(idtype load_id, const string& name)
-		: guid_(load_id), name(name){
+		: guid_(load_id), name_(name){
 	}
 
 
 	Object::Object(const Object& rhs)
-	:guid_(Utility::get_random_id()), name(rhs.name) {
+	:guid_(Utility::get_random_id()), name_(rhs.name_) {
 	}
 
 	Object::Object(Object&& rhs)
-	:guid_(rhs.guid_), name(rhs.name){
+	:guid_(rhs.guid_), name_(rhs.name_){
 		rhs.guid_ = kInvalidId;
 	}
 
 	Object& Object::operator=(const Object& rhs) {
 		guid_ = Utility::get_random_id();
-		name = rhs.name;
+		name_ = rhs.name_;
 		return *this;
 	}
 
 	Object& Object::operator=(Object&& rhs) {
 		guid_ = rhs.guid_;
-		name = rhs.name;
+		name_ = rhs.name_;
 		rhs.guid_ = kInvalidId;
 		return *this;
 	}

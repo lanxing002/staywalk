@@ -87,14 +87,7 @@ namespace staywalk{
 		void mark_dirty() override { }
 		bool is_dirty() override { return false; }
 
-		GLint get_uniform(const string& name) {
-			auto it = uniforms_.find(name);
-			if (it != uniforms_.end())
-				return it->second;
-			GLint target = glGetUniformLocation(glid, name.c_str());
-			uniforms_[name] = target;
-			return target;
-		}
+		GLint get_uniform(const string& name);
 
 		template<typename T>
 		void set_uniform(const string& name, T value) { static_assert(false && "not impl!!"); }
