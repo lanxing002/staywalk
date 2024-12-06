@@ -15,7 +15,7 @@ struct aiScene;
 namespace staywalk{
 	class World;
 
-	class Utility{
+	class sw_Class(nogui; nojson;) Utility {
 	public:
 		static const string kObjExt;
 		static const string kMeshExt;
@@ -60,6 +60,8 @@ namespace staywalk{
 		/*****************render object*****************/
 		/***********************************************/
 		static shared_ptr<RTex> make_texture(fs::path path);
+
+		sw_Func() static shared_ptr<RTex> create_tex(string path) { return make_texture(fs::path(path)); }
 
 		static bool load_tex_resource(RTex& tex);
 	};

@@ -111,7 +111,8 @@ namespace staywalk{
 		sw_Prop() GlWrap wrap_t = GlWrap::REPEAT;
 		sw_Prop() GlMinFilter min_filter = GlMinFilter::LINEAR;
 		sw_Prop() GlMagFilter mag_filter = GlMagFilter::LINEAR;
-		
+		GLuint get_glid() { return glid; }
+
 		MetaRegister(RTex);
 
 	private:

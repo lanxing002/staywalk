@@ -52,15 +52,15 @@ namespace staywalk{
 		Engine();
 
 	private:
-		Ref<Console> console_{nullptr};
 		FileMonitor file_monitor_;
+		Ref<Console> console_{nullptr};
 		Renderer renderer_;
-		InputManager input_mgr_;
 
 		GameObjectRef selelcted_{ nullptr };
 		WorldRef world_{ nullptr };
 
 		vec2 view_size_;
+		InputManager input_mgr_;
 	};
 }
 
