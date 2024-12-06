@@ -23,8 +23,11 @@ namespace staywalk {
 	}
 
 	void RTex::organize() {
-		if (!load_resource()) return;
-		
+		dirty_ = false;
+		if (tex.data == nullptr) {
+			return;
+		}
+
 		GLenum format = GL_RED;
 		if (tex.nr_comps == 1)
 			format = GL_RED;
@@ -42,7 +45,6 @@ namespace staywalk {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLint)wrap_t);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLint)min_filter);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLint)mag_filter);
-
 	}
 	
 	void RTex::disband(){
@@ -52,7 +54,7 @@ namespace staywalk {
 
 	void RTex::load_post() {
 		auto status = Utility::load_tex_resource(*this);
-
+		dirty_ = true;
 		log(fmt::format("RTex::load_post from {}, status: {}", tex.name, status),
 			status ? LogLevel::Info : LogLevel::Warn);
 	}

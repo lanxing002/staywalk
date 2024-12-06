@@ -300,6 +300,12 @@ ImGuiTable* ImGui::TableFindByID(ImGuiID id)
     return g.Tables.GetByKey(id);
 }
 
+bool ImGui::InTableScope() {
+    ImGuiContext& g = *GImGui;
+    ImGuiTable* table = g.CurrentTable;
+    return table != nullptr;
+}
+
 // Read about "TABLE SIZING" at the top of this file.
 bool    ImGui::BeginTable(const char* str_id, int columns_count, ImGuiTableFlags flags, const ImVec2& outer_size, float inner_width)
 {

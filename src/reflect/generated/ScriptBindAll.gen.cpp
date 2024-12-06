@@ -14,6 +14,7 @@ using namespace staywalk;
 #include "Material.h"
 #include "Camera.h"
 #include "Light.h"
+#include "Utility.h"
 #include "Engine.h"
 #include "World.h"
 #include "GameComponent.h"
@@ -66,7 +67,7 @@ py::class_<::staywalk::RShader,RObject, std::shared_ptr<::staywalk::RShader>>(__
 	.def_readwrite("code", &RShader::code)
 ;
 
-py::class_<::staywalk::RUniform,RObject, std::shared_ptr<::staywalk::RUniform>>(__module, "RUniform")
+py::class_<::staywalk::RUniform,Object, std::shared_ptr<::staywalk::RUniform>>(__module, "RUniform")
 ;
 
 py::class_<::staywalk::RProgram,RObject, std::shared_ptr<::staywalk::RProgram>>(__module, "RProgram")
@@ -96,6 +97,10 @@ py::class_<::staywalk::Camera,GameObject, std::shared_ptr<::staywalk::Camera>>(_
 
 py::class_<::staywalk::Light,GameObject, std::shared_ptr<::staywalk::Light>>(__module, "Light")
 	.def(py::init<const string &>())
+;
+
+py::class_<::staywalk::Utility, std::shared_ptr<::staywalk::Utility>>(__module, "Utility")
+	.def_static("create_tex", &Utility::create_tex)
 ;
 
 py::class_<::staywalk::Engine, std::shared_ptr<::staywalk::Engine>>(__module, "Engine")

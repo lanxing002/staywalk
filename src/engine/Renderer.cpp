@@ -54,24 +54,27 @@ void Renderer::render(double delta, unsigned long long count)
 	}
 
 	RenderInfo render_info;
+	render_info.model.push(mat4(1.0));
+	render_info.view.push(mat4(1.0));
+	render_info.projection.push(mat4(1.0));
 	if (auto cam = world->get_activated_camera()) {
-		render_info.view = cam->view;
-		render_info.projection = cam->projection;
+		render_info.view.top() = cam->view;
+		render_info.projection.top() = cam->projection;
 	}
 
 	// setup shader
 	{
 		auto program = program_table_[(int)ProgramType::PBR];
 		program->use();
-		program->set_uniform("view", render_info.view);
-		program->set_uniform("projection", render_info.projection);
+		program->set_uniform("view", render_info.view.top());
+		program->set_uniform("projection", render_info.projection.top());
 		render_info.program = program;
 	}
 	
 	// render mesh
 	{
 		for (auto& actor : world->get_actors()) {
-			render_info.model = actor->transform.matrix();
+			render_info.model.top() = actor->transform.matrix();
 			if (nullptr == actor->sm_comp) continue;
 			actor->sm_comp->draw(render_info);
 		}

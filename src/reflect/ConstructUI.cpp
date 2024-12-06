@@ -3,22 +3,30 @@
 #include "Engine.h"
 #include "TextEditor.h"
 #include "Event.h"
+#include "imgui.h"
 
 #include <glm/gtc/quaternion.hpp>
 
 using namespace staywalk;
 using namespace staywalk::reflect;
 
+//bool IsInTableScope(){
+//    IM_ASSERT(ImGui::GetCurrentContext() != NULL && "Missing Dear ImGui context. Refer to examples app!");
+//}
+
+
 #define TableStartCommon()                                              \
-    ImGui::TableNextRow();                                              \
-    ImGui::PushID(label.c_str());                                       \
-    ImGui::TableNextColumn();                                           \
-    ImGui::AlignTextToFramePadding();                                   \
-    ImGui::TextUnformatted(fmt::format(" {}   ", label).c_str());       \
-    ImGui::TableNextColumn();
+    if(ImGui::InTableScope()){                                          \
+        ImGui::TableNextRow();                                          \
+        ImGui::PushID(label.c_str());                                   \
+        ImGui::TableNextColumn();                                       \
+        ImGui::AlignTextToFramePadding();                               \
+        ImGui::TextUnformatted(fmt::format(" {}   ", label).c_str());   \
+        ImGui::TableNextColumn();                                       \
+    }
 
 
-#define TableEndCommon()   ImGui::PopID();
+#define TableEndCommon()   if(ImGui::InTableScope()) ImGui::PopID();
 
 template<>
 void UIHelper::construct_ui(const string& label, string& data, bool can_modify) {
