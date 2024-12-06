@@ -368,6 +368,9 @@ void SelectionWithDeletion::ApplyDeletionPostLoop(ImGuiMultiSelectIO* ms_io, std
             item_next_idx_to_select = (int)new_items.size() - 1;
     }
     items.swap(new_items);
+    auto w = Engine::get_world();
+	for(auto& item : new_items)
+        w->remove_asset(item->get_guid());
 
     // Update selection
     Clear();
