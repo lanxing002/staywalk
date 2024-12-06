@@ -11,6 +11,8 @@ namespace staywalk{
 			if (mesh) meshs.emplace_back(mesh, nullptr); 
 		}
 
+		sw_Func() void update_material(idtype id, MaterialRef mat);
+
 		void draw(RenderInfo& info) override;
 
 		void tick(float delta) override {}

@@ -41,7 +41,7 @@ namespace staywalk{
 		static void monitor(RProgramRef program, bool flag = true);
 
 	public:
-		RProgram(const string & name = "program-0");
+		sw_Prop() RProgram(const string & name = "program-0");
 		~RProgram() override;
 		sw_Prop() RShader vs;
 		sw_Prop() RShader fs;

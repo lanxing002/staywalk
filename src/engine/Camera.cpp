@@ -37,7 +37,7 @@ namespace staywalk {
 			}
 
 			//transform.rotation.y = std::min(-45.0f, std::max(45.0f, transform.rotation.y));
-			transform.rotation.x = std::max(-50.0f, std::min(50.0f, transform.rotation.x));
+			transform.rotation.x = std::max(-89.5f, std::min(89.5f, transform.rotation.x));
 		}
 		else Event::Editor_ShowHideCursor(true);
 
