@@ -6,8 +6,6 @@ using namespace staywalk;
 #include "Actor.h"
 #include "RenderObject.h"
 #include "RenderObject.h"
-#include "RenderObject.h"
-#include "RenderObject.h"
 #include "RProgram.h"
 #include "RProgram.h"
 #include "RProgram.h"
@@ -31,7 +29,7 @@ py::class_<::staywalk::Object, std::shared_ptr<::staywalk::Object>>(__module, "O
 
 py::class_<::staywalk::GameObject,Object, std::shared_ptr<::staywalk::GameObject>>(__module, "GameObject")
 	.def(py::init<const string &>())
-	.def_readwrite("transform", &GameObject::transform)
+	.def_readwrite("transform_", &GameObject::transform_)
 ;
 
 py::class_<::staywalk::Actor,GameObject, std::shared_ptr<::staywalk::Actor>>(__module, "Actor")
@@ -40,31 +38,21 @@ py::class_<::staywalk::Actor,GameObject, std::shared_ptr<::staywalk::Actor>>(__m
 	.def_readwrite("sm_comp", &Actor::sm_comp)
 ;
 
-py::class_<::staywalk::Resource,Object, std::shared_ptr<::staywalk::Resource>>(__module, "Resource")
-	.def(py::init<const string &>())
-	.def_readwrite("source", &Resource::source)
-	.def_readwrite("dump_dir", &Resource::dump_dir)
-;
-
-py::class_<::staywalk::Tex2d,Resource, std::shared_ptr<::staywalk::Tex2d>>(__module, "Tex2d")
-;
-
 py::class_<::staywalk::RObject,Object, std::shared_ptr<::staywalk::RObject>>(__module, "RObject")
 	.def(py::init<const string &>())
 ;
 
-py::class_<::staywalk::RTex,RObject, std::shared_ptr<::staywalk::RTex>>(__module, "RTex")
-	.def_readwrite("tex", &RTex::tex)
-	.def_readwrite("mipmap", &RTex::mipmap)
-	.def_readwrite("wrap_s", &RTex::wrap_s)
-	.def_readwrite("wrap_t", &RTex::wrap_t)
-	.def_readwrite("min_filter", &RTex::min_filter)
-	.def_readwrite("mag_filter", &RTex::mag_filter)
+py::class_<::staywalk::Tex2D,RObject, std::shared_ptr<::staywalk::Tex2D>>(__module, "Tex2D")
+	.def_readwrite("mipmap", &Tex2D::mipmap)
+	.def_readwrite("wrap_s", &Tex2D::wrap_s)
+	.def_readwrite("wrap_t", &Tex2D::wrap_t)
+	.def_readwrite("min_filter", &Tex2D::min_filter)
+	.def_readwrite("mag_filter", &Tex2D::mag_filter)
 ;
 
 py::class_<::staywalk::RShader,RObject, std::shared_ptr<::staywalk::RShader>>(__module, "RShader")
-	.def_readwrite("shadertype", &RShader::shadertype)
-	.def_readwrite("code", &RShader::code)
+	.def_readwrite("shadertype_", &RShader::shadertype_)
+	.def_readwrite("code_", &RShader::code_)
 ;
 
 py::class_<::staywalk::RUniform,Object, std::shared_ptr<::staywalk::RUniform>>(__module, "RUniform")
@@ -72,9 +60,9 @@ py::class_<::staywalk::RUniform,Object, std::shared_ptr<::staywalk::RUniform>>(_
 
 py::class_<::staywalk::RProgram,RObject, std::shared_ptr<::staywalk::RProgram>>(__module, "RProgram")
 	.def(py::init<const string &>())
-	.def_readwrite("vs", &RProgram::vs)
-	.def_readwrite("fs", &RProgram::fs)
-	.def_readwrite("gs", &RProgram::gs)
+	.def_readwrite("vs_", &RProgram::vs_)
+	.def_readwrite("fs_", &RProgram::fs_)
+	.def_readwrite("gs_", &RProgram::gs_)
 ;
 
 py::class_<::staywalk::Material,Object, std::shared_ptr<::staywalk::Material>>(__module, "Material")
@@ -82,20 +70,20 @@ py::class_<::staywalk::Material,Object, std::shared_ptr<::staywalk::Material>>(_
 	.def("add_tex", &Material::add_tex)
 	.def("add_uniform", &Material::add_uniform)
 	.def("is_same", &Material::is_same)
-	.def_readwrite("program", &Material::program)
+	.def_readwrite("program_", &Material::program_)
 ;
 
 py::class_<::staywalk::Camera,GameObject, std::shared_ptr<::staywalk::Camera>>(__module, "Camera")
 	.def(py::init<const string &>())
 	.def("look_actor", &Camera::look_actor)
-	.def_readwrite("porject_type", &Camera::porject_type)
-	.def_readwrite("fov", &Camera::fov)
-	.def_readwrite("aspect", &Camera::aspect)
-	.def_readwrite("near", &Camera::near)
-	.def_readwrite("far", &Camera::far)
+	.def_readwrite("porject_type_", &Camera::porject_type_)
+	.def_readwrite("fov_", &Camera::fov_)
+	.def_readwrite("aspect_", &Camera::aspect_)
+	.def_readwrite("near_", &Camera::near_)
+	.def_readwrite("far_", &Camera::far_)
 ;
 
-py::class_<::staywalk::Light,GameObject, std::shared_ptr<::staywalk::Light>>(__module, "Light")
+py::class_<::staywalk::RLight,GameObject, std::shared_ptr<::staywalk::RLight>>(__module, "RLight")
 	.def(py::init<const string &>())
 ;
 
