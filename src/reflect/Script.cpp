@@ -129,11 +129,11 @@ void py_bind_glm(py::module& __module) {
 
 	py::class_<staywalk::Vertex>(__module, "Vertex")
 		.def(py::init<>())
-		.def_readwrite("position", &Vertex::position)
-		.def_readwrite("normal", &Vertex::normal)
-		.def_readwrite("texcoords", &Vertex::texcoords)
-		.def_readwrite("tangent", &Vertex::tangent)
-		.def_readwrite("bitangent", &Vertex::bitangent);
+		.def_readwrite("position", &Vertex::position_)
+		.def_readwrite("normal", &Vertex::normal_)
+		.def_readwrite("texcoords", &Vertex::texcoords_)
+		.def_readwrite("tangent", &Vertex::tangent_)
+		.def_readwrite("bitangent", &Vertex::bitangent_);
 }
 
 static

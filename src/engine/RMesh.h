@@ -16,9 +16,7 @@ namespace staywalk{
 		sw_Func()  Mesh(const vector<Vertex>&vv, const vector<unsigned int>&ii, const string & name = "0-mesh");
 		~Mesh();
 
-		void organize() override;
-		void disband() override;
-		bool load_resource() override;
+		void gl_delete();
 		void draw(RenderInfo & info) override;
 
 		sw_Func() AABB get_aabb();
@@ -32,7 +30,7 @@ namespace staywalk{
 		uint ebo = kGlSickId;
 
 	private:
-		void disband_impl();
+		void gl_update();
 		void load_post();
 		void dump_post() const;
 

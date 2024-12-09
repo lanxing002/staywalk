@@ -194,25 +194,24 @@ namespace staywalk{
 		}
 	}
 
-	shared_ptr<RTex> Utility::make_texture(fs::path tex_name) {
-        auto result = std::make_shared<RTex>();
-        result->tex.name_ = tex_name.u8string();
+	shared_ptr<Tex2D> Utility::make_texture(fs::path tex_name) {
+        auto result = std::make_shared<Tex2D>();
+        result->name_ = tex_name.u8string();
         load_tex_resource(*result);
         return result;
     }
 
-    bool Utility::load_tex_resource(RTex& rtex)
-    {
-        auto path = get_textures_dir() / fs::path(rtex.tex.name_);
+    bool Utility::load_tex_resource(Tex2D& rtex){
+        auto path = get_textures_dir() / fs::path(rtex.name_);
         if (fs::is_directory(path) || !fs::exists(path)) {
             log(fmt::format("Utility --> load_texture : not find target ({})", path.u8string()), LogLevel::Error);
             return false;
         }
 
-        rtex.tex.data = stbi_load(path.u8string().c_str(),
-            &(rtex.tex.width), &(rtex.tex.height), &(rtex.tex.nr_comps), 0);
+        rtex.host_data_ = stbi_load(path.u8string().c_str(),
+            &(rtex.width_), &(rtex.height_), &(rtex.nr_comps_), 0);
 
-        if (rtex.tex.data == nullptr) {
+        if (rtex.host_data_ == nullptr) {
             log(fmt::format("Utility --> load_texture : failed when load {}", path.u8string()), LogLevel::Error);
             return false;
         }
@@ -331,20 +330,20 @@ namespace staywalk{
         for (unsigned int i = 0; i < mesh->mNumVertices; i++)
         {
             Vertex vertex;
-            vertex.position = vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
+            vertex.position_ = vec3(mesh->mVertices[i].x, mesh->mVertices[i].y, mesh->mVertices[i].z);
             if (mesh->HasNormals())
-                vertex.normal = vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
+                vertex.normal_ = vec3(mesh->mNormals[i].x, mesh->mNormals[i].y, mesh->mNormals[i].z);
 
             if (mesh->mTextureCoords[0]) // does the mesh contain texture coordinates?
             {
                 // a vertex can contain up to 8 different texture coordinates. We thus make the assumption that we won't 
                 // use models where a vertex can have multiple texture coordinates so we always take the first set (0).
-                vertex.texcoords = vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
-                vertex.tangent = vec3(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
-                vertex.bitangent = vec3(mesh->mBitangents[i].x, mesh->mBitangents[i].y, mesh->mBitangents[i].z);
+                vertex.texcoords_ = vec2(mesh->mTextureCoords[0][i].x, mesh->mTextureCoords[0][i].y);
+                vertex.tangent_ = vec3(mesh->mTangents[i].x, mesh->mTangents[i].y, mesh->mTangents[i].z);
+                vertex.bitangent_ = vec3(mesh->mBitangents[i].x, mesh->mBitangents[i].y, mesh->mBitangents[i].z);
             }
             else
-                vertex.texcoords = vec2(0.0f, 0.0f);
+                vertex.texcoords_ = vec2(0.0f, 0.0f);
 
             vertices.push_back(vertex);
         }

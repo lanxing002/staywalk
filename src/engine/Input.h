@@ -128,14 +128,14 @@ namespace staywalk{
 namespace staywalk {
 	struct InputEvent
 	{
-		EventType etype;
+		EventType etype_;
 
-		Keyboard keyboard;
-		Mouse mouse;
+		Keyboard keyboard_;
+		Mouse mouse_;
 
-		bool pressed;
+		bool pressed_;
 
-		glm::vec2 pos;
+		glm::vec2 pos_;
 	};
 
 	class InputManager;
@@ -144,9 +144,9 @@ namespace staywalk {
 		MouseDevice();
 		void clear();
 		bool state_[3];
-		vec2 pos = vec2(0, 0);
-		vec2 mouse_offset = vec2(.0, .0);
-		vec2 wheel_offset = vec2(.0, .0);
+		vec2 pos_ = vec2(0, 0);
+		vec2 mouse_offset_ = vec2(.0, .0);
+		vec2 wheel_offset_ = vec2(.0, .0);
 		friend class InputManager;
 	};
 

@@ -10,55 +10,59 @@ using namespace staywalk;
 
 RShader::RShader(const string& code_text, const string& name)
 	: RObject(name) {
-	code = SWCode::create_code();
-	code->text = code_text;
+	code_ = SWCode::create_code();
+	code_->text_ = code_text;
 }
 
-void staywalk::RShader::organize(){
-	if (shadertype == ShaderType::None) {
+void staywalk::RShader::gl_update(){
+	if (shadertype_ == ShaderType::None) {
 		log(fmt::format("RShader::organize --> shader {} has None shadetype", name_), LogLevel::Warn);
+		return;
 	}
-	if(glid == kGlSickId)
-		glid = glCreateShader((GLenum)shadertype);
-	auto source = code->text.c_str();
-	glShaderSource(glid, 1, &source, NULL);
-	glCompileShader(glid);
+	if (glid_ == kGlSickId || obj_shadertype_ != shadertype_) {
+		glid_ = glCreateShader((GLenum)shadertype_);
+		obj_shadertype_ = shadertype_;
+	}
+	auto source = code_->text_.c_str();
+	glShaderSource(glid_, 1, &source, NULL);
+	glCompileShader(glid_);
 	check_compile_error();
 }
 
-void staywalk::RShader::disband(){
-	if(kGlSickId != glid)
-		glDeleteShader(glid);
+void staywalk::RShader::gl_delete(){
+	if(kGlSickId != glid_)
+		glDeleteShader(glid_);
+	obj_shadertype_ = ShaderType::None;
 }
 
-GLuint staywalk::RShader::get_updated_id(){
+GLuint staywalk::RShader::get_updated_glid(){
 	if (dirty_) {
-		organize();  // only compile once for every change
+		gl_update();  // only compile once for every change
 		dirty_ = false;
 	}
-	return glid;
+	return glid_;
 }
 
 void staywalk::RShader::check_compile_error(){
 	GLint success;
 	GLchar info[1024];
-	glGetShaderiv(glid, GL_COMPILE_STATUS, &success);
+	glGetShaderiv(glid_, GL_COMPILE_STATUS, &success);
 	if (!success)
 	{
-		glGetShaderInfoLog(glid, 1024, NULL, info);
+		glGetShaderInfoLog(glid_, 1024, NULL, info);
 		log(fmt::format("RShader::Compile Failed --> {}", info), LogLevel::Warn);
 	}
 }
 
 RProgram::RProgram(const string& name)
 	: RObject(name)
-	,vs("", "vertex")
-	,fs("", "fragment")
-	,gs("", "geom")
+	,vs_("", "vertex")
+	,fs_("", "fragment")
+	,gs_("", "geom")
 {
-	vs.shadertype = ShaderType::VS;
-	fs.shadertype = ShaderType::FS;
-	gs.shadertype = ShaderType::GS;
+	vs_.shadertype_ = ShaderType::VS;
+	fs_.shadertype_ = ShaderType::FS;
+	gs_.shadertype_ = ShaderType::GS;
 	dirty_ = true;
 }
 
@@ -67,16 +71,16 @@ void RProgram::load_post(){
 	auto vs_file = p / (name_ + ".vs"); string vs_code;
 	auto fs_file = p / (name_ + ".fs"); string fs_code;
 	auto gs_file = p / (name_ + ".gs"); string gs_code;
-	if (Utility::load_text(vs_file, vs_code)) vs.code->text = vs_code;
-	if (Utility::load_text(fs_file, fs_code)) fs.code->text = fs_code;
-	if (Utility::load_text(gs_file, gs_code)) gs.code->text = gs_code;
+	if (Utility::load_text(vs_file, vs_code)) vs_.code_->text_ = vs_code;
+	if (Utility::load_text(fs_file, fs_code)) fs_.code_->text_ = fs_code;
+	if (Utility::load_text(gs_file, gs_code)) gs_.code_->text_ = gs_code;
 }
 
 void RProgram::dump_post() const{
 	auto p = Utility::get_shaders_dir();
-	auto vs_file = p / (name_ + ".vs"); string vs_code = vs.code->text;
-	auto fs_file = p / (name_ + ".fs"); string fs_code = fs.code->text;
-	auto gs_file = p / (name_ + ".gs"); string gs_code = gs.code->text;
+	auto vs_file = p / (name_ + ".vs"); string vs_code = vs_.code_->text_;
+	auto fs_file = p / (name_ + ".fs"); string fs_code = fs_.code_->text_;
+	auto gs_file = p / (name_ + ".gs"); string gs_code = gs_.code_->text_;
 
 	Utility::dump_text(vs_file, vs_code);
 	Utility::dump_text(fs_file, fs_code);
@@ -86,42 +90,41 @@ void RProgram::dump_post() const{
 staywalk::RProgram::~RProgram(){
 }
 
-void staywalk::RProgram::organize(){
-	glid = glCreateProgram();
+void staywalk::RProgram::gl_update(){
+	glid_ = glCreateProgram();
 }
 
-void staywalk::RProgram::disband(){
-	vs.disband();
-	fs.disband();
-	gs.disband();
-	if (kGlSickId != glid) glDeleteProgram(glid);
+void staywalk::RProgram::gl_delete(){
+	vs_.gl_delete();
+	fs_.gl_delete();
+	gs_.gl_delete();
+	if (kGlSickId != glid_) glDeleteProgram(glid_);
 }
 
 void staywalk::RProgram::use() {
 	if (dirty_) {
 		uniforms_.clear();
-		organize(); 
+		gl_update(); 
 		dirty_ = false;
 	}
 
-	if (vs.is_dirty() || fs.is_dirty() /*|| gs.is_dirty()*/) {
-		if (vs.is_dirty())  glAttachShader(glid, vs.get_updated_id());
-		if (fs.is_dirty()) glAttachShader(glid, fs.get_updated_id());
+	if (vs_.is_dirty() || fs_.is_dirty() /*|| gs.is_dirty()*/) {
+		if (vs_.is_dirty())  glAttachShader(glid_, vs_.get_updated_glid());
+		if (fs_.is_dirty()) glAttachShader(glid_, fs_.get_updated_glid());
 		//if (gs.is_dirty()) glAttachShader(glid, gs.get_updated_id());
-		glLinkProgram(glid);
+		glLinkProgram(glid_);
 		check_link_error();
 	}
 
-	glUseProgram(glid);
+	glUseProgram(glid_);
 }
 
-GLint staywalk::RProgram::get_uniform(const string& u_name){
-	//auto it = uniforms_.find(name);
-	//if (it != uniforms_.end())
-		//return it->second;
-	GLint target = glGetUniformLocation(glid, u_name.c_str());
-	GLCheck(;);
-	//uniforms_[name] = target;
+GLint staywalk::RProgram::get_uniform(const string& name){
+	auto it = uniforms_.find(name);
+	if (it != uniforms_.end())
+		return it->second;
+	GLint target = glGetUniformLocation(glid_, name.c_str());
+	uniforms_[name] = target;
 	return target;
 }
 
@@ -164,9 +167,9 @@ void staywalk::RProgram::set_uniform(const string& name, UniformRef uniform){
 void staywalk::RProgram::check_link_error(){
 	GLint success;
 	GLchar info[1024];
-	glGetProgramiv(glid, GL_LINK_STATUS, &success);
+	glGetProgramiv(glid_, GL_LINK_STATUS, &success);
 	if (!success){
-		glGetProgramInfoLog(glid, 1024, NULL, info);
+		glGetProgramInfoLog(glid_, 1024, NULL, info);
 		log(fmt::format("RProgram::Link {}: Failed --> {}", name_, info), LogLevel::Warn);
 	}
 }
@@ -183,32 +186,32 @@ void staywalk::RProgram::monitor(RProgramRef program, bool flag /*= true*/){
 	auto engine = Engine::get_engine();
 
 	if (flag) {
-		engine->monitor_file({ program->vs.get_guid(), vs_file }, [weak_ref](const string& new_context) {
+		engine->monitor_file({ program->vs_.get_guid(), vs_file }, [weak_ref](const string& new_context) {
 			if (auto ref = weak_ref.lock()) { 
-				ref->vs.code->text = new_context;
-				ref->vs.mark_dirty();
+				ref->vs_.code_->text_ = new_context;
+				ref->vs_.mark_dirty();
 				log(fmt::format("vs::hotload {} --> suceess", ref->name_));
 			}
 		});
-		engine->monitor_file({ program->fs.get_guid(), fs_file }, [weak_ref](const string& new_context) {
+		engine->monitor_file({ program->fs_.get_guid(), fs_file }, [weak_ref](const string& new_context) {
 			if (auto ref = weak_ref.lock()) { 
-				ref->fs.code->text = new_context; 
-				ref->fs.mark_dirty();
+				ref->fs_.code_->text_ = new_context; 
+				ref->fs_.mark_dirty();
 				log(fmt::format("fs::hotload {} --> suceess", ref->name_));
 			}
 		});
-		engine->monitor_file({ program->gs.get_guid(), gs_file }, [weak_ref](const string& new_context) {
-			if (auto ref = weak_ref.lock()) { 
-				ref->gs.code->text = new_context; 
-				ref->gs.mark_dirty();
+		engine->monitor_file({ program->gs_.get_guid(), gs_file }, [weak_ref](const string& new_context) {
+			if (auto ref = weak_ref.lock()) {
+				ref->gs_.code_->text_ = new_context;
+				ref->gs_.mark_dirty();
 				log(fmt::format("gs::hotload {} --> suceess", ref->name_));
 			}
-		});
+			});
 	}
 	else {
-		engine->cancel_monitor_file({ program->vs.get_guid(), vs_file });
-		engine->cancel_monitor_file({ program->fs.get_guid(), fs_file });
-		engine->cancel_monitor_file({ program->gs.get_guid(), gs_file });
+		engine->cancel_monitor_file({ program->vs_.get_guid(), vs_file });
+		engine->cancel_monitor_file({ program->fs_.get_guid(), fs_file });
+		engine->cancel_monitor_file({ program->gs_.get_guid(), gs_file });
 	}
 
 }

@@ -25,20 +25,17 @@ namespace staywalk {
 
         int edit_callback(ImGuiInputTextCallbackData* data);
 
-        // In C++11 you'd be better off using lambdas for this sort of forwarding callbacks
-        //static int TextEditCallbackStub(ImGuiInputTextCallbackData* data);
-        //int TextEditCallback(ImGuiInputTextCallbackData* data);
         static vector<std::pair<string, LogLevel>> log_cache_;
 
     private:
-        char                  InputBuf[2048];
-        ImFont* font_;
-        vector<std::pair<LogLevel, string>>         Items;
-        vector<string>          Commands;
-        vector<string>       History;
-        int                   HistoryPos;    // -1: new line, 0..History.Size-1 browsing history.
-        ImGuiTextFilter       Filter;
-        bool                  AutoScroll;
-        bool                  ScrollToBottom;
+        char                                    input_buf_[2048];
+        ImFont*                                 font_;
+        vector<std::pair<LogLevel, string>>     items_;
+        vector<string>                          commands_;
+        vector<string>                          history_;
+        int                                     history_pos_;    // -1: new line, 0..History.Size-1 browsing history.
+        ImGuiTextFilter                         filter_;
+        bool                                    auto_scroll_;
+        bool                                    scroll_to_buttom_;
     };
 }

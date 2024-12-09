@@ -31,18 +31,18 @@ namespace staywalk{
 
 	static constexpr uint kMaxBoueInfluence = 4;
 	struct Vertex {
-		vec3 position;
-		vec3 normal;
-		vec2 texcoords;
-		vec3 tangent;
-		vec3 bitangent;
+		vec3 position_;
+		vec3 normal_;
+		vec2 texcoords_;
+		vec3 tangent_;
+		vec3 bitangent_;
 
 		bool operator==(const Vertex& rhs) const {
-			return position == rhs.position &&
-				normal == rhs.normal &&
-				texcoords == rhs.texcoords &&
-				tangent == rhs.tangent &&
-				bitangent == rhs.bitangent;
+			return position_ == rhs.position_ &&
+				normal_ == rhs.normal_ &&
+				texcoords_ == rhs.texcoords_ &&
+				tangent_ == rhs.tangent_ &&
+				bitangent_ == rhs.bitangent_;
 		}
 		void dump(rapidjson::Value& value, staywalk::reflect::Dumper& dumper) const;
 		void load(rapidjson::Value& value, staywalk::reflect::Loader& loader);
@@ -52,76 +52,53 @@ namespace staywalk{
 		//array<float, kMaxBoueInfluence> weights;
 	};
 
-	// resource file use for cpu side, for create render object and edit
-	class sw_Class()  Resource : public Object {
-	public:
-		sw_Func()  Resource(const string& name = "0-resource");
-
-		sw_Prop() fs::path source;
-		sw_Prop() fs::path dump_dir;
-
-		MetaRegister(Resource);
-	};
-
-
-	class sw_Class()  Tex2d : public Resource {
-	public:
-		Tex2d(const string& name = "0-Tex2d");
-
-		unsigned char* data = nullptr;
-		int width = -1;
-		int height = -1;
-		int nr_comps = -1;
-
-		MetaRegister(Tex2d)
-	};
 
 	// render object is a opengl object
 	class sw_Class()  RObject : public Object{
 	public:
 		sw_Func()  RObject(const string& name = "0-RObj");
-
-		virtual void organize() {}
-		virtual void disband() {}
-		virtual bool load_resource() { return false; }
-
-		virtual bool valid() { return glid != kGlSickId; }
-		virtual void mark_dirty() { dirty_ = true; }
-		virtual bool is_dirty() { return dirty_; }
-
 		MetaRegister(RObject);
 
+		bool valid() const { return glid_ != kGlSickId; }
+		void mark_dirty() { dirty_ = true; }
+		bool is_dirty() const { return dirty_; }
+
 	protected:
-		GLuint glid = kGlSickId;  // for opengl id, -1 is invalid
+		GLuint glid_ = kGlSickId;  // for opengl id, -1 is invalid
 		bool dirty_ = true;
 	};
 
 	
-	class sw_Class(jsonpost;)  RTex : public RObject {
+	class sw_Class(jsonpost;)  Tex2D : public RObject {
 	public:
-		RTex(const string& name = "tex-0");
-
-		void organize() override;
-		void disband() override;
-
-	public:
-		sw_Prop() Tex2d tex;
+		Tex2D(const string& name = "tex-0");
+		//sw_Prop() Tex2d tex;
 		sw_Prop() bool mipmap = true;
 		sw_Prop() GlWrap wrap_s = GlWrap::REPEAT;
 		sw_Prop() GlWrap wrap_t = GlWrap::REPEAT;
 		sw_Prop() GlMinFilter min_filter = GlMinFilter::LINEAR;
 		sw_Prop() GlMagFilter mag_filter = GlMagFilter::LINEAR;
-		GLuint get_glid() { return glid; }
+		MetaRegister(Tex2D);
 
-		MetaRegister(RTex);
+		GLuint get_updated_glid();
+		void gl_delete();
 
 	private:
+		void gl_update();
 		void load_post();
 		void dump_post() const;
+
+		// texture host memory 
+		unsigned char* host_data_ = nullptr;
+		int width_ = -1;
+		int height_ = -1;
+		int nr_comps_ = -1;
+
+		friend class Utility;
 	};
 
 	// engine use this struct to manage light
-	struct RLight {
+	struct RenderLight {
 		static constexpr unsigned int kMaxLights = 20;
 
 		struct __LightBlock {
@@ -146,8 +123,8 @@ namespace staywalk{
 		__LightBuffer light_buffer;
 
 	private:
-		RLight();
-		~RLight();
+		RenderLight();
+		~RenderLight();
 
 		uint ubo_ = kGlSickId;
 		friend class Renderer;

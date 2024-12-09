@@ -12,11 +12,11 @@ namespace staywalk {
 
 	struct RenderInfo
 	{
-		std::stack<staywalk::mat4> model;
-		std::stack<staywalk::mat4> view;
-		std::stack<staywalk::mat4> projection;
-		staywalk::RProgramRef program{nullptr};
-		bool can_override{ false };
+		std::stack<staywalk::mat4> model_;
+		std::stack<staywalk::mat4> view_;
+		std::stack<staywalk::mat4> projection_;
+		staywalk::RProgramRef program_{nullptr};
+		bool can_override_{ false };
 	};
 
 }

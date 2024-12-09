@@ -12,29 +12,21 @@ namespace staywalk {
 		static const string AoKey;
 
 	public:
-		sw_Func()  Material(const string& name="0-material");
-
 		~Material();
+		void use(RenderInfo info);
+		void load_post() { if (program_) RProgram::monitor(program_, true); }
+		void dump_post() const {}
 
+		sw_Func()  Material(const string& name="0-material");
 		sw_Func()  void add_tex(const string & name, RTexRef tex);
 		sw_Func()  void add_uniform(const string & name, UniformRef uniform);
-
-		sw_Prop() RProgramRef program;
-
-		/**
-		* @ same effect
-		*/
 		sw_Func() bool is_same(MaterialRef rhs);
 
-		void use(RenderInfo info);
-
-		void load_post() { if (program) RProgram::monitor(program, true); }
-		void dump_post() const {}
+		sw_Prop() RProgramRef program_;
 
 	protected:
 		sw_Prop() vector<pair<string, UniformRef>> uniforms_;
 		sw_Prop() vector<pair<string, RTexRef>> texs_;
-		sw_Prop() vector<int> vecce;
 
 		MetaRegister(Material);
 	};

@@ -4,14 +4,13 @@
 
 namespace staywalk {
 	
-	class sw_Class() Light : public GameObject {
+	class sw_Class() RLight : public GameObject {
 	public:
 
-		sw_Func() Light(const string& name = "light-0");
+		sw_Func() RLight(const string& name = "light-0");
+		MetaRegister(RLight);
 
 		void tick(float delta) override;
-
-		MetaRegister(Light);
 	};
 
 }

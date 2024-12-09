@@ -127,9 +127,9 @@ namespace staywalk{
 	class RProgram;
 	class RShader;
 	class Material;
-	class Light;
+	class RLight;
 	class Camera;
-	class RTex;
+	class Tex2D;
 	class Mesh;
 	class RUniform;
 
@@ -143,8 +143,8 @@ namespace staywalk{
 	using RProgramRef = shared_ptr<RProgram>;
 	using RShaderRef = shared_ptr<RShader>;
 	using MaterialRef = shared_ptr<Material>;
-	using LightRef = shared_ptr<Light>;
-	using RTexRef = shared_ptr<RTex>;
+	using LightRef = shared_ptr<RLight>;
+	using RTexRef = shared_ptr<Tex2D>;
 	using MeshRef = shared_ptr<Mesh>;
 	using UniformRef = shared_ptr<RUniform>;
 

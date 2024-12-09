@@ -13,7 +13,7 @@ namespace staywalk {
 	}
 	
 	AABB Actor::get_aabb(){
-		auto mat = transform.matrix();
+		auto mat = transform_.matrix();
 		AABB aabb;
 		if (sm_comp) {
 			auto sm_aabb = sm_comp->get_aabb();

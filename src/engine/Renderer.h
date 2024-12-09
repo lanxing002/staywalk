@@ -18,7 +18,7 @@ namespace staywalk {
 		virtual void render(double delta, unsigned long long count);
 
 	private:
-		RLight light_mgr_;
+		RenderLight light_mgr_;
 		std::array<RProgramRef, (int)ProgramType::_Count> program_table_;
 	};
 }

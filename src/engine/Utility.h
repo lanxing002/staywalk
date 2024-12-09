@@ -59,11 +59,11 @@ namespace staywalk{
 		/***********************************************/
 		/*****************render object*****************/
 		/***********************************************/
-		static shared_ptr<RTex> make_texture(fs::path path);
+		static shared_ptr<Tex2D> make_texture(fs::path path);
 
-		sw_Func() static shared_ptr<RTex> create_tex(string path) { return make_texture(fs::path(path)); }
+		sw_Func() static shared_ptr<Tex2D> create_tex(string path) { return make_texture(fs::path(path)); }
 
-		static bool load_tex_resource(RTex& tex);
+		static bool load_tex_resource(Tex2D& tex);
 	};
 
 	class MeshLoader
@@ -75,7 +75,7 @@ namespace staywalk{
 	private:
 		pair<MeshRef, MaterialRef> construct_mesh(aiMesh* mesh, const aiScene* scene);
 		void process_node(aiNode* node, const aiScene* scene);
-		shared_ptr<RTex> find_material_tex(aiMaterial* mat, aiTextureType type);
+		shared_ptr<Tex2D> find_material_tex(aiMaterial* mat, aiTextureType type);
 		/**
 		* @brief copy source image file and make texture, if loaded then return cache object
 		*/

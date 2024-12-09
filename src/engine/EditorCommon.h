@@ -6,5 +6,5 @@
 
 class EditorCommon {
 public:
-    static std::map<std::string, ImFont*> font_table;
+    static std::map<std::string, ImFont*> font_table_;
 };

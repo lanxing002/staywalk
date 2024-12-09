@@ -42,39 +42,39 @@ void Renderer::render(double delta, unsigned long long count)
 	{
 		auto& lights = world->get_lights();
 		auto& buffer = light_mgr_.light_buffer;
-		auto num = std::min((unsigned int)lights.size(), RLight::kMaxLights);
+		auto num = std::min((unsigned int)lights.size(), RenderLight::kMaxLights);
 		int real_count = 0;
 		for (int i = 0; i < num; i++) {
 			if (lights[i] == nullptr) continue;
 			real_count++;
-			buffer.light_data[i].position = lights[i]->transform.location;
+			buffer.light_data[i].position = lights[i]->transform_.location;
 		}
 		buffer.light_count = real_count;
 		light_mgr_.sync_to_gpu();
 	}
 
 	RenderInfo render_info;
-	render_info.model.push(mat4(1.0));
-	render_info.view.push(mat4(1.0));
-	render_info.projection.push(mat4(1.0));
+	render_info.model_.push(mat4(1.0));
+	render_info.view_.push(mat4(1.0));
+	render_info.projection_.push(mat4(1.0));
 	if (auto cam = world->get_activated_camera()) {
-		render_info.view.top() = cam->view;
-		render_info.projection.top() = cam->projection;
+		render_info.view_.top() = cam->view_;
+		render_info.projection_.top() = cam->projection_;
 	}
 
 	// setup shader
 	{
 		auto program = program_table_[(int)ProgramType::PBR];
 		program->use();
-		program->set_uniform("view", render_info.view.top());
-		program->set_uniform("projection", render_info.projection.top());
-		render_info.program = program;
+		program->set_uniform("view", render_info.view_.top());
+		program->set_uniform("projection", render_info.projection_.top());
+		render_info.program_ = program;
 	}
 	
 	// render mesh
 	{
 		for (auto& actor : world->get_actors()) {
-			render_info.model.top() = actor->transform.matrix();
+			render_info.model_.top() = actor->transform_.matrix();
 			if (nullptr == actor->sm_comp) continue;
 			actor->sm_comp->draw(render_info);
 		}

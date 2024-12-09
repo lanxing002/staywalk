@@ -49,7 +49,7 @@ void EditorUI::initialize(GLFWwindow* window){
     assets_browser_ = std::make_shared<AssetsBrowser>();
 
     auto codefont = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/consola.ttf", 20.0f);
-    EditorCommon::font_table["consola"] = codefont;
+    EditorCommon::font_table_["consola"] = codefont;
 }
 
 void EditorUI::render(){
