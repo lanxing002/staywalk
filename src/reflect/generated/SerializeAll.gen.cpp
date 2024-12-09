@@ -52,8 +52,8 @@ void ::staywalk::GameObject::dump(rapidjson::Value& value, ::staywalk::reflect::
 
     {
         json::Value prop;
-        dumper.write(this->transform, prop);
-        value.AddMember("transform", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->transform_, prop);
+        value.AddMember("transform_", prop, dumper.get_doc().GetAllocator()); 
     }
 }
 
@@ -64,16 +64,16 @@ void ::staywalk::GameObject::load(rapidjson::Value& value, ::staywalk::reflect::
 
     Object::load(value, loader);
 
-    itr = value.FindMember("transform");
+    itr = value.FindMember("transform_");
     if(itr != value.MemberEnd()){
-        loader.read(this->transform, itr->value);
+        loader.read(this->transform_, itr->value);
     }
 }
 
 
 bool ::staywalk::GameObject::operator==(const ::staywalk::GameObject& rhs) const {
     return 
-Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->transform, rhs.transform);
+Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->transform_, rhs.transform_);
 }
 
 
@@ -123,84 +123,6 @@ GameObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->sm_comp, rhs.s
 
 #include "RenderObject.h"
 
-void ::staywalk::Resource::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
-    assert(value.IsObject());
-
-    Object::dump(value, dumper);
-
-    {
-        json::Value prop;
-        dumper.write(this->source, prop);
-        value.AddMember("source", prop, dumper.get_doc().GetAllocator()); 
-    }
-    {
-        json::Value prop;
-        dumper.write(this->dump_dir, prop);
-        value.AddMember("dump_dir", prop, dumper.get_doc().GetAllocator()); 
-    }
-}
-
-
-void ::staywalk::Resource::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
-    assert(value.IsObject());
-    json::Value::MemberIterator itr;
-
-    Object::load(value, loader);
-
-    itr = value.FindMember("source");
-    if(itr != value.MemberEnd()){
-        loader.read(this->source, itr->value);
-    }
-    itr = value.FindMember("dump_dir");
-    if(itr != value.MemberEnd()){
-        loader.read(this->dump_dir, itr->value);
-    }
-}
-
-
-bool ::staywalk::Resource::operator==(const ::staywalk::Resource& rhs) const {
-    return 
-Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->source, rhs.source) && ::staywalk::Comparer::equal(this->dump_dir, rhs.dump_dir);
-}
-
-
-::staywalk::reflect::MetaInfo staywalk::Resource::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Resource, "staywalk::Resource"};
-
-}
-
-#include "RenderObject.h"
-
-void ::staywalk::Tex2d::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
-    assert(value.IsObject());
-
-    Resource::dump(value, dumper);
-
-}
-
-
-void ::staywalk::Tex2d::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
-    assert(value.IsObject());
-    json::Value::MemberIterator itr;
-
-    Resource::load(value, loader);
-
-}
-
-
-bool ::staywalk::Tex2d::operator==(const ::staywalk::Tex2d& rhs) const {
-    return 
-Resource::operator==(rhs) ;
-}
-
-
-::staywalk::reflect::MetaInfo staywalk::Tex2d::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Tex2d, "staywalk::Tex2d"};
-
-}
-
-#include "RenderObject.h"
-
 void ::staywalk::RObject::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
@@ -231,16 +153,11 @@ Object::operator==(rhs) ;
 
 #include "RenderObject.h"
 
-void ::staywalk::RTex::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+void ::staywalk::Tex2D::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
     RObject::dump(value, dumper);
 
-    {
-        json::Value prop;
-        dumper.write(this->tex, prop);
-        value.AddMember("tex", prop, dumper.get_doc().GetAllocator()); 
-    }
     {
         json::Value prop;
         dumper.write(this->mipmap, prop);
@@ -270,16 +187,12 @@ void ::staywalk::RTex::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper
 }
 
 
-void ::staywalk::RTex::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+void ::staywalk::Tex2D::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
     RObject::load(value, loader);
 
-    itr = value.FindMember("tex");
-    if(itr != value.MemberEnd()){
-        loader.read(this->tex, itr->value);
-    }
     itr = value.FindMember("mipmap");
     if(itr != value.MemberEnd()){
         loader.read(this->mipmap, itr->value);
@@ -304,14 +217,14 @@ void ::staywalk::RTex::load(rapidjson::Value& value, ::staywalk::reflect::Loader
 }
 
 
-bool ::staywalk::RTex::operator==(const ::staywalk::RTex& rhs) const {
+bool ::staywalk::Tex2D::operator==(const ::staywalk::Tex2D& rhs) const {
     return 
-RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->tex, rhs.tex) && ::staywalk::Comparer::equal(this->mipmap, rhs.mipmap) && ::staywalk::Comparer::equal(this->wrap_s, rhs.wrap_s) && ::staywalk::Comparer::equal(this->wrap_t, rhs.wrap_t) && ::staywalk::Comparer::equal(this->min_filter, rhs.min_filter) && ::staywalk::Comparer::equal(this->mag_filter, rhs.mag_filter);
+RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->mipmap, rhs.mipmap) && ::staywalk::Comparer::equal(this->wrap_s, rhs.wrap_s) && ::staywalk::Comparer::equal(this->wrap_t, rhs.wrap_t) && ::staywalk::Comparer::equal(this->min_filter, rhs.min_filter) && ::staywalk::Comparer::equal(this->mag_filter, rhs.mag_filter);
 }
 
 
-::staywalk::reflect::MetaInfo staywalk::RTex::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::RTex, "staywalk::RTex"};
+::staywalk::reflect::MetaInfo staywalk::Tex2D::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Tex2D, "staywalk::Tex2D"};
 
 }
 
@@ -324,13 +237,13 @@ void ::staywalk::RShader::dump(rapidjson::Value& value, ::staywalk::reflect::Dum
 
     {
         json::Value prop;
-        dumper.write(this->shadertype, prop);
-        value.AddMember("shadertype", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->shadertype_, prop);
+        value.AddMember("shadertype_", prop, dumper.get_doc().GetAllocator()); 
     }
     {
         json::Value prop;
-        dumper.write(this->code, prop);
-        value.AddMember("code", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->code_, prop);
+        value.AddMember("code_", prop, dumper.get_doc().GetAllocator()); 
     }
 }
 
@@ -341,20 +254,20 @@ void ::staywalk::RShader::load(rapidjson::Value& value, ::staywalk::reflect::Loa
 
     RObject::load(value, loader);
 
-    itr = value.FindMember("shadertype");
+    itr = value.FindMember("shadertype_");
     if(itr != value.MemberEnd()){
-        loader.read(this->shadertype, itr->value);
+        loader.read(this->shadertype_, itr->value);
     }
-    itr = value.FindMember("code");
+    itr = value.FindMember("code_");
     if(itr != value.MemberEnd()){
-        loader.read(this->code, itr->value);
+        loader.read(this->code_, itr->value);
     }
 }
 
 
 bool ::staywalk::RShader::operator==(const ::staywalk::RShader& rhs) const {
     return 
-RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->shadertype, rhs.shadertype) && ::staywalk::Comparer::equal(this->code, rhs.code);
+RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->shadertype_, rhs.shadertype_) && ::staywalk::Comparer::equal(this->code_, rhs.code_);
 }
 
 
@@ -420,18 +333,18 @@ void ::staywalk::RProgram::dump(rapidjson::Value& value, ::staywalk::reflect::Du
 
     {
         json::Value prop;
-        dumper.write(this->vs, prop);
-        value.AddMember("vs", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->vs_, prop);
+        value.AddMember("vs_", prop, dumper.get_doc().GetAllocator()); 
     }
     {
         json::Value prop;
-        dumper.write(this->fs, prop);
-        value.AddMember("fs", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->fs_, prop);
+        value.AddMember("fs_", prop, dumper.get_doc().GetAllocator()); 
     }
     {
         json::Value prop;
-        dumper.write(this->gs, prop);
-        value.AddMember("gs", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->gs_, prop);
+        value.AddMember("gs_", prop, dumper.get_doc().GetAllocator()); 
     }
     this->dump_post();
 }
@@ -443,17 +356,17 @@ void ::staywalk::RProgram::load(rapidjson::Value& value, ::staywalk::reflect::Lo
 
     RObject::load(value, loader);
 
-    itr = value.FindMember("vs");
+    itr = value.FindMember("vs_");
     if(itr != value.MemberEnd()){
-        loader.read(this->vs, itr->value);
+        loader.read(this->vs_, itr->value);
     }
-    itr = value.FindMember("fs");
+    itr = value.FindMember("fs_");
     if(itr != value.MemberEnd()){
-        loader.read(this->fs, itr->value);
+        loader.read(this->fs_, itr->value);
     }
-    itr = value.FindMember("gs");
+    itr = value.FindMember("gs_");
     if(itr != value.MemberEnd()){
-        loader.read(this->gs, itr->value);
+        loader.read(this->gs_, itr->value);
     }
     this->load_post();
 }
@@ -461,7 +374,7 @@ void ::staywalk::RProgram::load(rapidjson::Value& value, ::staywalk::reflect::Lo
 
 bool ::staywalk::RProgram::operator==(const ::staywalk::RProgram& rhs) const {
     return 
-RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->vs, rhs.vs) && ::staywalk::Comparer::equal(this->fs, rhs.fs) && ::staywalk::Comparer::equal(this->gs, rhs.gs);
+RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->vs_, rhs.vs_) && ::staywalk::Comparer::equal(this->fs_, rhs.fs_) && ::staywalk::Comparer::equal(this->gs_, rhs.gs_);
 }
 
 
@@ -479,8 +392,8 @@ void ::staywalk::Material::dump(rapidjson::Value& value, ::staywalk::reflect::Du
 
     {
         json::Value prop;
-        dumper.write(this->program, prop);
-        value.AddMember("program", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->program_, prop);
+        value.AddMember("program_", prop, dumper.get_doc().GetAllocator()); 
     }
     {
         json::Value prop;
@@ -492,11 +405,6 @@ void ::staywalk::Material::dump(rapidjson::Value& value, ::staywalk::reflect::Du
         dumper.write(this->texs_, prop);
         value.AddMember("texs_", prop, dumper.get_doc().GetAllocator()); 
     }
-    {
-        json::Value prop;
-        dumper.write(this->vecce, prop);
-        value.AddMember("vecce", prop, dumper.get_doc().GetAllocator()); 
-    }
     this->dump_post();
 }
 
@@ -507,9 +415,9 @@ void ::staywalk::Material::load(rapidjson::Value& value, ::staywalk::reflect::Lo
 
     Object::load(value, loader);
 
-    itr = value.FindMember("program");
+    itr = value.FindMember("program_");
     if(itr != value.MemberEnd()){
-        loader.read(this->program, itr->value);
+        loader.read(this->program_, itr->value);
     }
     itr = value.FindMember("uniforms_");
     if(itr != value.MemberEnd()){
@@ -519,17 +427,13 @@ void ::staywalk::Material::load(rapidjson::Value& value, ::staywalk::reflect::Lo
     if(itr != value.MemberEnd()){
         loader.read(this->texs_, itr->value);
     }
-    itr = value.FindMember("vecce");
-    if(itr != value.MemberEnd()){
-        loader.read(this->vecce, itr->value);
-    }
     this->load_post();
 }
 
 
 bool ::staywalk::Material::operator==(const ::staywalk::Material& rhs) const {
     return 
-Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->program, rhs.program) && ::staywalk::Comparer::equal(this->uniforms_, rhs.uniforms_) && ::staywalk::Comparer::equal(this->texs_, rhs.texs_) && ::staywalk::Comparer::equal(this->vecce, rhs.vecce);
+Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->program_, rhs.program_) && ::staywalk::Comparer::equal(this->uniforms_, rhs.uniforms_) && ::staywalk::Comparer::equal(this->texs_, rhs.texs_);
 }
 
 
@@ -547,28 +451,28 @@ void ::staywalk::Camera::dump(rapidjson::Value& value, ::staywalk::reflect::Dump
 
     {
         json::Value prop;
-        dumper.write(this->porject_type, prop);
-        value.AddMember("porject_type", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->porject_type_, prop);
+        value.AddMember("porject_type_", prop, dumper.get_doc().GetAllocator()); 
     }
     {
         json::Value prop;
-        dumper.write(this->fov, prop);
-        value.AddMember("fov", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->fov_, prop);
+        value.AddMember("fov_", prop, dumper.get_doc().GetAllocator()); 
     }
     {
         json::Value prop;
-        dumper.write(this->aspect, prop);
-        value.AddMember("aspect", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->aspect_, prop);
+        value.AddMember("aspect_", prop, dumper.get_doc().GetAllocator()); 
     }
     {
         json::Value prop;
-        dumper.write(this->near, prop);
-        value.AddMember("near", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->near_, prop);
+        value.AddMember("near_", prop, dumper.get_doc().GetAllocator()); 
     }
     {
         json::Value prop;
-        dumper.write(this->far, prop);
-        value.AddMember("far", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->far_, prop);
+        value.AddMember("far_", prop, dumper.get_doc().GetAllocator()); 
     }
 }
 
@@ -579,32 +483,32 @@ void ::staywalk::Camera::load(rapidjson::Value& value, ::staywalk::reflect::Load
 
     GameObject::load(value, loader);
 
-    itr = value.FindMember("porject_type");
+    itr = value.FindMember("porject_type_");
     if(itr != value.MemberEnd()){
-        loader.read(this->porject_type, itr->value);
+        loader.read(this->porject_type_, itr->value);
     }
-    itr = value.FindMember("fov");
+    itr = value.FindMember("fov_");
     if(itr != value.MemberEnd()){
-        loader.read(this->fov, itr->value);
+        loader.read(this->fov_, itr->value);
     }
-    itr = value.FindMember("aspect");
+    itr = value.FindMember("aspect_");
     if(itr != value.MemberEnd()){
-        loader.read(this->aspect, itr->value);
+        loader.read(this->aspect_, itr->value);
     }
-    itr = value.FindMember("near");
+    itr = value.FindMember("near_");
     if(itr != value.MemberEnd()){
-        loader.read(this->near, itr->value);
+        loader.read(this->near_, itr->value);
     }
-    itr = value.FindMember("far");
+    itr = value.FindMember("far_");
     if(itr != value.MemberEnd()){
-        loader.read(this->far, itr->value);
+        loader.read(this->far_, itr->value);
     }
 }
 
 
 bool ::staywalk::Camera::operator==(const ::staywalk::Camera& rhs) const {
     return 
-GameObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->porject_type, rhs.porject_type) && ::staywalk::Comparer::equal(this->fov, rhs.fov) && ::staywalk::Comparer::equal(this->aspect, rhs.aspect) && ::staywalk::Comparer::equal(this->near, rhs.near) && ::staywalk::Comparer::equal(this->far, rhs.far);
+GameObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->porject_type_, rhs.porject_type_) && ::staywalk::Comparer::equal(this->fov_, rhs.fov_) && ::staywalk::Comparer::equal(this->aspect_, rhs.aspect_) && ::staywalk::Comparer::equal(this->near_, rhs.near_) && ::staywalk::Comparer::equal(this->far_, rhs.far_);
 }
 
 
@@ -615,7 +519,7 @@ GameObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->porject_type, 
 
 #include "Light.h"
 
-void ::staywalk::Light::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+void ::staywalk::RLight::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
     GameObject::dump(value, dumper);
@@ -623,7 +527,7 @@ void ::staywalk::Light::dump(rapidjson::Value& value, ::staywalk::reflect::Dumpe
 }
 
 
-void ::staywalk::Light::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+void ::staywalk::RLight::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
@@ -632,14 +536,14 @@ void ::staywalk::Light::load(rapidjson::Value& value, ::staywalk::reflect::Loade
 }
 
 
-bool ::staywalk::Light::operator==(const ::staywalk::Light& rhs) const {
+bool ::staywalk::RLight::operator==(const ::staywalk::RLight& rhs) const {
     return 
 GameObject::operator==(rhs) ;
 }
 
 
-::staywalk::reflect::MetaInfo staywalk::Light::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Light, "staywalk::Light"};
+::staywalk::reflect::MetaInfo staywalk::RLight::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::RLight, "staywalk::RLight"};
 
 }
 

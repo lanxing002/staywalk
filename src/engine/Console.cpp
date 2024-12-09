@@ -18,16 +18,16 @@ namespace staywalk {
 
     Console::Console() {
         clear_log();
-        memset(InputBuf, 0, sizeof(InputBuf));
-        HistoryPos = -1;
+        memset(input_buf_, 0, sizeof(input_buf_));
+        history_pos_ = -1;
 
         // "CLASSIFY" is here to provide the test case where "C"+[tab] completes to "CL" and display multiple matches.
-        Commands.push_back("HELP");
-        Commands.push_back("HISTORY");
-        Commands.push_back("CLEAR");
-        Commands.push_back("CLASSIFY");
-        AutoScroll = true;
-        ScrollToBottom = false;
+        commands_.push_back("HELP");
+        commands_.push_back("HISTORY");
+        commands_.push_back("CLEAR");
+        commands_.push_back("CLASSIFY");
+        auto_scroll_ = true;
+        scroll_to_buttom_ = false;
 
         ImGuiIO& io = ImGui::GetIO();
         font_ = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/consola.ttf", 18.0f);
@@ -39,11 +39,11 @@ namespace staywalk {
     }
 
     void Console::clear_log() {
-        Items.clear();
+        items_.clear();
     }
 
     void Console::add_log(const std::string& str, LogLevel level) {
-        Items.emplace_back(level, str);
+        items_.emplace_back(level, str);
     }
 
     static int text_edit_callback_Stub(ImGuiInputTextCallbackData* data) {
@@ -62,7 +62,7 @@ namespace staywalk {
         
         // Options menu
         if (ImGui::BeginPopup("Options")){
-            ImGui::Checkbox("Auto-scroll", &AutoScroll);
+            ImGui::Checkbox("Auto-scroll", &auto_scroll_);
             ImGui::EndPopup();
         }
 
@@ -70,7 +70,7 @@ namespace staywalk {
         if (ImGui::Button("Options"))
             ImGui::OpenPopup("Options");
         ImGui::SameLine();
-        Filter.Draw("Filter", 180);
+        filter_.Draw("Filter", 180);
         ImGui::Separator();
 
         // Reserve enough left-over height for 1 separator + 1 input text
@@ -83,9 +83,9 @@ namespace staywalk {
             }
 
             ImGui::PushStyleVar(ImGuiStyleVar_ItemSpacing, ImVec2(4, 1)); // Tighten spacing
-            for (const auto& [level, item] : Items)
+            for (const auto& [level, item] : items_)
             {
-                if (!Filter.PassFilter(item.c_str()))
+                if (!filter_.PassFilter(item.c_str()))
                     continue;
 
                 ImVec4 color;
@@ -101,9 +101,9 @@ namespace staywalk {
 
             // Keep up at the bottom of the scroll region if we were already at the bottom at the beginning of the frame.
             // Using a scrollbar or mouse-wheel will take away from the bottom edge.
-            if (ScrollToBottom || (AutoScroll && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()))
+            if (scroll_to_buttom_ || (auto_scroll_ && ImGui::GetScrollY() >= ImGui::GetScrollMaxY()))
                 ImGui::SetScrollHereY(1.0f);
-            ScrollToBottom = false;
+            scroll_to_buttom_ = false;
             ImGui::PopStyleVar();
         }
         ImGui::EndChild();
@@ -118,8 +118,8 @@ namespace staywalk {
         //    strcpy(InputBuf, History[pos].c_str());
         //}
 
-        if (ImGui::InputText("##Input", InputBuf, IM_ARRAYSIZE(InputBuf), input_text_flags, &text_edit_callback_Stub, (void*)this)){
-            char* s = InputBuf;
+        if (ImGui::InputText("##Input", input_buf_, IM_ARRAYSIZE(input_buf_), input_text_flags, &text_edit_callback_Stub, (void*)this)){
+            char* s = input_buf_;
             if (s[0]) exec_cmd(s);
             strcpy(s, "");
             reclaim_focus = true;
@@ -133,8 +133,8 @@ namespace staywalk {
     void Console::exec_cmd(const std::string& cmd){
         staywalk::log(cmd);
         Py::run(cmd);
-        History.push_back(cmd);
-        HistoryPos = -1;
+        history_.push_back(cmd);
+        history_pos_ = -1;
     }
 
     int Console::edit_callback(ImGuiInputTextCallbackData* data){
@@ -142,21 +142,21 @@ namespace staywalk {
         switch (data->EventFlag)
         {
         case ImGuiInputTextFlags_CallbackHistory: {
-            const int prev_history_pos = HistoryPos;
+            const int prev_history_pos = history_pos_;
             if (data->EventKey == ImGuiKey_UpArrow){
-                if (HistoryPos == -1)
-                    HistoryPos = int(History.size()) - 1;
-                else if (HistoryPos > 0)
-                    HistoryPos--;
+                if (history_pos_ == -1)
+                    history_pos_ = int(history_.size()) - 1;
+                else if (history_pos_ > 0)
+                    history_pos_--;
             }
             else if (data->EventKey == ImGuiKey_DownArrow){
-                if (HistoryPos != -1)
-                    if (++HistoryPos >= History.size())
-                        HistoryPos = -1;
+                if (history_pos_ != -1)
+                    if (++history_pos_ >= history_.size())
+                        history_pos_ = -1;
             }
 
-            if (prev_history_pos != HistoryPos){
-                const char* history_str = (HistoryPos >= 0) ? History[HistoryPos].c_str() : "";
+            if (prev_history_pos != history_pos_){
+                const char* history_str = (history_pos_ >= 0) ? history_[history_pos_].c_str() : "";
                 data->DeleteChars(0, data->BufTextLen);
                 data->InsertChars(0, history_str);
             }

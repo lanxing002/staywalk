@@ -29,17 +29,18 @@ namespace staywalk{
 	class sw_Class()  RShader : public RObject {
 	public:
 		RShader(const string& code_text = "", const string & name = "shader-0");
-		sw_Prop() ShaderType shadertype = ShaderType::None;
-		sw_Prop() SWCodeRef code;
+		sw_Prop() ShaderType shadertype_ = ShaderType::None;
+		sw_Prop() SWCodeRef code_;
 
-		void organize() override;
-		void disband() override;
-		GLuint get_updated_id();
-
+		GLuint get_updated_glid();
+		void gl_delete();
 		MetaRegister(RShader);
 
 	private:
 		void check_compile_error();
+		void gl_update();
+
+		ShaderType obj_shadertype_ = ShaderType::None;
 	};
 
 	class sw_Class()  RUniform : public Object {
@@ -47,7 +48,7 @@ namespace staywalk{
 		RUniform() {};
 		RUniform(int v) : utype_(UniformType::U1i) { update(v); }
 		RUniform(float v) : utype_(UniformType::U1f) { update(v); }
-		RUniform(vec2 v) : utype_(UniformType::U2f) { update(v);; }
+		RUniform(vec2 v) : utype_(UniformType::U2f) { update(v); }
 		RUniform(vec3 v) : utype_(UniformType::U3f) { update(v); }
 		RUniform(vec4 v) : utype_(UniformType::U4f) { update(v); }
 		RUniform(mat4 v) : utype_(UniformType::UMat4) { update(v); }
@@ -75,30 +76,27 @@ namespace staywalk{
 		static void monitor(RProgramRef program, bool flag = true);
 
 	public:
-		sw_Prop() RProgram(const string & name = "program-0");
+		sw_Func() RProgram(const string & name = "program-0");
 		~RProgram() override;
-		sw_Prop() RShader vs;
-		sw_Prop() RShader fs;
-		sw_Prop() RShader gs;
+		sw_Prop() RShader vs_;
+		sw_Prop() RShader fs_;
+		sw_Prop() RShader gs_;
+		MetaRegister(RProgram);
 
-		void organize() override;
-		void disband() override;
 		void use();
-		void mark_dirty() override { }
-		bool is_dirty() override { return false; }
+		void gl_delete();
 
 		GLint get_uniform(const string& name);
-
 		template<typename T>
 		void set_uniform(const string& name, T value) { static_assert(false && "not impl!!"); }
 		void set_uniform(const string& name, UniformRef uniform);
-		void check_link_error();
-
 
 		void load_post();
-		void dump_post() const;
 
-		MetaRegister(RProgram);
+	private:
+		void gl_update();
+		void check_link_error();
+		void dump_post() const;
 
 	private:
 		map<string, GLint> uniforms_;

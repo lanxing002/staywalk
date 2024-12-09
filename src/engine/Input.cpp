@@ -7,8 +7,8 @@ staywalk::MouseDevice::MouseDevice(){
 }
 
 void staywalk::MouseDevice::clear(){
-	mouse_offset = vec2(.0, .0);
-	wheel_offset = vec2(.0, .0);
+	mouse_offset_ = vec2(.0, .0);
+	wheel_offset_ = vec2(.0, .0);
 }
 
 staywalk::KeyBoardDevice::KeyBoardDevice(){
