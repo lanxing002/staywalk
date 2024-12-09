@@ -20,13 +20,13 @@ namespace staywalk {
 	}
 
 	void StaticMeshComponent::draw(RenderInfo& info) {
-		info.model.push(info.model.top() * transform.matrix());
-		info.program->set_uniform("model", info.model.top());
+		info.model_.push(info.model_.top() * transform.matrix());
+		info.program_->set_uniform("model", info.model_.top());
 		for (auto& [mesh, mat] : meshs) {
 			if(mat) mat->use(info);
 			if(mesh) mesh->draw(info);
 		}
-		info.model.pop();
+		info.model_.pop();
 	}
 
 	AABB StaticMeshComponent::get_aabb() const{

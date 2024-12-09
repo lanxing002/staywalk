@@ -56,8 +56,8 @@ TextEditor::TextEditor()
 	mLines.push_back(Line());
 
 	mCodeFont = nullptr;
-	auto it = EditorCommon::font_table.find("consola");
-	if (it != EditorCommon::font_table.end())
+	auto it = EditorCommon::font_table_.find("consola");
+	if (it != EditorCommon::font_table_.end())
 		mCodeFont = it->second;
 }
 
@@ -1141,7 +1141,7 @@ void TextEditor::Render(const char* aTitle, bool* bopen, const ImVec2& aSize, bo
 	if (ImGui::BeginMenuBar()) {
 		if (ImGui::Button("Save")) {
 			if (mCode) {
-				mCode->text = GetText();
+				mCode->text_ = GetText();
 				tip = "save to {} success ...";
 			}
 
@@ -1211,7 +1211,7 @@ void TextEditor::SetText(const std::string& aText)
 
 void TextEditor::SetCode(const staywalk::SWCodeRef code){
 	mCode = code;
-	SetText(code->text);
+	SetText(code->text_);
 }
 
 void TextEditor::SetTextLines(const std::vector<std::string>& aLines)

@@ -16,9 +16,9 @@ namespace staywalk {
 		bool middle_relase() const	{ return !mouse_.state_[(int)Mouse::MIDDLE]; }
 
 
-		vec2 pos() const { return mouse_.pos; }
-		vec2 mouse_offset() const { return mouse_.mouse_offset; }
-		int wheel() const { return  (int)mouse_.wheel_offset[1]; }
+		vec2 pos() const { return mouse_.pos_; }
+		vec2 mouse_offset() const { return mouse_.mouse_offset_; }
+		int wheel() const { return  (int)mouse_.wheel_offset_[1]; }
 
 		void clear();
 		void set_event(const InputEvent& e);

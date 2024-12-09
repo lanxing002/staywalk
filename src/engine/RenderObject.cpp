@@ -5,40 +5,29 @@
 #include "rhi.h"
 
 namespace staywalk {
-	Resource::Resource(const string& name)
-		:Object(name){
-	}
-
-	Tex2d::Tex2d(const string& name)
-		:Resource(name){
-	}
-
 	RObject::RObject(const string& name)
 		: Object(name) {
 	}
 
 
-	RTex::RTex(const string& name)
+	Tex2D::Tex2D(const string& name)
 		: RObject(name) {
 	}
 
-	void RTex::organize() {
-		dirty_ = false;
-		if (tex.data == nullptr) {
-			return;
-		}
+	void Tex2D::gl_update() {
+		if (host_data_ == nullptr) return;
 
 		GLenum format = GL_RED;
-		if (tex.nr_comps == 1)
+		if (nr_comps_ == 1)
 			format = GL_RED;
-		else if (tex.nr_comps == 3)
+		else if (nr_comps_ == 3)
 			format = GL_RGB;
-		else if (tex.nr_comps == 4)
+		else if (nr_comps_ == 4)
 			format = GL_RGBA;
 
-		glGenTextures(1, &glid);
-		glBindTexture(GL_TEXTURE_2D, glid);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, tex.width, tex.height, 0, format, GL_UNSIGNED_BYTE, tex.data);
+		glGenTextures(1, &glid_);
+		glBindTexture(GL_TEXTURE_2D, glid_);
+		glTexImage2D(GL_TEXTURE_2D, 0, format, width_, height_, 0, format, GL_UNSIGNED_BYTE, host_data_);
 		
 		if(mipmap)glGenerateMipmap(GL_TEXTURE_2D);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLint)wrap_s);
@@ -47,41 +36,49 @@ namespace staywalk {
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLint)mag_filter);
 	}
 	
-	void RTex::disband(){
-		glDeleteTextures(1, &glid);
-		glid = kGlSickId;
+	GLuint Tex2D::get_updated_glid(){
+		if (dirty_) {
+			gl_update();
+			dirty_ = false;
+		}
+		return glid_;
 	}
 
-	void RTex::load_post() {
+	void Tex2D::gl_delete() {
+		glDeleteTextures(1, &glid_);
+		glid_ = kGlSickId;
+	}
+
+	void Tex2D::load_post() {
 		auto status = Utility::load_tex_resource(*this);
 		dirty_ = true;
-		log(fmt::format("RTex::load_post from {}, status: {}", tex.name_, status),
+		log(fmt::format("RTex::load_post from {}, status: {}", name_, status),
 			status ? LogLevel::Info : LogLevel::Warn);
 	}
 
-	void RTex::dump_post() const {
+	void Tex2D::dump_post() const {
 		// editor cannot modify texture, so need not dump texture file
 		// may dump render-target,
 	}
 
 	/****************************************/
 	/****************************************/
-	RLight::RLight() {
+	RenderLight::RenderLight() {
 		light_buffer.light_count = 0;
 	}
 
-	RLight::~RLight() {
+	RenderLight::~RenderLight() {
 		light_buffer.light_count = 0;
 	}
 
-	void RLight::sync_to_gpu() {
+	void RenderLight::sync_to_gpu() {
 	}
 
-	void RLight::organize() {
+	void RenderLight::organize() {
 
 	}
 
-	void RLight::disband() {
+	void RenderLight::disband() {
 
 	}
 

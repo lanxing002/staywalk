@@ -12,11 +12,10 @@ Mesh::Mesh(const vector<Vertex>& vv, const vector<unsigned int>& ii, const strin
 	: RObject(name), vertices(vv), indices(ii){
 }
 
-void Mesh::organize(){
-	if (!load_resource()) return;
-
-	glGenVertexArrays(1, &glid);
-	glBindVertexArray(glid);
+void Mesh::gl_update(){
+	if (!(vertices.size() > 0 && indices.size() > 0)) return;
+	glGenVertexArrays(1, &glid_);
+	glBindVertexArray(glid_);
 
 	glGenBuffers(1, &vbo);
 	glBindBuffer(GL_ARRAY_BUFFER, vbo);
@@ -34,25 +33,21 @@ void Mesh::organize(){
 	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)0);
 	
 	glEnableVertexAttribArray(1); // normal
-	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(Vertex, normal));
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(Vertex, normal_));
 
 	glEnableVertexAttribArray(2); // texcoords
-	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(Vertex, texcoords));
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(Vertex, texcoords_));
 
 	glEnableVertexAttribArray(3); // tangent
-	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(Vertex, tangent));
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(Vertex, tangent_));
 
 	glEnableVertexAttribArray(4); // bitangent
-	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(Vertex, bitangent));
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(Vertex, bitangent_));
 	glBindVertexArray(0);
 }
 
-void Mesh::disband(){
-	disband_impl();
-}
-
-bool Mesh::load_resource(){
-	return vertices.size() > 0 && indices.size() > 0;
+void Mesh::gl_delete() {
+	//disband_impl();
 }
 
 void Mesh::load_post() {
@@ -76,6 +71,7 @@ void Mesh::load_post() {
 	compute_aabb();
 	log(fmt::format("load_post to {}, status: {}", path.u8string(), status),
 		status ? LogLevel::Info : LogLevel::Warn);
+	mark_dirty();
 }
 
 void Mesh::dump_post() const {
@@ -103,7 +99,7 @@ staywalk::AABB staywalk::Mesh::get_aabb(){
 
 staywalk::AABB staywalk::Mesh::compute_aabb() {
 	for (const auto& v : vertices)
-		aabb_.expand(v.position);
+		aabb_.expand(v.position_);
 	return aabb_;
 }
 
@@ -113,10 +109,10 @@ staywalk::MeshRef staywalk::Mesh::create_simple_mesh(){
 	Vertex v2; 
 	Vertex v3;
 	Vertex v4;
-	v1.position = vec3(-0.5, 0.0, 0.0);
-	v2.position = vec3(0.5, 0.0, 0.0);
-	v3.position = vec3(0.0, 1.0, 0.0);
-	v4.position = vec3(0.0, 0.0, 1.0);
+	v1.position_ = vec3(-0.5, 0.0, 0.0);
+	v2.position_ = vec3(0.5, 0.0, 0.0);
+	v3.position_ = vec3(0.0, 1.0, 0.0);
+	v4.position_ = vec3(0.0, 0.0, 1.0);
 
 	result->vertices = vector<Vertex>{ v1, v2, v3, v4 };
 	result->indices = vector<unsigned int>{0, 1, 2, 0, 1, 3};
@@ -129,17 +125,17 @@ staywalk::MeshRef staywalk::Mesh::create_plane(int row, int column){
 		log(fmt::format("Mesh::create_plane failed --> wrong parameter: {}, {}", row, column), LogLevel::Error);
 	}
 	MeshRef result = std::make_shared<Mesh>("plane");
-	float xstep = 1.0 / row;
-	float ystep = 1.0 / column;
+	float xstep = 1.0f / row;
+	float ystep = 1.0f / column;
 	
 	for(int i = 0; i <= row; i++)
 		for (int j = 0; j <= column; j++) {
 			Vertex v;
-			v.position = vec3(i * xstep, j * ystep, .0);
-			v.normal = vec3(.0, .0, 1.0);
-			v.texcoords = vec2(i * xstep, j * ystep);
-			v.tangent = vec3(1.0, .0, .0);
-			v.bitangent = vec3(.0, 1.0, .0);
+			v.position_ = vec3(i * xstep, j * ystep, .0);
+			v.normal_ = vec3(.0, .0, 1.0);
+			v.texcoords_ = vec2(i * xstep, j * ystep);
+			v.tangent_ = vec3(1.0, .0, .0);
+			v.bitangent_ = vec3(.0, 1.0, .0);
 			result->vertices.push_back(v);
 			if(i == 0 || j == 0) continue;
 			//         a------b
@@ -161,18 +157,18 @@ staywalk::MeshRef staywalk::Mesh::create_plane(int row, int column){
 	return result;
 }
 
-staywalk::Mesh::~Mesh()
-{
-	if (valid()) disband_impl();
+staywalk::Mesh::~Mesh(){
+ 	gl_delete();
+	//if (valid()) disband_impl();
 }
 
 void staywalk::Mesh::draw(RenderInfo& info) {
-	if (!valid()) organize();
-	glBindVertexArray(glid);
+	if (dirty_) {
+		gl_update();
+		dirty_ = false;
+	}
+	if (!valid()) return;
+	glBindVertexArray(glid_);
 	glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices.size()), GL_UNSIGNED_INT, 0);
 	glBindVertexArray(0);
-}
-
-void staywalk::Mesh::disband_impl(){
-	glid = kGlSickId;
 }
