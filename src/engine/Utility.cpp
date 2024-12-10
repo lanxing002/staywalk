@@ -218,7 +218,40 @@ namespace staywalk{
         return true;
     }
 
-    fs::path Utility::get_py_home() {
+	bool Utility::load_cube_resource(CubeMap& cubemap){
+        auto path = get_textures_dir() / "cubemap" / fs::path(cubemap.img_name_);
+        auto file_name = path.u8string() + "-nx." + cubemap.img_extension_;
+        int width = 0, height = 0, nrcomps = 0;
+		cubemap.host_data_nx_ = stbi_load(file_name.c_str(), &(width), &(height), &(nrcomps), 0);
+
+		file_name = path.u8string() + "-ny." + cubemap.img_extension_;
+		cubemap.host_data_ny_ = stbi_load(file_name.c_str(), &(width), &(height), &(nrcomps), 0);
+
+		file_name = path.u8string() + "-nz." + cubemap.img_extension_;
+		cubemap.host_data_nz_ = stbi_load(file_name.c_str(), &(width), &(height), &(nrcomps), 0);
+
+		file_name = path.u8string() + "-px." + cubemap.img_extension_;
+		cubemap.host_data_px_ = stbi_load(file_name.c_str(), &(width), &(height), &(nrcomps), 0);
+
+		file_name = path.u8string() + "-py." + cubemap.img_extension_;
+		cubemap.host_data_py_ = stbi_load(file_name.c_str(), &(width), &(height), &(nrcomps), 0);
+
+		file_name = path.u8string() + "-pz." + cubemap.img_extension_;
+		cubemap.host_data_pz_ = stbi_load(file_name.c_str(), &(width), &(height), &(nrcomps), 0);
+
+		if (cubemap.host_data_nx_ == nullptr
+            || cubemap.host_data_ny_ == nullptr
+			|| cubemap.host_data_nz_ == nullptr
+			|| cubemap.host_data_px_ == nullptr
+			|| cubemap.host_data_py_ == nullptr
+			|| cubemap.host_data_pz_ == nullptr
+            ) {
+			log(fmt::format("Utility --> load_cubemap : failed when load {}", file_name), LogLevel::Error);
+			return false;
+		}
+	}
+
+	fs::path Utility::get_py_home() {
         return fs::absolute(fs::path("3rdparty/cpython/build"));
     }
 
@@ -358,7 +391,7 @@ namespace staywalk{
         // 2. process materials
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
         //TODO: read texs and unforms to consturct staywalk::Material
-        RTexRef diffuseMaps = find_material_tex(material, aiTextureType_DIFFUSE);
+        TexRef diffuseMaps = find_material_tex(material, aiTextureType_DIFFUSE);
         shared_ptr<Material> mat = std::make_shared<Material>();
         mat->add_tex(Material::DiffuseKey, diffuseMaps);
 
@@ -380,7 +413,7 @@ namespace staywalk{
 
     // checks all material textures of a given type and loads the textures if they're not loaded yet.
 // the required info is returned as a Texture struct.
-    RTexRef MeshLoader::find_material_tex(aiMaterial* mat, aiTextureType type)
+    TexRef MeshLoader::find_material_tex(aiMaterial* mat, aiTextureType type)
     {
         if (mat->GetTextureCount(type) > 0) {
             aiString str;
@@ -388,10 +421,10 @@ namespace staywalk{
             fs::path tex_path = load_dir_ / fs::path{ str.C_Str()};
             return make_tex(tex_path);
         }
-        return RTexRef{ nullptr };
+        return TexRef{ nullptr };
     }
 
-    RTexRef MeshLoader::make_tex(fs::path path)
+    TexRef MeshLoader::make_tex(fs::path path)
     {
         auto it = loaded_texs_.find(path);
         if(it != loaded_texs_.end()) return it->second;
@@ -418,7 +451,7 @@ namespace staywalk{
             return result;
         }
 
-        return RTexRef(nullptr);
+        return TexRef(nullptr);
     }
 
 }

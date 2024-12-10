@@ -124,14 +124,15 @@ namespace staywalk{
 	class StaticMeshComponent;
 	
 	class RObject;
-	class RProgram;
-	class RShader;
+	class Program;
+	class Shader;
 	class Material;
 	class RLight;
 	class Camera;
 	class Tex2D;
+	class CubeMap;
 	class Mesh;
-	class RUniform;
+	class Uniform;
 
 	using WorldRef  = shared_ptr<World>;
 	using ObjectRef = shared_ptr<Object>;
@@ -140,13 +141,14 @@ namespace staywalk{
 	using GameComponentRef = shared_ptr<GameComponent>;
 	using StaticMeshComponentRef = shared_ptr<StaticMeshComponent>;
 
-	using RProgramRef = shared_ptr<RProgram>;
-	using RShaderRef = shared_ptr<RShader>;
+	using ProgramRef = shared_ptr<Program>;
+	using ShaderRef = shared_ptr<Shader>;
 	using MaterialRef = shared_ptr<Material>;
 	using LightRef = shared_ptr<RLight>;
-	using RTexRef = shared_ptr<Tex2D>;
+	using TexRef = shared_ptr<Tex2D>;
+	using CubeMapRef = shared_ptr<CubeMap>;
 	using MeshRef = shared_ptr<Mesh>;
-	using UniformRef = shared_ptr<RUniform>;
+	using UniformRef = shared_ptr<Uniform>;
 
 	using CameraRef = shared_ptr<Camera>;
 
