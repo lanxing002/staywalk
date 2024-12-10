@@ -1,0 +1,285 @@
+{
+    "actors": [
+        834502029593280514,
+        834502661343543296,
+        834511414860185600
+    ],
+    "cameras": [
+        834502234564722688
+    ],
+    "lights": [],
+    "assets": {
+        "834502029593280514": 834502029593280514,
+        "834502029593280515": 834502029593280515,
+        "834502234564722688": 834502234564722688,
+        "834502550819438592": 834502550819438592,
+        "834502743451238400": 834502743451238400,
+        "834508003624353792": 834508003624353792,
+        "834508590319403008": 834508590319403008,
+        "834511414860185600": 834511414860185600,
+        "834511653369282560": 834511653369282560,
+        "834511943136968704": 834511943136968704,
+        "834518570049208320": 834518570049208320
+    },
+    "__real_objects": {
+        "834502029593280513": {
+            "__object_type_": "staywalk::Mesh",
+            "name_": "0-mesh",
+            "guid_": 834502029593280513
+        },
+        "834502029593280512": {
+            "__object_type_": "staywalk::Material",
+            "name_": "0-material",
+            "guid_": 834502029593280512,
+            "program_": 18446744073709551615,
+            "uniforms_": [],
+            "texs_": []
+        },
+        "834502029593280515": {
+            "__object_type_": "staywalk::StaticMeshComponent",
+            "name_": "rock-sm",
+            "guid_": 834502029593280515,
+            "meshs": [
+                {
+                    "first": 834502029593280513,
+                    "second": 834502029593280512
+                }
+            ],
+            "transform": {
+                "location": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "834502029593280514": {
+            "__object_type_": "staywalk::Actor",
+            "name_": "rock",
+            "guid_": 834502029593280514,
+            "transform_": {
+                "location": [
+                    4.0,
+                    12.0,
+                    -1.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "sm_comp_": 834502029593280515
+        },
+        "834502550819438592": {
+            "__object_type_": "staywalk::Mesh",
+            "name_": "terrain",
+            "guid_": 834502550819438592
+        },
+        "834508003624353792": {
+            "__object_type_": "staywalk::RProgram",
+            "name_": "terrain",
+            "guid_": 834508003624353792,
+            "vs_": {
+                "name_": "vertex",
+                "guid_": 834508003624353793,
+                "shadertype_": 35633,
+                "code_": {
+                    "code": "#version 330 core\n\n// input data layout\nlayout(location = 0) in vec3 in_pos;\nlayout(location = 1) in vec3 in_norm;\nlayout(location = 2) in vec2 in_texcoord;\nlayout(location = 3) in vec3 in_tangent;\nlayout(location = 4) in vec3 in_bitangent;\n// layout(location = 5) in ivec4 boneIds; \n// layout(location = 6) in vec4 weights;\n\n// out data layout\nout vec3 norm;\nout vec2 texcoord;\nout vec3 tangent;\nout vec3 bitangent;\n\n// uniform \nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\n\nuniform sampler2D height;\n// shader code\nvoid main(){\n    float h = textureLod(height, in_texcoord, 0.0).x;\n    norm = in_norm;\n    texcoord = in_texcoord;\n    tangent = in_tangent;\n    bitangent = in_bitangent;\n    vec4 world_pos = model * vec4(in_pos, 1.0);\n    //world_pos.z = sin((in_pos.x + in_pos.y) * 4) * 100.0;\n    world_pos.z = h * 1.0;\n    gl_Position = projection * view * world_pos;\n}\n\n",
+                    "code_type": 0
+                }
+            },
+            "fs_": {
+                "name_": "fragment",
+                "guid_": 834508003624353794,
+                "shadertype_": 35632,
+                "code_": {
+                    "code": "#version 330 core\n\n// input data layout\nin vec3 norm;\nin vec2 texcoord;\nin vec3 tangent;\nin vec3 bitangent;\n\n// output data layout\nout vec4 frag_color;  \n// uniform sampler2D height;\nuniform sampler2D height;\n\n\n// shader code  \n\nvoid main(){\n    vec3 n = normalize(norm);\n    vec3 color = texture(height, texcoord).rrr;\n    //float factor = dot(n, vec3(1, 1, 0.5));\n    //frag_color.xyz = vec3(1.0, 1.0, 1.0);\n    // frag_color.xyz = color * 0.2;\n    frag_color.z = 1.0; \n    frag_color.xyz = color;\n    frag_color.w = 1.0;\n}",
+                    "code_type": 0
+                }
+            },
+            "gs_": {
+                "name_": "geom",
+                "guid_": 834508003624353795,
+                "shadertype_": 36313,
+                "code_": {
+                    "code": "",
+                    "code_type": 0
+                }
+            }
+        },
+        "834518570049208320": {
+            "__object_type_": "staywalk::Tex2D",
+            "name_": "heightmap",
+            "guid_": 834518570049208320,
+            "mipmap_": true,
+            "wrap_s_": 10497,
+            "wrap_t_": 10497,
+            "min_filter_": 9729,
+            "mag_filter_": 9729,
+            "img_name_": "heightmap.png"
+        },
+        "834508590319403008": {
+            "__object_type_": "staywalk::Material",
+            "name_": "terrain",
+            "guid_": 834508590319403008,
+            "program_": 834508003624353792,
+            "uniforms_": [],
+            "texs_": [
+                {
+                    "first": "height",
+                    "second": 834518570049208320
+                }
+            ]
+        },
+        "834502743451238400": {
+            "__object_type_": "staywalk::StaticMeshComponent",
+            "name_": "terrain-sm",
+            "guid_": 834502743451238400,
+            "meshs": [
+                {
+                    "first": 834502550819438592,
+                    "second": 834508590319403008
+                }
+            ],
+            "transform": {
+                "location": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "834502661343543296": {
+            "__object_type_": "staywalk::Actor",
+            "name_": "terrain",
+            "guid_": 834502661343543296,
+            "transform_": {
+                "location": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    100.0,
+                    100.0,
+                    1.0
+                ],
+                "rotation": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "sm_comp_": 834502743451238400
+        },
+        "834511653369282560": {
+            "__object_type_": "staywalk::Mesh",
+            "name_": "plane",
+            "guid_": 834511653369282560
+        },
+        "834511943136968704": {
+            "__object_type_": "staywalk::StaticMeshComponent",
+            "name_": "test",
+            "guid_": 834511943136968704,
+            "meshs": [
+                {
+                    "first": 834511653369282560,
+                    "second": 18446744073709551615
+                }
+            ],
+            "transform": {
+                "location": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "834511414860185600": {
+            "__object_type_": "staywalk::Actor",
+            "name_": "test",
+            "guid_": 834511414860185600,
+            "transform_": {
+                "location": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "sm_comp_": 834511943136968704
+        },
+        "834502234564722688": {
+            "__object_type_": "staywalk::Camera",
+            "name_": "main",
+            "guid_": 834502234564722688,
+            "transform_": {
+                "location": [
+                    -10.341153144836426,
+                    -13.191380500793457,
+                    7.036060333251953
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    -14.011993408203125,
+                    -770.2640380859375,
+                    0.0
+                ]
+            },
+            "porject_type_": 0,
+            "fov_": 55.0,
+            "aspect_": 1.0,
+            "near_": 1.0,
+            "far_": 989.0
+        }
+    }
+}

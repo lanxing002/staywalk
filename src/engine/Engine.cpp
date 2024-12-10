@@ -11,6 +11,7 @@ namespace staywalk {
 		if (engine == nullptr) {
 			engine = shared_ptr<Engine>(new Engine);
 		}
+		assert(!engine->destroy_);
 		return engine;
 	}
 
@@ -28,10 +29,14 @@ namespace staywalk {
 	void Engine::shutdown()
 	{
 		renderer_.destroy();
+		world_ = nullptr;
+		console_ = nullptr;
+		selelcted_ = nullptr;
+		destroy_ = true;
 	}
 
-	Engine::~Engine() {
 
+	Engine::~Engine() {
 	}
 
 	void Engine::set_world(WorldRef	world){

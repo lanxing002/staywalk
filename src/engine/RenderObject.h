@@ -78,6 +78,7 @@ namespace staywalk{
 		sw_Prop() GlWrap wrap_t_ = GlWrap::REPEAT;
 		sw_Prop() GlMinFilter min_filter_ = GlMinFilter::LINEAR;
 		sw_Prop() GlMagFilter mag_filter_ = GlMagFilter::LINEAR;
+		sw_Prop() string img_name_;
 		MetaRegister(Tex2D);
 
 		GLuint get_updated_glid();

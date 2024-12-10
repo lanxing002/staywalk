@@ -52,6 +52,11 @@ void EditorUI::initialize(GLFWwindow* window){
     EditorCommon::font_table_["consola"] = codefont;
 }
 
+void EditorUI::destroy(){
+    assets_browser_ = nullptr;
+    text_editors_.clear();
+}
+
 void EditorUI::render(){
     ImGui_ImplOpenGL3_NewFrame();
     ImGui_ImplGlfw_NewFrame();

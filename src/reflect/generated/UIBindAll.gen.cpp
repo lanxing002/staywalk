@@ -91,6 +91,8 @@ void ::staywalk::Tex2D::construct_basic_ui(bool can_modify) {
         staywalk::reflect::UIHelper::construct_ui("min_filter_", min_filter_, can_modify || true);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(mag_filter_)>()) 
         staywalk::reflect::UIHelper::construct_ui("mag_filter_", mag_filter_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(img_name_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("img_name_", img_name_, can_modify || true);
 }
 
 
@@ -124,6 +126,12 @@ void ::staywalk::Tex2D::construct_obj_ui(bool can_modify) {
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(mag_filter_)>()){ 
         //if (ImGui::TreeNode("mag_filter_")){
             staywalk::reflect::UIHelper::construct_ui("mag_filter_", mag_filter_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(img_name_)>()){ 
+        //if (ImGui::TreeNode("img_name_")){
+            staywalk::reflect::UIHelper::construct_ui("img_name_", img_name_, can_modify || true);
             //ImGui::TreePop();
         //}    
     }
