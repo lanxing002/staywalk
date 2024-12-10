@@ -6,6 +6,7 @@ using namespace staywalk;
 #include "Actor.h"
 #include "RenderObject.h"
 #include "RenderObject.h"
+#include "RenderObject.h"
 #include "RProgram.h"
 #include "RProgram.h"
 #include "RProgram.h"
@@ -52,19 +53,23 @@ py::class_<::staywalk::Tex2D,RObject, std::shared_ptr<::staywalk::Tex2D>>(__modu
 	.def_readwrite("img_name_", &Tex2D::img_name_)
 ;
 
-py::class_<::staywalk::RShader,RObject, std::shared_ptr<::staywalk::RShader>>(__module, "RShader")
-	.def_readwrite("shadertype_", &RShader::shadertype_)
-	.def_readwrite("code_", &RShader::code_)
+py::class_<::staywalk::CubeMap,RObject, std::shared_ptr<::staywalk::CubeMap>>(__module, "CubeMap")
+	.def_readwrite("img_name_", &CubeMap::img_name_)
 ;
 
-py::class_<::staywalk::RUniform,Object, std::shared_ptr<::staywalk::RUniform>>(__module, "RUniform")
+py::class_<::staywalk::Shader,RObject, std::shared_ptr<::staywalk::Shader>>(__module, "Shader")
+	.def_readwrite("shadertype_", &Shader::shadertype_)
+	.def_readwrite("code_", &Shader::code_)
 ;
 
-py::class_<::staywalk::RProgram,RObject, std::shared_ptr<::staywalk::RProgram>>(__module, "RProgram")
+py::class_<::staywalk::Uniform,Object, std::shared_ptr<::staywalk::Uniform>>(__module, "Uniform")
+;
+
+py::class_<::staywalk::Program,RObject, std::shared_ptr<::staywalk::Program>>(__module, "Program")
 	.def(py::init<const string &>())
-	.def_readwrite("vs_", &RProgram::vs_)
-	.def_readwrite("fs_", &RProgram::fs_)
-	.def_readwrite("gs_", &RProgram::gs_)
+	.def_readwrite("vs_", &Program::vs_)
+	.def_readwrite("fs_", &Program::fs_)
+	.def_readwrite("gs_", &Program::gs_)
 ;
 
 py::class_<::staywalk::Material,Object, std::shared_ptr<::staywalk::Material>>(__module, "Material")

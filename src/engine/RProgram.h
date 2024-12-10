@@ -26,15 +26,15 @@ namespace staywalk{
 			UMat4,
 	};
 
-	class sw_Class()  RShader : public RObject {
+	class sw_Class()  Shader : public RObject {
 	public:
-		RShader(const string& code_text = "", const string & name = "shader-0");
+		Shader(const string& code_text = "", const string & name = "shader-0");
 		sw_Prop() ShaderType shadertype_ = ShaderType::None;
 		sw_Prop() SWCodeRef code_;
 
 		GLuint get_updated_glid();
 		void gl_delete();
-		MetaRegister(RShader);
+		MetaRegister(Shader);
 
 	private:
 		void check_compile_error();
@@ -43,15 +43,15 @@ namespace staywalk{
 		ShaderType obj_shadertype_ = ShaderType::None;
 	};
 
-	class sw_Class()  RUniform : public Object {
+	class sw_Class()  Uniform : public Object {
 	public:
-		RUniform() {};
-		RUniform(int v) : utype_(UniformType::U1i) { update(v); }
-		RUniform(float v) : utype_(UniformType::U1f) { update(v); }
-		RUniform(vec2 v) : utype_(UniformType::U2f) { update(v); }
-		RUniform(vec3 v) : utype_(UniformType::U3f) { update(v); }
-		RUniform(vec4 v) : utype_(UniformType::U4f) { update(v); }
-		RUniform(mat4 v) : utype_(UniformType::UMat4) { update(v); }
+		Uniform() {};
+		Uniform(int v) : utype_(UniformType::U1i) { update(v); }
+		Uniform(float v) : utype_(UniformType::U1f) { update(v); }
+		Uniform(vec2 v) : utype_(UniformType::U2f) { update(v); }
+		Uniform(vec3 v) : utype_(UniformType::U3f) { update(v); }
+		Uniform(vec4 v) : utype_(UniformType::U4f) { update(v); }
+		Uniform(mat4 v) : utype_(UniformType::UMat4) { update(v); }
 
 		void update(int v) { __copy(v); }
 		void update(float v) { __copy(v); }
@@ -60,7 +60,7 @@ namespace staywalk{
 		void update(vec4 v) { __copy(v[0]); }
 		void update(mat4 v) { __copy(v[0][0]); }
 
-		MetaRegister(RUniform);
+		MetaRegister(Uniform);
 
 	private:
 		template<typename T>
@@ -68,20 +68,20 @@ namespace staywalk{
 
 		sw_Prop(nogui;) UniformType utype_;
 		sw_Prop(nogui;) mat4 data_;  // max storage for mat4
-		friend class RProgram;
+		friend class Program;
 	};
 
-	class sw_Class(jsonpost;)  RProgram : public RObject {
+	class sw_Class(jsonpost;)  Program : public RObject {
 	public:
-		static void monitor(RProgramRef program, bool flag = true);
+		static void monitor(ProgramRef program, bool flag = true);
 
 	public:
-		sw_Func() RProgram(const string & name = "program-0");
-		~RProgram() override;
-		sw_Prop() RShader vs_;
-		sw_Prop() RShader fs_;
-		sw_Prop() RShader gs_;
-		MetaRegister(RProgram);
+		sw_Func() Program(const string & name = "program-0");
+		~Program() override;
+		sw_Prop() Shader vs_;
+		sw_Prop() Shader fs_;
+		sw_Prop() Shader gs_;
+		MetaRegister(Program);
 
 		void use();
 		void gl_delete();
@@ -107,37 +107,37 @@ namespace staywalk{
 
 namespace staywalk {
 	template<>
-	inline void RProgram::set_uniform<bool>(const string& name, bool value) {
+	inline void Program::set_uniform<bool>(const string& name, bool value) {
 		glUniform1i(get_uniform(name), value);
 	}
 
 	template<>
-	inline void RProgram::set_uniform<int>(const string& name, int value) {
+	inline void Program::set_uniform<int>(const string& name, int value) {
 		glUniform1i(get_uniform(name), value);
 	}
 
 	template<>
-	inline void RProgram::set_uniform<float>(const string& name, float value) {
+	inline void Program::set_uniform<float>(const string& name, float value) {
 		glUniform1f(get_uniform(name), value);
 	}
 
 	template<>
-	inline void RProgram::set_uniform<vec2>(const string& name, vec2 value) {
+	inline void Program::set_uniform<vec2>(const string& name, vec2 value) {
 		glUniform2fv(get_uniform(name), 1, &value[0]);
 	}
 
 	template<>
-	inline void RProgram::set_uniform<vec3>(const string& name, vec3 value) {
+	inline void Program::set_uniform<vec3>(const string& name, vec3 value) {
 		glUniform3fv(get_uniform(name), 1, &value[0]);
 	}
 
 	template<>
-	inline void RProgram::set_uniform<vec4>(const string& name, vec4 value) {
+	inline void Program::set_uniform<vec4>(const string& name, vec4 value) {
 		glUniform4fv(get_uniform(name), 1, &value[0]);
 	}
 
 	template<>
-	inline void RProgram::set_uniform<mat4>(const string& name, mat4 value) {
+	inline void Program::set_uniform<mat4>(const string& name, mat4 value) {
 		glUniformMatrix4fv(get_uniform(name), 1, GL_FALSE, &value[0][0]);
 	}
 }

@@ -25,15 +25,15 @@ namespace staywalk {
 			else if (im.press(Keyboard::S))  zoffset = -1.0;
 			if (im.press(Keyboard::A)) xoffset = 1.0;
 			else if (im.press(Keyboard::D)) xoffset = -1.0;
-			transform_.location += (look_vec * zoffset + cam_left_vec * xoffset) * 0.1f;
+			transform_.location += (look_vec * zoffset + cam_left_vec * xoffset) * 0.14f;
 
 			auto mouse_offset = im.mouse_offset();
 			if (std::abs(mouse_offset.x) > 1e-6) {
-				transform_.rotation.y -= mouse_offset.x * 0.024f;
+				transform_.rotation.y -= mouse_offset.x * 0.064f;
 			}
 
 			if (std::abs(mouse_offset.y) > 1e-6) {
-				transform_.rotation.x -= mouse_offset.y * 0.024f;
+				transform_.rotation.x -= mouse_offset.y * 0.064f;
 			}
 
 			//transform.rotation.y = std::min(-45.0f, std::max(45.0f, transform.rotation.y));

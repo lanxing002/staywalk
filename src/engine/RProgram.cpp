@@ -8,13 +8,13 @@
 
 using namespace staywalk;
 
-RShader::RShader(const string& code_text, const string& name)
+Shader::Shader(const string& code_text, const string& name)
 	: RObject(name) {
 	code_ = SWCode::create_code();
 	code_->text_ = code_text;
 }
 
-void staywalk::RShader::gl_update(){
+void staywalk::Shader::gl_update(){
 	if (shadertype_ == ShaderType::None) {
 		log(fmt::format("RShader::organize --> shader {} has None shadetype", name_), LogLevel::Warn);
 		return;
@@ -29,13 +29,13 @@ void staywalk::RShader::gl_update(){
 	check_compile_error();
 }
 
-void staywalk::RShader::gl_delete(){
+void staywalk::Shader::gl_delete(){
 	if(kGlSickId != glid_)
 		glDeleteShader(glid_);
 	obj_shadertype_ = ShaderType::None;
 }
 
-GLuint staywalk::RShader::get_updated_glid(){
+GLuint staywalk::Shader::get_updated_glid(){
 	if (dirty_) {
 		gl_update();  // only compile once for every change
 		dirty_ = false;
@@ -43,7 +43,7 @@ GLuint staywalk::RShader::get_updated_glid(){
 	return glid_;
 }
 
-void staywalk::RShader::check_compile_error(){
+void staywalk::Shader::check_compile_error(){
 	GLint success;
 	GLchar info[1024];
 	glGetShaderiv(glid_, GL_COMPILE_STATUS, &success);
@@ -54,7 +54,7 @@ void staywalk::RShader::check_compile_error(){
 	}
 }
 
-RProgram::RProgram(const string& name)
+Program::Program(const string& name)
 	: RObject(name)
 	,vs_("", "vertex")
 	,fs_("", "fragment")
@@ -66,7 +66,7 @@ RProgram::RProgram(const string& name)
 	dirty_ = true;
 }
 
-void RProgram::load_post(){
+void Program::load_post(){
 	auto p = Utility::get_shaders_dir();
 	auto vs_file = p / (name_ + ".vs"); string vs_code;
 	auto fs_file = p / (name_ + ".fs"); string fs_code;
@@ -76,7 +76,7 @@ void RProgram::load_post(){
 	if (Utility::load_text(gs_file, gs_code)) gs_.code_->text_ = gs_code;
 }
 
-void RProgram::dump_post() const{
+void Program::dump_post() const{
 	auto p = Utility::get_shaders_dir();
 	auto vs_file = p / (name_ + ".vs"); string vs_code = vs_.code_->text_;
 	auto fs_file = p / (name_ + ".fs"); string fs_code = fs_.code_->text_;
@@ -87,21 +87,21 @@ void RProgram::dump_post() const{
 	Utility::dump_text(gs_file, gs_code);
 }
 
-staywalk::RProgram::~RProgram(){
+staywalk::Program::~Program(){
 }
 
-void staywalk::RProgram::gl_update(){
+void staywalk::Program::gl_update(){
 	glid_ = glCreateProgram();
 }
 
-void staywalk::RProgram::gl_delete(){
+void staywalk::Program::gl_delete(){
 	vs_.gl_delete();
 	fs_.gl_delete();
 	gs_.gl_delete();
 	if (kGlSickId != glid_) glDeleteProgram(glid_);
 }
 
-void staywalk::RProgram::use() {
+void staywalk::Program::use() {
 	if (dirty_) {
 		uniforms_.clear();
 		gl_update(); 
@@ -119,7 +119,7 @@ void staywalk::RProgram::use() {
 	glUseProgram(glid_);
 }
 
-GLint staywalk::RProgram::get_uniform(const string& name){
+GLint staywalk::Program::get_uniform(const string& name){
 	auto it = uniforms_.find(name);
 	if (it != uniforms_.end())
 		return it->second;
@@ -128,7 +128,7 @@ GLint staywalk::RProgram::get_uniform(const string& name){
 	return target;
 }
 
-void staywalk::RProgram::set_uniform(const string& name, UniformRef uniform){
+void staywalk::Program::set_uniform(const string& name, UniformRef uniform){
 	if (uniform == nullptr) return;
 	auto utype = uniform->utype_;
 	void* pdata = &uniform->data_[0][0];
@@ -164,7 +164,7 @@ void staywalk::RProgram::set_uniform(const string& name, UniformRef uniform){
 
 }
 
-void staywalk::RProgram::check_link_error(){
+void staywalk::Program::check_link_error(){
 	GLint success;
 	GLchar info[1024];
 	glGetProgramiv(glid_, GL_LINK_STATUS, &success);
@@ -174,7 +174,7 @@ void staywalk::RProgram::check_link_error(){
 	}
 }
 
-void staywalk::RProgram::monitor(RProgramRef program, bool flag /*= true*/){
+void staywalk::Program::monitor(ProgramRef program, bool flag /*= true*/){
 	if (program == nullptr) return;
 	auto p = Utility::get_shaders_dir();
 	auto name = program->name_;
@@ -182,7 +182,7 @@ void staywalk::RProgram::monitor(RProgramRef program, bool flag /*= true*/){
 	auto fs_file = p / (name + ".fs"); string fs_code;
 	auto gs_file = p / (name + ".gs"); string gs_code;
 	auto cs_file = p / (name + ".cs"); string cs_code;
-	auto weak_ref = std::weak_ptr<RProgram>(program);
+	auto weak_ref = std::weak_ptr<Program>(program);
 	auto engine = Engine::get_engine();
 
 	if (flag) {

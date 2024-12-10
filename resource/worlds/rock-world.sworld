@@ -100,7 +100,7 @@
                 "guid_": 834508003624353793,
                 "shadertype_": 35633,
                 "code_": {
-                    "code": "#version 330 core\n\n// input data layout\nlayout(location = 0) in vec3 in_pos;\nlayout(location = 1) in vec3 in_norm;\nlayout(location = 2) in vec2 in_texcoord;\nlayout(location = 3) in vec3 in_tangent;\nlayout(location = 4) in vec3 in_bitangent;\n// layout(location = 5) in ivec4 boneIds; \n// layout(location = 6) in vec4 weights;\n\n// out data layout\nout vec3 norm;\nout vec2 texcoord;\nout vec3 tangent;\nout vec3 bitangent;\n\n// uniform \nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\n\nuniform sampler2D height;\n// shader code\nvoid main(){\n    float h = textureLod(height, in_texcoord, 0.0).x;\n    norm = in_norm;\n    texcoord = in_texcoord;\n    tangent = in_tangent;\n    bitangent = in_bitangent;\n    vec4 world_pos = model * vec4(in_pos, 1.0);\n    //world_pos.z = sin((in_pos.x + in_pos.y) * 4) * 100.0;\n    world_pos.z = h * 1.0;\n    gl_Position = projection * view * world_pos;\n}\n\n",
+                    "code": "#version 330 core\n\n// input data layout\nlayout(location = 0) in vec3 in_pos;\nlayout(location = 1) in vec3 in_norm;\nlayout(location = 2) in vec2 in_texcoord;\nlayout(location = 3) in vec3 in_tangent;\nlayout(location = 4) in vec3 in_bitangent;\n// layout(location = 5) in ivec4 boneIds; \n// layout(location = 6) in vec4 weights;\n\n// out data layout\nout vec3 norm;\nout vec2 texcoord;\nout vec3 tangent;\nout vec3 bitangent;\n\n// uniform \nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\n\nuniform sampler2D height;\n// shader code\nvoid main(){\n    norm = in_norm;\n    texcoord = in_texcoord;\n    tangent = in_tangent;\n    bitangent = in_bitangent;\n\n    float h = textureLod(height, in_texcoord, 0.0).x;    \n    vec4 world_pos = model * vec4(in_pos, 1.0);\n    world_pos.z = h * 5.0;\n    gl_Position = projection * view * world_pos;\n}\n\n",
                     "code_type": 0
                 }
             },
@@ -109,7 +109,7 @@
                 "guid_": 834508003624353794,
                 "shadertype_": 35632,
                 "code_": {
-                    "code": "#version 330 core\n\n// input data layout\nin vec3 norm;\nin vec2 texcoord;\nin vec3 tangent;\nin vec3 bitangent;\n\n// output data layout\nout vec4 frag_color;  \n// uniform sampler2D height;\nuniform sampler2D height;\n\n\n// shader code  \n\nvoid main(){\n    vec3 n = normalize(norm);\n    vec3 color = texture(height, texcoord).rrr;\n    //float factor = dot(n, vec3(1, 1, 0.5));\n    //frag_color.xyz = vec3(1.0, 1.0, 1.0);\n    // frag_color.xyz = color * 0.2;\n    frag_color.z = 1.0; \n    frag_color.xyz = color;\n    frag_color.w = 1.0;\n}",
+                    "code": "#version 330 core\n\n// input data layout\nin vec3 norm;\nin vec2 texcoord;\nin vec3 tangent;\nin vec3 bitangent;\n\n// output data layout\nout vec4 frag_color;  \n// uniform sampler2D height;\nuniform sampler2D height;\n\n\n// shader code  \n\nvoid main(){\n    vec3 light = normalize(vec3(0.3, 0.2, 0.9));\n    vec3 color = texture(height, texcoord).rrr;\n    //float factor = dot(n, vec3(1, 1, 0.5));\n    //frag_color.xyz = vec3(1.0, 1.0, 1.0);\n    // frag_color.xyz = color * 0.2;\n    // vec2 tsize = textureSize(height, 0);\n    // float step = dFdx(texcoord.x);\n    // step = max(dFdy(texcoord.x), step);\n    // step = max(dFdx(texcoord.y), step);\n    // step = max(dFdy(texcoord.y), step);\n\n    \n    vec2 tsize = textureSize(height, 0);\n    float step = 1.0 / tsize.x ;\n    float hx1 = texture(height, texcoord + vec2(-step, .0)).x;\n    float hx2 = texture(height, texcoord + vec2(step, .0)).x;\n    float hy1 = texture(height, texcoord + vec2(.0, -step)).x;\n    float hy2 = texture(height, texcoord + vec2(.0, +step)).x;\n\n    vec3 vx = vec3((hx2 - hx1)/ (step * 2.0), 0.0, 1.0);\n    vec3 vy = vec3(0.0, (hy2 - hy1)/ (step * 2.0), 1.0);\n    vec3 n = normalize(vx + vy);\n    float f = dot(n, light);\n    frag_color.z = 1.0; \n    frag_color.xyz = vec3(f);\n    frag_color.w = 1.0;\n}",
                     "code_type": 0
                 }
             },
@@ -186,8 +186,8 @@
                     0.0
                 ],
                 "scale": [
-                    100.0,
-                    100.0,
+                    50.0,
+                    50.0,
                     1.0
                 ],
                 "rotation": [
@@ -210,7 +210,7 @@
             "meshs": [
                 {
                     "first": 834511653369282560,
-                    "second": 18446744073709551615
+                    "second": 834508590319403008
                 }
             ],
             "transform": {
@@ -260,9 +260,9 @@
             "guid_": 834502234564722688,
             "transform_": {
                 "location": [
-                    -10.341153144836426,
-                    -13.191380500793457,
-                    7.036060333251953
+                    36.19359588623047,
+                    4.194031715393066,
+                    39.10622024536133
                 ],
                 "scale": [
                     1.0,
@@ -270,16 +270,16 @@
                     1.0
                 ],
                 "rotation": [
-                    -14.011993408203125,
-                    -770.2640380859375,
+                    -53.467864990234375,
+                    -312.3182067871094,
                     0.0
                 ]
             },
             "porject_type_": 0,
-            "fov_": 55.0,
+            "fov_": 45.0,
             "aspect_": 1.0,
             "near_": 1.0,
-            "far_": 989.0
+            "far_": 1000.0
         }
     }
 }
