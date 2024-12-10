@@ -6,23 +6,23 @@
 namespace staywalk{
 	enum class sw_Class() GlWrap : int {
 		CLAMP_TO_EDGE = GL_CLAMP_TO_EDGE,
-			MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
-			REPEAT = GL_REPEAT,
+		MIRRORED_REPEAT = GL_MIRRORED_REPEAT,
+		REPEAT = GL_REPEAT,
 	};
 
 	enum class sw_Class() GlMinFilter : int {
-		NEAREST = GL_NEAREST,
+			NEAREST = GL_NEAREST,
 			LINEAR = GL_LINEAR,
 			NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
 			LINEAR_MIPMAP_NEAREST = GL_LINEAR_MIPMAP_NEAREST,
 			NEAREST_MIPMAP_LINEAR = GL_NEAREST_MIPMAP_LINEAR,
 			LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR,
-	};
+		};
 
 	enum class sw_Class() GlMagFilter : int {
-		NEAREST = GL_NEAREST,
+			NEAREST = GL_NEAREST,
 			LINEAR = GL_LINEAR,
-	};
+		};
 
 	struct Drawable {
 	public:
@@ -73,11 +73,11 @@ namespace staywalk{
 	public:
 		Tex2D(const string& name = "tex-0");
 		//sw_Prop() Tex2d tex;
-		sw_Prop() bool mipmap = true;
-		sw_Prop() GlWrap wrap_s = GlWrap::REPEAT;
-		sw_Prop() GlWrap wrap_t = GlWrap::REPEAT;
-		sw_Prop() GlMinFilter min_filter = GlMinFilter::LINEAR;
-		sw_Prop() GlMagFilter mag_filter = GlMagFilter::LINEAR;
+		sw_Prop() bool mipmap_ = true;
+		sw_Prop() GlWrap wrap_s_ = GlWrap::REPEAT;
+		sw_Prop() GlWrap wrap_t_ = GlWrap::REPEAT;
+		sw_Prop() GlMinFilter min_filter_ = GlMinFilter::LINEAR;
+		sw_Prop() GlMagFilter mag_filter_ = GlMagFilter::LINEAR;
 		MetaRegister(Tex2D);
 
 		GLuint get_updated_glid();
