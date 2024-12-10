@@ -64,6 +64,8 @@ namespace staywalk{
 		sw_Func() static shared_ptr<Tex2D> create_tex(string path) { return make_texture(fs::path(path)); }
 
 		static bool load_tex_resource(Tex2D& tex);
+
+		static bool load_cube_resource(CubeMap& cubemap);
 	};
 
 	class MeshLoader
@@ -79,9 +81,9 @@ namespace staywalk{
 		/**
 		* @brief copy source image file and make texture, if loaded then return cache object
 		*/
-		RTexRef make_tex(fs::path path);
+		TexRef make_tex(fs::path path);
 
-		map<fs::path, RTexRef> loaded_texs_;
+		map<fs::path, TexRef> loaded_texs_;
 		vector<pair<MeshRef, MaterialRef>> meshes_;
 		fs::path mesh_name_;
 		fs::path load_dir_;

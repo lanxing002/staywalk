@@ -139,9 +139,31 @@ void ::staywalk::Tex2D::construct_obj_ui(bool can_modify) {
 
 
 
+#include "RenderObject.h"
+
+void ::staywalk::CubeMap::construct_basic_ui(bool can_modify) {
+    RObject::construct_basic_ui(can_modify);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(img_name_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("img_name_", img_name_, can_modify || true);
+}
+
+
+
+void ::staywalk::CubeMap::construct_obj_ui(bool can_modify) {
+    RObject::construct_obj_ui(can_modify);
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(img_name_)>()){ 
+        //if (ImGui::TreeNode("img_name_")){
+            staywalk::reflect::UIHelper::construct_ui("img_name_", img_name_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+}
+
+
+
 #include "RProgram.h"
 
-void ::staywalk::RShader::construct_basic_ui(bool can_modify) {
+void ::staywalk::Shader::construct_basic_ui(bool can_modify) {
     RObject::construct_basic_ui(can_modify);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(shadertype_)>()) 
         staywalk::reflect::UIHelper::construct_ui("shadertype_", shadertype_, can_modify || true);
@@ -151,7 +173,7 @@ void ::staywalk::RShader::construct_basic_ui(bool can_modify) {
 
 
 
-void ::staywalk::RShader::construct_obj_ui(bool can_modify) {
+void ::staywalk::Shader::construct_obj_ui(bool can_modify) {
     RObject::construct_obj_ui(can_modify);
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(shadertype_)>()){ 
         //if (ImGui::TreeNode("shadertype_")){
@@ -171,13 +193,13 @@ void ::staywalk::RShader::construct_obj_ui(bool can_modify) {
 
 #include "RProgram.h"
 
-void ::staywalk::RUniform::construct_basic_ui(bool can_modify) {
+void ::staywalk::Uniform::construct_basic_ui(bool can_modify) {
     Object::construct_basic_ui(can_modify);
 }
 
 
 
-void ::staywalk::RUniform::construct_obj_ui(bool can_modify) {
+void ::staywalk::Uniform::construct_obj_ui(bool can_modify) {
     Object::construct_obj_ui(can_modify);
 }
 
@@ -185,7 +207,7 @@ void ::staywalk::RUniform::construct_obj_ui(bool can_modify) {
 
 #include "RProgram.h"
 
-void ::staywalk::RProgram::construct_basic_ui(bool can_modify) {
+void ::staywalk::Program::construct_basic_ui(bool can_modify) {
     RObject::construct_basic_ui(can_modify);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(vs_)>()) 
         staywalk::reflect::UIHelper::construct_ui("vs_", vs_, can_modify || true);
@@ -197,7 +219,7 @@ void ::staywalk::RProgram::construct_basic_ui(bool can_modify) {
 
 
 
-void ::staywalk::RProgram::construct_obj_ui(bool can_modify) {
+void ::staywalk::Program::construct_obj_ui(bool can_modify) {
     RObject::construct_obj_ui(can_modify);
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(vs_)>()){ 
         //if (ImGui::TreeNode("vs_")){

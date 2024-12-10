@@ -9,7 +9,7 @@ namespace staywalk {
 		Renderer() {}
 		~Renderer();
 
-		RProgramRef query_program(ProgramType pt);
+		ProgramRef query_program(ProgramType pt);
 
 		void initialize();
 
@@ -19,6 +19,6 @@ namespace staywalk {
 
 	private:
 		RenderLight light_mgr_;
-		std::array<RProgramRef, (int)ProgramType::_Count> program_table_;
+		std::array<ProgramRef, (int)ProgramType::_Count> program_table_;
 	};
 }
