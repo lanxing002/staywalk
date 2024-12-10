@@ -14,9 +14,12 @@ namespace staywalk {
 
 	}
 	void Camera::tick(float delta){
-		auto& im = Engine::get_engine()->get_input_mgr();
+		auto engine = Engine::get_engine();
+		auto& im = engine->get_input_mgr();
+		auto view_size = engine->get_view_size();
 		if (im.right_click())
 		{
+			aspect_ = view_size.x / (view_size.y);
 			Event::Editor_ShowHideCursor(false);
 			auto look_vec = glm::inverse(glm::mat3(view_)) * vec3(.0, .0, -1.0);
 			auto cam_left_vec = glm::inverse(glm::mat3(view_)) * vec3(-1.0, .0, 0.0);

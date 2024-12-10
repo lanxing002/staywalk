@@ -2,7 +2,8 @@
     "actors": [
         834502029593280514,
         834502661343543296,
-        834511414860185600
+        834511414860185600,
+        834693371539750912
     ],
     "cameras": [
         834502234564722688
@@ -19,7 +20,12 @@
         "834511414860185600": 834511414860185600,
         "834511653369282560": 834511653369282560,
         "834511943136968704": 834511943136968704,
-        "834518570049208320": 834518570049208320
+        "834518570049208320": 834518570049208320,
+        "834693087056887808": 834693087056887808,
+        "834693371539750912": 834693371539750912,
+        "834693658446921728": 834693658446921728,
+        "834693827154411520": 834693827154411520,
+        "834693969836244992": 834693969836244992
     },
     "__real_objects": {
         "834502029593280513": {
@@ -92,7 +98,7 @@
             "guid_": 834502550819438592
         },
         "834508003624353792": {
-            "__object_type_": "staywalk::RProgram",
+            "__object_type_": "staywalk::Program",
             "name_": "terrain",
             "guid_": 834508003624353792,
             "vs_": {
@@ -109,7 +115,7 @@
                 "guid_": 834508003624353794,
                 "shadertype_": 35632,
                 "code_": {
-                    "code": "#version 330 core\n\n// input data layout\nin vec3 norm;\nin vec2 texcoord;\nin vec3 tangent;\nin vec3 bitangent;\n\n// output data layout\nout vec4 frag_color;  \n// uniform sampler2D height;\nuniform sampler2D height;\n\n\n// shader code  \n\nvoid main(){\n    vec3 light = normalize(vec3(0.3, 0.2, 0.9));\n    vec3 color = texture(height, texcoord).rrr;\n    //float factor = dot(n, vec3(1, 1, 0.5));\n    //frag_color.xyz = vec3(1.0, 1.0, 1.0);\n    // frag_color.xyz = color * 0.2;\n    // vec2 tsize = textureSize(height, 0);\n    // float step = dFdx(texcoord.x);\n    // step = max(dFdy(texcoord.x), step);\n    // step = max(dFdx(texcoord.y), step);\n    // step = max(dFdy(texcoord.y), step);\n\n    \n    vec2 tsize = textureSize(height, 0);\n    float step = 1.0 / tsize.x ;\n    float hx1 = texture(height, texcoord + vec2(-step, .0)).x;\n    float hx2 = texture(height, texcoord + vec2(step, .0)).x;\n    float hy1 = texture(height, texcoord + vec2(.0, -step)).x;\n    float hy2 = texture(height, texcoord + vec2(.0, +step)).x;\n\n    vec3 vx = vec3((hx2 - hx1)/ (step * 2.0), 0.0, 1.0);\n    vec3 vy = vec3(0.0, (hy2 - hy1)/ (step * 2.0), 1.0);\n    vec3 n = normalize(vx + vy);\n    float f = dot(n, light);\n    frag_color.z = 1.0; \n    frag_color.xyz = vec3(f);\n    frag_color.w = 1.0;\n}",
+                    "code": "#version 330 core\n\n// input data layout\nin vec3 norm;\nin vec2 texcoord;\nin vec3 tangent;\nin vec3 bitangent;\n\n// output data layout\nout vec4 frag_color;  \n// uniform sampler2D height;\nuniform sampler2D height;\n\n\n// shader code  \n\nvoid main(){\n    vec3 light = normalize(vec3(0.3, 0.2, 0.9));\n    vec3 color = texture(height, texcoord).rrr;\n    //float factor = dot(n, vec3(1, 1, 0.5));\n    //frag_color.xyz = vec3(1.0, 1.0, 1.0);\n    // frag_color.xyz = color * 0.2;\n    // vec2 tsize = textureSize(height, 0);\n    // float step = dFdx(texcoord.x);\n    // step = max(dFdy(texcoord.x), step);\n    // step = max(dFdx(texcoord.y), step);\n    // step = max(dFdy(texcoord.y), step);\n\n    \n    vec2 tsize = textureSize(height, 0);\n    float step = 1.0 / tsize.x ;\n    float hx1 = texture(height, texcoord + vec2(-step, .0)).x;\n    float hx2 = texture(height, texcoord + vec2(step, .0)).x;\n    float hy1 = texture(height, texcoord + vec2(.0, -step)).x;\n    float hy2 = texture(height, texcoord + vec2(.0, +step)).x;\n\n    vec3 vx = vec3((hx2 - hx1)/ (step * 2.0), 0.0, 1.0);\n    vec3 vy = vec3(0.0, (hy2 - hy1)/ (step * 2.0), 1.0);\n    vec3 n = normalize(vx + vy);\n    float f = dot(n, light);\n    frag_color.z = 1.0; \n    frag_color.xyz = vec3(f) * vec3(0.6, 0.8, 0.89);\n    frag_color.w = 1.0;\n}",
                     "code_type": 0
                 }
             },
@@ -254,15 +260,66 @@
             },
             "sm_comp_": 834511943136968704
         },
-        "834502234564722688": {
-            "__object_type_": "staywalk::Camera",
-            "name_": "main",
-            "guid_": 834502234564722688,
-            "transform_": {
+        "834693969836244992": {
+            "__object_type_": "staywalk::Program",
+            "name_": "sky",
+            "guid_": 834693969836244992,
+            "vs_": {
+                "name_": "vertex",
+                "guid_": 834693969836244993,
+                "shadertype_": 35633,
+                "code_": {
+                    "code": "",
+                    "code_type": 0
+                }
+            },
+            "fs_": {
+                "name_": "fragment",
+                "guid_": 834693969836244994,
+                "shadertype_": 35632,
+                "code_": {
+                    "code": "",
+                    "code_type": 0
+                }
+            },
+            "gs_": {
+                "name_": "geom",
+                "guid_": 834693969836244995,
+                "shadertype_": 36313,
+                "code_": {
+                    "code": "",
+                    "code_type": 0
+                }
+            }
+        },
+        "834693827154411520": {
+            "__object_type_": "staywalk::Material",
+            "name_": "sky",
+            "guid_": 834693827154411520,
+            "program_": 834693969836244992,
+            "uniforms_": [],
+            "texs_": [
+                {
+                    "first": "",
+                    "second": 18446744073709551615
+                }
+            ]
+        },
+        "834693658446921728": {
+            "__object_type_": "staywalk::StaticMeshComponent",
+            "name_": "box",
+            "guid_": 834693658446921728,
+            "meshs": [
+                {
+                    "first": 834502550819438592,
+                    "second": 834693827154411520
+                }
+            ],
+            "transform": {
                 "location": [
-                    36.19359588623047,
-                    4.194031715393066,
-                    39.10622024536133
+                    0.0,
+                    0.0,
+                    0.0
                 ],
                 "scale": [
                     1.0,
@@ -270,16 +327,73 @@
                     1.0
                 ],
                 "rotation": [
-                    -53.467864990234375,
-                    -312.3182067871094,
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "834693371539750912": {
+            "__object_type_": "staywalk::Actor",
+            "name_": "sky",
+            "guid_": 834693371539750912,
+            "transform_": {
+                "location": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "sm_comp_": 834693658446921728
+        },
+        "834502234564722688": {
+            "__object_type_": "staywalk::Camera",
+            "name_": "main",
+            "guid_": 834502234564722688,
+            "transform_": {
+                "location": [
+                    30.258560180664063,
+                    15.341093063354492,
+                    9.89920711517334
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    -31.131980895996094,
+                    54.46541976928711,
                     0.0
                 ]
             },
             "porject_type_": 0,
             "fov_": 45.0,
-            "aspect_": 1.0,
+            "aspect_": 1.7777777910232544,
             "near_": 1.0,
             "far_": 1000.0
+        },
+        "834693087056887808": {
+            "__object_type_": "staywalk::CubeMap",
+            "name_": "sky",
+            "guid_": 834693087056887808,
+            "img_name_": "skybox",
+            "img_extension_": "jpg",
+            "wrap_s_": 33071,
+            "wrap_t_": 33071,
+            "wrap_r_": 33071,
+            "min_filter_": 9729,
+            "mag_filter_": 9729
         }
     }
 }
