@@ -91,8 +91,8 @@ void ::staywalk::Actor::dump(rapidjson::Value& value, ::staywalk::reflect::Dumpe
 
     {
         json::Value prop;
-        dumper.write(this->sm_comp, prop);
-        value.AddMember("sm_comp", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->sm_comp_, prop);
+        value.AddMember("sm_comp_", prop, dumper.get_doc().GetAllocator()); 
     }
 }
 
@@ -103,16 +103,16 @@ void ::staywalk::Actor::load(rapidjson::Value& value, ::staywalk::reflect::Loade
 
     GameObject::load(value, loader);
 
-    itr = value.FindMember("sm_comp");
+    itr = value.FindMember("sm_comp_");
     if(itr != value.MemberEnd()){
-        loader.read(this->sm_comp, itr->value);
+        loader.read(this->sm_comp_, itr->value);
     }
 }
 
 
 bool ::staywalk::Actor::operator==(const ::staywalk::Actor& rhs) const {
     return 
-GameObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->sm_comp, rhs.sm_comp);
+GameObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->sm_comp_, rhs.sm_comp_);
 }
 
 
@@ -160,28 +160,28 @@ void ::staywalk::Tex2D::dump(rapidjson::Value& value, ::staywalk::reflect::Dumpe
 
     {
         json::Value prop;
-        dumper.write(this->mipmap, prop);
-        value.AddMember("mipmap", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->mipmap_, prop);
+        value.AddMember("mipmap_", prop, dumper.get_doc().GetAllocator()); 
     }
     {
         json::Value prop;
-        dumper.write(this->wrap_s, prop);
-        value.AddMember("wrap_s", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->wrap_s_, prop);
+        value.AddMember("wrap_s_", prop, dumper.get_doc().GetAllocator()); 
     }
     {
         json::Value prop;
-        dumper.write(this->wrap_t, prop);
-        value.AddMember("wrap_t", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->wrap_t_, prop);
+        value.AddMember("wrap_t_", prop, dumper.get_doc().GetAllocator()); 
     }
     {
         json::Value prop;
-        dumper.write(this->min_filter, prop);
-        value.AddMember("min_filter", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->min_filter_, prop);
+        value.AddMember("min_filter_", prop, dumper.get_doc().GetAllocator()); 
     }
     {
         json::Value prop;
-        dumper.write(this->mag_filter, prop);
-        value.AddMember("mag_filter", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->mag_filter_, prop);
+        value.AddMember("mag_filter_", prop, dumper.get_doc().GetAllocator()); 
     }
     this->dump_post();
 }
@@ -193,25 +193,25 @@ void ::staywalk::Tex2D::load(rapidjson::Value& value, ::staywalk::reflect::Loade
 
     RObject::load(value, loader);
 
-    itr = value.FindMember("mipmap");
+    itr = value.FindMember("mipmap_");
     if(itr != value.MemberEnd()){
-        loader.read(this->mipmap, itr->value);
+        loader.read(this->mipmap_, itr->value);
     }
-    itr = value.FindMember("wrap_s");
+    itr = value.FindMember("wrap_s_");
     if(itr != value.MemberEnd()){
-        loader.read(this->wrap_s, itr->value);
+        loader.read(this->wrap_s_, itr->value);
     }
-    itr = value.FindMember("wrap_t");
+    itr = value.FindMember("wrap_t_");
     if(itr != value.MemberEnd()){
-        loader.read(this->wrap_t, itr->value);
+        loader.read(this->wrap_t_, itr->value);
     }
-    itr = value.FindMember("min_filter");
+    itr = value.FindMember("min_filter_");
     if(itr != value.MemberEnd()){
-        loader.read(this->min_filter, itr->value);
+        loader.read(this->min_filter_, itr->value);
     }
-    itr = value.FindMember("mag_filter");
+    itr = value.FindMember("mag_filter_");
     if(itr != value.MemberEnd()){
-        loader.read(this->mag_filter, itr->value);
+        loader.read(this->mag_filter_, itr->value);
     }
     this->load_post();
 }
@@ -219,7 +219,7 @@ void ::staywalk::Tex2D::load(rapidjson::Value& value, ::staywalk::reflect::Loade
 
 bool ::staywalk::Tex2D::operator==(const ::staywalk::Tex2D& rhs) const {
     return 
-RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->mipmap, rhs.mipmap) && ::staywalk::Comparer::equal(this->wrap_s, rhs.wrap_s) && ::staywalk::Comparer::equal(this->wrap_t, rhs.wrap_t) && ::staywalk::Comparer::equal(this->min_filter, rhs.min_filter) && ::staywalk::Comparer::equal(this->mag_filter, rhs.mag_filter);
+RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->mipmap_, rhs.mipmap_) && ::staywalk::Comparer::equal(this->wrap_s_, rhs.wrap_s_) && ::staywalk::Comparer::equal(this->wrap_t_, rhs.wrap_t_) && ::staywalk::Comparer::equal(this->min_filter_, rhs.min_filter_) && ::staywalk::Comparer::equal(this->mag_filter_, rhs.mag_filter_);
 }
 
 
