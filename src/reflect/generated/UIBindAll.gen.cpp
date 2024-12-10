@@ -45,17 +45,17 @@ void ::staywalk::GameObject::construct_obj_ui(bool can_modify) {
 
 void ::staywalk::Actor::construct_basic_ui(bool can_modify) {
     GameObject::construct_basic_ui(can_modify);
-    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(sm_comp)>()) 
-        staywalk::reflect::UIHelper::construct_ui("sm_comp", sm_comp, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(sm_comp_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("sm_comp_", sm_comp_, can_modify || true);
 }
 
 
 
 void ::staywalk::Actor::construct_obj_ui(bool can_modify) {
     GameObject::construct_obj_ui(can_modify);
-    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(sm_comp)>()){ 
-        //if (ImGui::TreeNode("sm_comp")){
-            staywalk::reflect::UIHelper::construct_ui("sm_comp", sm_comp, can_modify || true);
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(sm_comp_)>()){ 
+        //if (ImGui::TreeNode("sm_comp_")){
+            staywalk::reflect::UIHelper::construct_ui("sm_comp_", sm_comp_, can_modify || true);
             //ImGui::TreePop();
         //}    
     }
@@ -81,49 +81,49 @@ void ::staywalk::RObject::construct_obj_ui(bool can_modify) {
 
 void ::staywalk::Tex2D::construct_basic_ui(bool can_modify) {
     RObject::construct_basic_ui(can_modify);
-    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(mipmap)>()) 
-        staywalk::reflect::UIHelper::construct_ui("mipmap", mipmap, can_modify || true);
-    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(wrap_s)>()) 
-        staywalk::reflect::UIHelper::construct_ui("wrap_s", wrap_s, can_modify || true);
-    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(wrap_t)>()) 
-        staywalk::reflect::UIHelper::construct_ui("wrap_t", wrap_t, can_modify || true);
-    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(min_filter)>()) 
-        staywalk::reflect::UIHelper::construct_ui("min_filter", min_filter, can_modify || true);
-    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(mag_filter)>()) 
-        staywalk::reflect::UIHelper::construct_ui("mag_filter", mag_filter, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(mipmap_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("mipmap_", mipmap_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(wrap_s_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("wrap_s_", wrap_s_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(wrap_t_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("wrap_t_", wrap_t_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(min_filter_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("min_filter_", min_filter_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(mag_filter_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("mag_filter_", mag_filter_, can_modify || true);
 }
 
 
 
 void ::staywalk::Tex2D::construct_obj_ui(bool can_modify) {
     RObject::construct_obj_ui(can_modify);
-    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(mipmap)>()){ 
-        //if (ImGui::TreeNode("mipmap")){
-            staywalk::reflect::UIHelper::construct_ui("mipmap", mipmap, can_modify || true);
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(mipmap_)>()){ 
+        //if (ImGui::TreeNode("mipmap_")){
+            staywalk::reflect::UIHelper::construct_ui("mipmap_", mipmap_, can_modify || true);
             //ImGui::TreePop();
         //}    
     }
-    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(wrap_s)>()){ 
-        //if (ImGui::TreeNode("wrap_s")){
-            staywalk::reflect::UIHelper::construct_ui("wrap_s", wrap_s, can_modify || true);
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(wrap_s_)>()){ 
+        //if (ImGui::TreeNode("wrap_s_")){
+            staywalk::reflect::UIHelper::construct_ui("wrap_s_", wrap_s_, can_modify || true);
             //ImGui::TreePop();
         //}    
     }
-    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(wrap_t)>()){ 
-        //if (ImGui::TreeNode("wrap_t")){
-            staywalk::reflect::UIHelper::construct_ui("wrap_t", wrap_t, can_modify || true);
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(wrap_t_)>()){ 
+        //if (ImGui::TreeNode("wrap_t_")){
+            staywalk::reflect::UIHelper::construct_ui("wrap_t_", wrap_t_, can_modify || true);
             //ImGui::TreePop();
         //}    
     }
-    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(min_filter)>()){ 
-        //if (ImGui::TreeNode("min_filter")){
-            staywalk::reflect::UIHelper::construct_ui("min_filter", min_filter, can_modify || true);
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(min_filter_)>()){ 
+        //if (ImGui::TreeNode("min_filter_")){
+            staywalk::reflect::UIHelper::construct_ui("min_filter_", min_filter_, can_modify || true);
             //ImGui::TreePop();
         //}    
     }
-    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(mag_filter)>()){ 
-        //if (ImGui::TreeNode("mag_filter")){
-            staywalk::reflect::UIHelper::construct_ui("mag_filter", mag_filter, can_modify || true);
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(mag_filter_)>()){ 
+        //if (ImGui::TreeNode("mag_filter_")){
+            staywalk::reflect::UIHelper::construct_ui("mag_filter_", mag_filter_, can_modify || true);
             //ImGui::TreePop();
         //}    
     }

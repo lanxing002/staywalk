@@ -5,7 +5,7 @@ namespace staywalk{
 	class sw_Class()  Object {
 	public:
 		sw_Func() Object(const string& name = "0-obj");
-		sw_Func(nopy;)  idtype get_guid() { return guid_; }
+		sw_Func()  idtype get_guid() { return guid_; }
 		sw_Prop() string name_;
 		__MetaRegisterBase(Object);
 

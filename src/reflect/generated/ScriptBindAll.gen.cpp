@@ -24,6 +24,7 @@ using namespace staywalk;
 static void bind_auto(py::module& __module){
 py::class_<::staywalk::Object, std::shared_ptr<::staywalk::Object>>(__module, "Object")
 	.def(py::init<const string &>())
+	.def("get_guid", &Object::get_guid)
 	.def_readwrite("name_", &Object::name_)
 ;
 
@@ -35,7 +36,7 @@ py::class_<::staywalk::GameObject,Object, std::shared_ptr<::staywalk::GameObject
 py::class_<::staywalk::Actor,GameObject, std::shared_ptr<::staywalk::Actor>>(__module, "Actor")
 	.def(py::init<const string &>())
 	.def("get_aabb", &Actor::get_aabb)
-	.def_readwrite("sm_comp", &Actor::sm_comp)
+	.def_readwrite("sm_comp_", &Actor::sm_comp_)
 ;
 
 py::class_<::staywalk::RObject,Object, std::shared_ptr<::staywalk::RObject>>(__module, "RObject")
@@ -43,11 +44,11 @@ py::class_<::staywalk::RObject,Object, std::shared_ptr<::staywalk::RObject>>(__m
 ;
 
 py::class_<::staywalk::Tex2D,RObject, std::shared_ptr<::staywalk::Tex2D>>(__module, "Tex2D")
-	.def_readwrite("mipmap", &Tex2D::mipmap)
-	.def_readwrite("wrap_s", &Tex2D::wrap_s)
-	.def_readwrite("wrap_t", &Tex2D::wrap_t)
-	.def_readwrite("min_filter", &Tex2D::min_filter)
-	.def_readwrite("mag_filter", &Tex2D::mag_filter)
+	.def_readwrite("mipmap_", &Tex2D::mipmap_)
+	.def_readwrite("wrap_s_", &Tex2D::wrap_s_)
+	.def_readwrite("wrap_t_", &Tex2D::wrap_t_)
+	.def_readwrite("min_filter_", &Tex2D::min_filter_)
+	.def_readwrite("mag_filter_", &Tex2D::mag_filter_)
 ;
 
 py::class_<::staywalk::RShader,RObject, std::shared_ptr<::staywalk::RShader>>(__module, "RShader")

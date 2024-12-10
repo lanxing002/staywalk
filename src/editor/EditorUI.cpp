@@ -226,7 +226,7 @@ void EditorUI::show_world(){
 			 for (auto a : world->get_cameras()) {
                  auto acticated_cam = world->get_activated_camera();
                  bool activated = (a.get() == acticated_cam.get());
-                 ImGui::PushID(a->get_guid());
+                 ImGui::PushID((int)a->get_guid());
                  if (activated) ImGui::PushStyleColor(ImGuiCol_Text, ImVec4(0.12f, 0.8f, 0.1f, 1.0f));
 				 if (ImGui::Selectable(a->name_.c_str(), selected == a)) {
 					 Engine::get_engine()->select(a);
