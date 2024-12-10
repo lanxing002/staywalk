@@ -330,6 +330,7 @@ Window::Window(int width, int height)
 Window::~Window(){
     curr_window = nullptr;
     auto engine = Engine::get_engine();
+	editor_ui_.destroy();
     engine->shutdown();
     glfwTerminate();
 }

@@ -88,4 +88,6 @@ staywalk::Renderer::~Renderer(){
 void staywalk::Renderer::destroy(){
 	RProgram::monitor(program_table_[static_cast<int>(ProgramType::PBR)], false);
 	RProgram::monitor(program_table_[static_cast<int>(ProgramType::Shadow)], false);
+	for (int i = 0; i < (int)ProgramType::_Count; i++)
+		program_table_[i] = nullptr;
 }
