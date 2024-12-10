@@ -17,7 +17,10 @@ AssetsBrowser::AssetsBrowser(){
         IM_COL32(170, 170, 120, 255),
         IM_COL32(110, 20, 90, 255),
         IM_COL32(10, 120, 80, 255),
-        IM_COL32(220, 110, 70, 255),
+		IM_COL32(220, 110, 70, 255),
+		IM_COL32(220, 156, 10, 255),
+		IM_COL32(180, 110, 70, 255),
+		IM_COL32(20, 90, 120, 255),
     };
 
     type_icon_labels_ = {
@@ -26,9 +29,9 @@ AssetsBrowser::AssetsBrowser(){
 		{(int)reflect::ObjectType::Actor,                   "Actor" },
 		{(int)reflect::ObjectType::Tex2D,                   "Tex2"  },
 		{(int)reflect::ObjectType::RObject,                 "RObj"  },
-		{(int)reflect::ObjectType::RShader,                 "Shader"},
-		{(int)reflect::ObjectType::RUniform,                "Unif"  },
-		{(int)reflect::ObjectType::RProgram,                "Prog"  },
+		{(int)reflect::ObjectType::Shader,                 "Shader"},
+		{(int)reflect::ObjectType::Uniform,                "Unif"  },
+		{(int)reflect::ObjectType::Program,                "Prog"  },
 		{(int)reflect::ObjectType::Material,                "Mat"   },
 		{(int)reflect::ObjectType::Camera,                  "Cam"   },
 		{(int)reflect::ObjectType::RLight,                  "Light" },
@@ -37,7 +40,8 @@ AssetsBrowser::AssetsBrowser(){
 		{(int)reflect::ObjectType::GameComponent,           "Comp"  },
 		{(int)reflect::ObjectType::Mesh,                    "Mesh"  },
 		{(int)reflect::ObjectType::StaticMeshComponent,     "SM"    },
-		{(int)reflect::ObjectType::Terrain,                 "Terr"  }
+		{(int)reflect::ObjectType::Terrain,                 "Terr"  },
+		{(int)reflect::ObjectType::CubeMap,                 "Cube"  },
 	};
 }
 

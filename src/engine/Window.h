@@ -26,6 +26,7 @@ public:
 
 	int width_ = 1280;
 	int height_ = 720;
+	bool dirty_ = true;
 	unsigned long long frame_count_;
 };
 

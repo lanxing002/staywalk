@@ -23,14 +23,14 @@ uniform mat4 projection;
 uniform sampler2D height;
 // shader code
 void main(){
-    float h = textureLod(height, in_texcoord, 0.0).x;
     norm = in_norm;
     texcoord = in_texcoord;
     tangent = in_tangent;
     bitangent = in_bitangent;
+
+    float h = textureLod(height, in_texcoord, 0.0).x;    
     vec4 world_pos = model * vec4(in_pos, 1.0);
-    //world_pos.z = sin((in_pos.x + in_pos.y) * 4) * 100.0;
-    world_pos.z = h * 1.0;
+    world_pos.z = h * 5.0;
     gl_Position = projection * view * world_pos;
 }
 

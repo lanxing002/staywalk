@@ -237,9 +237,50 @@ RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->mipmap_, rhs.mipm
 
 }
 
+#include "RenderObject.h"
+
+void ::staywalk::CubeMap::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+
+    RObject::dump(value, dumper);
+
+    {
+        json::Value prop;
+        dumper.write(this->img_name_, prop);
+        value.AddMember("img_name_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    this->dump_post();
+}
+
+
+void ::staywalk::CubeMap::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    RObject::load(value, loader);
+
+    itr = value.FindMember("img_name_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->img_name_, itr->value);
+    }
+    this->load_post();
+}
+
+
+bool ::staywalk::CubeMap::operator==(const ::staywalk::CubeMap& rhs) const {
+    return 
+RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->img_name_, rhs.img_name_);
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::CubeMap::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::CubeMap, "staywalk::CubeMap"};
+
+}
+
 #include "RProgram.h"
 
-void ::staywalk::RShader::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+void ::staywalk::Shader::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
     RObject::dump(value, dumper);
@@ -257,7 +298,7 @@ void ::staywalk::RShader::dump(rapidjson::Value& value, ::staywalk::reflect::Dum
 }
 
 
-void ::staywalk::RShader::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+void ::staywalk::Shader::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
@@ -274,20 +315,20 @@ void ::staywalk::RShader::load(rapidjson::Value& value, ::staywalk::reflect::Loa
 }
 
 
-bool ::staywalk::RShader::operator==(const ::staywalk::RShader& rhs) const {
+bool ::staywalk::Shader::operator==(const ::staywalk::Shader& rhs) const {
     return 
 RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->shadertype_, rhs.shadertype_) && ::staywalk::Comparer::equal(this->code_, rhs.code_);
 }
 
 
-::staywalk::reflect::MetaInfo staywalk::RShader::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::RShader, "staywalk::RShader"};
+::staywalk::reflect::MetaInfo staywalk::Shader::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Shader, "staywalk::Shader"};
 
 }
 
 #include "RProgram.h"
 
-void ::staywalk::RUniform::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+void ::staywalk::Uniform::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
     Object::dump(value, dumper);
@@ -305,7 +346,7 @@ void ::staywalk::RUniform::dump(rapidjson::Value& value, ::staywalk::reflect::Du
 }
 
 
-void ::staywalk::RUniform::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+void ::staywalk::Uniform::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
@@ -322,20 +363,20 @@ void ::staywalk::RUniform::load(rapidjson::Value& value, ::staywalk::reflect::Lo
 }
 
 
-bool ::staywalk::RUniform::operator==(const ::staywalk::RUniform& rhs) const {
+bool ::staywalk::Uniform::operator==(const ::staywalk::Uniform& rhs) const {
     return 
 Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->utype_, rhs.utype_) && ::staywalk::Comparer::equal(this->data_, rhs.data_);
 }
 
 
-::staywalk::reflect::MetaInfo staywalk::RUniform::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::RUniform, "staywalk::RUniform"};
+::staywalk::reflect::MetaInfo staywalk::Uniform::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Uniform, "staywalk::Uniform"};
 
 }
 
 #include "RProgram.h"
 
-void ::staywalk::RProgram::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+void ::staywalk::Program::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
     RObject::dump(value, dumper);
@@ -359,7 +400,7 @@ void ::staywalk::RProgram::dump(rapidjson::Value& value, ::staywalk::reflect::Du
 }
 
 
-void ::staywalk::RProgram::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+void ::staywalk::Program::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
@@ -381,14 +422,14 @@ void ::staywalk::RProgram::load(rapidjson::Value& value, ::staywalk::reflect::Lo
 }
 
 
-bool ::staywalk::RProgram::operator==(const ::staywalk::RProgram& rhs) const {
+bool ::staywalk::Program::operator==(const ::staywalk::Program& rhs) const {
     return 
 RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->vs_, rhs.vs_) && ::staywalk::Comparer::equal(this->fs_, rhs.fs_) && ::staywalk::Comparer::equal(this->gs_, rhs.gs_);
 }
 
 
-::staywalk::reflect::MetaInfo staywalk::RProgram::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::RProgram, "staywalk::RProgram"};
+::staywalk::reflect::MetaInfo staywalk::Program::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Program, "staywalk::Program"};
 
 }
 

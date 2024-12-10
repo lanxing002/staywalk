@@ -27,7 +27,7 @@ namespace staywalk{
 		//end of engine functions
 
 		sw_Func() void set_world(WorldRef world);
-		sw_Func() RProgramRef query_program(ProgramType pt);
+		sw_Func() ProgramRef query_program(ProgramType pt);
 		sw_Func() InputManager& get_input_mgr() { return input_mgr_; }
 		sw_Func() vec2 get_view_size() { return view_size_; }
 		sw_Func() void set_view_size(vec2 value) { view_size_ = value; }

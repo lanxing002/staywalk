@@ -46,7 +46,7 @@ namespace staywalk {
 		Event::World_AssetChanged();
 	}
 
-	staywalk::RProgramRef Engine::query_program(ProgramType pt)
+	staywalk::ProgramRef Engine::query_program(ProgramType pt)
 	{
 		return renderer_.query_program(pt);
 	}

@@ -10,19 +10,6 @@ using namespace staywalk;
 Window* Window::curr_window = nullptr;
 InputManager* input_mgr = nullptr;
 
-
-void window_size_callback(GLFWwindow* window, int width, int height) {
-	if (input_mgr == nullptr) return;
-	if (Window::curr_window) {
-		Window::curr_window->width_ = width;
-		Window::curr_window->height_ = height;
-	}
-	auto engine = Engine::get_engine();
-	if (engine) {
-		engine->set_view_size({ width, height });
-	}
-}
-
 void key_callback(GLFWwindow* window, int key, int scancode, int action, int mods){
 	if (input_mgr == nullptr) return;
 	InputEvent e;
@@ -310,7 +297,6 @@ Window::Window(int width, int height)
     glfwSetCursorPosCallback(window_, cursor_position_callback);
     glfwSetMouseButtonCallback(window_, mouse_button_callback);
     glfwSetScrollCallback(window_, scroll_callback);
-
     glfwMakeContextCurrent(window_);
     glfwSetFramebufferSizeCallback(window_, Window::handle_resize);
 
@@ -345,6 +331,13 @@ void Window::run(){
 
     while (!shold_close()){
         frame_count_++;
+
+		if (dirty_) {
+			dirty_ = false;
+			engine->set_view_size({ width_, height_ });
+			glViewport(0, 0, width_, height_);
+		}
+
         process_evnet();
         
         auto engine = Engine::get_engine();
@@ -361,6 +354,9 @@ void Window::run(){
 }
 
 void Window::handle_resize(GLFWwindow* window, int width, int height){
+	Window::curr_window->width_ = width;
+	Window::curr_window->height_ = height;
+	Window::curr_window->dirty_ = true;
 }
 
 

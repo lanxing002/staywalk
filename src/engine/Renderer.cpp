@@ -8,20 +8,20 @@
 using namespace staywalk;
 
 
-RProgramRef Renderer::query_program(ProgramType pt){
+ProgramRef Renderer::query_program(ProgramType pt){
 	return program_table_[(int)pt];
 }
 
 void Renderer::initialize(){
-	RProgramRef pbr = std::make_shared<RProgram>("pbr");
-	RProgramRef shadow = std::make_shared<RProgram>("shadow");
+	ProgramRef pbr = std::make_shared<Program>("pbr");
+	ProgramRef shadow = std::make_shared<Program>("shadow");
 	pbr->load_post();
 	shadow->load_post();
 	program_table_[static_cast<int>(ProgramType::PBR)] = pbr;
 	program_table_[static_cast<int>(ProgramType::Shadow)] = shadow;
 
-	RProgram::monitor(program_table_[static_cast<int>(ProgramType::PBR)]);
-	RProgram::monitor(program_table_[static_cast<int>(ProgramType::Shadow)]);
+	Program::monitor(program_table_[static_cast<int>(ProgramType::PBR)]);
+	Program::monitor(program_table_[static_cast<int>(ProgramType::Shadow)]);
 
 	glEnable(GL_DEPTH_TEST);
 
@@ -86,8 +86,8 @@ staywalk::Renderer::~Renderer(){
 }
 
 void staywalk::Renderer::destroy(){
-	RProgram::monitor(program_table_[static_cast<int>(ProgramType::PBR)], false);
-	RProgram::monitor(program_table_[static_cast<int>(ProgramType::Shadow)], false);
+	Program::monitor(program_table_[static_cast<int>(ProgramType::PBR)], false);
+	Program::monitor(program_table_[static_cast<int>(ProgramType::Shadow)], false);
 	for (int i = 0; i < (int)ProgramType::_Count; i++)
 		program_table_[i] = nullptr;
 }

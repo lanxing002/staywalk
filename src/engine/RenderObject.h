@@ -98,6 +98,36 @@ namespace staywalk{
 		friend class Utility;
 	};
 
+	class sw_Class(jsonpost;)  CubeMap : public RObject {
+	public:
+		CubeMap(const string& name = "cube-map-0");
+		sw_Prop() string img_name_;
+		sw_Prop() string img_extension_;
+		MetaRegister(CubeMap);
+
+		GLuint get_updated_glid();
+		void gl_delete();
+
+	private:
+		void gl_update();
+		void load_post();
+		void dump_post() const;
+
+		// texture host memory 
+		unsigned char* host_data_nx_ = nullptr;
+		unsigned char* host_data_ny_ = nullptr;
+		unsigned char* host_data_nz_ = nullptr;
+		unsigned char* host_data_px_ = nullptr;
+		unsigned char* host_data_py_ = nullptr;
+		unsigned char* host_data_pz_ = nullptr;
+
+		int width_ = -1;
+		int height_ = -1;
+		int nr_comps_ = -1;
+
+		friend class Utility;
+	};
+
 	// engine use this struct to manage light
 	struct RenderLight {
 		static constexpr unsigned int kMaxLights = 20;

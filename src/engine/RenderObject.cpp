@@ -82,4 +82,59 @@ namespace staywalk {
 
 	}
 
+	CubeMap::CubeMap(const string& name /*= "tex-0"*/)
+	:RObject(name){
+
+	}
+
+	GLuint CubeMap::get_updated_glid() {
+		return glid_;
+	}
+
+	void CubeMap::gl_delete() {
+
+	}
+
+	void CubeMap::gl_update() {
+		if (host_data_nx_ == nullptr
+			|| host_data_ny_ == nullptr
+			|| host_data_nz_ == nullptr
+			|| host_data_px_ == nullptr
+			|| host_data_py_ == nullptr
+			|| host_data_pz_ == nullptr) return;
+
+		GLenum format = GL_RED;
+		if (nr_comps_ == 1)
+			format = GL_RED;
+		else if (nr_comps_ == 3)
+			format = GL_RGB;
+		else if (nr_comps_ == 4)
+			format = GL_RGBA;
+
+		glGenTextures(1, &glid_);
+		glBindTexture(GL_TEXTURE_CUBE_MAP, glid_);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_X, 0, format, width_, height_, 0, format, GL_UNSIGNED_BYTE, host_data_px_);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Y, 0, format, width_, height_, 0, format, GL_UNSIGNED_BYTE, host_data_py_);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_POSITIVE_Z, 0, format, width_, height_, 0, format, GL_UNSIGNED_BYTE, host_data_pz_);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_X, 0, format, width_, height_, 0, format, GL_UNSIGNED_BYTE, host_data_nx_);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Y, 0, format, width_, height_, 0, format, GL_UNSIGNED_BYTE, host_data_ny_);
+		glTexImage2D(GL_TEXTURE_CUBE_MAP_NEGATIVE_Z, 0, format, width_, height_, 0, format, GL_UNSIGNED_BYTE, host_data_nz_);
+
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_CUBE_MAP, GL_TEXTURE_WRAP_R, GL_CLAMP_TO_EDGE);
+	}
+
+	void CubeMap::load_post() {
+		auto status = Utility::load_cube_resource(*this);
+		dirty_ = true;
+		log(fmt::format("CubeMap::load_post from {}, status: {}", name_, status),
+			status ? LogLevel::Info : LogLevel::Warn);
+	}
+
+	void CubeMap::dump_post() const	{
+	}
+
 }

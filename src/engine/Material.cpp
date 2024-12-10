@@ -10,10 +10,10 @@ namespace staywalk {
 	}
 
 	Material::~Material(){
-		if (program_) RProgram::monitor(program_, false);
+		if (program_) Program::monitor(program_, false);
 	}
 
-	void Material::add_tex(const string& name, RTexRef tex){
+	void Material::add_tex(const string& name, TexRef tex){
 		if (tex == nullptr) return;
 		bool added = false;
 		for (auto& [n, t] : texs_) {
