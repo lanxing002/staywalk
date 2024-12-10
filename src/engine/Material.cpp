@@ -62,27 +62,25 @@ namespace staywalk {
 	}
 
 	void Material::use(RenderInfo info){
-		if (program_) {
-			program_->use();
-			program_->set_uniform("view", info.view_.top());
-			program_->set_uniform("projection", info.projection_.top());
-			program_->set_uniform("model", info.model_.top());
+		auto prog = program_ == nullptr ? info.program_ : program_;
+		prog->use();
+		prog->set_uniform("view", info.view_.top());
+		prog->set_uniform("projection", info.projection_.top());
+		prog->set_uniform("model", info.model_.top());
 
-			for (auto& [n, u] : uniforms_) {
-				if (u)
-					program_->set_uniform(name_, u);
-			}
+		for (auto& [n, u] : uniforms_) {
+			if (u) prog->set_uniform(name_, u);
+		}
 
-			int idx = 0;
-			for (auto& [n, t] : texs_) {
-				if(t == nullptr) continue;
-				auto texid = t->get_updated_glid();
-				if (texid == kGlSickId) continue;;
-				glActiveTexture(GL_TEXTURE0 + idx);
-				glBindTexture(GL_TEXTURE_2D, texid);
-				program_->set_uniform(n, idx);
-				idx++;
-			}
+		int idx = 0;
+		for (auto& [n, t] : texs_) {
+			if (t == nullptr) continue;
+			auto texid = t->get_updated_glid();
+			if (texid == kGlSickId) continue;;
+			prog->set_uniform(n, idx);
+			glActiveTexture(GL_TEXTURE0 + idx);
+			glBindTexture(GL_TEXTURE_2D, texid);
+			idx++;
 		}
 	}
 }

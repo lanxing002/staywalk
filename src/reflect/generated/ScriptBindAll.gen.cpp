@@ -49,6 +49,7 @@ py::class_<::staywalk::Tex2D,RObject, std::shared_ptr<::staywalk::Tex2D>>(__modu
 	.def_readwrite("wrap_t_", &Tex2D::wrap_t_)
 	.def_readwrite("min_filter_", &Tex2D::min_filter_)
 	.def_readwrite("mag_filter_", &Tex2D::mag_filter_)
+	.def_readwrite("img_name_", &Tex2D::img_name_)
 ;
 
 py::class_<::staywalk::RShader,RObject, std::shared_ptr<::staywalk::RShader>>(__module, "RShader")
