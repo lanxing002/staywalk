@@ -202,7 +202,7 @@ namespace staywalk{
     }
 
     bool Utility::load_tex_resource(Tex2D& rtex){
-        auto path = get_textures_dir() / fs::path(rtex.name_);
+        auto path = get_textures_dir() / fs::path(rtex.img_name_);
         if (fs::is_directory(path) || !fs::exists(path)) {
             log(fmt::format("Utility --> load_texture : not find target ({})", path.u8string()), LogLevel::Error);
             return false;

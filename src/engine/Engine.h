@@ -48,6 +48,7 @@ namespace staywalk{
 		Engine();
 
 	private:
+		bool destroy_ = false;
 		FileMonitor file_monitor_;
 		Ref<Console> console_{nullptr};
 		Renderer renderer_;

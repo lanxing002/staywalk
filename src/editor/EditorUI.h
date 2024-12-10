@@ -18,6 +18,7 @@ public:
     ~EditorUI();
 
     void initialize(GLFWwindow* window);
+    void destroy();
     void render();
     void render_post();
 

@@ -25,15 +25,15 @@ namespace staywalk {
 			else if (im.press(Keyboard::S))  zoffset = -1.0;
 			if (im.press(Keyboard::A)) xoffset = 1.0;
 			else if (im.press(Keyboard::D)) xoffset = -1.0;
-			transform_.location += (look_vec * zoffset + cam_left_vec * xoffset) * 0.03f;
+			transform_.location += (look_vec * zoffset + cam_left_vec * xoffset) * 0.1f;
 
 			auto mouse_offset = im.mouse_offset();
 			if (std::abs(mouse_offset.x) > 1e-6) {
-				transform_.rotation.y += mouse_offset.x * 0.024f;
+				transform_.rotation.y -= mouse_offset.x * 0.024f;
 			}
 
 			if (std::abs(mouse_offset.y) > 1e-6) {
-				transform_.rotation.x += mouse_offset.y * 0.024f;
+				transform_.rotation.x -= mouse_offset.y * 0.024f;
 			}
 
 			//transform.rotation.y = std::min(-45.0f, std::max(45.0f, transform.rotation.y));
@@ -41,7 +41,12 @@ namespace staywalk {
 		}
 		else Event::Editor_ShowHideCursor(true);
 
-		view_ = glm::mat4_cast(glm::quat(glm::radians(transform_.rotation))) * glm::translate(glm::mat4(1.0), -transform_.location);
+		auto rot = glm::mat4(1.0);
+		rot = glm::rotate(glm::mat4(1.0), glm::radians(transform_.rotation.x + 90), glm::vec3(1.0, 0.0, 0.0)) * rot;
+		rot = glm::rotate(glm::mat4(1.0), glm::radians(transform_.rotation.y), glm::vec3(0.0, 0.0, 1.0)) * rot;
+		rot = glm::translate(glm::mat4(1.0), transform_.location) * rot;
+		view_ = glm::inverse(rot);
+
 		projection_ = glm::perspective(glm::radians(fov_), aspect_, near_, far_);
 	}
 
