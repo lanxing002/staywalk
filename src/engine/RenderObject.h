@@ -100,9 +100,14 @@ namespace staywalk{
 
 	class sw_Class(jsonpost;)  CubeMap : public RObject {
 	public:
-		CubeMap(const string& name = "cube-map-0");
+		sw_Func() CubeMap(const string& name = "cube-map-0");
 		sw_Prop() string img_name_;
 		sw_Prop() string img_extension_;
+		sw_Prop() GlWrap wrap_s_ = GlWrap::CLAMP_TO_EDGE;
+		sw_Prop() GlWrap wrap_t_ = GlWrap::CLAMP_TO_EDGE;
+		sw_Prop() GlWrap wrap_r_ = GlWrap::CLAMP_TO_EDGE;
+		sw_Prop() GlMinFilter min_filter_ = GlMinFilter::LINEAR;
+		sw_Prop() GlMagFilter mag_filter_ = GlMagFilter::LINEAR;
 		MetaRegister(CubeMap);
 
 		GLuint get_updated_glid();

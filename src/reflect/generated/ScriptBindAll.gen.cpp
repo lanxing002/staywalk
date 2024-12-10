@@ -54,7 +54,14 @@ py::class_<::staywalk::Tex2D,RObject, std::shared_ptr<::staywalk::Tex2D>>(__modu
 ;
 
 py::class_<::staywalk::CubeMap,RObject, std::shared_ptr<::staywalk::CubeMap>>(__module, "CubeMap")
+	.def(py::init<const string &>())
 	.def_readwrite("img_name_", &CubeMap::img_name_)
+	.def_readwrite("img_extension_", &CubeMap::img_extension_)
+	.def_readwrite("wrap_s_", &CubeMap::wrap_s_)
+	.def_readwrite("wrap_t_", &CubeMap::wrap_t_)
+	.def_readwrite("wrap_r_", &CubeMap::wrap_r_)
+	.def_readwrite("min_filter_", &CubeMap::min_filter_)
+	.def_readwrite("mag_filter_", &CubeMap::mag_filter_)
 ;
 
 py::class_<::staywalk::Shader,RObject, std::shared_ptr<::staywalk::Shader>>(__module, "Shader")

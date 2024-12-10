@@ -145,6 +145,18 @@ void ::staywalk::CubeMap::construct_basic_ui(bool can_modify) {
     RObject::construct_basic_ui(can_modify);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(img_name_)>()) 
         staywalk::reflect::UIHelper::construct_ui("img_name_", img_name_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(img_extension_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("img_extension_", img_extension_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(wrap_s_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("wrap_s_", wrap_s_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(wrap_t_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("wrap_t_", wrap_t_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(wrap_r_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("wrap_r_", wrap_r_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(min_filter_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("min_filter_", min_filter_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(mag_filter_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("mag_filter_", mag_filter_, can_modify || true);
 }
 
 
@@ -154,6 +166,42 @@ void ::staywalk::CubeMap::construct_obj_ui(bool can_modify) {
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(img_name_)>()){ 
         //if (ImGui::TreeNode("img_name_")){
             staywalk::reflect::UIHelper::construct_ui("img_name_", img_name_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(img_extension_)>()){ 
+        //if (ImGui::TreeNode("img_extension_")){
+            staywalk::reflect::UIHelper::construct_ui("img_extension_", img_extension_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(wrap_s_)>()){ 
+        //if (ImGui::TreeNode("wrap_s_")){
+            staywalk::reflect::UIHelper::construct_ui("wrap_s_", wrap_s_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(wrap_t_)>()){ 
+        //if (ImGui::TreeNode("wrap_t_")){
+            staywalk::reflect::UIHelper::construct_ui("wrap_t_", wrap_t_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(wrap_r_)>()){ 
+        //if (ImGui::TreeNode("wrap_r_")){
+            staywalk::reflect::UIHelper::construct_ui("wrap_r_", wrap_r_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(min_filter_)>()){ 
+        //if (ImGui::TreeNode("min_filter_")){
+            staywalk::reflect::UIHelper::construct_ui("min_filter_", min_filter_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(mag_filter_)>()){ 
+        //if (ImGui::TreeNode("mag_filter_")){
+            staywalk::reflect::UIHelper::construct_ui("mag_filter_", mag_filter_, can_modify || true);
             //ImGui::TreePop();
         //}    
     }
