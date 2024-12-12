@@ -22,6 +22,24 @@ namespace staywalk{
 		void load(rapidjson::Value&, staywalk::reflect::Loader&);
 	};
 
+	class Bone {
+	public:
+		mat4 transform_;
+		idtype id_;
+
+		vector<pair<vec3, float>> positions_;
+		vector<pair<quat, float>> rotations_;
+		vector<pair<vec3, float>> scales_;
+
+		bool operator==(const Bone& rhs) const {
+			return transform_ == rhs.transform_ &&
+				id_ == rhs.id_ &&
+				positions_ == rhs.positions_ &&
+				rotations_ == rhs.rotations_ &&
+				scales_ == rhs.scales_;
+		}
+	};
+
 	struct AABB {
 		AABB() { min = vec3(1.0); max = vec3(-1.0); };
 		AABB(const vec3& in_min, const vec3& in_max) : min(in_min), max(in_max) {}

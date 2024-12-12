@@ -58,13 +58,13 @@ namespace staywalk {
 		renderer_.initialize();
 	}
 
-	void Engine::render_update(){
-		renderer_.render(1.0, 0);
+	void Engine::render_update(float delta, unsigned int frame_count){
+		renderer_.render(delta, frame_count);
 	}
 
 	void Engine::logic_update(float delta){
 		file_monitor_.effect();
-		if (world_) world_->logic_update();
+		if (world_) world_->logic_update(delta);
 	}
 
 

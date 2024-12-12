@@ -10,6 +10,8 @@
 #include "InputManager.h"
 #include "Terrain.h"
 #include "Utility.h"
+#include "Animation.h"
+#include "SkeletonMeshComponent.h"
 
 int entry()
 {

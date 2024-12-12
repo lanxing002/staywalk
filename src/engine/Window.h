@@ -3,6 +3,9 @@
 #include "EditorUI.h"
 #include "Renderer.h"
 
+#include <chrono>
+
+
 /**
 *@brieft wrap of glfw window, one app one window 
 */
@@ -23,6 +26,7 @@ public:
 
 	EditorUI editor_ui_;
 	GLFWwindow* window_;
+	std::chrono::system_clock::time_point last_tick_;
 
 	int width_ = 1280;
 	int height_ = 720;

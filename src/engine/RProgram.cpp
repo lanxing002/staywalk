@@ -109,8 +109,9 @@ void staywalk::Program::use() {
 	}
 
 	if (vs_.is_dirty() || fs_.is_dirty() /*|| gs.is_dirty()*/) {
-		if (vs_.is_dirty())  glAttachShader(glid_, vs_.get_updated_glid());
-		if (fs_.is_dirty()) glAttachShader(glid_, fs_.get_updated_glid());
+		uniforms_.clear();
+		glAttachShader(glid_, vs_.get_updated_glid());
+		glAttachShader(glid_, fs_.get_updated_glid());
 		//if (gs.is_dirty()) glAttachShader(glid, gs.get_updated_id());
 		glLinkProgram(glid_);
 		check_link_error();

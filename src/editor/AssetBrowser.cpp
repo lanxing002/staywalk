@@ -20,7 +20,12 @@ AssetsBrowser::AssetsBrowser(){
 		IM_COL32(220, 110, 70, 255),
 		IM_COL32(220, 156, 10, 255),
 		IM_COL32(180, 110, 70, 255),
-		IM_COL32(20, 90, 120, 255),
+        IM_COL32(20, 90, 120, 255),
+        IM_COL32(20, 90, 120, 255),
+        IM_COL32(20, 255, 255, 255),
+        IM_COL32(20, 255, 120, 255),
+        IM_COL32(20, 255, 120, 255),
+        IM_COL32(255, 255, 200, 255),
     };
 
     type_icon_labels_ = {
@@ -41,7 +46,10 @@ AssetsBrowser::AssetsBrowser(){
 		{(int)reflect::ObjectType::Mesh,                    "Mesh"  },
 		{(int)reflect::ObjectType::StaticMeshComponent,     "SM"    },
 		{(int)reflect::ObjectType::Terrain,                 "Terr"  },
-		{(int)reflect::ObjectType::CubeMap,                 "Cube"  },
+        {(int)reflect::ObjectType::CubeMap,                 "Cube"  },
+        {(int)reflect::ObjectType::SkeletonMeshComponent,    "DM"  },
+        {(int)reflect::ObjectType::Animation,    "Ani"  },
+        {(int)reflect::ObjectType::SkeletonMesh,    "SMesh"  },
 	};
 }
 

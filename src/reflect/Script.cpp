@@ -3,6 +3,8 @@
 #include "Input.h"
 #include "InputManager.h"
 #include "SimpleType.h"
+#include "Engine.h"
+#include "World.h"
 
 #include "fmt/format.h"
 #include "fmt/ranges.h"
@@ -35,6 +37,10 @@ namespace glm {
 		);
 	}
 }
+
+class Dumm {
+
+};
 
 namespace staywalk {
 	auto format_as(const AABB& aabb) {
@@ -158,6 +164,9 @@ void py_bind_custom(py::module& __module) {
 PYBIND11_MODULE(staywalk, __module) {
 	// custom define
 	py::class_<::staywalk::Drawable, std::shared_ptr<::staywalk::Drawable>>(__module, "Drawable");
+	py::class_<Dumm>(__module, "g")
+		.def_property_readonly_static("e", [](py::object) {return Engine::get_engine(); })
+		.def_property_readonly_static("w", [](py::object) {return Engine::get_world(); });
 
 	py_bind_custom(__module);
 	py_bind_glm(__module);

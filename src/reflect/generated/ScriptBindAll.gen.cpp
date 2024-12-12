@@ -18,8 +18,12 @@ using namespace staywalk;
 #include "World.h"
 #include "GameComponent.h"
 #include "RMesh.h"
+#include "RMesh.h"
 #include "StaticMeshComponent.h"
 #include "Terrain.h"
+#include "Animation.h"
+#include "Animation.h"
+#include "SkeletonMeshComponent.h"
 
 
 static void bind_auto(py::module& __module){
@@ -103,6 +107,8 @@ py::class_<::staywalk::RLight,GameObject, std::shared_ptr<::staywalk::RLight>>(_
 
 py::class_<::staywalk::Utility, std::shared_ptr<::staywalk::Utility>>(__module, "Utility")
 	.def_static("create_tex", &Utility::create_tex)
+	.def_static("create_sm_from_obj", &Utility::create_sm_from_obj)
+	.def_static("create_skeleton_from_obj", &Utility::create_skeleton_from_obj)
 ;
 
 py::class_<::staywalk::Engine, std::shared_ptr<::staywalk::Engine>>(__module, "Engine")
@@ -153,8 +159,16 @@ py::class_<::staywalk::Mesh,RObject,Drawable, std::shared_ptr<::staywalk::Mesh>>
 	.def_static("create_plane", &Mesh::create_plane)
 	.def("get_aabb", &Mesh::get_aabb)
 	.def("compute_aabb", &Mesh::compute_aabb)
-	.def_readwrite("vertices", &Mesh::vertices)
-	.def_readwrite("indices", &Mesh::indices)
+	.def_readwrite("vertices_", &Mesh::vertices_)
+	.def_readwrite("indices_", &Mesh::indices_)
+;
+
+py::class_<::staywalk::SkeletonMesh,RObject,Drawable, std::shared_ptr<::staywalk::SkeletonMesh>>(__module, "SkeletonMesh")
+	.def(py::init<const string &>())
+	.def(py::init<const vector<SkinVertex> &,const vector<unsigned int> &,const string &>())
+	.def_readwrite("vertices_", &SkeletonMesh::vertices_)
+	.def_readwrite("indices_", &SkeletonMesh::indices_)
+	.def_readwrite("bone_mat_", &SkeletonMesh::bone_mat_)
 ;
 
 py::class_<::staywalk::StaticMeshComponent,GameComponent,Drawable, std::shared_ptr<::staywalk::StaticMeshComponent>>(__module, "StaticMeshComponent")
@@ -169,6 +183,24 @@ py::class_<::staywalk::StaticMeshComponent,GameComponent,Drawable, std::shared_p
 py::class_<::staywalk::Terrain,Actor, std::shared_ptr<::staywalk::Terrain>>(__module, "Terrain")
 	.def(py::init<const string &>())
 	.def("init_with_plane", &Terrain::init_with_plane)
+;
+
+py::class_<::staywalk::BoneTreeNode,Object, std::shared_ptr<::staywalk::BoneTreeNode>>(__module, "BoneTreeNode")
+	.def_readwrite("transform_", &BoneTreeNode::transform_)
+	.def_readwrite("children_", &BoneTreeNode::children_)
+	.def_readwrite("bone_id_", &BoneTreeNode::bone_id_)
+;
+
+py::class_<::staywalk::Animation,RObject, std::shared_ptr<::staywalk::Animation>>(__module, "Animation")
+	.def(py::init<const string &>())
+;
+
+py::class_<::staywalk::SkeletonMeshComponent,GameComponent,Drawable, std::shared_ptr<::staywalk::SkeletonMeshComponent>>(__module, "SkeletonMeshComponent")
+	.def(py::init<const string &>())
+	.def("update_material", &SkeletonMeshComponent::update_material)
+	.def_readwrite("transform_", &SkeletonMeshComponent::transform_)
+	.def_readwrite("meshs_", &SkeletonMeshComponent::meshs_)
+	.def_readwrite("animation_", &SkeletonMeshComponent::animation_)
 ;
 
 

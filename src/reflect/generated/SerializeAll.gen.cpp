@@ -713,6 +713,38 @@ RObject::operator==(rhs) ;
 
 }
 
+#include "RMesh.h"
+
+void ::staywalk::SkeletonMesh::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+
+    RObject::dump(value, dumper);
+
+    this->dump_post();
+}
+
+
+void ::staywalk::SkeletonMesh::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    RObject::load(value, loader);
+
+    this->load_post();
+}
+
+
+bool ::staywalk::SkeletonMesh::operator==(const ::staywalk::SkeletonMesh& rhs) const {
+    return 
+RObject::operator==(rhs) ;
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::SkeletonMesh::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::SkeletonMesh, "staywalk::SkeletonMesh"};
+
+}
+
 #include "StaticMeshComponent.h"
 
 void ::staywalk::StaticMeshComponent::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
@@ -788,6 +820,179 @@ Actor::operator==(rhs) ;
 
 ::staywalk::reflect::MetaInfo staywalk::Terrain::get_meta_info() const {
     return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Terrain, "staywalk::Terrain"};
+
+}
+
+#include "Animation.h"
+
+void ::staywalk::BoneTreeNode::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+
+    Object::dump(value, dumper);
+
+    {
+        json::Value prop;
+        dumper.write(this->transform_, prop);
+        value.AddMember("transform_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->children_, prop);
+        value.AddMember("children_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->bone_id_, prop);
+        value.AddMember("bone_id_", prop, dumper.get_doc().GetAllocator()); 
+    }
+}
+
+
+void ::staywalk::BoneTreeNode::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    Object::load(value, loader);
+
+    itr = value.FindMember("transform_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->transform_, itr->value);
+    }
+    itr = value.FindMember("children_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->children_, itr->value);
+    }
+    itr = value.FindMember("bone_id_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->bone_id_, itr->value);
+    }
+}
+
+
+bool ::staywalk::BoneTreeNode::operator==(const ::staywalk::BoneTreeNode& rhs) const {
+    return 
+Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->transform_, rhs.transform_) && ::staywalk::Comparer::equal(this->children_, rhs.children_) && ::staywalk::Comparer::equal(this->bone_id_, rhs.bone_id_);
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::BoneTreeNode::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::BoneTreeNode, "staywalk::BoneTreeNode"};
+
+}
+
+#include "Animation.h"
+
+void ::staywalk::Animation::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+
+    RObject::dump(value, dumper);
+
+    {
+        json::Value prop;
+        dumper.write(this->duration_, prop);
+        value.AddMember("duration_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->ticks_pers_, prop);
+        value.AddMember("ticks_pers_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->node_root_, prop);
+        value.AddMember("node_root_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    this->dump_post();
+}
+
+
+void ::staywalk::Animation::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    RObject::load(value, loader);
+
+    itr = value.FindMember("duration_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->duration_, itr->value);
+    }
+    itr = value.FindMember("ticks_pers_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->ticks_pers_, itr->value);
+    }
+    itr = value.FindMember("node_root_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->node_root_, itr->value);
+    }
+    this->load_post();
+}
+
+
+bool ::staywalk::Animation::operator==(const ::staywalk::Animation& rhs) const {
+    return 
+RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->duration_, rhs.duration_) && ::staywalk::Comparer::equal(this->ticks_pers_, rhs.ticks_pers_) && ::staywalk::Comparer::equal(this->node_root_, rhs.node_root_);
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::Animation::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Animation, "staywalk::Animation"};
+
+}
+
+#include "SkeletonMeshComponent.h"
+
+void ::staywalk::SkeletonMeshComponent::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+
+    GameComponent::dump(value, dumper);
+
+    {
+        json::Value prop;
+        dumper.write(this->transform_, prop);
+        value.AddMember("transform_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->meshs_, prop);
+        value.AddMember("meshs_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->animation_, prop);
+        value.AddMember("animation_", prop, dumper.get_doc().GetAllocator()); 
+    }
+}
+
+
+void ::staywalk::SkeletonMeshComponent::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    GameComponent::load(value, loader);
+
+    itr = value.FindMember("transform_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->transform_, itr->value);
+    }
+    itr = value.FindMember("meshs_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->meshs_, itr->value);
+    }
+    itr = value.FindMember("animation_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->animation_, itr->value);
+    }
+}
+
+
+bool ::staywalk::SkeletonMeshComponent::operator==(const ::staywalk::SkeletonMeshComponent& rhs) const {
+    return 
+GameComponent::operator==(rhs)  && ::staywalk::Comparer::equal(this->transform_, rhs.transform_) && ::staywalk::Comparer::equal(this->meshs_, rhs.meshs_) && ::staywalk::Comparer::equal(this->animation_, rhs.animation_);
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::SkeletonMeshComponent::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::SkeletonMeshComponent, "staywalk::SkeletonMeshComponent"};
 
 }
 

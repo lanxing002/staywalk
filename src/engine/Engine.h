@@ -40,7 +40,7 @@ namespace staywalk{
 
 		InputManager* get_input_mgr_raw() { return &input_mgr_; }
 		void initialize();
-		void render_update();
+		void render_update(float delta, unsigned int frame_count);
 		void logic_update(float delta);
 		void event_clear() { input_mgr_.clear(); }
 

@@ -192,6 +192,80 @@ void staywalk::Transform::load(rapidjson::Value& value, staywalk::reflect::Loade
         loader.read(rotation, itr->value);
     }
 }
+//
+//void staywalk::Bone::dump(rapidjson::Value& value, staywalk::reflect::Dumper& dumper) const {
+//    assert(value.IsObject());
+//    {
+//        json::Value prop;
+//        dumper.write(transform_, prop);
+//        value.AddMember("transform_", prop, dumper.get_doc().GetAllocator());
+//    }
+//
+//    {
+//        json::Value prop;
+//        dumper.write(name_, prop);
+//        value.AddMember("name_", prop, dumper.get_doc().GetAllocator());
+//    }
+//
+//    {
+//        json::Value prop;
+//        dumper.write(id_, prop);
+//        value.AddMember("id_", prop, dumper.get_doc().GetAllocator());
+//    }
+//
+//    {
+//        json::Value prop;
+//        dumper.write(positions_, prop);
+//        value.AddMember("positions_", prop, dumper.get_doc().GetAllocator());
+//    }
+//
+//    {
+//        json::Value prop;
+//        dumper.write(rotations_, prop);
+//        value.AddMember("rotations_", prop, dumper.get_doc().GetAllocator());
+//    }
+//
+//    {
+//        json::Value prop;
+//        dumper.write(scales_, prop);
+//        value.AddMember("scales_", prop, dumper.get_doc().GetAllocator());
+//    }
+//}
+//
+//void staywalk::Bone::load(rapidjson::Value& value, staywalk::reflect::Loader& loader) {
+//    assert(value.IsObject());
+//    json::Value::MemberIterator itr;
+//
+//    itr = value.FindMember("transform_");
+//    if (itr != value.MemberEnd()) {
+//        loader.read(transform_, itr->value);
+//    }
+//
+//    itr = value.FindMember("name_");
+//    if (itr != value.MemberEnd()) {
+//        loader.read(name_, itr->value);
+//    }
+//
+//    itr = value.FindMember("id_");
+//    if (itr != value.MemberEnd()) {
+//        loader.read(id_, itr->value);
+//    }
+//
+//    itr = value.FindMember("positions_");
+//    if (itr != value.MemberEnd()) {
+//        loader.read(positions_, itr->value);
+//    }
+//
+//    itr = value.FindMember("rotations_");
+//    if (itr != value.MemberEnd()) {
+//        loader.read(rotations_, itr->value);
+//    }
+//
+//    itr = value.FindMember("scales_");
+//    if (itr != value.MemberEnd()) {
+//        loader.read(scales_, itr->value);
+//    }
+//}
 
 void  AABB::dump(rapidjson::Value& value, staywalk::reflect::Dumper& dumper) const {
 	assert(value.IsObject());
@@ -231,6 +305,12 @@ void Vertex::dump(rapidjson::Value& value, staywalk::reflect::Dumper& dumper) co
 
 void Vertex::load(rapidjson::Value& value, staywalk::reflect::Loader& loader) {
 
+}
+
+void SkinVertex::dump(rapidjson::Value& value, staywalk::reflect::Dumper& dumper) const {
+}
+
+void SkinVertex::load(rapidjson::Value& value, staywalk::reflect::Loader& loader) {
 }
 
 void SWCode::__SWCode::load(rapidjson::Value& value, staywalk::reflect::Loader& loader) {

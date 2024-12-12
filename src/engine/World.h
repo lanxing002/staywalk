@@ -53,7 +53,7 @@ namespace staywalk {
 		sw_Func() void add_asset(Ref<Object> obj);
 		sw_Func() void remove_asset(idtype id);
 
-		void logic_update();  // game tick
+		void logic_update(float delta);  // game tick
 
 	private:
 		string name_{"empty-world"};

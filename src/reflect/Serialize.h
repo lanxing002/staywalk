@@ -257,7 +257,8 @@ namespace staywalk {
 				std::is_base_of_v<staywalk::Object, T> || 
 				std::is_same_v<T, staywalk::Object> ||
 				std::is_same_v<T, staywalk::Transform> ||
-				std::is_same_v<T, staywalk::Vertex>;
+				std::is_same_v<T, staywalk::Vertex> ||
+				std::is_same_v<T, staywalk::Bone>;
 
 			constexpr bool is_enum = std::is_enum_v<T>;
 			static_assert((is_obj || is_enum) && "other tyep shoubld override in template function");
@@ -318,7 +319,8 @@ namespace staywalk {
 				std::is_base_of_v<staywalk::Object, T> ||
 				std::is_same_v<T, staywalk::Object> ||
 				std::is_same_v<T, staywalk::Transform> ||
-				std::is_same_v<T, staywalk::Vertex>;
+				std::is_same_v<T, staywalk::Vertex> ||
+				std::is_same_v<T, staywalk::Bone>;
 
 			constexpr bool is_enum = std::is_enum_v<T>;
 			static_assert((is_obj || is_enum) && "other tyep shoubld override in template function");
