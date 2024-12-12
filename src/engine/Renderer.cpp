@@ -42,7 +42,7 @@ void Renderer::render(double delta, unsigned long long count)
 	{
 		auto& lights = world->get_lights();
 		auto& buffer = light_mgr_.light_buffer;
-		auto num = std::min((unsigned int)lights.size(), RenderLight::kMaxLights);
+		auto num = (int)std::min((unsigned int)lights.size(), RenderLight::kMaxLights);
 		int real_count = 0;
 		for (int i = 0; i < num; i++) {
 			if (lights[i] == nullptr) continue;

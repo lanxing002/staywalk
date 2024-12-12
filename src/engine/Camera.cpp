@@ -17,26 +17,17 @@ namespace staywalk {
 		auto engine = Engine::get_engine();
 		auto& im = engine->get_input_mgr();
 		auto view_size = engine->get_view_size();
-		if (im.right_click())
-		{
-			aspect_ = view_size.x / (view_size.y);
-			Event::Editor_ShowHideCursor(false);
-			auto look_vec = glm::inverse(glm::mat3(view_)) * vec3(.0, .0, -1.0);
-			auto cam_left_vec = glm::inverse(glm::mat3(view_)) * vec3(-1.0, .0, 0.0);
-			float zoffset = .0; float xoffset = .0;
-			if (im.press(Keyboard::W))  zoffset = 1.0;
-			else if (im.press(Keyboard::S))  zoffset = -1.0;
-			if (im.press(Keyboard::A)) xoffset = 1.0;
-			else if (im.press(Keyboard::D)) xoffset = -1.0;
-			transform_.location += (look_vec * zoffset + cam_left_vec * xoffset) * 0.14f;
+		aspect_ = view_size.x / (view_size.y + 0.000001f);
 
+		if (im.right_click()){
+			Event::Editor_ShowHideCursor(false);
 			auto mouse_offset = im.mouse_offset();
 			if (std::abs(mouse_offset.x) > 1e-6) {
-				transform_.rotation.y -= mouse_offset.x * 0.064f;
+				transform_.rotation.y -= mouse_offset.x * delta * 6.4f;
 			}
 
 			if (std::abs(mouse_offset.y) > 1e-6) {
-				transform_.rotation.x -= mouse_offset.y * 0.064f;
+				transform_.rotation.x -= mouse_offset.y * delta * 6.4f;
 			}
 
 			//transform.rotation.y = std::min(-45.0f, std::max(45.0f, transform.rotation.y));
@@ -49,8 +40,18 @@ namespace staywalk {
 		rot = glm::rotate(glm::mat4(1.0), glm::radians(transform_.rotation.y), glm::vec3(0.0, 0.0, 1.0)) * rot;
 		rot = glm::translate(glm::mat4(1.0), transform_.location) * rot;
 		view_ = glm::inverse(rot);
-
 		projection_ = glm::perspective(glm::radians(fov_), aspect_, near_, far_);
+
+		if (im.right_click()) {
+			auto look_vec = glm::inverse(glm::mat3(view_)) * vec3(.0, .0, -1.0);
+			auto cam_left_vec = glm::inverse(glm::mat3(view_)) * vec3(-1.0, .0, 0.0);
+			float zoffset = .0; float xoffset = .0;
+			if (im.press(Keyboard::W))  zoffset = 1.0;
+			else if (im.press(Keyboard::S))  zoffset = -1.0;
+			if (im.press(Keyboard::A)) xoffset = 1.0;
+			else if (im.press(Keyboard::D)) xoffset = -1.0;
+			transform_.location += (look_vec * zoffset + cam_left_vec * xoffset) * delta * 8.4f;
+		}
 	}
 
 	void Camera::look_actor(ActorRef actor) {

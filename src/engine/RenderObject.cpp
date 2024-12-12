@@ -139,5 +139,4 @@ namespace staywalk {
 
 	void CubeMap::dump_post() const	{
 	}
-
 }
