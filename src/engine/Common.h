@@ -80,6 +80,8 @@ namespace staywalk
 
 	constexpr idtype kInvalidId = -1;
 	constexpr uint kGlSickId = 0;
+	static constexpr uint kMaxBoueInfluence = 4;
+	static constexpr uint kMaxBoneNum = 100;
 
 	namespace reflect {
 		template<typename T>
@@ -116,12 +118,19 @@ public:																			\
 
 // forward declare 
 namespace staywalk{
+	class BoneTreeNode;
+	class BoneInfo;
+	class Bone;
+	class SkinVertex;
+	
 	class World;
 	class Object;
 	class GameObject;
 	class Actor;
 	class GameComponent;
 	class StaticMeshComponent;
+	class SkeletonMeshComponent;
+	class SkeletonMesh;
 	
 	class RObject;
 	class Program;
@@ -133,6 +142,7 @@ namespace staywalk{
 	class CubeMap;
 	class Mesh;
 	class Uniform;
+	class Animation;
 
 	using WorldRef  = shared_ptr<World>;
 	using ObjectRef = shared_ptr<Object>;
@@ -140,6 +150,9 @@ namespace staywalk{
 	using ActorRef = shared_ptr<Actor>;
 	using GameComponentRef = shared_ptr<GameComponent>;
 	using StaticMeshComponentRef = shared_ptr<StaticMeshComponent>;
+	using SkeletonMeshComponenttRef = shared_ptr<SkeletonMeshComponent>;
+	using AnimationRef = shared_ptr<Animation>;
+	using SkeletonMeshRef = shared_ptr<SkeletonMesh>;
 
 	using ProgramRef = shared_ptr<Program>;
 	using ShaderRef = shared_ptr<Shader>;

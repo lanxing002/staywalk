@@ -3,6 +3,7 @@
 #include "Engine.h"
 #include "InputManager.h"
 #include "Event.h"
+#include "PyEnv.h"
 #include <iostream>
 
 using namespace staywalk;
@@ -328,9 +329,15 @@ void Window::run(){
 
     editor_ui_.initialize(window_);
     engine->initialize();
+	Py::run("import staywalk as sw");
 
+	last_tick_ = std::chrono::system_clock::now();
     while (!shold_close()){
         frame_count_++;
+		auto now_time = std::chrono::system_clock::now();
+		auto duration_cnt = std::chrono::duration_cast<std::chrono::milliseconds>(now_time - last_tick_);
+		last_tick_ = now_time;
+		float duration = duration_cnt.count() / 1000.0;
 
 		if (dirty_) {
 			dirty_ = false;
@@ -341,8 +348,8 @@ void Window::run(){
         process_evnet();
         
         auto engine = Engine::get_engine();
-		engine->logic_update(1.0);
-		engine->render_update();
+		engine->logic_update(duration);
+		engine->render_update(duration, frame_count_);
         {  // render editor ui
 			editor_ui_.render();
 			editor_ui_.render_post();

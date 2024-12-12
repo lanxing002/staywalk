@@ -29,7 +29,6 @@ namespace staywalk{
 		virtual void draw(RenderInfo& info) = 0;
 	};
 
-	static constexpr uint kMaxBoueInfluence = 4;
 	struct Vertex {
 		vec3 position_;
 		vec3 normal_;
@@ -52,6 +51,32 @@ namespace staywalk{
 		//array<float, kMaxBoueInfluence> weights;
 	};
 
+	class SkinVertex {
+	public:
+		vec3 position_;
+		vec3 normal_;
+		vec2 texcoords_;
+		vec3 tangent_;
+		vec3 bitangent_;
+		array<int, kMaxBoueInfluence> bone_ids_;
+		array<float, kMaxBoueInfluence> bone_weights_;
+
+		bool operator==(const SkinVertex& rhs) const {
+			return position_ == rhs.position_ &&
+				normal_ == rhs.normal_ &&
+				texcoords_ == rhs.texcoords_ &&
+				tangent_ == rhs.tangent_ &&
+				bitangent_ == rhs.bitangent_ && 
+				bone_ids_ == rhs.bone_ids_ &&
+				bone_weights_ == bone_weights_;
+		}
+		void dump(rapidjson::Value& value, staywalk::reflect::Dumper& dumper) const;
+		void load(rapidjson::Value& value, staywalk::reflect::Loader& loader);
+		//bone indexes which will influence this vertex
+
+		//array<int, kMaxBoueInfluence> boune_ids;
+		//array<float, kMaxBoueInfluence> weights;
+	};
 
 	// render object is a opengl object
 	class sw_Class()  RObject : public Object{

@@ -121,17 +121,17 @@ namespace staywalk{
 		Event::World_AssetChanged();
 	}
 
-	void World::logic_update(){
+	void World::logic_update(float delta){
 		for (auto& cam : cameras_) {
-			if (cam) cam->tick(1.0);
+			if (cam) cam->tick(delta);
 		}
 
 		for (auto& actor : actors_) {
-			if (actor) actor->tick(1.0);
+			if (actor) actor->tick(delta);
 		}
 
 		for (auto& light : lights_) {
-			if (light) light->tick(1.0);
+			if (light) light->tick(delta);
 		}
 	}
 }

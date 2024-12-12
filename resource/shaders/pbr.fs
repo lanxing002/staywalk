@@ -8,14 +8,15 @@ in vec3 bitangent;
 
 // output data layout
 out vec4 frag_color;  
-
+uniform sampler2D diffuse;
 
 // shader code
 
 void main(){
-    vec3 n = normalize(norm);   
+    vec3 n = normalize(norm); 
+    vec3 c = texture(diffuse, texcoord).xyz;  
     //float factor = dot(n, vec3(1, 1, 0.5));
     //frag_color.xyz = vec3(1.0, 1.0, 1.0);
-    frag_color.xyz = norm * 1.0;
+    frag_color.xyz = c * 1.0;
     frag_color.w = 1.0;
 }

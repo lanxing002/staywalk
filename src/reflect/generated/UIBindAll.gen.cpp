@@ -425,6 +425,20 @@ void ::staywalk::Mesh::construct_obj_ui(bool can_modify) {
 
 
 
+#include "RMesh.h"
+
+void ::staywalk::SkeletonMesh::construct_basic_ui(bool can_modify) {
+    RObject::construct_basic_ui(can_modify);
+}
+
+
+
+void ::staywalk::SkeletonMesh::construct_obj_ui(bool can_modify) {
+    RObject::construct_obj_ui(can_modify);
+}
+
+
+
 #include "StaticMeshComponent.h"
 
 void ::staywalk::StaticMeshComponent::construct_basic_ui(bool can_modify) {
@@ -465,6 +479,96 @@ void ::staywalk::Terrain::construct_basic_ui(bool can_modify) {
 
 void ::staywalk::Terrain::construct_obj_ui(bool can_modify) {
     Actor::construct_obj_ui(can_modify);
+}
+
+
+
+#include "Animation.h"
+
+void ::staywalk::BoneTreeNode::construct_basic_ui(bool can_modify) {
+    Object::construct_basic_ui(can_modify);
+}
+
+
+
+void ::staywalk::BoneTreeNode::construct_obj_ui(bool can_modify) {
+    Object::construct_obj_ui(can_modify);
+}
+
+
+
+#include "Animation.h"
+
+void ::staywalk::Animation::construct_basic_ui(bool can_modify) {
+    RObject::construct_basic_ui(can_modify);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(duration_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("duration_", duration_, can_modify || false);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(ticks_pers_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("ticks_pers_", ticks_pers_, can_modify || false);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(node_root_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("node_root_", node_root_, can_modify || false);
+}
+
+
+
+void ::staywalk::Animation::construct_obj_ui(bool can_modify) {
+    RObject::construct_obj_ui(can_modify);
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(duration_)>()){ 
+        //if (ImGui::TreeNode("duration_")){
+            staywalk::reflect::UIHelper::construct_ui("duration_", duration_, can_modify || false);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(ticks_pers_)>()){ 
+        //if (ImGui::TreeNode("ticks_pers_")){
+            staywalk::reflect::UIHelper::construct_ui("ticks_pers_", ticks_pers_, can_modify || false);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(node_root_)>()){ 
+        //if (ImGui::TreeNode("node_root_")){
+            staywalk::reflect::UIHelper::construct_ui("node_root_", node_root_, can_modify || false);
+            //ImGui::TreePop();
+        //}    
+    }
+}
+
+
+
+#include "SkeletonMeshComponent.h"
+
+void ::staywalk::SkeletonMeshComponent::construct_basic_ui(bool can_modify) {
+    GameComponent::construct_basic_ui(can_modify);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(transform_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("transform_", transform_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(meshs_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("meshs_", meshs_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(animation_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("animation_", animation_, can_modify || true);
+}
+
+
+
+void ::staywalk::SkeletonMeshComponent::construct_obj_ui(bool can_modify) {
+    GameComponent::construct_obj_ui(can_modify);
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(transform_)>()){ 
+        //if (ImGui::TreeNode("transform_")){
+            staywalk::reflect::UIHelper::construct_ui("transform_", transform_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(meshs_)>()){ 
+        //if (ImGui::TreeNode("meshs_")){
+            staywalk::reflect::UIHelper::construct_ui("meshs_", meshs_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(animation_)>()){ 
+        //if (ImGui::TreeNode("animation_")){
+            staywalk::reflect::UIHelper::construct_ui("animation_", animation_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
 }
 
 
