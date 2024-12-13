@@ -94,6 +94,11 @@ void ::staywalk::Actor::dump(rapidjson::Value& value, ::staywalk::reflect::Dumpe
         dumper.write(this->sm_comp_, prop);
         value.AddMember("sm_comp_", prop, dumper.get_doc().GetAllocator()); 
     }
+    {
+        json::Value prop;
+        dumper.write(this->skeleton_comp_, prop);
+        value.AddMember("skeleton_comp_", prop, dumper.get_doc().GetAllocator()); 
+    }
 }
 
 
@@ -107,12 +112,16 @@ void ::staywalk::Actor::load(rapidjson::Value& value, ::staywalk::reflect::Loade
     if(itr != value.MemberEnd()){
         loader.read(this->sm_comp_, itr->value);
     }
+    itr = value.FindMember("skeleton_comp_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->skeleton_comp_, itr->value);
+    }
 }
 
 
 bool ::staywalk::Actor::operator==(const ::staywalk::Actor& rhs) const {
     return 
-GameObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->sm_comp_, rhs.sm_comp_);
+GameObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->sm_comp_, rhs.sm_comp_) && ::staywalk::Comparer::equal(this->skeleton_comp_, rhs.skeleton_comp_);
 }
 
 

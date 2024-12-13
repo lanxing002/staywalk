@@ -14,7 +14,7 @@ namespace staywalk{
 		MetaRegister(SkeletonMeshComponent);
 
 		~SkeletonMeshComponent() override {}
-		void draw(RenderInfo & info) override {}
+		void draw(RenderInfo& info) override;
 		void tick(float delta) override {}
 	};
 }

@@ -42,6 +42,7 @@ py::class_<::staywalk::Actor,GameObject, std::shared_ptr<::staywalk::Actor>>(__m
 	.def(py::init<const string &>())
 	.def("get_aabb", &Actor::get_aabb)
 	.def_readwrite("sm_comp_", &Actor::sm_comp_)
+	.def_readwrite("skeleton_comp_", &Actor::skeleton_comp_)
 ;
 
 py::class_<::staywalk::RObject,Object, std::shared_ptr<::staywalk::RObject>>(__module, "RObject")

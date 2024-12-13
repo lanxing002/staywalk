@@ -337,7 +337,7 @@ void Window::run(){
 		auto now_time = std::chrono::system_clock::now();
 		auto duration_cnt = std::chrono::duration_cast<std::chrono::milliseconds>(now_time - last_tick_);
 		last_tick_ = now_time;
-		float duration = duration_cnt.count() / 1000.0;
+		float duration = duration_cnt.count() / 1000.0f;
 
 		if (dirty_) {
 			dirty_ = false;

@@ -18,13 +18,13 @@
 #include "Animation.h"
 #include "Animation.h"
 #include "SkeletonMeshComponent.h"
-#include "Camera.h"
 #include "RProgram.h"
-#include "RenderObject.h"
-#include "RenderObject.h"
 #include "RenderInfo.h"
-#include "RenderObject.h"
 #include "RProgram.h"
+#include "RenderObject.h"
+#include "Camera.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
 
 
 
@@ -81,10 +81,27 @@ shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::ProjectType>() {
+staywalk::reflect::get_enum_label<::staywalk::UniformType>() {
     return { 
-        {static_cast<int>(::staywalk::ProjectType::Persepective), "Persepective"},
-        {static_cast<int>(::staywalk::ProjectType::Ortho), "Ortho"},
+        {static_cast<int>(::staywalk::UniformType::U1f), "U1f"},
+        {static_cast<int>(::staywalk::UniformType::U2f), "U2f"},
+        {static_cast<int>(::staywalk::UniformType::U3f), "U3f"},
+        {static_cast<int>(::staywalk::UniformType::U4f), "U4f"},
+        {static_cast<int>(::staywalk::UniformType::U1i), "U1i"},
+        {static_cast<int>(::staywalk::UniformType::U2i), "U2i"},
+        {static_cast<int>(::staywalk::UniformType::U3i), "U3i"},
+        {static_cast<int>(::staywalk::UniformType::U4i), "U4i"},
+        {static_cast<int>(::staywalk::UniformType::UMat4), "UMat4"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::ProgramType>() {
+    return { 
+        {static_cast<int>(::staywalk::ProgramType::PBR), "PBR"},
+        {static_cast<int>(::staywalk::ProgramType::Shadow), "Shadow"},
+        {static_cast<int>(::staywalk::ProgramType::_Count), "_Count"},
     };
 }
 
@@ -115,6 +132,15 @@ staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>() {
 
 template<>
 std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::ProjectType>() {
+    return { 
+        {static_cast<int>(::staywalk::ProjectType::Persepective), "Persepective"},
+        {static_cast<int>(::staywalk::ProjectType::Ortho), "Ortho"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
 staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
     return { 
         {static_cast<int>(::staywalk::GlWrap::CLAMP_TO_EDGE), "CLAMP_TO_EDGE"},
@@ -125,35 +151,9 @@ staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::ProgramType>() {
-    return { 
-        {static_cast<int>(::staywalk::ProgramType::PBR), "PBR"},
-        {static_cast<int>(::staywalk::ProgramType::Shadow), "Shadow"},
-        {static_cast<int>(::staywalk::ProgramType::_Count), "_Count"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
 staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>() {
     return { 
         {static_cast<int>(::staywalk::GlMagFilter::NEAREST), "NEAREST"},
         {static_cast<int>(::staywalk::GlMagFilter::LINEAR), "LINEAR"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::UniformType>() {
-    return { 
-        {static_cast<int>(::staywalk::UniformType::U1f), "U1f"},
-        {static_cast<int>(::staywalk::UniformType::U2f), "U2f"},
-        {static_cast<int>(::staywalk::UniformType::U3f), "U3f"},
-        {static_cast<int>(::staywalk::UniformType::U4f), "U4f"},
-        {static_cast<int>(::staywalk::UniformType::U1i), "U1i"},
-        {static_cast<int>(::staywalk::UniformType::U2i), "U2i"},
-        {static_cast<int>(::staywalk::UniformType::U3i), "U3i"},
-        {static_cast<int>(::staywalk::UniformType::U4i), "U4i"},
-        {static_cast<int>(::staywalk::UniformType::UMat4), "UMat4"},
     };
 }

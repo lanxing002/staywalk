@@ -225,9 +225,9 @@ namespace staywalk{
         return sm;
 	}
 
-    SkeletonMeshComponenttRef Utility::create_skeleton_from_obj(string path) {
+    SkeletonMeshComponentRef Utility::create_skeleton_from_obj(string path) {
         auto meshloader = SkeletonMeshLoader(path);
-        SkeletonMeshComponenttRef sm = std::make_shared<SkeletonMeshComponent>();
+        SkeletonMeshComponentRef sm = std::make_shared<SkeletonMeshComponent>();
         sm->animation_ = meshloader.get_animation();
         sm->meshs_ = meshloader.get_skeleton_meshes();
         return sm;
@@ -501,7 +501,7 @@ namespace staywalk{
 		auto sname = mesh_name_.stem().u8string();
 
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(mesh_name_.u8string(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
+		const aiScene* scene = importer.ReadFile(mesh_name_.u8string(), aiProcess_Triangulate | aiProcess_GenSmoothNormals /*| aiProcess_FlipUVs */| aiProcess_CalcTangentSpace);
 
 		// check for errors
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {

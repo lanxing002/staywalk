@@ -24,8 +24,8 @@ namespace staywalk{
 
 	class Bone {
 	public:
-		mat4 transform_;
 		idtype id_;
+		mat4 transform_;
 
 		vector<pair<vec3, float>> positions_;
 		vector<pair<quat, float>> rotations_;

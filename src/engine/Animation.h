@@ -19,8 +19,6 @@ namespace staywalk {
 		sw_Func() Animation(const string & name = "0-animation");
 		MetaRegister(Animation);
 
-		~Animation() {}
-
 	private:
 		void load_post();
 		void dump_post() const;

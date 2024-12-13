@@ -150,7 +150,7 @@ namespace staywalk{
 	using ActorRef = shared_ptr<Actor>;
 	using GameComponentRef = shared_ptr<GameComponent>;
 	using StaticMeshComponentRef = shared_ptr<StaticMeshComponent>;
-	using SkeletonMeshComponenttRef = shared_ptr<SkeletonMeshComponent>;
+	using SkeletonMeshComponentRef = shared_ptr<SkeletonMeshComponent>;
 	using AnimationRef = shared_ptr<Animation>;
 	using SkeletonMeshRef = shared_ptr<SkeletonMesh>;
 

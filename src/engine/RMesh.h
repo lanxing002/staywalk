@@ -26,8 +26,8 @@ namespace staywalk{
 	public:
 		sw_Prop(nojson;nogui;) vector<Vertex> vertices_;
 		sw_Prop(nojson;nogui;) vector<unsigned int> indices_;
-		uint vbo = kGlSickId;
-		uint ebo = kGlSickId;
+		uint vbo_ = kGlSickId;
+		uint ebo_ = kGlSickId;
 
 	private:
 		void gl_update();
@@ -47,7 +47,7 @@ namespace staywalk{
 
 		~SkeletonMesh() {}
 		void gl_delete();
-		void draw(RenderInfo& info) override {}
+		void draw(RenderInfo& info) override;
 
 	private:
 		void gl_update();
@@ -60,8 +60,8 @@ namespace staywalk{
 		sw_Prop(nojson; nogui;) vector<mat4> bone_mat_;
 
 	private:
-		uint vbo = kGlSickId;
-		uint ebo = kGlSickId;
+		uint vbo_ = kGlSickId;
+		uint ebo_ = kGlSickId;
 		AABB aabb_;
 	};
 }
