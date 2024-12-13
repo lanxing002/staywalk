@@ -17,15 +17,15 @@ void Mesh::gl_update(){
 	glGenVertexArrays(1, &glid_);
 	glBindVertexArray(glid_);
 
-	glGenBuffers(1, &vbo);
-	glBindBuffer(GL_ARRAY_BUFFER, vbo);
+	glGenBuffers(1, &vbo_);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_);
 
 	constexpr auto vertex_size = sizeof(decltype(vertices_)::value_type);
 	auto size_byte = vertices_.size() * vertex_size;
 	glBufferData(GL_ARRAY_BUFFER, size_byte, vertices_.data(), GL_STATIC_DRAW);
 
-	glGenBuffers(1, &ebo);
-	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo);
+	glGenBuffers(1, &ebo_);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
 	constexpr int dd = sizeof(decltype(indices_)::value_type);
 	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_.size() * sizeof(decltype(indices_)::value_type), indices_.data(), GL_STATIC_DRAW);
 	
@@ -182,8 +182,64 @@ SkeletonMesh::SkeletonMesh(const vector<SkinVertex>& vv, const vector<unsigned i
 }
 
 
+void SkeletonMesh::draw(RenderInfo& info){
+	if (dirty_) {
+		gl_update();
+		dirty_ = false;
+	}
+	if (!valid()) return;
+	glBindVertexArray(glid_);
+	glDrawElements(GL_TRIANGLES, static_cast<unsigned int>(indices_.size()), GL_UNSIGNED_INT, 0);
+	glBindVertexArray(0);
+}
+
+void SkeletonMesh::gl_update(){
+	if (!(vertices_.size() > 0 && indices_.size() > 0)) return;
+	glGenVertexArrays(1, &glid_);
+	glBindVertexArray(glid_);
+
+	glGenBuffers(1, &vbo_);
+	glBindBuffer(GL_ARRAY_BUFFER, vbo_);
+
+	constexpr auto vertex_size = sizeof(decltype(vertices_)::value_type);
+	auto size_byte = vertices_.size() * vertex_size;
+	glBufferData(GL_ARRAY_BUFFER, size_byte, vertices_.data(), GL_STATIC_DRAW);
+
+	glGenBuffers(1, &ebo_);
+	glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, ebo_);
+	constexpr int dd = sizeof(decltype(indices_)::value_type);
+	glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices_.size() * sizeof(decltype(indices_)::value_type), indices_.data(), GL_STATIC_DRAW);
+
+	glEnableVertexAttribArray(0); // position
+	glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)0);
+
+	glEnableVertexAttribArray(1); // normal
+	glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(SkinVertex, normal_));
+
+	glEnableVertexAttribArray(2); // texcoords
+	glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(SkinVertex, texcoords_));
+
+	glEnableVertexAttribArray(3); // tangent
+	glVertexAttribPointer(3, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(SkinVertex, tangent_));
+
+	glEnableVertexAttribArray(4); // bitangent
+	glVertexAttribPointer(4, 3, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(SkinVertex, bitangent_));
+
+	glEnableVertexAttribArray(5);
+	glVertexAttribIPointer(5, 4, GL_INT, vertex_size, (void*)offsetof(SkinVertex, bone_ids_));
+	// weights
+	glEnableVertexAttribArray(6);
+	glVertexAttribPointer(6, 4, GL_FLOAT, GL_FALSE, vertex_size, (void*)offsetof(SkinVertex, bone_weights_));
+
+	glBindVertexArray(0);
+}
+
+void SkeletonMesh::gl_delete(){
+
+}
+
 void SkeletonMesh::load_post() {
-	auto path = Utility::get_objects_dir() / (name_ + Utility::kMeshExt);
+	auto path = Utility::get_objects_dir() / (name_ + Utility::kSkeletonMeshExt);
 	auto ifs = ifstream(path, std::ios::binary);
 	bool status = false;
 	if (ifs) {
@@ -208,6 +264,7 @@ void SkeletonMesh::load_post() {
 		status ? LogLevel::Info : LogLevel::Warn);
 	mark_dirty();
 }
+
 
 void SkeletonMesh::dump_post() const {
 	size_t vsize = vertices_.size();

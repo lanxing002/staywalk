@@ -68,8 +68,14 @@ namespace staywalk{
 
 		sw_Func() static shared_ptr<Tex2D> create_tex(string path) { return make_texture(fs::path(path)); }
 		sw_Func() static StaticMeshComponentRef create_sm_from_obj(string path);
-		sw_Func() static SkeletonMeshComponenttRef create_skeleton_from_obj(string path);
+		sw_Func() static SkeletonMeshComponentRef create_skeleton_from_obj(string path);
 		//sw_Func() static StaticMeshComponentRef create_sm_from_obj(string path);
+
+		template<typename T>
+		static void write_vector_to_ofs(ofstream& ofs, const vector<T>& data);
+
+		template<typename T>
+		static void read_vector_from_ifs(ifstream& ofs, vector<T>& data);
 
 		static bool load_tex_resource(Tex2D& tex);
 
@@ -138,4 +144,24 @@ namespace staywalk{
 		map<string, BoneInfo> boneinfo_map_;
 		int bone_count_ = 0;
 	};
+}
+
+
+namespace staywalk {
+	template<typename T>
+	static void Utility::write_vector_to_ofs(ofstream& ofs, const vector<T>& data) {
+		//static_assert(std::is_trivial_v<T> && "must trivial");
+		auto num = data.size();
+		ofs.write(reinterpret_cast<const char*>(&num), sizeof(num));
+		ofs.write(reinterpret_cast<const char*>(data.data()), num * sizeof(T));
+	}
+
+	template<typename T>
+	static void Utility::read_vector_from_ifs(ifstream& ifs, vector<T>& data) {
+		//static_assert(std::is_trivial_v<T> && "must trivial");
+		size_t num = 0;
+		ifs.read(reinterpret_cast<char*>(&num), sizeof(num));
+		data.resize(num);
+		ifs.read(reinterpret_cast<char*>(data.data()), num * sizeof(T));
+	}
 }
