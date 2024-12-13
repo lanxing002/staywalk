@@ -47,6 +47,8 @@ void ::staywalk::Actor::construct_basic_ui(bool can_modify) {
     GameObject::construct_basic_ui(can_modify);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(sm_comp_)>()) 
         staywalk::reflect::UIHelper::construct_ui("sm_comp_", sm_comp_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(skeleton_comp_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("skeleton_comp_", skeleton_comp_, can_modify || true);
 }
 
 
@@ -56,6 +58,12 @@ void ::staywalk::Actor::construct_obj_ui(bool can_modify) {
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(sm_comp_)>()){ 
         //if (ImGui::TreeNode("sm_comp_")){
             staywalk::reflect::UIHelper::construct_ui("sm_comp_", sm_comp_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(skeleton_comp_)>()){ 
+        //if (ImGui::TreeNode("skeleton_comp_")){
+            staywalk::reflect::UIHelper::construct_ui("skeleton_comp_", skeleton_comp_, can_modify || true);
             //ImGui::TreePop();
         //}    
     }

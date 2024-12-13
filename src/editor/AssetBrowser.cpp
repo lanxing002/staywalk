@@ -298,7 +298,7 @@ void AssetsBrowser::draw(const char* title, bool* p_open){
         ms_io = ImGui::EndMultiSelect();
         selection_.ApplyRequests(ms_io);
         if (want_delete)
-            selection_.ApplyDeletionPostLoop(ms_io, items_, item_curr_idx_to_focus);
+			selection_.ApplyDeletionPostLoop(ms_io, items_, item_curr_idx_to_focus);
 
         // Zooming with CTRL+Wheel
         if (ImGui::IsWindowAppearing())
@@ -365,25 +365,14 @@ int SelectionWithDeletion::ApplyDeletionPreLoop(ImGuiMultiSelectIO* ms_io, int i
 
 void SelectionWithDeletion::ApplyDeletionPostLoop(ImGuiMultiSelectIO* ms_io, std::vector<staywalk::Ref<staywalk::Object>>& items, int item_curr_idx_to_select)
 {
-    // Rewrite item list (delete items) + convert old selection index (before deletion) to new selection index (after selection).
-    // If NavId was not part of selection, we will stay on same item.
-    std::vector<staywalk::Ref<staywalk::Object>> new_items;
-    new_items.reserve((int)items.size() - Size);
-    int item_next_idx_to_select = -1;
-    for (int idx = 0; idx < (int)items.size(); idx++)
-    {
-        if (!Contains(GetStorageIdFromIndex(idx)))
-            new_items.push_back(items[idx]);
-        if (item_curr_idx_to_select == idx)
-            item_next_idx_to_select = (int)new_items.size() - 1;
+    vector<idtype> need_delete_ids;
+    for (int idx = 0; idx < (int)items.size(); idx++){
+        if (Contains(GetStorageIdFromIndex(idx)))
+            need_delete_ids.push_back(items[idx]->get_guid());
     }
-    items.swap(new_items);
     auto w = Engine::get_world();
-	for(auto& item : new_items)
-        w->remove_asset(item->get_guid());
+    for (auto id : need_delete_ids)
+		w->remove_asset(id);
 
-    // Update selection
-    Clear();
-    if (item_next_idx_to_select != -1 && ms_io->NavIdSelected)
-        SetItemSelected(GetStorageIdFromIndex(item_next_idx_to_select), true);
+	//SetItemSelected(GetStorageIdFromIndex(0), true);
 }
