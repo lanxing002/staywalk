@@ -165,6 +165,19 @@ void staywalk::Program::set_uniform(const string& name, UniformRef uniform){
 
 }
 
+GLint staywalk::Program::set_uniform_block(const string& name){
+	GLuint block_idx = glGetUniformBlockIndex(glid_, name.c_str());
+	const auto it = uniforms_block_.find(block_idx);
+	if (it != uniforms_block_.end()) {
+		glUniformBlockBinding(glid_, it->first, it->second);
+		return it->second;
+	}
+	auto bind_idx = (int)uniforms_block_.size();
+	glUniformBlockBinding(glid_, block_idx, bind_idx);
+	uniforms_block_[block_idx] = bind_idx;
+	return bind_idx;
+}
+
 void staywalk::Program::check_link_error(){
 	GLint success;
 	GLchar info[1024];

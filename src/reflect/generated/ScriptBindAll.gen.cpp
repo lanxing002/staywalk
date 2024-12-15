@@ -169,7 +169,6 @@ py::class_<::staywalk::SkeletonMesh,RObject,Drawable, std::shared_ptr<::staywalk
 	.def(py::init<const vector<SkinVertex> &,const vector<unsigned int> &,const string &>())
 	.def_readwrite("vertices_", &SkeletonMesh::vertices_)
 	.def_readwrite("indices_", &SkeletonMesh::indices_)
-	.def_readwrite("bone_mat_", &SkeletonMesh::bone_mat_)
 ;
 
 py::class_<::staywalk::StaticMeshComponent,GameComponent,Drawable, std::shared_ptr<::staywalk::StaticMeshComponent>>(__module, "StaticMeshComponent")

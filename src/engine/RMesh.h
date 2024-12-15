@@ -57,7 +57,6 @@ namespace staywalk{
 	public:
 		sw_Prop(nojson; nogui;) vector<SkinVertex> vertices_;
 		sw_Prop(nojson; nogui;) vector<unsigned int> indices_;
-		sw_Prop(nojson; nogui;) vector<mat4> bone_mat_;
 
 	private:
 		uint vbo_ = kGlSickId;

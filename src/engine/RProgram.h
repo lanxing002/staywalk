@@ -90,7 +90,7 @@ namespace staywalk{
 		template<typename T>
 		void set_uniform(const string& name, T value) { static_assert(false && "not impl!!"); }
 		void set_uniform(const string& name, UniformRef uniform);
-
+		GLint set_uniform_block(const string& name);
 		void load_post();
 
 	private:
@@ -100,6 +100,7 @@ namespace staywalk{
 
 	private:
 		map<string, GLint> uniforms_;
+		map<GLuint, GLint> uniforms_block_;
 		friend class Render;
 	};
 }

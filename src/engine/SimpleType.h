@@ -25,15 +25,16 @@ namespace staywalk{
 	class Bone {
 	public:
 		idtype id_;
-		mat4 transform_;
+		mat4 offset_;
 
 		vector<pair<vec3, float>> positions_;
 		vector<pair<quat, float>> rotations_;
 		vector<pair<vec3, float>> scales_;
 
 		bool operator==(const Bone& rhs) const {
-			return transform_ == rhs.transform_ &&
+			return 
 				id_ == rhs.id_ &&
+				offset_ == rhs.offset_ &&
 				positions_ == rhs.positions_ &&
 				rotations_ == rhs.rotations_ &&
 				scales_ == rhs.scales_;

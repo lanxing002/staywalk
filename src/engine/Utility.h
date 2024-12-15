@@ -67,8 +67,8 @@ namespace staywalk{
 		static shared_ptr<Tex2D> make_texture(fs::path path);
 
 		sw_Func() static shared_ptr<Tex2D> create_tex(string path) { return make_texture(fs::path(path)); }
-		sw_Func() static StaticMeshComponentRef create_sm_from_obj(string path);
-		sw_Func() static SkeletonMeshComponentRef create_skeleton_from_obj(string path);
+		sw_Func() static StaticMeshComponentRef create_sm_from_obj(string path, bool flip_uv = true);
+		sw_Func() static SkeletonMeshComponentRef create_skeleton_from_obj(string path, bool flip_uv = true);
 		//sw_Func() static StaticMeshComponentRef create_sm_from_obj(string path);
 
 		template<typename T>
@@ -87,7 +87,7 @@ namespace staywalk{
 	class MeshLoader
 	{
 	public:
-		MeshLoader(const string& mesh_name);
+		MeshLoader(const string& mesh_name, bool flip_uv);
 		const vector<pair<MeshRef, MaterialRef>>& get_meshes() { return meshes_; }
 
 	private:
@@ -117,7 +117,7 @@ namespace staywalk{
 		};
 
 	public:
-		SkeletonMeshLoader(const string& mesh_name);
+		SkeletonMeshLoader(const string& mesh_name, bool flip_uv);
 		const vector<pair<SkeletonMeshRef, MaterialRef>>& get_skeleton_meshes() { return skeleton_meshes_; }
 		const AnimationRef& get_animation() { return animation_; }
 

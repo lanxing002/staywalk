@@ -22,6 +22,7 @@ namespace staywalk {
 	void StaticMeshComponent::draw(RenderInfo& info) {
 		info.model_.push(info.model_.top() * transform.matrix());
 		info.program_->set_uniform("model", info.model_.top());
+		info.program_->use();
 		for (auto& [mesh, mat] : meshs) {
 			if(mat) mat->use(info);
 			if(mesh) mesh->draw(info);

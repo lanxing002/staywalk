@@ -898,6 +898,11 @@ void ::staywalk::Animation::dump(rapidjson::Value& value, ::staywalk::reflect::D
 
     {
         json::Value prop;
+        dumper.write(this->curr_time_, prop);
+        value.AddMember("curr_time_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
         dumper.write(this->duration_, prop);
         value.AddMember("duration_", prop, dumper.get_doc().GetAllocator()); 
     }
@@ -921,6 +926,10 @@ void ::staywalk::Animation::load(rapidjson::Value& value, ::staywalk::reflect::L
 
     RObject::load(value, loader);
 
+    itr = value.FindMember("curr_time_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->curr_time_, itr->value);
+    }
     itr = value.FindMember("duration_");
     if(itr != value.MemberEnd()){
         loader.read(this->duration_, itr->value);
@@ -939,7 +948,7 @@ void ::staywalk::Animation::load(rapidjson::Value& value, ::staywalk::reflect::L
 
 bool ::staywalk::Animation::operator==(const ::staywalk::Animation& rhs) const {
     return 
-RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->duration_, rhs.duration_) && ::staywalk::Comparer::equal(this->ticks_pers_, rhs.ticks_pers_) && ::staywalk::Comparer::equal(this->node_root_, rhs.node_root_);
+RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->curr_time_, rhs.curr_time_) && ::staywalk::Comparer::equal(this->duration_, rhs.duration_) && ::staywalk::Comparer::equal(this->ticks_pers_, rhs.ticks_pers_) && ::staywalk::Comparer::equal(this->node_root_, rhs.node_root_);
 }
 
 
