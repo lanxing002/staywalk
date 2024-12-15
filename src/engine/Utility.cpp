@@ -218,15 +218,15 @@ namespace staywalk{
         return result;
     }
 
-	staywalk::StaticMeshComponentRef Utility::create_sm_from_obj(string path){
-		auto meshload = MeshLoader(path);
+	staywalk::StaticMeshComponentRef Utility::create_sm_from_obj(string path, bool flip_uv){
+		auto meshload = MeshLoader(path, flip_uv);
 		Ref<StaticMeshComponent> sm = std::make_shared<StaticMeshComponent>();
 		sm->meshs = meshload.get_meshes();
         return sm;
 	}
 
-    SkeletonMeshComponentRef Utility::create_skeleton_from_obj(string path) {
-        auto meshloader = SkeletonMeshLoader(path);
+    SkeletonMeshComponentRef Utility::create_skeleton_from_obj(string path, bool flip_uv) {
+        auto meshloader = SkeletonMeshLoader(path, flip_uv);
         SkeletonMeshComponentRef sm = std::make_shared<SkeletonMeshComponent>();
         sm->animation_ = meshloader.get_animation();
         sm->meshs_ = meshloader.get_skeleton_meshes();
@@ -345,7 +345,7 @@ namespace staywalk{
         return static_cast<bool>(ofs);
 	}
 
-	MeshLoader::MeshLoader(const string& mname)
+	MeshLoader::MeshLoader(const string& mname, bool flip_uv)
     :mesh_name_(mname){
         if (fs::is_directory(mesh_name_) ||  !fs::exists(mesh_name_)) {
             log(fmt::format("MeshLoader --> mesh ({}) not exists!", mesh_name_.u8string()), LogLevel::Warn);
@@ -355,6 +355,8 @@ namespace staywalk{
         load_dir_ = mesh_name_.parent_path();
 
         Assimp::Importer importer;
+		auto flags = aiProcess_Triangulate | aiProcess_GenSmoothNormals /*| aiProcess_FlipUVs */ | aiProcess_CalcTangentSpace;
+		if (flip_uv) flags |= aiProcess_FlipUVs;
         const aiScene* scene = importer.ReadFile(mesh_name_.u8string(), aiProcess_Triangulate | aiProcess_GenSmoothNormals | aiProcess_FlipUVs | aiProcess_CalcTangentSpace);
 
         // check for errors
@@ -490,7 +492,7 @@ namespace staywalk{
         return TexRef(nullptr);
     }
 
-	SkeletonMeshLoader::SkeletonMeshLoader(const string& mesh_name)
+	SkeletonMeshLoader::SkeletonMeshLoader(const string& mesh_name, bool flip_uv)
     :mesh_name_(mesh_name){
 		if (fs::is_directory(mesh_name_) || !fs::exists(mesh_name_)) {
 			log(fmt::format("SkeletonMeshLoader --> mesh ({}) not exists!", mesh_name_.u8string()), LogLevel::Warn);
@@ -501,7 +503,9 @@ namespace staywalk{
 		auto sname = mesh_name_.stem().u8string();
 
 		Assimp::Importer importer;
-		const aiScene* scene = importer.ReadFile(mesh_name_.u8string(), aiProcess_Triangulate | aiProcess_GenSmoothNormals /*| aiProcess_FlipUVs */| aiProcess_CalcTangentSpace);
+        auto flags = aiProcess_Triangulate | aiProcess_GenSmoothNormals /*| aiProcess_FlipUVs */ | aiProcess_CalcTangentSpace;
+        if (flip_uv) flags |= aiProcess_FlipUVs;
+		const aiScene* scene = importer.ReadFile(mesh_name_.u8string(), flags);
 
 		// check for errors
 		if (!scene || scene->mFlags & AI_SCENE_FLAGS_INCOMPLETE || !scene->mRootNode) {
@@ -536,8 +540,8 @@ namespace staywalk{
         {
 			animation_ = std::make_shared<Animation>(sname);
 			auto animation = scene->mAnimations[0];
-			animation_->duration_ = (float)animation->mDuration;
-			animation_->ticks_pers_ = (float)animation->mTicksPerSecond;
+			animation_->duration_ = (float)animation->mDuration / 1000.0f;
+			animation_->ticks_pers_ = (float)animation->mTicksPerSecond / 1000.0f;
 			aiMatrix4x4 g_transform = scene->mRootNode->mTransformation;
 			g_transform = g_transform.Inverse();
 			read_missing_bone_data(animation);
@@ -680,27 +684,27 @@ namespace staywalk{
 		auto num_pos = channel->mNumPositionKeys;
 		for (uint i = 0; i < num_pos; i++) {
 			aiVector3D ai_pos = channel->mPositionKeys[i].mValue;
-			float timeStamp = (float)channel->mPositionKeys[i].mTime;
+			float timeStamp = (float)channel->mPositionKeys[i].mTime / 1000.0f;
 			bone.positions_.emplace_back(vec3(ai_pos.x, ai_pos.y, ai_pos.z), timeStamp);
 		}
 
 		auto num_rot = channel->mNumRotationKeys;
 		for (uint i = 0; i < num_rot; ++i) {
 			aiQuaternion ai_rot = channel->mRotationKeys[i].mValue;
-			float timeStamp = (float)channel->mRotationKeys[i].mTime;
+			float timeStamp = (float)channel->mRotationKeys[i].mTime / 1000.0f;
 			bone.rotations_.emplace_back(quat(ai_rot.x, ai_rot.y, ai_rot.z, ai_rot.w), timeStamp);
 		}
 
 		auto num_scale = channel->mNumScalingKeys;
 		for (uint i = 0; i < num_scale; ++i) {
 			aiVector3D ai_scale = channel->mScalingKeys[i].mValue;
-			float timeStamp = (float)channel->mScalingKeys[i].mTime;
-			bone.rotations_.emplace_back(vec3(ai_scale.x, ai_scale.y, ai_scale.z), timeStamp);
+			float timeStamp = (float)channel->mScalingKeys[i].mTime / 1000.0f;
+			bone.scales_.emplace_back(vec3(ai_scale.x, ai_scale.y, ai_scale.z), timeStamp);
 		}
 	}
 
 	void SkeletonMeshLoader::read_bone_tree(BoneTreeNode& dest, const aiNode* src) {
-		if (src) return;
+		if (!src) return;
 
 		dest.name_ = std::string(src->mName.data);
 		dest.transform_ = convert_matrix_to_glm(src->mTransformation);
@@ -735,14 +739,11 @@ namespace staywalk{
 	void SkeletonMeshLoader::reconstruct_bone_info(){
         auto bone_num = boneinfo_map_.size();
         assert(bone_num <= kMaxBoneNum);
-        vector<mat4> boneoffset(bone_num);
         vector<Bone> bones(bone_num);
 
-        for (auto& [n, info] : boneinfo_map_) boneoffset[info.id_] = info.offset_;
-        for (auto& bone : animation_->bones_) bones[bone.id_] = bone;
+		for (auto& bone : animation_->bones_) bones[bone.id_] = bone;
+        for (auto& [n, offset] : boneinfo_map_) bones[offset.id_].offset_ = offset.offset_;
         animation_->bones_ = bones;
-        for (auto& mesh : skeleton_meshes_) mesh.first->bone_mat_ = boneoffset;
-
 	}
 
 }
