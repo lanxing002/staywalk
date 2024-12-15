@@ -28,7 +28,7 @@ namespace staywalk{
 	}
 	
 	WorldRef World::load_marry_world(){
-		auto meshload = MeshLoader(R"(E:\gly\codes\LearnOpenGL\resources\objects\rock\rock.obj)");
+		auto meshload = MeshLoader(R"(E:\gly\codes\LearnOpenGL\resources\objects\rock\rock.obj)", true);
 
 		shared_ptr<Actor> actor = std::make_shared<Actor>("rock");
 		Ref<StaticMeshComponent> sm = std::make_shared<StaticMeshComponent>();

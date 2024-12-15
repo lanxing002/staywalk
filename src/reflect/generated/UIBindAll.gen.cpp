@@ -509,6 +509,8 @@ void ::staywalk::BoneTreeNode::construct_obj_ui(bool can_modify) {
 
 void ::staywalk::Animation::construct_basic_ui(bool can_modify) {
     RObject::construct_basic_ui(can_modify);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(curr_time_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("curr_time_", curr_time_, can_modify || false);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(duration_)>()) 
         staywalk::reflect::UIHelper::construct_ui("duration_", duration_, can_modify || false);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(ticks_pers_)>()) 
@@ -521,6 +523,12 @@ void ::staywalk::Animation::construct_basic_ui(bool can_modify) {
 
 void ::staywalk::Animation::construct_obj_ui(bool can_modify) {
     RObject::construct_obj_ui(can_modify);
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(curr_time_)>()){ 
+        //if (ImGui::TreeNode("curr_time_")){
+            staywalk::reflect::UIHelper::construct_ui("curr_time_", curr_time_, can_modify || false);
+            //ImGui::TreePop();
+        //}    
+    }
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(duration_)>()){ 
         //if (ImGui::TreeNode("duration_")){
             staywalk::reflect::UIHelper::construct_ui("duration_", duration_, can_modify || false);

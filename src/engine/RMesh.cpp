@@ -55,17 +55,8 @@ void Mesh::load_post() {
 	auto ifs = ifstream(path, std::ios::binary);
 	bool status = false;
 	if (ifs) {
-		size_t vsize = 0;
-		size_t isize = 0;
-
-		ifs.read(reinterpret_cast<char*>(&vsize), sizeof(vsize));
-		ifs.read(reinterpret_cast<char*>(&isize), sizeof(isize));
-
-		vertices_.resize(vsize);
-		indices_.resize(isize);
-
-		ifs.read(reinterpret_cast<char*>(vertices_.data()), vsize * sizeof(Vertex));
-		ifs.read(reinterpret_cast<char*>(indices_.data()), isize * sizeof(unsigned int));
+		Utility::read_vector_from_ifs(ifs, vertices_);
+		Utility::read_vector_from_ifs(ifs, indices_);
 		status = true;
 	}
 	compute_aabb();
@@ -75,17 +66,13 @@ void Mesh::load_post() {
 }
 
 void Mesh::dump_post() const {
-	size_t vsize = vertices_.size();
-	size_t isize = indices_.size();
+
 	auto path = Utility::get_objects_dir() / (name_ + Utility::kMeshExt);
 	auto ofs = ofstream(path, std::ios::binary | std::ios::trunc);
 	bool status = false;
 	if (ofs) {
-		ofs.write(reinterpret_cast<char*>(&vsize), sizeof(vsize));
-		ofs.write(reinterpret_cast<char*>(&isize), sizeof(isize));
-
-		ofs.write(reinterpret_cast<const char*>(vertices_.data()), vsize * sizeof(Vertex));
-		ofs.write(reinterpret_cast<const char*>(indices_.data()), isize * sizeof(unsigned int));
+		Utility::write_vector_to_ofs(ofs, vertices_);
+		Utility::write_vector_to_ofs(ofs, indices_);
 		status = true;
 	}
 
@@ -243,21 +230,8 @@ void SkeletonMesh::load_post() {
 	auto ifs = ifstream(path, std::ios::binary);
 	bool status = false;
 	if (ifs) {
-		size_t vsize = 0;
-		size_t isize = 0;
-		size_t msize = 0;
-
-		ifs.read(reinterpret_cast<char*>(&vsize), sizeof(vsize));
-		ifs.read(reinterpret_cast<char*>(&isize), sizeof(isize));
-		ifs.read(reinterpret_cast<char*>(&msize), sizeof(msize));
-
-		vertices_.resize(vsize);
-		indices_.resize(isize);
-		bone_mat_.resize(msize);
-
-		ifs.read(reinterpret_cast<char*>(vertices_.data()), vsize * sizeof(Vertex));
-		ifs.read(reinterpret_cast<char*>(indices_.data()), isize * sizeof(unsigned int));
-		ifs.read(reinterpret_cast<char*>(bone_mat_.data()), msize * sizeof(mat4));
+		Utility::read_vector_from_ifs(ifs, vertices_);
+		Utility::read_vector_from_ifs(ifs, indices_);
 		status = true;
 	}
 	log(fmt::format("load_post to {}, status: {}", path.u8string(), status),
@@ -267,20 +241,12 @@ void SkeletonMesh::load_post() {
 
 
 void SkeletonMesh::dump_post() const {
-	size_t vsize = vertices_.size();
-	size_t isize = indices_.size();
-	size_t msize = bone_mat_.size();
-	auto path = Utility::get_objects_dir() / (name_ + Utility::kMeshExt);
+	auto path = Utility::get_objects_dir() / (name_ + Utility::kSkeletonMeshExt);
 	auto ofs = ofstream(path, std::ios::binary | std::ios::trunc);
 	bool status = false;
 	if (ofs) {
-		ofs.write(reinterpret_cast<char*>(&vsize), sizeof(vsize));
-		ofs.write(reinterpret_cast<char*>(&isize), sizeof(isize));
-		ofs.write(reinterpret_cast<char*>(&msize), sizeof(msize));
-
-		ofs.write(reinterpret_cast<const char*>(vertices_.data()), vsize * sizeof(Vertex));
-		ofs.write(reinterpret_cast<const char*>(indices_.data()), isize * sizeof(unsigned int));
-		ofs.write(reinterpret_cast<const char*>(bone_mat_.data()), isize * sizeof(mat4));
+		Utility::write_vector_to_ofs(ofs, vertices_);
+		Utility::write_vector_to_ofs(ofs, indices_);
 		status = true;
 	}
 
