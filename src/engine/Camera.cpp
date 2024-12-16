@@ -10,7 +10,7 @@
 
 namespace staywalk {
 	Camera::Camera(const string& name)
-		:GameObject(name) {
+		:Entity(name) {
 
 	}
 	void Camera::tick(float delta){

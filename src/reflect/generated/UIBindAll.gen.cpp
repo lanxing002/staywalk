@@ -19,9 +19,9 @@ void ::staywalk::Object::construct_obj_ui(bool can_modify) {
 
 
 
-#include "GameObject.h"
+#include "Entity.h"
 
-void ::staywalk::GameObject::construct_basic_ui(bool can_modify) {
+void ::staywalk::Entity::construct_basic_ui(bool can_modify) {
     Object::construct_basic_ui(can_modify);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(transform_)>()) 
         staywalk::reflect::UIHelper::construct_ui("transform_", transform_, can_modify || true);
@@ -29,7 +29,7 @@ void ::staywalk::GameObject::construct_basic_ui(bool can_modify) {
 
 
 
-void ::staywalk::GameObject::construct_obj_ui(bool can_modify) {
+void ::staywalk::Entity::construct_obj_ui(bool can_modify) {
     Object::construct_obj_ui(can_modify);
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(transform_)>()){ 
         //if (ImGui::TreeNode("transform_")){
@@ -44,7 +44,7 @@ void ::staywalk::GameObject::construct_obj_ui(bool can_modify) {
 #include "Actor.h"
 
 void ::staywalk::Actor::construct_basic_ui(bool can_modify) {
-    GameObject::construct_basic_ui(can_modify);
+    Entity::construct_basic_ui(can_modify);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(sm_comp_)>()) 
         staywalk::reflect::UIHelper::construct_ui("sm_comp_", sm_comp_, can_modify || true);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(skeleton_comp_)>()) 
@@ -54,7 +54,7 @@ void ::staywalk::Actor::construct_basic_ui(bool can_modify) {
 
 
 void ::staywalk::Actor::construct_obj_ui(bool can_modify) {
-    GameObject::construct_obj_ui(can_modify);
+    Entity::construct_obj_ui(can_modify);
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(sm_comp_)>()){ 
         //if (ImGui::TreeNode("sm_comp_")){
             staywalk::reflect::UIHelper::construct_ui("sm_comp_", sm_comp_, can_modify || true);
@@ -340,7 +340,7 @@ void ::staywalk::Material::construct_obj_ui(bool can_modify) {
 #include "Camera.h"
 
 void ::staywalk::Camera::construct_basic_ui(bool can_modify) {
-    GameObject::construct_basic_ui(can_modify);
+    Entity::construct_basic_ui(can_modify);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(porject_type_)>()) 
         staywalk::reflect::UIHelper::construct_ui("porject_type_", porject_type_, can_modify || true);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(fov_)>()) 
@@ -356,7 +356,7 @@ void ::staywalk::Camera::construct_basic_ui(bool can_modify) {
 
 
 void ::staywalk::Camera::construct_obj_ui(bool can_modify) {
-    GameObject::construct_obj_ui(can_modify);
+    Entity::construct_obj_ui(can_modify);
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(porject_type_)>()){ 
         //if (ImGui::TreeNode("porject_type_")){
             staywalk::reflect::UIHelper::construct_ui("porject_type_", porject_type_, can_modify || true);
@@ -394,26 +394,26 @@ void ::staywalk::Camera::construct_obj_ui(bool can_modify) {
 #include "Light.h"
 
 void ::staywalk::RLight::construct_basic_ui(bool can_modify) {
-    GameObject::construct_basic_ui(can_modify);
+    Entity::construct_basic_ui(can_modify);
 }
 
 
 
 void ::staywalk::RLight::construct_obj_ui(bool can_modify) {
-    GameObject::construct_obj_ui(can_modify);
+    Entity::construct_obj_ui(can_modify);
 }
 
 
 
-#include "GameComponent.h"
+#include "Component.h"
 
-void ::staywalk::GameComponent::construct_basic_ui(bool can_modify) {
+void ::staywalk::Component::construct_basic_ui(bool can_modify) {
     Object::construct_basic_ui(can_modify);
 }
 
 
 
-void ::staywalk::GameComponent::construct_obj_ui(bool can_modify) {
+void ::staywalk::Component::construct_obj_ui(bool can_modify) {
     Object::construct_obj_ui(can_modify);
 }
 
@@ -450,7 +450,7 @@ void ::staywalk::SkeletonMesh::construct_obj_ui(bool can_modify) {
 #include "StaticMeshComponent.h"
 
 void ::staywalk::StaticMeshComponent::construct_basic_ui(bool can_modify) {
-    GameComponent::construct_basic_ui(can_modify);
+    Component::construct_basic_ui(can_modify);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(meshs)>()) 
         staywalk::reflect::UIHelper::construct_ui("meshs", meshs, can_modify || true);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(transform)>()) 
@@ -460,7 +460,7 @@ void ::staywalk::StaticMeshComponent::construct_basic_ui(bool can_modify) {
 
 
 void ::staywalk::StaticMeshComponent::construct_obj_ui(bool can_modify) {
-    GameComponent::construct_obj_ui(can_modify);
+    Component::construct_obj_ui(can_modify);
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(meshs)>()){ 
         //if (ImGui::TreeNode("meshs")){
             staywalk::reflect::UIHelper::construct_ui("meshs", meshs, can_modify || true);
@@ -554,7 +554,7 @@ void ::staywalk::Animation::construct_obj_ui(bool can_modify) {
 #include "SkeletonMeshComponent.h"
 
 void ::staywalk::SkeletonMeshComponent::construct_basic_ui(bool can_modify) {
-    GameComponent::construct_basic_ui(can_modify);
+    Component::construct_basic_ui(can_modify);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(transform_)>()) 
         staywalk::reflect::UIHelper::construct_ui("transform_", transform_, can_modify || true);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(meshs_)>()) 
@@ -566,7 +566,7 @@ void ::staywalk::SkeletonMeshComponent::construct_basic_ui(bool can_modify) {
 
 
 void ::staywalk::SkeletonMeshComponent::construct_obj_ui(bool can_modify) {
-    GameComponent::construct_obj_ui(can_modify);
+    Component::construct_obj_ui(can_modify);
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(transform_)>()){ 
         //if (ImGui::TreeNode("transform_")){
             staywalk::reflect::UIHelper::construct_ui("transform_", transform_, can_modify || true);

@@ -4,7 +4,7 @@
 
 namespace staywalk {
 	StaticMeshComponent::StaticMeshComponent(const string& name)
-		:GameComponent(name) {
+		:Component(name) {
 	}
 
 	void StaticMeshComponent::update_material(idtype id, MaterialRef mat){

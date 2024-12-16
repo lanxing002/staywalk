@@ -43,9 +43,9 @@ true && ::staywalk::Comparer::equal(this->name_, rhs.name_) && ::staywalk::Compa
 
 }
 
-#include "GameObject.h"
+#include "Entity.h"
 
-void ::staywalk::GameObject::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+void ::staywalk::Entity::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
     Object::dump(value, dumper);
@@ -58,7 +58,7 @@ void ::staywalk::GameObject::dump(rapidjson::Value& value, ::staywalk::reflect::
 }
 
 
-void ::staywalk::GameObject::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+void ::staywalk::Entity::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
@@ -71,14 +71,14 @@ void ::staywalk::GameObject::load(rapidjson::Value& value, ::staywalk::reflect::
 }
 
 
-bool ::staywalk::GameObject::operator==(const ::staywalk::GameObject& rhs) const {
+bool ::staywalk::Entity::operator==(const ::staywalk::Entity& rhs) const {
     return 
 Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->transform_, rhs.transform_);
 }
 
 
-::staywalk::reflect::MetaInfo staywalk::GameObject::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::GameObject, "staywalk::GameObject"};
+::staywalk::reflect::MetaInfo staywalk::Entity::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Entity, "staywalk::Entity"};
 
 }
 
@@ -87,7 +87,7 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->transform_, rhs.tr
 void ::staywalk::Actor::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
-    GameObject::dump(value, dumper);
+    Entity::dump(value, dumper);
 
     {
         json::Value prop;
@@ -106,7 +106,7 @@ void ::staywalk::Actor::load(rapidjson::Value& value, ::staywalk::reflect::Loade
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
-    GameObject::load(value, loader);
+    Entity::load(value, loader);
 
     itr = value.FindMember("sm_comp_");
     if(itr != value.MemberEnd()){
@@ -121,7 +121,7 @@ void ::staywalk::Actor::load(rapidjson::Value& value, ::staywalk::reflect::Loade
 
 bool ::staywalk::Actor::operator==(const ::staywalk::Actor& rhs) const {
     return 
-GameObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->sm_comp_, rhs.sm_comp_) && ::staywalk::Comparer::equal(this->skeleton_comp_, rhs.skeleton_comp_);
+Entity::operator==(rhs)  && ::staywalk::Comparer::equal(this->sm_comp_, rhs.sm_comp_) && ::staywalk::Comparer::equal(this->skeleton_comp_, rhs.skeleton_comp_);
 }
 
 
@@ -560,7 +560,7 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->program_, rhs.prog
 void ::staywalk::Camera::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
-    GameObject::dump(value, dumper);
+    Entity::dump(value, dumper);
 
     {
         json::Value prop;
@@ -594,7 +594,7 @@ void ::staywalk::Camera::load(rapidjson::Value& value, ::staywalk::reflect::Load
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
-    GameObject::load(value, loader);
+    Entity::load(value, loader);
 
     itr = value.FindMember("porject_type_");
     if(itr != value.MemberEnd()){
@@ -621,7 +621,7 @@ void ::staywalk::Camera::load(rapidjson::Value& value, ::staywalk::reflect::Load
 
 bool ::staywalk::Camera::operator==(const ::staywalk::Camera& rhs) const {
     return 
-GameObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->porject_type_, rhs.porject_type_) && ::staywalk::Comparer::equal(this->fov_, rhs.fov_) && ::staywalk::Comparer::equal(this->aspect_, rhs.aspect_) && ::staywalk::Comparer::equal(this->near_, rhs.near_) && ::staywalk::Comparer::equal(this->far_, rhs.far_);
+Entity::operator==(rhs)  && ::staywalk::Comparer::equal(this->porject_type_, rhs.porject_type_) && ::staywalk::Comparer::equal(this->fov_, rhs.fov_) && ::staywalk::Comparer::equal(this->aspect_, rhs.aspect_) && ::staywalk::Comparer::equal(this->near_, rhs.near_) && ::staywalk::Comparer::equal(this->far_, rhs.far_);
 }
 
 
@@ -635,7 +635,7 @@ GameObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->porject_type_,
 void ::staywalk::RLight::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
-    GameObject::dump(value, dumper);
+    Entity::dump(value, dumper);
 
 }
 
@@ -644,14 +644,14 @@ void ::staywalk::RLight::load(rapidjson::Value& value, ::staywalk::reflect::Load
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
-    GameObject::load(value, loader);
+    Entity::load(value, loader);
 
 }
 
 
 bool ::staywalk::RLight::operator==(const ::staywalk::RLight& rhs) const {
     return 
-GameObject::operator==(rhs) ;
+Entity::operator==(rhs) ;
 }
 
 
@@ -660,9 +660,9 @@ GameObject::operator==(rhs) ;
 
 }
 
-#include "GameComponent.h"
+#include "Component.h"
 
-void ::staywalk::GameComponent::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+void ::staywalk::Component::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
     Object::dump(value, dumper);
@@ -670,7 +670,7 @@ void ::staywalk::GameComponent::dump(rapidjson::Value& value, ::staywalk::reflec
 }
 
 
-void ::staywalk::GameComponent::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+void ::staywalk::Component::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
@@ -679,14 +679,14 @@ void ::staywalk::GameComponent::load(rapidjson::Value& value, ::staywalk::reflec
 }
 
 
-bool ::staywalk::GameComponent::operator==(const ::staywalk::GameComponent& rhs) const {
+bool ::staywalk::Component::operator==(const ::staywalk::Component& rhs) const {
     return 
 Object::operator==(rhs) ;
 }
 
 
-::staywalk::reflect::MetaInfo staywalk::GameComponent::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::GameComponent, "staywalk::GameComponent"};
+::staywalk::reflect::MetaInfo staywalk::Component::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Component, "staywalk::Component"};
 
 }
 
@@ -759,7 +759,7 @@ RObject::operator==(rhs) ;
 void ::staywalk::StaticMeshComponent::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
-    GameComponent::dump(value, dumper);
+    Component::dump(value, dumper);
 
     {
         json::Value prop;
@@ -778,7 +778,7 @@ void ::staywalk::StaticMeshComponent::load(rapidjson::Value& value, ::staywalk::
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
-    GameComponent::load(value, loader);
+    Component::load(value, loader);
 
     itr = value.FindMember("meshs");
     if(itr != value.MemberEnd()){
@@ -793,7 +793,7 @@ void ::staywalk::StaticMeshComponent::load(rapidjson::Value& value, ::staywalk::
 
 bool ::staywalk::StaticMeshComponent::operator==(const ::staywalk::StaticMeshComponent& rhs) const {
     return 
-GameComponent::operator==(rhs)  && ::staywalk::Comparer::equal(this->meshs, rhs.meshs) && ::staywalk::Comparer::equal(this->transform, rhs.transform);
+Component::operator==(rhs)  && ::staywalk::Comparer::equal(this->meshs, rhs.meshs) && ::staywalk::Comparer::equal(this->transform, rhs.transform);
 }
 
 
@@ -962,7 +962,7 @@ RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->curr_time_, rhs.c
 void ::staywalk::SkeletonMeshComponent::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
-    GameComponent::dump(value, dumper);
+    Component::dump(value, dumper);
 
     {
         json::Value prop;
@@ -986,7 +986,7 @@ void ::staywalk::SkeletonMeshComponent::load(rapidjson::Value& value, ::staywalk
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
-    GameComponent::load(value, loader);
+    Component::load(value, loader);
 
     itr = value.FindMember("transform_");
     if(itr != value.MemberEnd()){
@@ -1005,7 +1005,7 @@ void ::staywalk::SkeletonMeshComponent::load(rapidjson::Value& value, ::staywalk
 
 bool ::staywalk::SkeletonMeshComponent::operator==(const ::staywalk::SkeletonMeshComponent& rhs) const {
     return 
-GameComponent::operator==(rhs)  && ::staywalk::Comparer::equal(this->transform_, rhs.transform_) && ::staywalk::Comparer::equal(this->meshs_, rhs.meshs_) && ::staywalk::Comparer::equal(this->animation_, rhs.animation_);
+Component::operator==(rhs)  && ::staywalk::Comparer::equal(this->transform_, rhs.transform_) && ::staywalk::Comparer::equal(this->meshs_, rhs.meshs_) && ::staywalk::Comparer::equal(this->animation_, rhs.animation_);
 }
 
 

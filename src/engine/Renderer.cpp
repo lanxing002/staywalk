@@ -63,23 +63,40 @@ void Renderer::render(double delta, unsigned long long count)
 		render_info.projection_.top() = cam->projection_;
 	}
 
+	auto program = program_table_[(int)ProgramType::PBR];
 	// setup shader
-	{
-		auto program = program_table_[(int)ProgramType::PBR];
-		program->use();
-		program->set_uniform("view", render_info.view_.top());
-		program->set_uniform("projection", render_info.projection_.top());
-		render_info.program_ = program;
-	}
+	program->use();
+	program->set_uniform("view", render_info.view_.top());
+	program->set_uniform("projection", render_info.projection_.top());
+	render_info.program_ = program;
 	
 	// render mesh
 	{
+		GLCheck(;)
+		program->set_uniform("use_skeleton", GL_FALSE);
 		for (auto& actor : world->get_actors()) {
 			render_info.model_.top() = actor->transform_.matrix();
 			if (actor->sm_comp_) actor->sm_comp_->draw(render_info);
-			GLCheck(;);
+		}
+
+		assert(
+			render_info.program_ == program 
+			&& render_info.model_.size() == 1
+			&& render_info.projection_.size() == 1	
+			&& render_info.view_.size() == 1);
+		GLCheck(;);
+		program->set_uniform("use_skeleton", GL_TRUE);
+		for (auto& actor : world->get_actors()) {
+			render_info.model_.top() = actor->transform_.matrix();
 			if (actor->skeleton_comp_) actor->skeleton_comp_->draw(render_info);
 		}
+
+		GLCheck(;)
+		assert(
+			render_info.program_ == program
+			&& render_info.model_.size() == 1
+			&& render_info.projection_.size() == 1
+			&& render_info.view_.size() == 1);
 	}
 }
 
