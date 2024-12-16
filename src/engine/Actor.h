@@ -1,8 +1,8 @@
 #pragma once
-#include "GameObject.h"
+#include "Entity.h"
 
 namespace staywalk {
-	class sw_Class()  Actor : public GameObject{
+	class sw_Class()  Actor : public Entity{
 	public:
 	 	sw_Func()  Actor(const string& name = "0-actor");
 		

@@ -2,11 +2,11 @@
 #include "Object.h"
 
 namespace staywalk{
-	class sw_Class()  GameComponent : public Object{
+	class sw_Class()  Component : public Object{
 	public:
-		sw_Func()  GameComponent(const string& name = "0-comp")
+		sw_Func()  Component(const string& name = "0-comp")
 			:Object(name) {}
-		MetaRegister(GameComponent);
+		MetaRegister(Component);
 
 		//---------------------------------//
 		virtual void tick(float delta) {}

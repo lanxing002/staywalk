@@ -30,7 +30,7 @@ AssetsBrowser::AssetsBrowser(){
 
     type_icon_labels_ = {
 		{(int)reflect::ObjectType::Object,                  "Obj"   },
-		{(int)reflect::ObjectType::GameObject,              "G-Obj" },
+		{(int)reflect::ObjectType::Entity,                  "Entity" },
 		{(int)reflect::ObjectType::Actor,                   "Actor" },
 		{(int)reflect::ObjectType::Tex2D,                   "Tex2"  },
 		{(int)reflect::ObjectType::RObject,                 "RObj"  },
@@ -42,7 +42,7 @@ AssetsBrowser::AssetsBrowser(){
 		{(int)reflect::ObjectType::RLight,                  "Light" },
 		{(int)reflect::ObjectType::Engine,                  "E-"    },
 		{(int)reflect::ObjectType::World,                   "W-"    },
-		{(int)reflect::ObjectType::GameComponent,           "Comp"  },
+		{(int)reflect::ObjectType::Component,               "Comp"  },
 		{(int)reflect::ObjectType::Mesh,                    "Mesh"  },
 		{(int)reflect::ObjectType::StaticMeshComponent,     "SM"    },
 		{(int)reflect::ObjectType::Terrain,                 "Terr"  },

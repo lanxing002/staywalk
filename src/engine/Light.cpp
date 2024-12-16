@@ -3,7 +3,7 @@
 
 namespace staywalk {
 	RLight::RLight(const string& name)
-	:GameObject(name){
+	:Entity(name){
 	}
 
 

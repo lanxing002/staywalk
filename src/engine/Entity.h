@@ -5,13 +5,13 @@
 
 namespace staywalk
 {
-	class sw_Class()  GameObject : public Object
+	class sw_Class()  Entity : public Object
 	{
 	public:
-		sw_Func()  GameObject(const string& name = "0-game-obj")
+		sw_Func()  Entity(const string& name = "0-game-obj")
 			:Object(name) {}
 		sw_Prop() Transform transform_ = Identity;
-		MetaRegister(GameObject);
+		MetaRegister(Entity);
 
 		//---------------------------------//
 		virtual void tick(float delta) {}
