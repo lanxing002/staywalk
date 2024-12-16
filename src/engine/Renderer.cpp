@@ -77,6 +77,7 @@ void Renderer::render(double delta, unsigned long long count)
 		for (auto& actor : world->get_actors()) {
 			render_info.model_.top() = actor->transform_.matrix();
 			if (actor->sm_comp_) actor->sm_comp_->draw(render_info);
+			GLCheck(;);
 			if (actor->skeleton_comp_) actor->skeleton_comp_->draw(render_info);
 		}
 	}
