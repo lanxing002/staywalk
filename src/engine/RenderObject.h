@@ -19,10 +19,24 @@ namespace staywalk{
 			LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR,
 		};
 
-	enum class sw_Class() GlMagFilter : int {
-			NEAREST = GL_NEAREST,
-			LINEAR = GL_LINEAR,
+	enum class sw_Class() GlTexFormat : int {
+				RED = GL_RED,
+				RGB = GL_RGB,
+				RGBA = GL_RGBA,
+				DEPTH = GL_DEPTH_COMPONENT,
+				DEPTHSTENCIL = GL_DEPTH_STENCIL,
 		};
+
+	enum class sw_Class() GlMagFilter : int {
+		NEAREST = GL_NEAREST,
+			LINEAR = GL_LINEAR,
+	};
+
+	enum class sw_Class() GlAttachment : int {
+		COLOR = GL_COLOR_ATTACHMENT0,
+		DEPTH = GL_DEPTH_ATTACHMENT,
+		STENCIL = GL_STENCIL_ATTACHMENT,
+	};
 
 	struct Drawable {
 	public:
@@ -94,9 +108,20 @@ namespace staywalk{
 	};
 
 	
-	class sw_Class(jsonpost;)  Tex2D : public RObject {
+	class sw_Class() Tex : public RObject {
 	public:
-		Tex2D(const string& name = "tex-0");
+		MetaRegister(Tex);
+
+		Tex(const string & name = "tex");
+		virtual GLuint get_updated_glid() { assert(false); return glid_; }
+		virtual void gl_delete() { return; }
+	private:
+		virtual void gl_update() { return; }
+	};
+
+	class sw_Class(jsonpost;)  Tex2D : public Tex {
+	public:
+		Tex2D(const string& name = "tex-2d");
 		//sw_Prop() Tex2d tex;
 		sw_Prop() bool mipmap_ = true;
 		sw_Prop() GlWrap wrap_s_ = GlWrap::REPEAT;
@@ -106,11 +131,11 @@ namespace staywalk{
 		sw_Prop() string img_name_;
 		MetaRegister(Tex2D);
 
-		GLuint get_updated_glid();
-		void gl_delete();
+		GLuint get_updated_glid() override;
+		void gl_delete() override;
 
 	private:
-		void gl_update();
+		void gl_update() override;
 		void load_post();
 		void dump_post() const;
 
@@ -121,6 +146,37 @@ namespace staywalk{
 		int nr_comps_ = -1;
 
 		friend class Utility;
+	};
+
+	class sw_Class()  Tex2DRT : public Tex {
+	public:
+		Tex2DRT(const string& name = "rt-2d");
+		//sw_Prop() Tex2d tex;
+		sw_Prop() GlWrap wrap_s_ = GlWrap::REPEAT;
+		sw_Prop() GlWrap wrap_t_ = GlWrap::REPEAT;
+		sw_Prop() GlMinFilter min_filter_ = GlMinFilter::LINEAR;
+		sw_Prop() GlMagFilter mag_filter_ = GlMagFilter::LINEAR;
+		sw_Prop() int width_ = 512;
+		sw_Prop() int height_ = 512;
+		sw_Prop() GlTexFormat format_ = GlTexFormat::RGBA;
+		MetaRegister(Tex2DRT);
+
+		GLuint get_updated_glid() override;
+		void gl_delete() override {}
+
+	private:
+		void gl_update() override;
+	};
+
+	class sw_Class()  FrameBuffer : public RObject {
+	public:
+		FrameBuffer(const string & name = "framebuffer");
+		GLuint get_updated_glid();
+		void gl_delete() {}
+
+		MetaRegister(FrameBuffer);
+	private:
+		void gl_update();
 	};
 
 	class sw_Class(jsonpost;)  CubeMap : public RObject {

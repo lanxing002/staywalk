@@ -430,7 +430,7 @@ namespace staywalk{
         // 2. process materials
         aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
         //TODO: read texs and unforms to consturct staywalk::Material
-        TexRef diffuseMaps = find_material_tex(material, aiTextureType_DIFFUSE);
+        Tex2DRef diffuseMaps = find_material_tex(material, aiTextureType_DIFFUSE);
         shared_ptr<Material> mat = std::make_shared<Material>();
         mat->add_tex(Material::DiffuseKey, diffuseMaps);
 
@@ -452,7 +452,7 @@ namespace staywalk{
 
     // checks all material textures of a given type and loads the textures if they're not loaded yet.
 // the required info is returned as a Texture struct.
-    TexRef MeshLoader::find_material_tex(aiMaterial* mat, aiTextureType type)
+    Tex2DRef MeshLoader::find_material_tex(aiMaterial* mat, aiTextureType type)
     {
         if (mat->GetTextureCount(type) > 0) {
             aiString str;
@@ -460,10 +460,10 @@ namespace staywalk{
             fs::path tex_path = load_dir_ / fs::path{ str.C_Str()};
             return make_tex(tex_path);
         }
-        return TexRef{ nullptr };
+        return Tex2DRef{ nullptr };
     }
 
-    TexRef MeshLoader::make_tex(fs::path path)
+    Tex2DRef MeshLoader::make_tex(fs::path path)
     {
         auto it = loaded_texs_.find(path);
         if(it != loaded_texs_.end()) return it->second;
@@ -490,7 +490,7 @@ namespace staywalk{
             return result;
         }
 
-        return TexRef(nullptr);
+        return Tex2DRef(nullptr);
     }
 
 	SkeletonMeshLoader::SkeletonMeshLoader(const string& mesh_name, bool flip_uv)
@@ -589,7 +589,7 @@ namespace staywalk{
 		extract_bone_weight_for_vertices(vertices, mesh, scene);
 
 		aiMaterial* material = scene->mMaterials[mesh->mMaterialIndex];
-		TexRef diffuseMaps = find_material_tex(material, aiTextureType_DIFFUSE);
+		Tex2DRef diffuseMaps = find_material_tex(material, aiTextureType_DIFFUSE);
 		shared_ptr<Material> mat = std::make_shared<Material>();
 		mat->add_tex(Material::DiffuseKey, diffuseMaps);
 
@@ -649,10 +649,10 @@ namespace staywalk{
 			fs::path tex_path = load_dir_ / fs::path{ str.C_Str() };
 			return make_tex(tex_path);
 		}
-		return TexRef{ nullptr };
+		return Tex2DRef{ nullptr };
 	}
 
-	staywalk::TexRef SkeletonMeshLoader::make_tex(fs::path path){
+	staywalk::Tex2DRef SkeletonMeshLoader::make_tex(fs::path path){
 		auto it = loaded_texs_.find(path);
 		if (it != loaded_texs_.end()) return it->second;
 
@@ -678,7 +678,7 @@ namespace staywalk{
 			return result;
 		}
 
-		return TexRef(nullptr);
+		return Tex2DRef(nullptr);
 	}
 
 	void SkeletonMeshLoader::load_bone(const aiNodeAnim* channel, Bone& bone) {

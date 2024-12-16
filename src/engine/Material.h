@@ -9,7 +9,7 @@ namespace staywalk {
 	class sw_Class(jsonpost;)  Material : public Object{
 	public:
 		sw_Func()  Material(const string& name="0-material");
-		sw_Func()  void add_tex(const string & name, TexRef tex);
+		sw_Func()  void add_tex(const string & name, Tex2DRef tex);
 		sw_Func()  void add_uniform(const string & name, UniformRef uniform);
 		sw_Func() bool is_same(MaterialRef rhs);
 		sw_Prop() ProgramRef program_;

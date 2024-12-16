@@ -40,6 +40,9 @@ namespace staywalk {
 		sw_Func() void add_actor(shared_ptr<Actor> actor);
 		sw_Func() void remove_actor(idtype id);
 
+		sw_Func() void add_rendertarget(RenderTargetRef rt);
+		sw_Func() void remove_rendertarget(idtype id);
+
 		sw_Func() void add_camera(CameraRef camera);
 		sw_Func() void remove_camera(idtype cid);
 		sw_Func() void activate_camera(idtype cid);
@@ -61,6 +64,7 @@ namespace staywalk {
 		vector<ActorRef> actors_;
 		vector<LightRef> lights_;
 		vector<CameraRef> cameras_;
+		vector<RenderTargetRef> rts_;
 		map<idtype, Ref<Object>> assets_;
 
 		// render field

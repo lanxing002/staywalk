@@ -13,7 +13,7 @@ namespace staywalk {
 		if (program_) Program::monitor(program_, false);
 	}
 
-	void Material::add_tex(const string& name, TexRef tex){
+	void Material::add_tex(const string& name, Tex2DRef tex){
 		if (tex == nullptr) return;
 		bool added = false;
 		for (auto& [n, t] : texs_) {

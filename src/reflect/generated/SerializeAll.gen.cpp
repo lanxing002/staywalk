@@ -162,10 +162,40 @@ Object::operator==(rhs) ;
 
 #include "RenderObject.h"
 
-void ::staywalk::Tex2D::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+void ::staywalk::Tex::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
     RObject::dump(value, dumper);
+
+}
+
+
+void ::staywalk::Tex::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    RObject::load(value, loader);
+
+}
+
+
+bool ::staywalk::Tex::operator==(const ::staywalk::Tex& rhs) const {
+    return 
+RObject::operator==(rhs) ;
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::Tex::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Tex, "staywalk::Tex"};
+
+}
+
+#include "RenderObject.h"
+
+void ::staywalk::Tex2D::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+
+    Tex::dump(value, dumper);
 
     {
         json::Value prop;
@@ -205,7 +235,7 @@ void ::staywalk::Tex2D::load(rapidjson::Value& value, ::staywalk::reflect::Loade
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
-    RObject::load(value, loader);
+    Tex::load(value, loader);
 
     itr = value.FindMember("mipmap_");
     if(itr != value.MemberEnd()){
@@ -237,12 +267,135 @@ void ::staywalk::Tex2D::load(rapidjson::Value& value, ::staywalk::reflect::Loade
 
 bool ::staywalk::Tex2D::operator==(const ::staywalk::Tex2D& rhs) const {
     return 
-RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->mipmap_, rhs.mipmap_) && ::staywalk::Comparer::equal(this->wrap_s_, rhs.wrap_s_) && ::staywalk::Comparer::equal(this->wrap_t_, rhs.wrap_t_) && ::staywalk::Comparer::equal(this->min_filter_, rhs.min_filter_) && ::staywalk::Comparer::equal(this->mag_filter_, rhs.mag_filter_) && ::staywalk::Comparer::equal(this->img_name_, rhs.img_name_);
+Tex::operator==(rhs)  && ::staywalk::Comparer::equal(this->mipmap_, rhs.mipmap_) && ::staywalk::Comparer::equal(this->wrap_s_, rhs.wrap_s_) && ::staywalk::Comparer::equal(this->wrap_t_, rhs.wrap_t_) && ::staywalk::Comparer::equal(this->min_filter_, rhs.min_filter_) && ::staywalk::Comparer::equal(this->mag_filter_, rhs.mag_filter_) && ::staywalk::Comparer::equal(this->img_name_, rhs.img_name_);
 }
 
 
 ::staywalk::reflect::MetaInfo staywalk::Tex2D::get_meta_info() const {
     return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Tex2D, "staywalk::Tex2D"};
+
+}
+
+#include "RenderObject.h"
+
+void ::staywalk::Tex2DRT::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+
+    Tex::dump(value, dumper);
+
+    {
+        json::Value prop;
+        dumper.write(this->wrap_s_, prop);
+        value.AddMember("wrap_s_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->wrap_t_, prop);
+        value.AddMember("wrap_t_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->min_filter_, prop);
+        value.AddMember("min_filter_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->mag_filter_, prop);
+        value.AddMember("mag_filter_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->width_, prop);
+        value.AddMember("width_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->height_, prop);
+        value.AddMember("height_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->format_, prop);
+        value.AddMember("format_", prop, dumper.get_doc().GetAllocator()); 
+    }
+}
+
+
+void ::staywalk::Tex2DRT::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    Tex::load(value, loader);
+
+    itr = value.FindMember("wrap_s_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->wrap_s_, itr->value);
+    }
+    itr = value.FindMember("wrap_t_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->wrap_t_, itr->value);
+    }
+    itr = value.FindMember("min_filter_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->min_filter_, itr->value);
+    }
+    itr = value.FindMember("mag_filter_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->mag_filter_, itr->value);
+    }
+    itr = value.FindMember("width_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->width_, itr->value);
+    }
+    itr = value.FindMember("height_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->height_, itr->value);
+    }
+    itr = value.FindMember("format_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->format_, itr->value);
+    }
+}
+
+
+bool ::staywalk::Tex2DRT::operator==(const ::staywalk::Tex2DRT& rhs) const {
+    return 
+Tex::operator==(rhs)  && ::staywalk::Comparer::equal(this->wrap_s_, rhs.wrap_s_) && ::staywalk::Comparer::equal(this->wrap_t_, rhs.wrap_t_) && ::staywalk::Comparer::equal(this->min_filter_, rhs.min_filter_) && ::staywalk::Comparer::equal(this->mag_filter_, rhs.mag_filter_) && ::staywalk::Comparer::equal(this->width_, rhs.width_) && ::staywalk::Comparer::equal(this->height_, rhs.height_) && ::staywalk::Comparer::equal(this->format_, rhs.format_);
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::Tex2DRT::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Tex2DRT, "staywalk::Tex2DRT"};
+
+}
+
+#include "RenderObject.h"
+
+void ::staywalk::FrameBuffer::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+
+    RObject::dump(value, dumper);
+
+}
+
+
+void ::staywalk::FrameBuffer::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    RObject::load(value, loader);
+
+}
+
+
+bool ::staywalk::FrameBuffer::operator==(const ::staywalk::FrameBuffer& rhs) const {
+    return 
+RObject::operator==(rhs) ;
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::FrameBuffer::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::FrameBuffer, "staywalk::FrameBuffer"};
 
 }
 
@@ -1011,6 +1164,63 @@ Component::operator==(rhs)  && ::staywalk::Comparer::equal(this->transform_, rhs
 
 ::staywalk::reflect::MetaInfo staywalk::SkeletonMeshComponent::get_meta_info() const {
     return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::SkeletonMeshComponent, "staywalk::SkeletonMeshComponent"};
+
+}
+
+#include "RenderTarget.h"
+
+void ::staywalk::RenderTarget::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+
+    Entity::dump(value, dumper);
+
+    {
+        json::Value prop;
+        dumper.write(this->camera_, prop);
+        value.AddMember("camera_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->tex_rt_, prop);
+        value.AddMember("tex_rt_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->attachment_, prop);
+        value.AddMember("attachment_", prop, dumper.get_doc().GetAllocator()); 
+    }
+}
+
+
+void ::staywalk::RenderTarget::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    Entity::load(value, loader);
+
+    itr = value.FindMember("camera_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->camera_, itr->value);
+    }
+    itr = value.FindMember("tex_rt_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->tex_rt_, itr->value);
+    }
+    itr = value.FindMember("attachment_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->attachment_, itr->value);
+    }
+}
+
+
+bool ::staywalk::RenderTarget::operator==(const ::staywalk::RenderTarget& rhs) const {
+    return 
+Entity::operator==(rhs)  && ::staywalk::Comparer::equal(this->camera_, rhs.camera_) && ::staywalk::Comparer::equal(this->tex_rt_, rhs.tex_rt_) && ::staywalk::Comparer::equal(this->attachment_, rhs.attachment_);
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::RenderTarget::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::RenderTarget, "staywalk::RenderTarget"};
 
 }
 
