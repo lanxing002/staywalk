@@ -13,8 +13,6 @@ namespace staywalk {
 	}
 
 	void Animation::animate(float delta){
-		curr_time_ = 0.0;
-		delta = 0.1f;
 		curr_time_ += ticks_pers_ * delta;
 		curr_time_ = fmod(curr_time_, duration_);
 		calculate_bone_transform(node_root_, glm::mat4(1.0f));
@@ -96,8 +94,8 @@ namespace staywalk {
 		mat4 transform = parent_transform * node.transform_;
 		if (node.bone_id_ != -1) {
 			transform = 
-				parent_transform *  calculate_per_bone(bones_[node.bone_id_]) * bones_[node.bone_id_].offset_;
-			bone_influences_[node.bone_id_] = transform;
+				parent_transform *  calculate_per_bone(bones_[node.bone_id_]) ;
+			bone_influences_[node.bone_id_] = transform * bones_[node.bone_id_].offset_;
 			// parent <-- animation <-- bone space <-- model space
 		}
 
