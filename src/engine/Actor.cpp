@@ -6,7 +6,7 @@
 
 namespace staywalk {
 	Actor::Actor(const string& name)
-		: GameObject(name){
+		: Entity(name){
 	}
 
 	void Actor::tick(float delta) {

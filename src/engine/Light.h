@@ -1,10 +1,10 @@
 #pragma once
-#include "GameObject.h"
+#include "Entity.h"
 #include <array>
 
 namespace staywalk {
 	
-	class sw_Class() RLight : public GameObject {
+	class sw_Class() RLight : public Entity {
 	public:
 		sw_Func() RLight(const string& name = "light-0");
 		MetaRegister(RLight);

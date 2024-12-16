@@ -125,9 +125,9 @@ namespace staywalk{
 	
 	class World;
 	class Object;
-	class GameObject;
+	class Entity;
 	class Actor;
-	class GameComponent;
+	class Component;
 	class StaticMeshComponent;
 	class SkeletonMeshComponent;
 	class SkeletonMesh;
@@ -146,9 +146,9 @@ namespace staywalk{
 
 	using WorldRef  = shared_ptr<World>;
 	using ObjectRef = shared_ptr<Object>;
-	using GameObjectRef = shared_ptr<GameObject>;
+	using EntityRef = shared_ptr<Entity>;
 	using ActorRef = shared_ptr<Actor>;
-	using GameComponentRef = shared_ptr<GameComponent>;
+	using ComponentRef = shared_ptr<Component>;
 	using StaticMeshComponentRef = shared_ptr<StaticMeshComponent>;
 	using SkeletonMeshComponentRef = shared_ptr<SkeletonMeshComponent>;
 	using AnimationRef = shared_ptr<Animation>;

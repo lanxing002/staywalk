@@ -31,8 +31,8 @@ namespace staywalk{
 		sw_Func() InputManager& get_input_mgr() { return input_mgr_; }
 		sw_Func() vec2 get_view_size() { return view_size_; }
 		sw_Func() void set_view_size(vec2 value) { view_size_ = value; }
-		sw_Func() void select(Ref<GameObject> target) { selelcted_ = target; }
-		sw_Func() Ref<GameObject> get_selected() { return selelcted_; }
+		sw_Func() void select(Ref<Entity> target) { selelcted_ = target; }
+		sw_Func() Ref<Entity> get_selected() { return selelcted_; }
 
 		//---------------------------------//
 		void shutdown();
@@ -53,7 +53,7 @@ namespace staywalk{
 		Ref<Console> console_{nullptr};
 		Renderer renderer_;
 
-		GameObjectRef selelcted_{ nullptr };
+		EntityRef selelcted_{ nullptr };
 		WorldRef world_{ nullptr };
 
 		vec2 view_size_;

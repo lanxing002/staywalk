@@ -1,5 +1,5 @@
 #pragma once
-#include "GameObject.h"
+#include "Entity.h"
 #include "Common.h"
 
 namespace staywalk{
@@ -8,7 +8,7 @@ namespace staywalk{
 		Ortho,
 	};
 
-	class sw_Class() Camera : public GameObject{
+	class sw_Class() Camera : public Entity{
 	public:
 		sw_Func()  Camera(const string& name = "camera-0");
 		sw_Func() void look_actor(ActorRef actor);

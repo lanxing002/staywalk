@@ -1,6 +1,6 @@
 #include "Utility.h"
-#include "GameObject.h"
-#include "GameComponent.h"
+#include "Entity.h"
+#include "Component.h"
 #include "Actor.h"
 #include "Camera.h"
 #include "Logger.h"
@@ -177,6 +177,7 @@ namespace staywalk{
     }
 
 	void Utility::check_gl_error(const std::string& file_line){
+        return;
 		GLenum error;
         while ((error = glGetError()) != GL_NO_ERROR){
             string info;

@@ -5,7 +5,7 @@
 
 namespace staywalk {
 	SkeletonMeshComponent::SkeletonMeshComponent(const string& name)
-		:GameComponent(name) {
+		:Component(name) {
 	}
 
 

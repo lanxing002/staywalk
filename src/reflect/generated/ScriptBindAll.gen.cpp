@@ -2,7 +2,7 @@
 namespace py = pybind11;
 using namespace staywalk;
 #include "Object.h"
-#include "GameObject.h"
+#include "Entity.h"
 #include "Actor.h"
 #include "RenderObject.h"
 #include "RenderObject.h"
@@ -16,7 +16,7 @@ using namespace staywalk;
 #include "Utility.h"
 #include "Engine.h"
 #include "World.h"
-#include "GameComponent.h"
+#include "Component.h"
 #include "RMesh.h"
 #include "RMesh.h"
 #include "StaticMeshComponent.h"
@@ -33,12 +33,12 @@ py::class_<::staywalk::Object, std::shared_ptr<::staywalk::Object>>(__module, "O
 	.def_readwrite("name_", &Object::name_)
 ;
 
-py::class_<::staywalk::GameObject,Object, std::shared_ptr<::staywalk::GameObject>>(__module, "GameObject")
+py::class_<::staywalk::Entity,Object, std::shared_ptr<::staywalk::Entity>>(__module, "Entity")
 	.def(py::init<const string &>())
-	.def_readwrite("transform_", &GameObject::transform_)
+	.def_readwrite("transform_", &Entity::transform_)
 ;
 
-py::class_<::staywalk::Actor,GameObject, std::shared_ptr<::staywalk::Actor>>(__module, "Actor")
+py::class_<::staywalk::Actor,Entity, std::shared_ptr<::staywalk::Actor>>(__module, "Actor")
 	.def(py::init<const string &>())
 	.def("get_aabb", &Actor::get_aabb)
 	.def_readwrite("sm_comp_", &Actor::sm_comp_)
@@ -92,7 +92,7 @@ py::class_<::staywalk::Material,Object, std::shared_ptr<::staywalk::Material>>(_
 	.def_readwrite("program_", &Material::program_)
 ;
 
-py::class_<::staywalk::Camera,GameObject, std::shared_ptr<::staywalk::Camera>>(__module, "Camera")
+py::class_<::staywalk::Camera,Entity, std::shared_ptr<::staywalk::Camera>>(__module, "Camera")
 	.def(py::init<const string &>())
 	.def("look_actor", &Camera::look_actor)
 	.def_readwrite("porject_type_", &Camera::porject_type_)
@@ -102,7 +102,7 @@ py::class_<::staywalk::Camera,GameObject, std::shared_ptr<::staywalk::Camera>>(_
 	.def_readwrite("far_", &Camera::far_)
 ;
 
-py::class_<::staywalk::RLight,GameObject, std::shared_ptr<::staywalk::RLight>>(__module, "RLight")
+py::class_<::staywalk::RLight,Entity, std::shared_ptr<::staywalk::RLight>>(__module, "RLight")
 	.def(py::init<const string &>())
 ;
 
@@ -149,7 +149,7 @@ py::class_<::staywalk::World, std::shared_ptr<::staywalk::World>>(__module, "Wor
 	.def("remove_asset", &World::remove_asset)
 ;
 
-py::class_<::staywalk::GameComponent,Object, std::shared_ptr<::staywalk::GameComponent>>(__module, "GameComponent")
+py::class_<::staywalk::Component,Object, std::shared_ptr<::staywalk::Component>>(__module, "Component")
 	.def(py::init<const string &>())
 ;
 
@@ -171,7 +171,7 @@ py::class_<::staywalk::SkeletonMesh,RObject,Drawable, std::shared_ptr<::staywalk
 	.def_readwrite("indices_", &SkeletonMesh::indices_)
 ;
 
-py::class_<::staywalk::StaticMeshComponent,GameComponent,Drawable, std::shared_ptr<::staywalk::StaticMeshComponent>>(__module, "StaticMeshComponent")
+py::class_<::staywalk::StaticMeshComponent,Component,Drawable, std::shared_ptr<::staywalk::StaticMeshComponent>>(__module, "StaticMeshComponent")
 	.def(py::init<const string &>())
 	.def("add_mesh", &StaticMeshComponent::add_mesh)
 	.def("update_material", &StaticMeshComponent::update_material)
@@ -195,7 +195,7 @@ py::class_<::staywalk::Animation,RObject, std::shared_ptr<::staywalk::Animation>
 	.def(py::init<const string &>())
 ;
 
-py::class_<::staywalk::SkeletonMeshComponent,GameComponent,Drawable, std::shared_ptr<::staywalk::SkeletonMeshComponent>>(__module, "SkeletonMeshComponent")
+py::class_<::staywalk::SkeletonMeshComponent,Component,Drawable, std::shared_ptr<::staywalk::SkeletonMeshComponent>>(__module, "SkeletonMeshComponent")
 	.def(py::init<const string &>())
 	.def("update_material", &SkeletonMeshComponent::update_material)
 	.def_readwrite("transform_", &SkeletonMeshComponent::transform_)
