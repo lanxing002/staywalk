@@ -126,6 +126,7 @@ namespace staywalk{
 	class World;
 	class Object;
 	class Entity;
+	class RenderTarget;
 	class Actor;
 	class Component;
 	class StaticMeshComponent;
@@ -138,7 +139,10 @@ namespace staywalk{
 	class Material;
 	class RLight;
 	class Camera;
+	class Tex;
 	class Tex2D;
+	class Tex2DRT;
+	class FrameBuffer;
 	class CubeMap;
 	class Mesh;
 	class Uniform;
@@ -147,6 +151,7 @@ namespace staywalk{
 	using WorldRef  = shared_ptr<World>;
 	using ObjectRef = shared_ptr<Object>;
 	using EntityRef = shared_ptr<Entity>;
+	using RenderTargetRef = shared_ptr<RenderTarget>;
 	using ActorRef = shared_ptr<Actor>;
 	using ComponentRef = shared_ptr<Component>;
 	using StaticMeshComponentRef = shared_ptr<StaticMeshComponent>;
@@ -158,7 +163,10 @@ namespace staywalk{
 	using ShaderRef = shared_ptr<Shader>;
 	using MaterialRef = shared_ptr<Material>;
 	using LightRef = shared_ptr<RLight>;
-	using TexRef = shared_ptr<Tex2D>;
+	using TexRef = shared_ptr<Tex>;
+	using Tex2DRef = shared_ptr<Tex2D>;
+	using Tex2DRTRef = shared_ptr<Tex2DRT>;
+	using FrameBufferRef = shared_ptr<FrameBuffer>;
 	using CubeMapRef = shared_ptr<CubeMap>;
 	using MeshRef = shared_ptr<Mesh>;
 	using UniformRef = shared_ptr<Uniform>;

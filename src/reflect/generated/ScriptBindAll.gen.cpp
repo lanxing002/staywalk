@@ -7,6 +7,9 @@ using namespace staywalk;
 #include "RenderObject.h"
 #include "RenderObject.h"
 #include "RenderObject.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
 #include "RProgram.h"
 #include "RProgram.h"
 #include "RProgram.h"
@@ -24,6 +27,7 @@ using namespace staywalk;
 #include "Animation.h"
 #include "Animation.h"
 #include "SkeletonMeshComponent.h"
+#include "RenderTarget.h"
 
 
 static void bind_auto(py::module& __module){
@@ -49,13 +53,29 @@ py::class_<::staywalk::RObject,Object, std::shared_ptr<::staywalk::RObject>>(__m
 	.def(py::init<const string &>())
 ;
 
-py::class_<::staywalk::Tex2D,RObject, std::shared_ptr<::staywalk::Tex2D>>(__module, "Tex2D")
+py::class_<::staywalk::Tex,RObject, std::shared_ptr<::staywalk::Tex>>(__module, "Tex")
+;
+
+py::class_<::staywalk::Tex2D,Tex, std::shared_ptr<::staywalk::Tex2D>>(__module, "Tex2D")
 	.def_readwrite("mipmap_", &Tex2D::mipmap_)
 	.def_readwrite("wrap_s_", &Tex2D::wrap_s_)
 	.def_readwrite("wrap_t_", &Tex2D::wrap_t_)
 	.def_readwrite("min_filter_", &Tex2D::min_filter_)
 	.def_readwrite("mag_filter_", &Tex2D::mag_filter_)
 	.def_readwrite("img_name_", &Tex2D::img_name_)
+;
+
+py::class_<::staywalk::Tex2DRT,Tex, std::shared_ptr<::staywalk::Tex2DRT>>(__module, "Tex2DRT")
+	.def_readwrite("wrap_s_", &Tex2DRT::wrap_s_)
+	.def_readwrite("wrap_t_", &Tex2DRT::wrap_t_)
+	.def_readwrite("min_filter_", &Tex2DRT::min_filter_)
+	.def_readwrite("mag_filter_", &Tex2DRT::mag_filter_)
+	.def_readwrite("width_", &Tex2DRT::width_)
+	.def_readwrite("height_", &Tex2DRT::height_)
+	.def_readwrite("format_", &Tex2DRT::format_)
+;
+
+py::class_<::staywalk::FrameBuffer,RObject, std::shared_ptr<::staywalk::FrameBuffer>>(__module, "FrameBuffer")
 ;
 
 py::class_<::staywalk::CubeMap,RObject, std::shared_ptr<::staywalk::CubeMap>>(__module, "CubeMap")
@@ -201,6 +221,13 @@ py::class_<::staywalk::SkeletonMeshComponent,Component,Drawable, std::shared_ptr
 	.def_readwrite("transform_", &SkeletonMeshComponent::transform_)
 	.def_readwrite("meshs_", &SkeletonMeshComponent::meshs_)
 	.def_readwrite("animation_", &SkeletonMeshComponent::animation_)
+;
+
+py::class_<::staywalk::RenderTarget,Entity, std::shared_ptr<::staywalk::RenderTarget>>(__module, "RenderTarget")
+	.def(py::init<const string &>())
+	.def_readwrite("camera_", &RenderTarget::camera_)
+	.def_readwrite("tex_rt_", &RenderTarget::tex_rt_)
+	.def_readwrite("attachment_", &RenderTarget::attachment_)
 ;
 
 
