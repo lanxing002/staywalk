@@ -6,6 +6,7 @@
 #include "Logger.h"
 #include "Event.h"
 #include "Engine.h"
+#include "RenderTarget.h"
 
 namespace staywalk{
 	World::~World() {
@@ -70,7 +71,19 @@ namespace staywalk{
 			[id](Ref<Actor>& a) {return a->get_guid() == id; }));
 	}
 
-	void World::add_camera(CameraRef camera){
+	void World::add_rendertarget(RenderTargetRef rt){
+		if (rt)
+			rts_.push_back(rt);
+		else
+			log(fmt::format("add_rendertarget: add nullptr"), LogLevel::Warn);
+	}
+
+	void World::remove_rendertarget(idtype id){
+		rts_.erase(std::remove_if(rts_.begin(), rts_.end(),
+			[id](RenderTargetRef& a) {return a->get_guid() == id; }));
+	}
+
+	void World::add_camera(CameraRef camera) {
 		if (camera == nullptr) return;
 		auto cid = camera->get_guid();
 		auto it = find_if(cameras_.begin(), cameras_.end(), [cid](CameraRef& cam) {return cam->get_guid() == cid; });

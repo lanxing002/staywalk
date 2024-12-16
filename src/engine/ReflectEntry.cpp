@@ -12,6 +12,7 @@
 #include "Utility.h"
 #include "Animation.h"
 #include "SkeletonMeshComponent.h"
+#include "RenderTarget.h"
 
 int entry()
 {

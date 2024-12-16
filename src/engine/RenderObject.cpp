@@ -11,7 +11,7 @@ namespace staywalk {
 
 
 	Tex2D::Tex2D(const string& name)
-		: RObject(name) {
+		: Tex(name) {
 	}
 
 	void Tex2D::gl_update() {
@@ -139,4 +139,56 @@ namespace staywalk {
 
 	void CubeMap::dump_post() const	{
 	}
+
+	Tex2DRT::Tex2DRT(const string& name /*= "rt-2d"*/)
+	:Tex(name){
+
+	}
+
+	GLuint Tex2DRT::get_updated_glid() {
+		if (width_ <= 0 || height_ <= 0) {
+			log(fmt::format("RenderTarget::get_updated_glid wrong width {} or height {}", width_, height_), 
+				LogLevel::Error);
+			return kGlSickId;
+		}
+		if (dirty_) {
+			gl_update();
+			dirty_ = false;
+		}
+		return glid_;
+	}
+
+	void Tex2DRT::gl_update(){
+		glGenTextures(1, &glid_);
+		glBindTexture(GL_TEXTURE_2D, glid_);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width_, height_, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)min_filter_);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)mag_filter_);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (int)(wrap_s_));
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (int)(wrap_t_));
+	}
+
+	Tex::Tex(const string& name /*= "tex"*/)
+	:RObject(name){
+	}
+
+	FrameBuffer::FrameBuffer(const string& name /*= "framebuffer"*/)
+	:RObject(name){
+	}
+
+	GLuint FrameBuffer::get_updated_glid(){
+		if (dirty_) gl_update();
+		return glid_;
+	}
+
+	void FrameBuffer::gl_update() {
+		gl_delete();
+		glGenFramebuffers(1, &glid_);
+		//glBindFramebuffer(GL_FRAMEBUFFER, glid_);
+		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
+		//glDrawBuffer(GL_NONE);
+		//glReadBuffer(GL_NONE);
+		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
+	}
+
 }

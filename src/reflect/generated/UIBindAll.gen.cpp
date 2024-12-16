@@ -87,8 +87,22 @@ void ::staywalk::RObject::construct_obj_ui(bool can_modify) {
 
 #include "RenderObject.h"
 
-void ::staywalk::Tex2D::construct_basic_ui(bool can_modify) {
+void ::staywalk::Tex::construct_basic_ui(bool can_modify) {
     RObject::construct_basic_ui(can_modify);
+}
+
+
+
+void ::staywalk::Tex::construct_obj_ui(bool can_modify) {
+    RObject::construct_obj_ui(can_modify);
+}
+
+
+
+#include "RenderObject.h"
+
+void ::staywalk::Tex2D::construct_basic_ui(bool can_modify) {
+    Tex::construct_basic_ui(can_modify);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(mipmap_)>()) 
         staywalk::reflect::UIHelper::construct_ui("mipmap_", mipmap_, can_modify || true);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(wrap_s_)>()) 
@@ -106,7 +120,7 @@ void ::staywalk::Tex2D::construct_basic_ui(bool can_modify) {
 
 
 void ::staywalk::Tex2D::construct_obj_ui(bool can_modify) {
-    RObject::construct_obj_ui(can_modify);
+    Tex::construct_obj_ui(can_modify);
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(mipmap_)>()){ 
         //if (ImGui::TreeNode("mipmap_")){
             staywalk::reflect::UIHelper::construct_ui("mipmap_", mipmap_, can_modify || true);
@@ -143,6 +157,90 @@ void ::staywalk::Tex2D::construct_obj_ui(bool can_modify) {
             //ImGui::TreePop();
         //}    
     }
+}
+
+
+
+#include "RenderObject.h"
+
+void ::staywalk::Tex2DRT::construct_basic_ui(bool can_modify) {
+    Tex::construct_basic_ui(can_modify);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(wrap_s_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("wrap_s_", wrap_s_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(wrap_t_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("wrap_t_", wrap_t_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(min_filter_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("min_filter_", min_filter_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(mag_filter_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("mag_filter_", mag_filter_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(width_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("width_", width_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(height_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("height_", height_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(format_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("format_", format_, can_modify || true);
+}
+
+
+
+void ::staywalk::Tex2DRT::construct_obj_ui(bool can_modify) {
+    Tex::construct_obj_ui(can_modify);
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(wrap_s_)>()){ 
+        //if (ImGui::TreeNode("wrap_s_")){
+            staywalk::reflect::UIHelper::construct_ui("wrap_s_", wrap_s_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(wrap_t_)>()){ 
+        //if (ImGui::TreeNode("wrap_t_")){
+            staywalk::reflect::UIHelper::construct_ui("wrap_t_", wrap_t_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(min_filter_)>()){ 
+        //if (ImGui::TreeNode("min_filter_")){
+            staywalk::reflect::UIHelper::construct_ui("min_filter_", min_filter_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(mag_filter_)>()){ 
+        //if (ImGui::TreeNode("mag_filter_")){
+            staywalk::reflect::UIHelper::construct_ui("mag_filter_", mag_filter_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(width_)>()){ 
+        //if (ImGui::TreeNode("width_")){
+            staywalk::reflect::UIHelper::construct_ui("width_", width_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(height_)>()){ 
+        //if (ImGui::TreeNode("height_")){
+            staywalk::reflect::UIHelper::construct_ui("height_", height_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(format_)>()){ 
+        //if (ImGui::TreeNode("format_")){
+            staywalk::reflect::UIHelper::construct_ui("format_", format_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+}
+
+
+
+#include "RenderObject.h"
+
+void ::staywalk::FrameBuffer::construct_basic_ui(bool can_modify) {
+    RObject::construct_basic_ui(can_modify);
+}
+
+
+
+void ::staywalk::FrameBuffer::construct_obj_ui(bool can_modify) {
+    RObject::construct_obj_ui(can_modify);
 }
 
 
@@ -582,6 +680,44 @@ void ::staywalk::SkeletonMeshComponent::construct_obj_ui(bool can_modify) {
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(animation_)>()){ 
         //if (ImGui::TreeNode("animation_")){
             staywalk::reflect::UIHelper::construct_ui("animation_", animation_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+}
+
+
+
+#include "RenderTarget.h"
+
+void ::staywalk::RenderTarget::construct_basic_ui(bool can_modify) {
+    Entity::construct_basic_ui(can_modify);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(camera_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("camera_", camera_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(tex_rt_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("tex_rt_", tex_rt_, can_modify || true);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(attachment_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("attachment_", attachment_, can_modify || true);
+}
+
+
+
+void ::staywalk::RenderTarget::construct_obj_ui(bool can_modify) {
+    Entity::construct_obj_ui(can_modify);
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(camera_)>()){ 
+        //if (ImGui::TreeNode("camera_")){
+            staywalk::reflect::UIHelper::construct_ui("camera_", camera_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(tex_rt_)>()){ 
+        //if (ImGui::TreeNode("tex_rt_")){
+            staywalk::reflect::UIHelper::construct_ui("tex_rt_", tex_rt_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(attachment_)>()){ 
+        //if (ImGui::TreeNode("attachment_")){
+            staywalk::reflect::UIHelper::construct_ui("attachment_", attachment_, can_modify || true);
             //ImGui::TreePop();
         //}    
     }

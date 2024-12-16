@@ -2,6 +2,7 @@
 #include "Logger.h"
 #include "World.h"
 #include "Actor.h"
+#include "RenderTarget.h"
 #include "SimpleType.h"
 
 #include <rapidjson/prettywriter.h>
@@ -22,16 +23,19 @@ void staywalk::reflect::Dumper::dump_world(const World& world){
     json::Value actors;
     json::Value cameras;
     json::Value lights;
-    json::Value assets;
+	json::Value rts;
+	json::Value assets;
 
     write(world.actors_, actors);
     write(world.cameras_, cameras);
-    write(world.lights_, lights);
+	write(world.lights_, lights);
+	write(world.rts_, rts);
     write(world.assets_, assets);
 
     doc_.AddMember("actors", actors, doc_.GetAllocator());
     doc_.AddMember("cameras", cameras, doc_.GetAllocator());
-    doc_.AddMember("lights", lights, doc_.GetAllocator());
+	doc_.AddMember("lights", lights, doc_.GetAllocator());
+	doc_.AddMember("render_targets", rts, doc_.GetAllocator());
     doc_.AddMember("assets", assets, doc_.GetAllocator());
     doc_.AddMember("__real_objects", real_objs_, doc_.GetAllocator());
     
@@ -108,12 +112,13 @@ void Loader::load(World& world) {
     auto actors_it = doc_.FindMember("actors");
     auto cameras_it = doc_.FindMember("cameras");
     auto lights_it = doc_.FindMember("lights");
-    auto assets_it = doc_.FindMember("assets");
+	auto rts_it = doc_.FindMember("render_targets");
+	auto assets_it = doc_.FindMember("assets");
     auto real_objs_it = doc_.FindMember("__real_objects");
     const auto end_it = doc_.MemberEnd();
     if (actors_it == end_it || cameras_it == end_it || 
-        lights_it == end_it || real_objs_it== end_it ||
-        assets_it == end_it) {
+		lights_it == end_it || real_objs_it == end_it ||
+		rts_it == end_it || assets_it == end_it) {
         log("wrong world json data", LogLevel::Error);
     }
 
@@ -121,7 +126,8 @@ void Loader::load(World& world) {
     read(world.actors_, actors_it->value);
     read(world.cameras_, cameras_it->value);
     read(world.lights_, lights_it->value);
-    read(world.assets_, assets_it->value);
+    read(world.rts_, rts_it->value);
+	read(world.assets_, assets_it->value);
 
     clear();
 }

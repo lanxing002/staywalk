@@ -97,9 +97,9 @@ namespace staywalk{
 		/**
 		* @brief copy source image file and make texture, if loaded then return cache object
 		*/
-		TexRef make_tex(fs::path path);
+		Tex2DRef make_tex(fs::path path);
 
-		map<fs::path, TexRef> loaded_texs_;
+		map<fs::path, Tex2DRef> loaded_texs_;
 		vector<pair<MeshRef, MaterialRef>> meshes_;
 
 		fs::path mesh_name_;
@@ -127,7 +127,7 @@ namespace staywalk{
 		void extract_bone_weight_for_vertices(vector<SkinVertex>& vertices, aiMesh* mesh, const aiScene* scene);
 		void process_node(aiNode* node, const aiScene* scene);
 		shared_ptr<Tex2D> find_material_tex(aiMaterial* mat, aiTextureType type);
-		TexRef make_tex(fs::path path);
+		Tex2DRef make_tex(fs::path path);
 
 		void load_bone(const aiNodeAnim* channel, Bone& bone);
 		void read_bone_tree(BoneTreeNode& dest, const aiNode* src);
@@ -138,7 +138,7 @@ namespace staywalk{
 		vector<pair<SkeletonMeshRef, MaterialRef>> skeleton_meshes_;
 		AnimationRef animation_;
 
-		map<fs::path, TexRef> loaded_texs_;
+		map<fs::path, Tex2DRef> loaded_texs_;
 		fs::path mesh_name_;
 		fs::path load_dir_;
 		map<string, BoneInfo> boneinfo_map_;
