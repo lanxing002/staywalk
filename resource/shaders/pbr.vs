@@ -20,7 +20,10 @@ out vec3 bitangent;
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
-uniform mat4 bones_matrices[100];
+uniform bool use_skeleton;
+layout (std140) uniform  BoneMatrixBlock {
+    mat4 bone_matrices[100];
+};
 
 const int MAX_BONES = 100;
 const int MAX_BONE_INFLUENCE = 4;
@@ -40,13 +43,13 @@ void main(){
             total_pos = vec4(in_pos, 1.0f);
             break;
         }
-        vec4 local_pos = bones_matrices[bone_ids[i]] * vec4(in_pos,1.0f);
+        vec4 local_pos = bone_matrices[bone_ids[i]] * vec4(in_pos,1.0f);
         total_pos += local_pos * bone_weights[i];
         //vec3 localNormal = mat3(bones_matrices[bone_ids[i]]) * norm;
    }
 	
     mat4 viewModel = view * model;
 
-    gl_Position = projection * view * model * vec4(total_pos, 1.0);
+    gl_Position = projection * view * model * total_pos, 1.0;
 }
 

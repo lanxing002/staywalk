@@ -692,7 +692,7 @@ namespace staywalk{
 		for (uint i = 0; i < num_rot; ++i) {
 			aiQuaternion ai_rot = channel->mRotationKeys[i].mValue;
 			float timeStamp = (float)channel->mRotationKeys[i].mTime / 1000.0f;
-			bone.rotations_.emplace_back(quat(ai_rot.x, ai_rot.y, ai_rot.z, ai_rot.w), timeStamp);
+			bone.rotations_.emplace_back(quat(ai_rot.w, ai_rot.x, ai_rot.y, ai_rot.z), timeStamp);
 		}
 
 		auto num_scale = channel->mNumScalingKeys;
