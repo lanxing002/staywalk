@@ -32,12 +32,6 @@ namespace staywalk{
 			LINEAR = GL_LINEAR,
 	};
 
-	enum class sw_Class() GlAttachment : int {
-		COLOR = GL_COLOR_ATTACHMENT0,
-		DEPTH = GL_DEPTH_ATTACHMENT,
-		STENCIL = GL_STENCIL_ATTACHMENT,
-	};
-
 	struct Drawable {
 	public:
 		virtual void draw(RenderInfo& info) = 0;
@@ -121,8 +115,7 @@ namespace staywalk{
 
 	class sw_Class(jsonpost;)  Tex2D : public Tex {
 	public:
-		Tex2D(const string& name = "tex-2d");
-		//sw_Prop() Tex2d tex;
+		sw_Func() Tex2D(const string& name = "tex-2d");
 		sw_Prop() bool mipmap_ = true;
 		sw_Prop() GlWrap wrap_s_ = GlWrap::REPEAT;
 		sw_Prop() GlWrap wrap_t_ = GlWrap::REPEAT;
@@ -150,14 +143,14 @@ namespace staywalk{
 
 	class sw_Class()  Tex2DRT : public Tex {
 	public:
-		Tex2DRT(const string& name = "rt-2d");
+		sw_Func() Tex2DRT(const string& name = "rt-2d");
 		//sw_Prop() Tex2d tex;
 		sw_Prop() GlWrap wrap_s_ = GlWrap::REPEAT;
 		sw_Prop() GlWrap wrap_t_ = GlWrap::REPEAT;
 		sw_Prop() GlMinFilter min_filter_ = GlMinFilter::LINEAR;
 		sw_Prop() GlMagFilter mag_filter_ = GlMagFilter::LINEAR;
-		sw_Prop() int width_ = 512;
-		sw_Prop() int height_ = 512;
+		int width_ = -1;
+		int height_ = -1;
 		sw_Prop() GlTexFormat format_ = GlTexFormat::RGBA;
 		MetaRegister(Tex2DRT);
 

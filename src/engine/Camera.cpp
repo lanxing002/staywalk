@@ -35,12 +35,7 @@ namespace staywalk {
 		}
 		else Event::Editor_ShowHideCursor(true);
 
-		auto rot = glm::mat4(1.0);
-		rot = glm::rotate(glm::mat4(1.0), glm::radians(transform_.rotation.x + 90), glm::vec3(1.0, 0.0, 0.0)) * rot;
-		rot = glm::rotate(glm::mat4(1.0), glm::radians(transform_.rotation.y), glm::vec3(0.0, 0.0, 1.0)) * rot;
-		rot = glm::translate(glm::mat4(1.0), transform_.location) * rot;
-		view_ = glm::inverse(rot);
-		projection_ = glm::perspective(glm::radians(fov_), aspect_, near_, far_);
+		update_matrix();
 
 		if (im.right_click()) {
 			auto look_vec = glm::inverse(glm::mat3(view_)) * vec3(.0, .0, -1.0);
@@ -52,6 +47,15 @@ namespace staywalk {
 			else if (im.press(Keyboard::D)) xoffset = -1.0;
 			transform_.location += (look_vec * zoffset + cam_left_vec * xoffset) * delta * 8.4f;
 		}
+	}
+
+	void Camera::update_matrix() {
+		auto rot = glm::mat4(1.0);
+		rot = glm::rotate(glm::mat4(1.0), glm::radians(transform_.rotation.x + 90), glm::vec3(1.0, 0.0, 0.0)) * rot;
+		rot = glm::rotate(glm::mat4(1.0), glm::radians(transform_.rotation.y), glm::vec3(0.0, 0.0, 1.0)) * rot;
+		rot = glm::translate(glm::mat4(1.0), transform_.location) * rot;
+		view_ = glm::inverse(rot);
+		projection_ = glm::perspective(glm::radians(fov_), aspect_, near_, far_);
 	}
 
 	void Camera::look_actor(ActorRef actor) {
