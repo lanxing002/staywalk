@@ -147,6 +147,7 @@ namespace staywalk{
 	class Mesh;
 	class Uniform;
 	class Animation;
+	class StateSet;
 
 	using WorldRef  = shared_ptr<World>;
 	using ObjectRef = shared_ptr<Object>;
@@ -170,6 +171,7 @@ namespace staywalk{
 	using CubeMapRef = shared_ptr<CubeMap>;
 	using MeshRef = shared_ptr<Mesh>;
 	using UniformRef = shared_ptr<Uniform>;
+	using StateSetRef = shared_ptr<StateSet>;
 
 	using CameraRef = shared_ptr<Camera>;
 

@@ -132,22 +132,27 @@ GLint staywalk::Program::get_uniform(const string& name){
 void staywalk::Program::set_uniform(const string& name, UniformRef uniform){
 	if (uniform == nullptr) return;
 	auto utype = uniform->utype_;
-	void* pdata = &uniform->data_[0][0];
+	void* pdata = nullptr;
 	switch (utype)
 	{
 	case staywalk::UniformType::U1f:
+		pdata = &uniform->vdata_.x;
 		glUniform1f(get_uniform(name), *reinterpret_cast<float*>(pdata));
 		break;
 	case staywalk::UniformType::U2f:
+		pdata = &uniform->vdata_.x;
 		glUniform2fv(get_uniform(name), 1,  reinterpret_cast<float*>(pdata));
 		break;
 	case staywalk::UniformType::U3f:
+		pdata = &uniform->vdata_.x;
 		glUniform3fv(get_uniform(name), 1, reinterpret_cast<float*>(pdata));
 		break;
 	case staywalk::UniformType::U4f:
+		pdata = &uniform->vdata_.x;
 		glUniform4fv(get_uniform(name), 1, reinterpret_cast<float*>(pdata));
 		break;
 	case staywalk::UniformType::U1i:
+		pdata = &uniform->idata_;
 		glUniform1i(get_uniform(name), *reinterpret_cast<int*>(pdata));
 		break;
 	case staywalk::UniformType::U2i:
@@ -157,6 +162,7 @@ void staywalk::Program::set_uniform(const string& name, UniformRef uniform){
 	case staywalk::UniformType::U4i:
 		break;
 	case staywalk::UniformType::UMat4:
+		pdata = &uniform->mdata_;
 		glUniformMatrix4fv(get_uniform(name), 1, GL_FALSE, reinterpret_cast<float*>(pdata));
 		break;
 	default:

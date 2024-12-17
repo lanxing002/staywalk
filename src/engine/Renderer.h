@@ -19,6 +19,7 @@ namespace staywalk {
 
 	private:
 		RenderLight light_mgr_;
+		StateSetRef stateset_;
 		std::array<ProgramRef, (int)ProgramType::_Count> program_table_;
 	};
 }
