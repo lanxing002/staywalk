@@ -46,28 +46,33 @@ namespace staywalk{
 	class sw_Class()  Uniform : public Object {
 	public:
 		Uniform() {};
-		Uniform(int v) : utype_(UniformType::U1i) { update(v); }
-		Uniform(float v) : utype_(UniformType::U1f) { update(v); }
-		Uniform(vec2 v) : utype_(UniformType::U2f) { update(v); }
-		Uniform(vec3 v) : utype_(UniformType::U3f) { update(v); }
-		Uniform(vec4 v) : utype_(UniformType::U4f) { update(v); }
-		Uniform(mat4 v) : utype_(UniformType::UMat4) { update(v); }
+		Uniform(int v) : utype_(UniformType::U1i) { idata_ = v; }
+		Uniform(float v) : utype_(UniformType::U1f) { vdata_ = vec4(v); }
+		Uniform(vec2 v) : utype_(UniformType::U2f) { vdata_ = vec4(v.x, v.y, .0, .0); }
+		Uniform(vec3 v) : utype_(UniformType::U3f) { vdata_ = vec4(v.x, v.y, v.z, .0); }
+		Uniform(vec4 v) : utype_(UniformType::U4f) { vdata_ = v; }
+		Uniform(mat4 v) : utype_(UniformType::UMat4) { mdata_ = v; }
 
-		void update(int v) { __copy(v); }
-		void update(float v) { __copy(v); }
-		void update(vec2 v) { __copy(v[0]); }
-		void update(vec3 v) { __copy(v[0]); }
-		void update(vec4 v) { __copy(v[0]); }
-		void update(mat4 v) { __copy(v[0][0]); }
+		void update(int v) { __copyv(v, v); }
+		void update(float v) { __copyv(v, v); }
+		void update(vec2 v) { __copyv(v, v.x); }
+		void update(vec3 v) { __copyv(v, v.x); }
+		void update(vec4 v) { __copyv(v, v.x); }
+		void update(mat4 v) { __copym(v, v[0][0]); }
 
 		MetaRegister(Uniform);
 
 	private:
-		template<typename T>
-		inline void __copy(T v) { memcpy(&data_[0][0], &v, sizeof v); }
+		template<typename T, typename HeadT>
+		inline void __copym(T v, HeadT head) { memcpy(&mdata_[0][0], &head, sizeof v); }
+
+		template<typename T, typename HeadT>
+		inline void __copyv(T v, HeadT head) { memcpy(&vdata_.x, &head, sizeof v); }
 
 		sw_Prop(nogui;) UniformType utype_;
-		sw_Prop(nogui;) mat4 data_;  // max storage for mat4
+		sw_Prop(nogui;) mat4 mdata_;  // max storage for mat4
+		sw_Prop(nogui;) vec4 vdata_;  // max storage for mat4
+		sw_Prop(nogui;) int idata_;  // max storage for mat4
 		friend class Program;
 	};
 

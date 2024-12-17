@@ -9,8 +9,12 @@
     "cameras": [
         834502234564722688
     ],
-    "lights": [],
-    "render_targets": [],
+    "lights": [
+        837154564439277568
+    ],
+    "render_targets": [
+        837044653202079744
+    ],
     "assets": {
         "834502029593280514": 834502029593280514,
         "834502029593280515": 834502029593280515,
@@ -29,7 +33,8 @@
         "834693827154411520": 834693827154411520,
         "834693969836244992": 834693969836244992,
         "834941007287025664": 834941007287025664,
-        "836764263887405056": 836764263887405056
+        "836764263887405056": 836764263887405056,
+        "837042716469624832": 837042716469624832
     },
     "__real_objects": {
         "834502029593280513": {
@@ -41,9 +46,9 @@
             "__object_type_": "staywalk::Material",
             "name_": "0-material",
             "guid_": 834502029593280512,
-            "program_": 18446744073709551615,
-            "uniforms_": [],
-            "texs_": []
+            "uniforms_": {},
+            "texs_": {},
+            "program_": 18446744073709551615
         },
         "834502029593280515": {
             "__object_type_": "staywalk::StaticMeshComponent",
@@ -102,6 +107,17 @@
             "name_": "terrain",
             "guid_": 834502550819438592
         },
+        "834518570049208320": {
+            "__object_type_": "staywalk::Tex2D",
+            "name_": "heightmap",
+            "guid_": 834518570049208320,
+            "mipmap_": true,
+            "wrap_s_": 10497,
+            "wrap_t_": 10497,
+            "min_filter_": 9729,
+            "mag_filter_": 9729,
+            "img_name_": "heightmap.png"
+        },
         "834508003624353792": {
             "__object_type_": "staywalk::Program",
             "name_": "terrain",
@@ -134,29 +150,15 @@
                 }
             }
         },
-        "834518570049208320": {
-            "__object_type_": "staywalk::Tex2D",
-            "name_": "heightmap",
-            "guid_": 834518570049208320,
-            "mipmap_": true,
-            "wrap_s_": 10497,
-            "wrap_t_": 10497,
-            "min_filter_": 9729,
-            "mag_filter_": 9729,
-            "img_name_": "heightmap.png"
-        },
         "834508590319403008": {
             "__object_type_": "staywalk::Material",
             "name_": "terrain",
             "guid_": 834508590319403008,
-            "program_": 834508003624353792,
-            "uniforms_": [],
-            "texs_": [
-                {
-                    "first": "height",
-                    "second": 834518570049208320
-                }
-            ]
+            "uniforms_": {},
+            "texs_": {
+                "height": 834518570049208320
+            },
+            "program_": 834508003624353792
         },
         "834502743451238400": {
             "__object_type_": "staywalk::StaticMeshComponent",
@@ -230,14 +232,11 @@
             "__object_type_": "staywalk::Material",
             "name_": "0-material",
             "guid_": 834941007001812992,
-            "program_": 18446744073709551615,
-            "uniforms_": [],
-            "texs_": [
-                {
-                    "first": "diffuse",
-                    "second": 834941005600915456
-                }
-            ]
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 834941005600915456
+            },
+            "program_": 18446744073709551615
         },
         "834941007287025664": {
             "__object_type_": "staywalk::StaticMeshComponent",
@@ -327,14 +326,11 @@
             "__object_type_": "staywalk::Material",
             "name_": "sky",
             "guid_": 834693827154411520,
-            "program_": 834693969836244992,
-            "uniforms_": [],
-            "texs_": [
-                {
-                    "first": "",
-                    "second": 18446744073709551615
-                }
-            ]
+            "uniforms_": {},
+            "texs_": {
+                "e": 18446744073709551615
+            },
+            "program_": 834693969836244992
         },
         "834693658446921728": {
             "__object_type_": "staywalk::StaticMeshComponent",
@@ -408,20 +404,17 @@
             "__object_type_": "staywalk::Material",
             "name_": "vampire",
             "guid_": 836764263858044928,
-            "program_": 18446744073709551615,
-            "uniforms_": [],
-            "texs_": [
-                {
-                    "first": "diffuse",
-                    "second": 836764263073710080
-                }
-            ]
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 836764263073710080
+            },
+            "program_": 18446744073709551615
         },
         "836764263862239232": {
             "__object_type_": "staywalk::Animation",
             "name_": "vampire",
             "guid_": 836764263862239232,
-            "curr_time_": 1.9221011400222778,
+            "curr_time_": 2.518289089202881,
             "duration_": 3.433332920074463,
             "ticks_pers_": 1.0,
             "node_root_": {
@@ -2681,9 +2674,9 @@
             "guid_": 834502234564722688,
             "transform_": {
                 "location": [
-                    11.213885307312012,
-                    -10.247824668884277,
-                    7.788809776306152
+                    9.801835060119629,
+                    -13.319633483886719,
+                    3.861497640609741
                 ],
                 "scale": [
                     1.0,
@@ -2691,8 +2684,8 @@
                     1.0
                 ],
                 "rotation": [
-                    -26.40252685546875,
-                    -1457.25390625,
+                    -8.687350273132324,
+                    -1412.442626953125,
                     0.0
                 ]
             },
@@ -2701,6 +2694,109 @@
             "aspect_": 1.7777777910232544,
             "near_": 1.0,
             "far_": 1000.0
+        },
+        "837154564439277568": {
+            "__object_type_": "staywalk::RLight",
+            "name_": "light",
+            "guid_": 837154564439277568,
+            "transform_": {
+                "location": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "light_type_": 0,
+            "pos": [
+                10.0,
+                10.0,
+                10.0
+            ]
+        },
+        "837110806800760902": {
+            "__object_type_": "staywalk::Tex2DRT",
+            "name_": "color",
+            "guid_": 837110806800760902,
+            "wrap_s_": 10497,
+            "wrap_t_": 10497,
+            "min_filter_": 9729,
+            "mag_filter_": 9729,
+            "format_": 6408
+        },
+        "837110806800760903": {
+            "__object_type_": "staywalk::Tex2DRT",
+            "name_": "depth",
+            "guid_": 837110806800760903,
+            "wrap_s_": 10497,
+            "wrap_t_": 10497,
+            "min_filter_": 9729,
+            "mag_filter_": 9729,
+            "format_": 6402
+        },
+        "837044653202079744": {
+            "__object_type_": "staywalk::RenderTarget",
+            "name_": "rt",
+            "guid_": 837044653202079744,
+            "transform_": {
+                "location": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "camera_": {
+                "name_": "main",
+                "guid_": 837162801402216448,
+                "transform_": {
+                    "location": [
+                        9.801835060119629,
+                        -13.319633483886719,
+                        3.861497640609741
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "rotation": [
+                        -8.687350273132324,
+                        -1412.442626953125,
+                        0.0
+                    ]
+                },
+                "porject_type_": 0,
+                "fov_": 45.0,
+                "aspect_": 1.0,
+                "near_": 1.0,
+                "far_": 1000.0
+            },
+            "post_stage_": false,
+            "width_": 1024,
+            "height_": 1024,
+            "color_rt_": 837110806800760902,
+            "depth_rt_": 837110806800760903,
+            "stencil_rt_": 18446744073709551615,
+            "program_": 18446744073709551615
         },
         "834511653369282560": {
             "__object_type_": "staywalk::Mesh",
@@ -2746,6 +2842,91 @@
             "wrap_r_": 33071,
             "min_filter_": 9729,
             "mag_filter_": 9729
+        },
+        "837110807102750723": {
+            "__object_type_": "staywalk::Tex2DRT",
+            "name_": "color",
+            "guid_": 837110807102750723,
+            "wrap_s_": 10497,
+            "wrap_t_": 10497,
+            "min_filter_": 9729,
+            "mag_filter_": 9729,
+            "format_": 6408
+        },
+        "837110807102750724": {
+            "__object_type_": "staywalk::Tex2DRT",
+            "name_": "depth",
+            "guid_": 837110807102750724,
+            "wrap_s_": 10497,
+            "wrap_t_": 10497,
+            "min_filter_": 9729,
+            "mag_filter_": 9729,
+            "format_": 6408
+        },
+        "837110807102750725": {
+            "__object_type_": "staywalk::Tex2DRT",
+            "name_": "stencil",
+            "guid_": 837110807102750725,
+            "wrap_s_": 10497,
+            "wrap_t_": 10497,
+            "min_filter_": 9729,
+            "mag_filter_": 9729,
+            "format_": 6408
+        },
+        "837042716469624832": {
+            "__object_type_": "staywalk::RenderTarget",
+            "name_": "rt",
+            "guid_": 837042716469624832,
+            "transform_": {
+                "location": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "camera_": {
+                "name_": "camera-0",
+                "guid_": 837042716469624833,
+                "transform_": {
+                    "location": [
+                        0.0,
+                        0.0,
+                        0.0
+                    ],
+                    "scale": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ],
+                    "rotation": [
+                        1.0,
+                        1.0,
+                        1.0
+                    ]
+                },
+                "porject_type_": -842150451,
+                "fov_": 60.0,
+                "aspect_": 1.0,
+                "near_": 0.10000000149011612,
+                "far_": 1000.0
+            },
+            "post_stage_": false,
+            "width_": 1024,
+            "height_": 1024,
+            "color_rt_": 837110807102750723,
+            "depth_rt_": 837110807102750724,
+            "stencil_rt_": 837110807102750725,
+            "program_": 18446744073709551615
         }
     }
 }

@@ -21,6 +21,7 @@ uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
 uniform bool use_skeleton;
+uniform vec4 light;
 layout (std140) uniform  BoneMatrixBlock {
     mat4 bone_matrices[100];
 };

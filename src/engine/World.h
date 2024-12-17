@@ -42,6 +42,7 @@ namespace staywalk {
 
 		sw_Func() void add_rendertarget(RenderTargetRef rt);
 		sw_Func() void remove_rendertarget(idtype id);
+		sw_Func() vector<RenderTargetRef> get_all_rendertargets() { return rts_; }
 
 		sw_Func() void add_camera(CameraRef camera);
 		sw_Func() void remove_camera(idtype cid);
@@ -50,6 +51,7 @@ namespace staywalk {
 
 		sw_Func() void add_light(LightRef light);
 		sw_Func() void remove_light(idtype lid);
+		sw_Func() LightRef get_main_light();
 
 		// asset for candidate
 		sw_Func() const map<idtype, Ref<Object>>& get_all_assets() { return assets_; }

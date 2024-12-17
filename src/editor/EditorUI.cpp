@@ -7,6 +7,7 @@
 #include "PyEnv.h"
 #include "Renderer.h"
 #include "RProgram.h"
+#include "RenderTarget.h"
 
 #include <imgui.h>
 #include <imgui_internal.h>
@@ -248,6 +249,15 @@ void EditorUI::show_world(){
 			 }
 			 ImGui::TreePop();
 		 }
+
+         if (ImGui::TreeNode("render-targets")) {
+             for (auto a : world->get_all_rendertargets()) {
+                 if (ImGui::Selectable(a->name_.c_str(), selected == a)) {
+                     Engine::get_engine()->select(a);
+                 }
+             }
+             ImGui::TreePop();
+         }
 
 		 if (ImGui::TreeNode("light")) {
 			 for (auto a : world->get_lights()) {

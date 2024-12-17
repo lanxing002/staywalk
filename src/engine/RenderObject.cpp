@@ -159,9 +159,10 @@ namespace staywalk {
 	}
 
 	void Tex2DRT::gl_update(){
+		assert(width_ > 0 && height_ > 0);
 		glGenTextures(1, &glid_);
 		glBindTexture(GL_TEXTURE_2D, glid_);
-		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width_, height_, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+		glTexImage2D(GL_TEXTURE_2D, 0, (int)format_, width_, height_, 0, (int)format_, GL_FLOAT, NULL);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)min_filter_);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)mag_filter_);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (int)(wrap_s_));
@@ -177,7 +178,7 @@ namespace staywalk {
 	}
 
 	GLuint FrameBuffer::get_updated_glid(){
-		if (dirty_) gl_update();
+		if (dirty_) { gl_update(); dirty_ = false; }
 		return glid_;
 	}
 

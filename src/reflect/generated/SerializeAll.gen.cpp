@@ -305,16 +305,6 @@ void ::staywalk::Tex2DRT::dump(rapidjson::Value& value, ::staywalk::reflect::Dum
     }
     {
         json::Value prop;
-        dumper.write(this->width_, prop);
-        value.AddMember("width_", prop, dumper.get_doc().GetAllocator()); 
-    }
-    {
-        json::Value prop;
-        dumper.write(this->height_, prop);
-        value.AddMember("height_", prop, dumper.get_doc().GetAllocator()); 
-    }
-    {
-        json::Value prop;
         dumper.write(this->format_, prop);
         value.AddMember("format_", prop, dumper.get_doc().GetAllocator()); 
     }
@@ -343,14 +333,6 @@ void ::staywalk::Tex2DRT::load(rapidjson::Value& value, ::staywalk::reflect::Loa
     if(itr != value.MemberEnd()){
         loader.read(this->mag_filter_, itr->value);
     }
-    itr = value.FindMember("width_");
-    if(itr != value.MemberEnd()){
-        loader.read(this->width_, itr->value);
-    }
-    itr = value.FindMember("height_");
-    if(itr != value.MemberEnd()){
-        loader.read(this->height_, itr->value);
-    }
     itr = value.FindMember("format_");
     if(itr != value.MemberEnd()){
         loader.read(this->format_, itr->value);
@@ -360,7 +342,7 @@ void ::staywalk::Tex2DRT::load(rapidjson::Value& value, ::staywalk::reflect::Loa
 
 bool ::staywalk::Tex2DRT::operator==(const ::staywalk::Tex2DRT& rhs) const {
     return 
-Tex::operator==(rhs)  && ::staywalk::Comparer::equal(this->wrap_s_, rhs.wrap_s_) && ::staywalk::Comparer::equal(this->wrap_t_, rhs.wrap_t_) && ::staywalk::Comparer::equal(this->min_filter_, rhs.min_filter_) && ::staywalk::Comparer::equal(this->mag_filter_, rhs.mag_filter_) && ::staywalk::Comparer::equal(this->width_, rhs.width_) && ::staywalk::Comparer::equal(this->height_, rhs.height_) && ::staywalk::Comparer::equal(this->format_, rhs.format_);
+Tex::operator==(rhs)  && ::staywalk::Comparer::equal(this->wrap_s_, rhs.wrap_s_) && ::staywalk::Comparer::equal(this->wrap_t_, rhs.wrap_t_) && ::staywalk::Comparer::equal(this->min_filter_, rhs.min_filter_) && ::staywalk::Comparer::equal(this->mag_filter_, rhs.mag_filter_) && ::staywalk::Comparer::equal(this->format_, rhs.format_);
 }
 
 
@@ -556,8 +538,18 @@ void ::staywalk::Uniform::dump(rapidjson::Value& value, ::staywalk::reflect::Dum
     }
     {
         json::Value prop;
-        dumper.write(this->data_, prop);
-        value.AddMember("data_", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->mdata_, prop);
+        value.AddMember("mdata_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->vdata_, prop);
+        value.AddMember("vdata_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->idata_, prop);
+        value.AddMember("idata_", prop, dumper.get_doc().GetAllocator()); 
     }
 }
 
@@ -572,16 +564,24 @@ void ::staywalk::Uniform::load(rapidjson::Value& value, ::staywalk::reflect::Loa
     if(itr != value.MemberEnd()){
         loader.read(this->utype_, itr->value);
     }
-    itr = value.FindMember("data_");
+    itr = value.FindMember("mdata_");
     if(itr != value.MemberEnd()){
-        loader.read(this->data_, itr->value);
+        loader.read(this->mdata_, itr->value);
+    }
+    itr = value.FindMember("vdata_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->vdata_, itr->value);
+    }
+    itr = value.FindMember("idata_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->idata_, itr->value);
     }
 }
 
 
 bool ::staywalk::Uniform::operator==(const ::staywalk::Uniform& rhs) const {
     return 
-Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->utype_, rhs.utype_) && ::staywalk::Comparer::equal(this->data_, rhs.data_);
+Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->utype_, rhs.utype_) && ::staywalk::Comparer::equal(this->mdata_, rhs.mdata_) && ::staywalk::Comparer::equal(this->vdata_, rhs.vdata_) && ::staywalk::Comparer::equal(this->idata_, rhs.idata_);
 }
 
 
@@ -649,18 +649,13 @@ RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->vs_, rhs.vs_) && 
 
 }
 
-#include "Material.h"
+#include "StateSet.h"
 
-void ::staywalk::Material::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+void ::staywalk::StateSet::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
     Object::dump(value, dumper);
 
-    {
-        json::Value prop;
-        dumper.write(this->program_, prop);
-        value.AddMember("program_", prop, dumper.get_doc().GetAllocator()); 
-    }
     {
         json::Value prop;
         dumper.write(this->uniforms_, prop);
@@ -671,20 +666,15 @@ void ::staywalk::Material::dump(rapidjson::Value& value, ::staywalk::reflect::Du
         dumper.write(this->texs_, prop);
         value.AddMember("texs_", prop, dumper.get_doc().GetAllocator()); 
     }
-    this->dump_post();
 }
 
 
-void ::staywalk::Material::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+void ::staywalk::StateSet::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
     Object::load(value, loader);
 
-    itr = value.FindMember("program_");
-    if(itr != value.MemberEnd()){
-        loader.read(this->program_, itr->value);
-    }
     itr = value.FindMember("uniforms_");
     if(itr != value.MemberEnd()){
         loader.read(this->uniforms_, itr->value);
@@ -693,13 +683,53 @@ void ::staywalk::Material::load(rapidjson::Value& value, ::staywalk::reflect::Lo
     if(itr != value.MemberEnd()){
         loader.read(this->texs_, itr->value);
     }
+}
+
+
+bool ::staywalk::StateSet::operator==(const ::staywalk::StateSet& rhs) const {
+    return 
+Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->uniforms_, rhs.uniforms_) && ::staywalk::Comparer::equal(this->texs_, rhs.texs_);
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::StateSet::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::StateSet, "staywalk::StateSet"};
+
+}
+
+#include "Material.h"
+
+void ::staywalk::Material::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+
+    StateSet::dump(value, dumper);
+
+    {
+        json::Value prop;
+        dumper.write(this->program_, prop);
+        value.AddMember("program_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    this->dump_post();
+}
+
+
+void ::staywalk::Material::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    StateSet::load(value, loader);
+
+    itr = value.FindMember("program_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->program_, itr->value);
+    }
     this->load_post();
 }
 
 
 bool ::staywalk::Material::operator==(const ::staywalk::Material& rhs) const {
     return 
-Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->program_, rhs.program_) && ::staywalk::Comparer::equal(this->uniforms_, rhs.uniforms_) && ::staywalk::Comparer::equal(this->texs_, rhs.texs_);
+StateSet::operator==(rhs)  && ::staywalk::Comparer::equal(this->program_, rhs.program_);
 }
 
 
@@ -790,6 +820,16 @@ void ::staywalk::RLight::dump(rapidjson::Value& value, ::staywalk::reflect::Dump
 
     Entity::dump(value, dumper);
 
+    {
+        json::Value prop;
+        dumper.write(this->light_type_, prop);
+        value.AddMember("light_type_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->pos, prop);
+        value.AddMember("pos", prop, dumper.get_doc().GetAllocator()); 
+    }
 }
 
 
@@ -799,12 +839,20 @@ void ::staywalk::RLight::load(rapidjson::Value& value, ::staywalk::reflect::Load
 
     Entity::load(value, loader);
 
+    itr = value.FindMember("light_type_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->light_type_, itr->value);
+    }
+    itr = value.FindMember("pos");
+    if(itr != value.MemberEnd()){
+        loader.read(this->pos, itr->value);
+    }
 }
 
 
 bool ::staywalk::RLight::operator==(const ::staywalk::RLight& rhs) const {
     return 
-Entity::operator==(rhs) ;
+Entity::operator==(rhs)  && ::staywalk::Comparer::equal(this->light_type_, rhs.light_type_) && ::staywalk::Comparer::equal(this->pos, rhs.pos);
 }
 
 
@@ -1181,14 +1229,40 @@ void ::staywalk::RenderTarget::dump(rapidjson::Value& value, ::staywalk::reflect
     }
     {
         json::Value prop;
-        dumper.write(this->tex_rt_, prop);
-        value.AddMember("tex_rt_", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->post_stage_, prop);
+        value.AddMember("post_stage_", prop, dumper.get_doc().GetAllocator()); 
     }
     {
         json::Value prop;
-        dumper.write(this->attachment_, prop);
-        value.AddMember("attachment_", prop, dumper.get_doc().GetAllocator()); 
+        dumper.write(this->width_, prop);
+        value.AddMember("width_", prop, dumper.get_doc().GetAllocator()); 
     }
+    {
+        json::Value prop;
+        dumper.write(this->height_, prop);
+        value.AddMember("height_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->color_rt_, prop);
+        value.AddMember("color_rt_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->depth_rt_, prop);
+        value.AddMember("depth_rt_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->stencil_rt_, prop);
+        value.AddMember("stencil_rt_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->program_, prop);
+        value.AddMember("program_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    this->dump_post();
 }
 
 
@@ -1202,20 +1276,41 @@ void ::staywalk::RenderTarget::load(rapidjson::Value& value, ::staywalk::reflect
     if(itr != value.MemberEnd()){
         loader.read(this->camera_, itr->value);
     }
-    itr = value.FindMember("tex_rt_");
+    itr = value.FindMember("post_stage_");
     if(itr != value.MemberEnd()){
-        loader.read(this->tex_rt_, itr->value);
+        loader.read(this->post_stage_, itr->value);
     }
-    itr = value.FindMember("attachment_");
+    itr = value.FindMember("width_");
     if(itr != value.MemberEnd()){
-        loader.read(this->attachment_, itr->value);
+        loader.read(this->width_, itr->value);
     }
+    itr = value.FindMember("height_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->height_, itr->value);
+    }
+    itr = value.FindMember("color_rt_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->color_rt_, itr->value);
+    }
+    itr = value.FindMember("depth_rt_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->depth_rt_, itr->value);
+    }
+    itr = value.FindMember("stencil_rt_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->stencil_rt_, itr->value);
+    }
+    itr = value.FindMember("program_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->program_, itr->value);
+    }
+    this->load_post();
 }
 
 
 bool ::staywalk::RenderTarget::operator==(const ::staywalk::RenderTarget& rhs) const {
     return 
-Entity::operator==(rhs)  && ::staywalk::Comparer::equal(this->camera_, rhs.camera_) && ::staywalk::Comparer::equal(this->tex_rt_, rhs.tex_rt_) && ::staywalk::Comparer::equal(this->attachment_, rhs.attachment_);
+Entity::operator==(rhs)  && ::staywalk::Comparer::equal(this->camera_, rhs.camera_) && ::staywalk::Comparer::equal(this->post_stage_, rhs.post_stage_) && ::staywalk::Comparer::equal(this->width_, rhs.width_) && ::staywalk::Comparer::equal(this->height_, rhs.height_) && ::staywalk::Comparer::equal(this->color_rt_, rhs.color_rt_) && ::staywalk::Comparer::equal(this->depth_rt_, rhs.depth_rt_) && ::staywalk::Comparer::equal(this->stencil_rt_, rhs.stencil_rt_) && ::staywalk::Comparer::equal(this->program_, rhs.program_);
 }
 
 

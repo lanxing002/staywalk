@@ -13,6 +13,7 @@ using namespace staywalk;
 #include "RProgram.h"
 #include "RProgram.h"
 #include "RProgram.h"
+#include "StateSet.h"
 #include "Material.h"
 #include "Camera.h"
 #include "Light.h"
@@ -57,6 +58,7 @@ py::class_<::staywalk::Tex,RObject, std::shared_ptr<::staywalk::Tex>>(__module, 
 ;
 
 py::class_<::staywalk::Tex2D,Tex, std::shared_ptr<::staywalk::Tex2D>>(__module, "Tex2D")
+	.def(py::init<const string &>())
 	.def_readwrite("mipmap_", &Tex2D::mipmap_)
 	.def_readwrite("wrap_s_", &Tex2D::wrap_s_)
 	.def_readwrite("wrap_t_", &Tex2D::wrap_t_)
@@ -66,12 +68,11 @@ py::class_<::staywalk::Tex2D,Tex, std::shared_ptr<::staywalk::Tex2D>>(__module, 
 ;
 
 py::class_<::staywalk::Tex2DRT,Tex, std::shared_ptr<::staywalk::Tex2DRT>>(__module, "Tex2DRT")
+	.def(py::init<const string &>())
 	.def_readwrite("wrap_s_", &Tex2DRT::wrap_s_)
 	.def_readwrite("wrap_t_", &Tex2DRT::wrap_t_)
 	.def_readwrite("min_filter_", &Tex2DRT::min_filter_)
 	.def_readwrite("mag_filter_", &Tex2DRT::mag_filter_)
-	.def_readwrite("width_", &Tex2DRT::width_)
-	.def_readwrite("height_", &Tex2DRT::height_)
 	.def_readwrite("format_", &Tex2DRT::format_)
 ;
 
@@ -104,17 +105,25 @@ py::class_<::staywalk::Program,RObject, std::shared_ptr<::staywalk::Program>>(__
 	.def_readwrite("gs_", &Program::gs_)
 ;
 
-py::class_<::staywalk::Material,Object, std::shared_ptr<::staywalk::Material>>(__module, "Material")
+py::class_<::staywalk::StateSet,Object, std::shared_ptr<::staywalk::StateSet>>(__module, "StateSet")
 	.def(py::init<const string &>())
-	.def("add_tex", &Material::add_tex)
-	.def("add_uniform", &Material::add_uniform)
-	.def("is_same", &Material::is_same)
+	.def("add_tex", &StateSet::add_tex)
+	.def("add_uniform", &StateSet::add_uniform)
+	.def("remove_tex", &StateSet::remove_tex)
+	.def("remove_uniform", &StateSet::remove_uniform)
+	.def("is_same", &StateSet::is_same)
+	.def("get_tex_slot", &StateSet::get_tex_slot)
+;
+
+py::class_<::staywalk::Material,StateSet, std::shared_ptr<::staywalk::Material>>(__module, "Material")
+	.def(py::init<const string &>())
 	.def_readwrite("program_", &Material::program_)
 ;
 
 py::class_<::staywalk::Camera,Entity, std::shared_ptr<::staywalk::Camera>>(__module, "Camera")
 	.def(py::init<const string &>())
 	.def("look_actor", &Camera::look_actor)
+	.def("update_matrix", &Camera::update_matrix)
 	.def_readwrite("porject_type_", &Camera::porject_type_)
 	.def_readwrite("fov_", &Camera::fov_)
 	.def_readwrite("aspect_", &Camera::aspect_)
@@ -124,6 +133,8 @@ py::class_<::staywalk::Camera,Entity, std::shared_ptr<::staywalk::Camera>>(__mod
 
 py::class_<::staywalk::RLight,Entity, std::shared_ptr<::staywalk::RLight>>(__module, "RLight")
 	.def(py::init<const string &>())
+	.def_readwrite("light_type_", &RLight::light_type_)
+	.def_readwrite("pos", &RLight::pos)
 ;
 
 py::class_<::staywalk::Utility, std::shared_ptr<::staywalk::Utility>>(__module, "Utility")
@@ -158,12 +169,16 @@ py::class_<::staywalk::World, std::shared_ptr<::staywalk::World>>(__module, "Wor
 	.def("get_lights", &World::get_lights, py::return_value_policy::reference_internal)
 	.def("add_actor", &World::add_actor)
 	.def("remove_actor", &World::remove_actor)
+	.def("add_rendertarget", &World::add_rendertarget)
+	.def("remove_rendertarget", &World::remove_rendertarget)
+	.def("get_all_rendertargets", &World::get_all_rendertargets)
 	.def("add_camera", &World::add_camera)
 	.def("remove_camera", &World::remove_camera)
 	.def("activate_camera", &World::activate_camera)
 	.def("get_activated_camera", &World::get_activated_camera)
 	.def("add_light", &World::add_light)
 	.def("remove_light", &World::remove_light)
+	.def("get_main_light", &World::get_main_light)
 	.def("get_all_assets", &World::get_all_assets, py::return_value_policy::reference_internal)
 	.def("add_asset", &World::add_asset)
 	.def("remove_asset", &World::remove_asset)
@@ -226,8 +241,13 @@ py::class_<::staywalk::SkeletonMeshComponent,Component,Drawable, std::shared_ptr
 py::class_<::staywalk::RenderTarget,Entity, std::shared_ptr<::staywalk::RenderTarget>>(__module, "RenderTarget")
 	.def(py::init<const string &>())
 	.def_readwrite("camera_", &RenderTarget::camera_)
-	.def_readwrite("tex_rt_", &RenderTarget::tex_rt_)
-	.def_readwrite("attachment_", &RenderTarget::attachment_)
+	.def_readwrite("post_stage_", &RenderTarget::post_stage_)
+	.def_readwrite("width_", &RenderTarget::width_)
+	.def_readwrite("height_", &RenderTarget::height_)
+	.def_readwrite("color_rt_", &RenderTarget::color_rt_)
+	.def_readwrite("depth_rt_", &RenderTarget::depth_rt_)
+	.def_readwrite("stencil_rt_", &RenderTarget::stencil_rt_)
+	.def_readwrite("program_", &RenderTarget::program_)
 ;
 
 

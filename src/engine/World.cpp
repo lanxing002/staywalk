@@ -105,21 +105,30 @@ namespace staywalk{
 	}
 
 	void World::add_light(LightRef light) {
-		if (light == nullptr) return;
-		auto lid = light->get_guid();
-		auto it = find_if(lights_.begin(), lights_.end(), [lid](LightRef& lig) {return lig->get_guid() == lid; });
-		if (it != lights_.end()) {
-			lights_.push_back(light);
-			light_dirty_ = true;
-		}
+		lights_.push_back(light);
 	}
 	
 	void World::remove_light(idtype lid) {
 		auto it = find_if(lights_.begin(), lights_.end(), [lid](LightRef& lig) {return lig->get_guid() == lid; });
 		if (it != lights_.end()) {
 			lights_.erase(it);
-			light_dirty_ = true;
 		}
+	}
+
+	LightRef World::get_main_light() {
+		LightRef result = nullptr;
+		if (lights_.size() == 0) {
+			static LightRef m = std::make_shared<RLight>("main-light");
+			result = m;
+		}
+		else {
+			for (auto& l : lights_) 
+				if (l) {
+					result = l;
+					break;
+			}
+		}
+		return result;
 	}
 
 	void World::add_asset(Ref<Object> obj) {
@@ -145,6 +154,10 @@ namespace staywalk{
 
 		for (auto& light : lights_) {
 			if (light) light->tick(delta);
+		}
+
+		for (auto& rt : rts_) {
+			if (rt) rt->tick(delta);
 		}
 	}
 }
