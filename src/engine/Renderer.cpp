@@ -45,10 +45,11 @@ void Renderer::render(double delta, unsigned long long count)
 	const auto& light = world->get_main_light();
 	vec4 light_vec = vec4(light->pos.x, light->pos.y, light->pos.z,
 		light->light_type_ == LightType::Directional ? 1.0 : -1.0);
+	
 	for (size_t idx = 0; idx <= rt_num; idx++) {
 		bool main_pass = idx == rt_num;
 		if (main_pass) {
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);
+			glBindFramebuffer(GL_FRAMEBUFFER, 0);  // default framebuffer
 			glViewport(0, 0, engine->get_view_size().x, engine->get_view_size().y);
 		}
 		else{

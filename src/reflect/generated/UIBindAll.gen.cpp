@@ -713,12 +713,6 @@ void ::staywalk::RenderTarget::construct_basic_ui(bool can_modify) {
         staywalk::reflect::UIHelper::construct_ui("width_", width_, can_modify || true);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(height_)>()) 
         staywalk::reflect::UIHelper::construct_ui("height_", height_, can_modify || true);
-    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(color_rt_)>()) 
-        staywalk::reflect::UIHelper::construct_ui("color_rt_", color_rt_, can_modify || true);
-    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(depth_rt_)>()) 
-        staywalk::reflect::UIHelper::construct_ui("depth_rt_", depth_rt_, can_modify || true);
-    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(stencil_rt_)>()) 
-        staywalk::reflect::UIHelper::construct_ui("stencil_rt_", stencil_rt_, can_modify || true);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(program_)>()) 
         staywalk::reflect::UIHelper::construct_ui("program_", program_, can_modify || true);
 }
@@ -751,30 +745,26 @@ void ::staywalk::RenderTarget::construct_obj_ui(bool can_modify) {
             //ImGui::TreePop();
         //}    
     }
-    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(color_rt_)>()){ 
-        //if (ImGui::TreeNode("color_rt_")){
-            staywalk::reflect::UIHelper::construct_ui("color_rt_", color_rt_, can_modify || true);
-            //ImGui::TreePop();
-        //}    
-    }
-    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(depth_rt_)>()){ 
-        //if (ImGui::TreeNode("depth_rt_")){
-            staywalk::reflect::UIHelper::construct_ui("depth_rt_", depth_rt_, can_modify || true);
-            //ImGui::TreePop();
-        //}    
-    }
-    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(stencil_rt_)>()){ 
-        //if (ImGui::TreeNode("stencil_rt_")){
-            staywalk::reflect::UIHelper::construct_ui("stencil_rt_", stencil_rt_, can_modify || true);
-            //ImGui::TreePop();
-        //}    
-    }
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(program_)>()){ 
         //if (ImGui::TreeNode("program_")){
             staywalk::reflect::UIHelper::construct_ui("program_", program_, can_modify || true);
             //ImGui::TreePop();
         //}    
     }
+}
+
+
+
+#include "DepthRenderTarget.h"
+
+void ::staywalk::DepthRenderTarget::construct_basic_ui(bool can_modify) {
+    RenderTarget::construct_basic_ui(can_modify);
+}
+
+
+
+void ::staywalk::DepthRenderTarget::construct_obj_ui(bool can_modify) {
+    RenderTarget::construct_obj_ui(can_modify);
 }
 
 

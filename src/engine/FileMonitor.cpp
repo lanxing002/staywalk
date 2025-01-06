@@ -53,13 +53,14 @@ void FileMonitor::effect(){
 
 void staywalk::FileMonitor::unwatch_file(const Key& key){
 	auto it = cb_table_.find(key);
-	if (it != cb_table_.end()){
+	if (it == cb_table_.end()){
 		log(fmt::format("unwatch_file failed: {}, {} have not been watched", key
 			.first, key.second.u8string()),
 			LogLevel::Warn);
 		return;
 	}
 
+	auto lock = std::lock_guard<std::mutex>(mutex_);
 	cb_table_.erase(it);
 	modify_table_.erase(key);
 }
