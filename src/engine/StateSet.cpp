@@ -12,9 +12,10 @@ namespace staywalk {
 	StateSet::~StateSet(){
 	}
 
-	void StateSet::add_tex(const string& name, Tex2DRef tex){
+	void StateSet::add_tex(const string& name, TexRef tex){
 		texs_[name] = tex;
 	}
+
 
 	void StateSet::add_uniform(const string& name, UniformRef uniform){
 		uniforms_[name] = uniform;

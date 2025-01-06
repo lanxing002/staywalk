@@ -14,12 +14,14 @@ out vec3 norm;
 out vec2 texcoord;
 out vec3 tangent;
 out vec3 bitangent;
+out vec3 light_pos;
 
  
 // uniform 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform mat4 light_view_project;
 uniform bool use_skeleton;
 uniform vec4 light;
 layout (std140) uniform  BoneMatrixBlock {
@@ -36,7 +38,6 @@ void main(){
     tangent = in_tangent;
     bitangent = in_bitangent;
 
-
     vec4 total_pos = vec4(0.0f);
     for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++){
         if(bone_ids[i] == -1)  continue;
@@ -49,8 +50,12 @@ void main(){
         //vec3 localNormal = mat3(bones_matrices[bone_ids[i]]) * norm;
    }
 	
-    mat4 viewModel = view * model;
+    vec4 lpos = light_view_project * model * total_pos;
+    lpos /= lpos.w;
+    lpos = (lpos + 1.0) * 0.5;
+    light_pos = lpos.xyz;
 
-    gl_Position = projection * view * model * total_pos, 1.0;
+    gl_Position = projection * view * model * total_pos;
+    //gl_Position = lpos;
 }
 
