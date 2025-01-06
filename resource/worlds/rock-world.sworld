@@ -273,9 +273,9 @@
             "guid_": 834511414860185600,
             "transform_": {
                 "location": [
-                    0.0,
-                    0.0,
-                    0.0
+                    24.0,
+                    11.0,
+                    -1.0
                 ],
                 "scale": [
                     1.0,
@@ -415,7 +415,7 @@
             "__object_type_": "staywalk::Animation",
             "name_": "vampire",
             "guid_": 836764263862239232,
-            "curr_time_": 1.570984959602356,
+            "curr_time_": 2.2726213932037354,
             "duration_": 3.433332920074463,
             "ticks_pers_": 1.0,
             "node_root_": {
@@ -2675,9 +2675,9 @@
             "guid_": 834502234564722688,
             "transform_": {
                 "location": [
-                    9.801835060119629,
-                    -13.319633483886719,
-                    3.861497640609741
+                    37.22716522216797,
+                    13.124076843261719,
+                    8.481700897216797
                 ],
                 "scale": [
                     1.0,
@@ -2685,14 +2685,14 @@
                     1.0
                 ],
                 "rotation": [
-                    -7.10015344619751,
-                    -1404.8779296875,
+                    -29.481090545654297,
+                    -1337.74072265625,
                     0.0
                 ]
             },
             "porject_type_": 0,
             "fov_": 45.0,
-            "aspect_": 1.7777777910232544,
+            "aspect_": 1.894892692565918,
             "near_": 1.0,
             "far_": 1000.0
         },
@@ -2702,9 +2702,9 @@
             "guid_": 837154564439277568,
             "transform_": {
                 "location": [
-                    0.0,
-                    0.0,
-                    0.0
+                    30.0,
+                    30.0,
+                    10.0
                 ],
                 "scale": [
                     1.0,
@@ -2719,9 +2719,9 @@
             },
             "light_type_": 0,
             "pos": [
-                10.0,
-                10.0,
-                10.0
+                -1.0,
+                -1.0,
+                -1.0
             ]
         },
         "844409217744896001": {
@@ -2733,7 +2733,7 @@
                 "guid_": 844409217744896002,
                 "shadertype_": 35633,
                 "code_": {
-                    "code": "#version 330 core\n\n// input data layout\nlayout(location = 0) in vec3 in_pos;\n\n// uniform \nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\n\n// shader code\nvoid main(){\n\n    gl_Position = projection * view *  model * vec4(in_pos, 1.0f);\n    \n}\n\n",
+                    "code": "#version 330 core\n\n// input data layout\nlayout(location = 0) in vec3 in_pos;\nlayout(location = 1) in vec3 in_norm;\nlayout(location = 2) in vec2 in_texcoord;\nlayout(location = 3) in vec3 in_tangent;\nlayout(location = 4) in vec3 in_bitangent;\nlayout(location = 5) in ivec4 bone_ids; \nlayout(location = 6) in vec4 bone_weights;\n\n \n// uniform \nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\nlayout (std140) uniform  BoneMatrixBlock {\n    mat4 bone_matrices[100];\n};\n\nconst int MAX_BONES = 100;\nconst int MAX_BONE_INFLUENCE = 4;\n\n// shader code\nvoid main(){\n    vec4 total_pos = vec4(0.0f);\n    for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++){\n        if(bone_ids[i] == -1)  continue;\n        if(bone_ids[i] >=MAX_BONES) {\n            total_pos = vec4(in_pos, 1.0f);\n            break;\n        }\n        vec4 local_pos = bone_matrices[bone_ids[i]] * vec4(in_pos,1.0f);\n        total_pos += local_pos * bone_weights[i];\n        //vec3 localNormal = mat3(bones_matrices[bone_ids[i]]) * norm;\n   }\n\t\n    mat4 viewModel = view * model;\n    gl_Position = projection * view * model * total_pos, 1.0;\n}\n\n",
                     "code_type": 0
                 }
             },
@@ -2782,9 +2782,9 @@
                 "guid_": 844416340092518400,
                 "transform_": {
                     "location": [
-                        9.801835060119629,
-                        -13.319633483886719,
-                        3.861497640609741
+                        45.0,
+                        45.0,
+                        45.0
                     ],
                     "scale": [
                         1.0,
@@ -2800,8 +2800,8 @@
                 "porject_type_": 0,
                 "fov_": 45.0,
                 "aspect_": 1.0,
-                "near_": 1.0,
-                "far_": 1000.0
+                "near_": 10.0,
+                "far_": 400.0
             },
             "post_stage_": false,
             "width_": 1024,

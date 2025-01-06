@@ -16,6 +16,8 @@ namespace staywalk {
 		//--------------------------------//
 		void use() override;
 
+		void tick(float delte) override;
+
 	private:
 		void dump_post() const;
 		void load_post();

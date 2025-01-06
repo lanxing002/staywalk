@@ -24,7 +24,6 @@
 #include "SkeletonMeshComponent.h"
 #include "RenderTarget.h"
 #include "DepthRenderTarget.h"
-#include "Camera.h"
 #include "RenderObject.h"
 #include "RProgram.h"
 #include "RProgram.h"
@@ -33,6 +32,7 @@
 #include "RenderInfo.h"
 #include "RenderObject.h"
 #include "Light.h"
+#include "Camera.h"
 
 
 
@@ -101,15 +101,6 @@ shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::ProjectType>() {
-    return { 
-        {static_cast<int>(::staywalk::ProjectType::Persepective), "Persepective"},
-        {static_cast<int>(::staywalk::ProjectType::Ortho), "Ortho"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
 staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
     return { 
         {static_cast<int>(::staywalk::GlWrap::CLAMP_TO_EDGE), "CLAMP_TO_EDGE"},
@@ -148,13 +139,10 @@ staywalk::reflect::get_enum_label<::staywalk::UniformType>() {
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlTexFormat>() {
+staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>() {
     return { 
-        {static_cast<int>(::staywalk::GlTexFormat::RED), "RED"},
-        {static_cast<int>(::staywalk::GlTexFormat::RGB), "RGB"},
-        {static_cast<int>(::staywalk::GlTexFormat::RGBA), "RGBA"},
-        {static_cast<int>(::staywalk::GlTexFormat::DEPTH), "DEPTH"},
-        {static_cast<int>(::staywalk::GlTexFormat::DEPTHSTENCIL), "DEPTHSTENCIL"},
+        {static_cast<int>(::staywalk::GlMagFilter::NEAREST), "NEAREST"},
+        {static_cast<int>(::staywalk::GlMagFilter::LINEAR), "LINEAR"},
     };
 }
 
@@ -183,10 +171,13 @@ staywalk::reflect::get_enum_label<::staywalk::ProgramType>() {
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>() {
+staywalk::reflect::get_enum_label<::staywalk::GlTexFormat>() {
     return { 
-        {static_cast<int>(::staywalk::GlMagFilter::NEAREST), "NEAREST"},
-        {static_cast<int>(::staywalk::GlMagFilter::LINEAR), "LINEAR"},
+        {static_cast<int>(::staywalk::GlTexFormat::RED), "RED"},
+        {static_cast<int>(::staywalk::GlTexFormat::RGB), "RGB"},
+        {static_cast<int>(::staywalk::GlTexFormat::RGBA), "RGBA"},
+        {static_cast<int>(::staywalk::GlTexFormat::DEPTH), "DEPTH"},
+        {static_cast<int>(::staywalk::GlTexFormat::DEPTHSTENCIL), "DEPTHSTENCIL"},
     };
 }
 
@@ -196,5 +187,14 @@ staywalk::reflect::get_enum_label<::staywalk::LightType>() {
     return { 
         {static_cast<int>(::staywalk::LightType::Directional), "Directional"},
         {static_cast<int>(::staywalk::LightType::Position), "Position"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::ProjectType>() {
+    return { 
+        {static_cast<int>(::staywalk::ProjectType::Persepective), "Persepective"},
+        {static_cast<int>(::staywalk::ProjectType::Ortho), "Ortho"},
     };
 }

@@ -9,7 +9,7 @@ namespace staywalk {
 	class sw_Class()  StateSet : public Object{
 	public:
 		sw_Func()  StateSet(const string& name="0-stateset");
-		sw_Func()  void add_tex(const string & name, Tex2DRef tex);
+		sw_Func()  void add_tex(const string & name, TexRef tex);
 		sw_Func()  void add_uniform(const string & name, UniformRef uniform);
 		sw_Func()  void remove_tex(const string & name) { texs_.erase(name); }
 		sw_Func()  void remove_uniform(const string& name) { uniforms_.erase(name); }
