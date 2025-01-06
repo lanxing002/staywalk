@@ -39,6 +39,6 @@ void main(){
     vec3 n = normalize(vx + vy);
     float f = dot(n, light);
     frag_color.z = 1.0; 
-    frag_color.xyz = vec3(f) * vec3(0.6, 0.8, 0.89);
+    frag_color.xyz = vec3(f) * vec3(0.8, 0.6, 0.4);
     frag_color.w = 1.0;
 }

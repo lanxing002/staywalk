@@ -13,7 +13,7 @@
         837154564439277568
     ],
     "render_targets": [
-        837044653202079744
+        844406964623507456
     ],
     "assets": {
         "834502029593280514": 834502029593280514,
@@ -34,7 +34,8 @@
         "834693969836244992": 834693969836244992,
         "834941007287025664": 834941007287025664,
         "836764263887405056": 836764263887405056,
-        "837042716469624832": 837042716469624832
+        "837042716469624832": 837042716469624832,
+        "844409217744896001": 844409217744896001
     },
     "__real_objects": {
         "834502029593280513": {
@@ -136,7 +137,7 @@
                 "guid_": 834508003624353794,
                 "shadertype_": 35632,
                 "code_": {
-                    "code": "#version 330 core\n\n// input data layout\nin vec3 norm;\nin vec2 texcoord;\nin vec3 tangent;\nin vec3 bitangent;\n\n// output data layout\nout vec4 frag_color;  \n// uniform sampler2D height;\nuniform sampler2D height;\n\n\n// shader code  \n\nvoid main(){\n    vec3 light = normalize(vec3(0.3, 0.2, 0.9));\n    vec3 color = texture(height, texcoord).rrr;\n    //float factor = dot(n, vec3(1, 1, 0.5));\n    //frag_color.xyz = vec3(1.0, 1.0, 1.0);\n    // frag_color.xyz = color * 0.2;\n    // vec2 tsize = textureSize(height, 0);\n    // float step = dFdx(texcoord.x);\n    // step = max(dFdy(texcoord.x), step);\n    // step = max(dFdx(texcoord.y), step);\n    // step = max(dFdy(texcoord.y), step);\n\n    \n    vec2 tsize = textureSize(height, 0);\n    float step = 1.0 / tsize.x ;\n    float hx1 = texture(height, texcoord + vec2(-step, .0)).x;\n    float hx2 = texture(height, texcoord + vec2(step, .0)).x;\n    float hy1 = texture(height, texcoord + vec2(.0, -step)).x;\n    float hy2 = texture(height, texcoord + vec2(.0, +step)).x;\n\n    vec3 vx = vec3((hx2 - hx1)/ (step * 2.0), 0.0, 1.0);\n    vec3 vy = vec3(0.0, (hy2 - hy1)/ (step * 2.0), 1.0);\n    vec3 n = normalize(vx + vy);\n    float f = dot(n, light);\n    frag_color.z = 1.0; \n    frag_color.xyz = vec3(f) * vec3(0.6, 0.8, 0.89);\n    frag_color.w = 1.0;\n}",
+                    "code": "#version 330 core\n\n// input data layout\nin vec3 norm;\nin vec2 texcoord;\nin vec3 tangent;\nin vec3 bitangent;\n\n// output data layout\nout vec4 frag_color;  \n// uniform sampler2D height;\nuniform sampler2D height;\n\n\n// shader code  \n\nvoid main(){\n    vec3 light = normalize(vec3(0.3, 0.2, 0.9));\n    vec3 color = texture(height, texcoord).rrr;\n    //float factor = dot(n, vec3(1, 1, 0.5));\n    //frag_color.xyz = vec3(1.0, 1.0, 1.0);\n    // frag_color.xyz = color * 0.2;\n    // vec2 tsize = textureSize(height, 0);\n    // float step = dFdx(texcoord.x);\n    // step = max(dFdy(texcoord.x), step);\n    // step = max(dFdx(texcoord.y), step);\n    // step = max(dFdy(texcoord.y), step);\n\n    \n    vec2 tsize = textureSize(height, 0);\n    float step = 1.0 / tsize.x ;\n    float hx1 = texture(height, texcoord + vec2(-step, .0)).x;\n    float hx2 = texture(height, texcoord + vec2(step, .0)).x;\n    float hy1 = texture(height, texcoord + vec2(.0, -step)).x;\n    float hy2 = texture(height, texcoord + vec2(.0, +step)).x;\n\n    vec3 vx = vec3((hx2 - hx1)/ (step * 2.0), 0.0, 1.0);\n    vec3 vy = vec3(0.0, (hy2 - hy1)/ (step * 2.0), 1.0);\n    vec3 n = normalize(vx + vy);\n    float f = dot(n, light);\n    frag_color.z = 1.0; \n    frag_color.xyz = vec3(f) * vec3(0.8, 0.6, 0.4);\n    frag_color.w = 1.0;\n}",
                     "code_type": 0
                 }
             },
@@ -414,7 +415,7 @@
             "__object_type_": "staywalk::Animation",
             "name_": "vampire",
             "guid_": 836764263862239232,
-            "curr_time_": 2.518289089202881,
+            "curr_time_": 1.570984959602356,
             "duration_": 3.433332920074463,
             "ticks_pers_": 1.0,
             "node_root_": {
@@ -2684,8 +2685,8 @@
                     1.0
                 ],
                 "rotation": [
-                    -8.687350273132324,
-                    -1412.442626953125,
+                    -7.10015344619751,
+                    -1404.8779296875,
                     0.0
                 ]
             },
@@ -2723,30 +2724,42 @@
                 10.0
             ]
         },
-        "837110806800760902": {
-            "__object_type_": "staywalk::Tex2DRT",
-            "name_": "color",
-            "guid_": 837110806800760902,
-            "wrap_s_": 10497,
-            "wrap_t_": 10497,
-            "min_filter_": 9729,
-            "mag_filter_": 9729,
-            "format_": 6408
-        },
-        "837110806800760903": {
-            "__object_type_": "staywalk::Tex2DRT",
+        "844409217744896001": {
+            "__object_type_": "staywalk::Program",
             "name_": "depth",
-            "guid_": 837110806800760903,
-            "wrap_s_": 10497,
-            "wrap_t_": 10497,
-            "min_filter_": 9729,
-            "mag_filter_": 9729,
-            "format_": 6402
+            "guid_": 844409217744896001,
+            "vs_": {
+                "name_": "vertex",
+                "guid_": 844409217744896002,
+                "shadertype_": 35633,
+                "code_": {
+                    "code": "#version 330 core\n\n// input data layout\nlayout(location = 0) in vec3 in_pos;\n\n// uniform \nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\n\n// shader code\nvoid main(){\n\n    gl_Position = projection * view *  model * vec4(in_pos, 1.0f);\n    \n}\n\n",
+                    "code_type": 0
+                }
+            },
+            "fs_": {
+                "name_": "fragment",
+                "guid_": 844409217744896003,
+                "shadertype_": 35632,
+                "code_": {
+                    "code": "",
+                    "code_type": 0
+                }
+            },
+            "gs_": {
+                "name_": "geom",
+                "guid_": 844409217744896004,
+                "shadertype_": 36313,
+                "code_": {
+                    "code": "",
+                    "code_type": 0
+                }
+            }
         },
-        "837044653202079744": {
-            "__object_type_": "staywalk::RenderTarget",
-            "name_": "rt",
-            "guid_": 837044653202079744,
+        "844406964623507456": {
+            "__object_type_": "staywalk::DepthRenderTarget",
+            "name_": "depth",
+            "guid_": 844406964623507456,
             "transform_": {
                 "location": [
                     0.0,
@@ -2766,7 +2779,7 @@
             },
             "camera_": {
                 "name_": "main",
-                "guid_": 837162801402216448,
+                "guid_": 844416340092518400,
                 "transform_": {
                     "location": [
                         9.801835060119629,
@@ -2779,8 +2792,8 @@
                         1.0
                     ],
                     "rotation": [
-                        -8.687350273132324,
-                        -1412.442626953125,
+                        -7.10015344619751,
+                        -1404.8779296875,
                         0.0
                     ]
                 },
@@ -2793,10 +2806,7 @@
             "post_stage_": false,
             "width_": 1024,
             "height_": 1024,
-            "color_rt_": 837110806800760902,
-            "depth_rt_": 837110806800760903,
-            "stencil_rt_": 18446744073709551615,
-            "program_": 18446744073709551615
+            "program_": 844409217744896001
         },
         "834511653369282560": {
             "__object_type_": "staywalk::Mesh",
@@ -2842,36 +2852,6 @@
             "wrap_r_": 33071,
             "min_filter_": 9729,
             "mag_filter_": 9729
-        },
-        "837110807102750723": {
-            "__object_type_": "staywalk::Tex2DRT",
-            "name_": "color",
-            "guid_": 837110807102750723,
-            "wrap_s_": 10497,
-            "wrap_t_": 10497,
-            "min_filter_": 9729,
-            "mag_filter_": 9729,
-            "format_": 6408
-        },
-        "837110807102750724": {
-            "__object_type_": "staywalk::Tex2DRT",
-            "name_": "depth",
-            "guid_": 837110807102750724,
-            "wrap_s_": 10497,
-            "wrap_t_": 10497,
-            "min_filter_": 9729,
-            "mag_filter_": 9729,
-            "format_": 6408
-        },
-        "837110807102750725": {
-            "__object_type_": "staywalk::Tex2DRT",
-            "name_": "stencil",
-            "guid_": 837110807102750725,
-            "wrap_s_": 10497,
-            "wrap_t_": 10497,
-            "min_filter_": 9729,
-            "mag_filter_": 9729,
-            "format_": 6408
         },
         "837042716469624832": {
             "__object_type_": "staywalk::RenderTarget",
@@ -2923,9 +2903,6 @@
             "post_stage_": false,
             "width_": 1024,
             "height_": 1024,
-            "color_rt_": 837110807102750723,
-            "depth_rt_": 837110807102750724,
-            "stencil_rt_": 837110807102750725,
             "program_": 18446744073709551615
         }
     }

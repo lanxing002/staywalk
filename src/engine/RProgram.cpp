@@ -211,21 +211,21 @@ void staywalk::Program::monitor(ProgramRef program, bool flag /*= true*/){
 	auto engine = Engine::get_engine();
 
 	if (flag) {
-		engine->monitor_file({ program->vs_.get_guid(), vs_file }, [weak_ref](const string& new_context) {
+		engine->monitor_file(FileMonitor::make_key(program->vs_.get_guid(), vs_file), [weak_ref](const string& new_context) {
 			if (auto ref = weak_ref.lock()) { 
 				ref->vs_.code_->text_ = new_context;
 				ref->vs_.mark_dirty();
 				log(fmt::format("vs::hotload {} --> suceess", ref->name_));
 			}
 		});
-		engine->monitor_file({ program->fs_.get_guid(), fs_file }, [weak_ref](const string& new_context) {
+		engine->monitor_file(FileMonitor::make_key(program->fs_.get_guid(), fs_file), [weak_ref](const string& new_context) {
 			if (auto ref = weak_ref.lock()) { 
 				ref->fs_.code_->text_ = new_context; 
 				ref->fs_.mark_dirty();
 				log(fmt::format("fs::hotload {} --> suceess", ref->name_));
 			}
 		});
-		engine->monitor_file({ program->gs_.get_guid(), gs_file }, [weak_ref](const string& new_context) {
+		engine->monitor_file(FileMonitor::make_key(program->gs_.get_guid(), gs_file ), [weak_ref](const string& new_context) {
 			if (auto ref = weak_ref.lock()) {
 				ref->gs_.code_->text_ = new_context;
 				ref->gs_.mark_dirty();
@@ -234,9 +234,9 @@ void staywalk::Program::monitor(ProgramRef program, bool flag /*= true*/){
 			});
 	}
 	else {
-		engine->cancel_monitor_file({ program->vs_.get_guid(), vs_file });
-		engine->cancel_monitor_file({ program->fs_.get_guid(), fs_file });
-		engine->cancel_monitor_file({ program->gs_.get_guid(), gs_file });
+		engine->cancel_monitor_file(FileMonitor::make_key(program->vs_.get_guid(), vs_file ));
+		engine->cancel_monitor_file(FileMonitor::make_key( program->fs_.get_guid(), fs_file ));
+		engine->cancel_monitor_file(FileMonitor::make_key( program->gs_.get_guid(), gs_file ));
 	}
 
 }

@@ -29,6 +29,7 @@ using namespace staywalk;
 #include "Animation.h"
 #include "SkeletonMeshComponent.h"
 #include "RenderTarget.h"
+#include "DepthRenderTarget.h"
 
 
 static void bind_auto(py::module& __module){
@@ -244,10 +245,11 @@ py::class_<::staywalk::RenderTarget,Entity, std::shared_ptr<::staywalk::RenderTa
 	.def_readwrite("post_stage_", &RenderTarget::post_stage_)
 	.def_readwrite("width_", &RenderTarget::width_)
 	.def_readwrite("height_", &RenderTarget::height_)
-	.def_readwrite("color_rt_", &RenderTarget::color_rt_)
-	.def_readwrite("depth_rt_", &RenderTarget::depth_rt_)
-	.def_readwrite("stencil_rt_", &RenderTarget::stencil_rt_)
 	.def_readwrite("program_", &RenderTarget::program_)
+;
+
+py::class_<::staywalk::DepthRenderTarget,RenderTarget, std::shared_ptr<::staywalk::DepthRenderTarget>>(__module, "DepthRenderTarget")
+	.def(py::init<const string &>())
 ;
 
 

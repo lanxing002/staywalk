@@ -13,6 +13,7 @@
 #include "Animation.h"
 #include "SkeletonMeshComponent.h"
 #include "RenderTarget.h"
+#include "DepthRenderTarget.h"
 
 int entry()
 {

@@ -1244,25 +1244,9 @@ void ::staywalk::RenderTarget::dump(rapidjson::Value& value, ::staywalk::reflect
     }
     {
         json::Value prop;
-        dumper.write(this->color_rt_, prop);
-        value.AddMember("color_rt_", prop, dumper.get_doc().GetAllocator()); 
-    }
-    {
-        json::Value prop;
-        dumper.write(this->depth_rt_, prop);
-        value.AddMember("depth_rt_", prop, dumper.get_doc().GetAllocator()); 
-    }
-    {
-        json::Value prop;
-        dumper.write(this->stencil_rt_, prop);
-        value.AddMember("stencil_rt_", prop, dumper.get_doc().GetAllocator()); 
-    }
-    {
-        json::Value prop;
         dumper.write(this->program_, prop);
         value.AddMember("program_", prop, dumper.get_doc().GetAllocator()); 
     }
-    this->dump_post();
 }
 
 
@@ -1288,34 +1272,53 @@ void ::staywalk::RenderTarget::load(rapidjson::Value& value, ::staywalk::reflect
     if(itr != value.MemberEnd()){
         loader.read(this->height_, itr->value);
     }
-    itr = value.FindMember("color_rt_");
-    if(itr != value.MemberEnd()){
-        loader.read(this->color_rt_, itr->value);
-    }
-    itr = value.FindMember("depth_rt_");
-    if(itr != value.MemberEnd()){
-        loader.read(this->depth_rt_, itr->value);
-    }
-    itr = value.FindMember("stencil_rt_");
-    if(itr != value.MemberEnd()){
-        loader.read(this->stencil_rt_, itr->value);
-    }
     itr = value.FindMember("program_");
     if(itr != value.MemberEnd()){
         loader.read(this->program_, itr->value);
     }
-    this->load_post();
 }
 
 
 bool ::staywalk::RenderTarget::operator==(const ::staywalk::RenderTarget& rhs) const {
     return 
-Entity::operator==(rhs)  && ::staywalk::Comparer::equal(this->camera_, rhs.camera_) && ::staywalk::Comparer::equal(this->post_stage_, rhs.post_stage_) && ::staywalk::Comparer::equal(this->width_, rhs.width_) && ::staywalk::Comparer::equal(this->height_, rhs.height_) && ::staywalk::Comparer::equal(this->color_rt_, rhs.color_rt_) && ::staywalk::Comparer::equal(this->depth_rt_, rhs.depth_rt_) && ::staywalk::Comparer::equal(this->stencil_rt_, rhs.stencil_rt_) && ::staywalk::Comparer::equal(this->program_, rhs.program_);
+Entity::operator==(rhs)  && ::staywalk::Comparer::equal(this->camera_, rhs.camera_) && ::staywalk::Comparer::equal(this->post_stage_, rhs.post_stage_) && ::staywalk::Comparer::equal(this->width_, rhs.width_) && ::staywalk::Comparer::equal(this->height_, rhs.height_) && ::staywalk::Comparer::equal(this->program_, rhs.program_);
 }
 
 
 ::staywalk::reflect::MetaInfo staywalk::RenderTarget::get_meta_info() const {
     return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::RenderTarget, "staywalk::RenderTarget"};
+
+}
+
+#include "DepthRenderTarget.h"
+
+void ::staywalk::DepthRenderTarget::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+
+    RenderTarget::dump(value, dumper);
+
+    this->dump_post();
+}
+
+
+void ::staywalk::DepthRenderTarget::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    RenderTarget::load(value, loader);
+
+    this->load_post();
+}
+
+
+bool ::staywalk::DepthRenderTarget::operator==(const ::staywalk::DepthRenderTarget& rhs) const {
+    return 
+RenderTarget::operator==(rhs) ;
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::DepthRenderTarget::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::DepthRenderTarget, "staywalk::DepthRenderTarget"};
 
 }
 

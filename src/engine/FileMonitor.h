@@ -27,6 +27,7 @@ namespace staywalk {
 		~FileMonitor();
 
 		map<Key, CallbackType> cb_table_;
+		map<Key, fs::path> fiels;
 		map<Key, fs::file_time_type> modify_table_;
 		map<Key, std::string> new_content_;
 		std::thread thread_;
