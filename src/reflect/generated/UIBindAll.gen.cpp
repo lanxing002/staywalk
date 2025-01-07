@@ -769,7 +769,7 @@ void ::staywalk::DepthRenderTarget::construct_obj_ui(bool can_modify) {
 
 
 
-#include "C:/Users/Lenovo/Documents/gly/git_stars/staywalk/src/project/SkyBox.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/project/SkyBox.h"
 
 void ::staywalk::Skybox::construct_basic_ui(bool can_modify) {
     Actor::construct_basic_ui(can_modify);
