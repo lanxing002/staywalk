@@ -26,7 +26,7 @@ void main(){
     vec4 total_pos = vec4(0.0f);
     for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++){
         if(bone_ids[i] == -1)  continue;
-        if(bone_ids[i] >=MAX_BONES) {
+        if(bone_ids[i] >=MAX_BONES) { 
             total_pos = vec4(in_pos, 1.0f);
             break;
         }

@@ -24,15 +24,16 @@
 #include "SkeletonMeshComponent.h"
 #include "RenderTarget.h"
 #include "DepthRenderTarget.h"
-#include "RenderObject.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/staywalk/src/project/SkyBox.h"
 #include "RProgram.h"
 #include "RProgram.h"
-#include "RenderObject.h"
+#include "Light.h"
 #include "RenderObject.h"
 #include "RenderInfo.h"
-#include "RenderObject.h"
-#include "Light.h"
 #include "Camera.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
 
 
 
@@ -93,21 +94,13 @@ shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
 
     else if (minfo.tname == "staywalk::DepthRenderTarget"){return std::make_shared<::staywalk::DepthRenderTarget>();}
 
+    else if (minfo.tname == "staywalk::Skybox"){return std::make_shared<::staywalk::Skybox>();}
+
     else {assert(false); return nullptr;}
 
 }
 
 
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
-    return { 
-        {static_cast<int>(::staywalk::GlWrap::CLAMP_TO_EDGE), "CLAMP_TO_EDGE"},
-        {static_cast<int>(::staywalk::GlWrap::MIRRORED_REPEAT), "MIRRORED_REPEAT"},
-        {static_cast<int>(::staywalk::GlWrap::REPEAT), "REPEAT"},
-    };
-}
 
 template<>
 std::vector<std::pair<int, std::string>>
@@ -139,33 +132,10 @@ staywalk::reflect::get_enum_label<::staywalk::UniformType>() {
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>() {
+staywalk::reflect::get_enum_label<::staywalk::LightType>() {
     return { 
-        {static_cast<int>(::staywalk::GlMagFilter::NEAREST), "NEAREST"},
-        {static_cast<int>(::staywalk::GlMagFilter::LINEAR), "LINEAR"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>() {
-    return { 
-        {static_cast<int>(::staywalk::GlMinFilter::NEAREST), "NEAREST"},
-        {static_cast<int>(::staywalk::GlMinFilter::LINEAR), "LINEAR"},
-        {static_cast<int>(::staywalk::GlMinFilter::NEAREST_MIPMAP_NEAREST), "NEAREST_MIPMAP_NEAREST"},
-        {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_NEAREST), "LINEAR_MIPMAP_NEAREST"},
-        {static_cast<int>(::staywalk::GlMinFilter::NEAREST_MIPMAP_LINEAR), "NEAREST_MIPMAP_LINEAR"},
-        {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_LINEAR), "LINEAR_MIPMAP_LINEAR"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::ProgramType>() {
-    return { 
-        {static_cast<int>(::staywalk::ProgramType::PBR), "PBR"},
-        {static_cast<int>(::staywalk::ProgramType::Shadow), "Shadow"},
-        {static_cast<int>(::staywalk::ProgramType::_Count), "_Count"},
+        {static_cast<int>(::staywalk::LightType::Directional), "Directional"},
+        {static_cast<int>(::staywalk::LightType::Position), "Position"},
     };
 }
 
@@ -183,10 +153,11 @@ staywalk::reflect::get_enum_label<::staywalk::GlTexFormat>() {
 
 template<>
 std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::LightType>() {
+staywalk::reflect::get_enum_label<::staywalk::ProgramType>() {
     return { 
-        {static_cast<int>(::staywalk::LightType::Directional), "Directional"},
-        {static_cast<int>(::staywalk::LightType::Position), "Position"},
+        {static_cast<int>(::staywalk::ProgramType::PBR), "PBR"},
+        {static_cast<int>(::staywalk::ProgramType::Shadow), "Shadow"},
+        {static_cast<int>(::staywalk::ProgramType::_Count), "_Count"},
     };
 }
 
@@ -196,5 +167,37 @@ staywalk::reflect::get_enum_label<::staywalk::ProjectType>() {
     return { 
         {static_cast<int>(::staywalk::ProjectType::Persepective), "Persepective"},
         {static_cast<int>(::staywalk::ProjectType::Ortho), "Ortho"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
+    return { 
+        {static_cast<int>(::staywalk::GlWrap::CLAMP_TO_EDGE), "CLAMP_TO_EDGE"},
+        {static_cast<int>(::staywalk::GlWrap::MIRRORED_REPEAT), "MIRRORED_REPEAT"},
+        {static_cast<int>(::staywalk::GlWrap::REPEAT), "REPEAT"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>() {
+    return { 
+        {static_cast<int>(::staywalk::GlMagFilter::NEAREST), "NEAREST"},
+        {static_cast<int>(::staywalk::GlMagFilter::LINEAR), "LINEAR"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>() {
+    return { 
+        {static_cast<int>(::staywalk::GlMinFilter::NEAREST), "NEAREST"},
+        {static_cast<int>(::staywalk::GlMinFilter::LINEAR), "LINEAR"},
+        {static_cast<int>(::staywalk::GlMinFilter::NEAREST_MIPMAP_NEAREST), "NEAREST_MIPMAP_NEAREST"},
+        {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_NEAREST), "LINEAR_MIPMAP_NEAREST"},
+        {static_cast<int>(::staywalk::GlMinFilter::NEAREST_MIPMAP_LINEAR), "NEAREST_MIPMAP_LINEAR"},
+        {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_LINEAR), "LINEAR_MIPMAP_LINEAR"},
     };
 }

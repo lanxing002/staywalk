@@ -10,6 +10,7 @@
 
 namespace staywalk{
 	World::~World() {
+		
 	}
 
 	void World::dump() {

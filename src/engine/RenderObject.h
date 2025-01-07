@@ -109,6 +109,9 @@ namespace staywalk{
 		Tex(const string & name = "tex");
 		virtual GLuint get_updated_glid() { assert(false); return glid_; }
 		virtual void gl_delete() { return; }
+
+		virtual GLenum get_tex_enum() { assert(false); return 0; }
+
 	private:
 		virtual void gl_update() { return; }
 	};
@@ -126,6 +129,7 @@ namespace staywalk{
 
 		GLuint get_updated_glid() override;
 		void gl_delete() override;
+		GLenum get_tex_enum() override { return GL_TEXTURE_2D; }
 
 	private:
 		void gl_update() override;
@@ -149,14 +153,15 @@ namespace staywalk{
 		sw_Prop() GlWrap wrap_t_ = GlWrap::REPEAT;
 		sw_Prop() GlMinFilter min_filter_ = GlMinFilter::LINEAR;
 		sw_Prop() GlMagFilter mag_filter_ = GlMagFilter::LINEAR;
-		int width_ = -1;
-		int height_ = -1;
 		sw_Prop() GlTexFormat format_ = GlTexFormat::RGBA;
 		MetaRegister(Tex2DRT);
 
+		GLenum get_tex_enum() override { return GL_TEXTURE_2D; }
 		GLuint get_updated_glid() override;
 		void gl_delete() override {}
 
+		int width_ = -1;
+		int height_ = -1;
 	private:
 		void gl_update() override;
 	};
@@ -172,7 +177,7 @@ namespace staywalk{
 		void gl_update();
 	};
 
-	class sw_Class(jsonpost;)  CubeMap : public RObject {
+	class sw_Class(jsonpost;)  CubeMap : public Tex {
 	public:
 		sw_Func() CubeMap(const string& name = "cube-map-0");
 		sw_Prop() string img_name_;
@@ -182,8 +187,10 @@ namespace staywalk{
 		sw_Prop() GlWrap wrap_r_ = GlWrap::CLAMP_TO_EDGE;
 		sw_Prop() GlMinFilter min_filter_ = GlMinFilter::LINEAR;
 		sw_Prop() GlMagFilter mag_filter_ = GlMagFilter::LINEAR;
+
 		MetaRegister(CubeMap);
 
+		GLenum get_tex_enum() override { return GL_TEXTURE_CUBE_MAP; }
 		GLuint get_updated_glid();
 		void gl_delete();
 

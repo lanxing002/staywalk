@@ -232,7 +232,7 @@ void ::staywalk::FrameBuffer::construct_obj_ui(bool can_modify) {
 #include "RenderObject.h"
 
 void ::staywalk::CubeMap::construct_basic_ui(bool can_modify) {
-    RObject::construct_basic_ui(can_modify);
+    Tex::construct_basic_ui(can_modify);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(img_name_)>()) 
         staywalk::reflect::UIHelper::construct_ui("img_name_", img_name_, can_modify || true);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(img_extension_)>()) 
@@ -252,7 +252,7 @@ void ::staywalk::CubeMap::construct_basic_ui(bool can_modify) {
 
 
 void ::staywalk::CubeMap::construct_obj_ui(bool can_modify) {
-    RObject::construct_obj_ui(can_modify);
+    Tex::construct_obj_ui(can_modify);
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(img_name_)>()){ 
         //if (ImGui::TreeNode("img_name_")){
             staywalk::reflect::UIHelper::construct_ui("img_name_", img_name_, can_modify || true);
@@ -765,6 +765,20 @@ void ::staywalk::DepthRenderTarget::construct_basic_ui(bool can_modify) {
 
 void ::staywalk::DepthRenderTarget::construct_obj_ui(bool can_modify) {
     RenderTarget::construct_obj_ui(can_modify);
+}
+
+
+
+#include "C:/Users/Lenovo/Documents/gly/git_stars/staywalk/src/project/SkyBox.h"
+
+void ::staywalk::Skybox::construct_basic_ui(bool can_modify) {
+    Actor::construct_basic_ui(can_modify);
+}
+
+
+
+void ::staywalk::Skybox::construct_obj_ui(bool can_modify) {
+    Actor::construct_obj_ui(can_modify);
 }
 
 

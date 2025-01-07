@@ -64,7 +64,7 @@ namespace staywalk {
 			program->set_uniform(n, idx);
 			tex_slot_[n] = idx;
 			glActiveTexture(GL_TEXTURE0 + idx);
-			glBindTexture(GL_TEXTURE_2D, texid);
+			glBindTexture(t->get_tex_enum(), texid);
 			idx++;
 		}
 	}

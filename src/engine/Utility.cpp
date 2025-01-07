@@ -256,23 +256,35 @@ namespace staywalk{
         auto path = get_textures_dir() / "cubemap" / fs::path(cubemap.img_name_);
         auto file_name = path.u8string() + "-nx." + cubemap.img_extension_;
         int width = 0, height = 0, nrcomps = 0;
+        int width_cmp = 0, height_cmp = 0, nrcomps_cmp = 0;
 		cubemap.host_data_nx_ = stbi_load(file_name.c_str(), &(width), &(height), &(nrcomps), 0);
+        width_cmp = width;
+        height_cmp = height;
+        nrcomps_cmp = nrcomps;
 
 		file_name = path.u8string() + "-ny." + cubemap.img_extension_;
 		cubemap.host_data_ny_ = stbi_load(file_name.c_str(), &(width), &(height), &(nrcomps), 0);
+        assert(width_cmp == width && height_cmp == height && nrcomps == nrcomps_cmp);
 
 		file_name = path.u8string() + "-nz." + cubemap.img_extension_;
 		cubemap.host_data_nz_ = stbi_load(file_name.c_str(), &(width), &(height), &(nrcomps), 0);
+        assert(width_cmp == width && height_cmp == height && nrcomps == nrcomps_cmp);
 
 		file_name = path.u8string() + "-px." + cubemap.img_extension_;
 		cubemap.host_data_px_ = stbi_load(file_name.c_str(), &(width), &(height), &(nrcomps), 0);
+        assert(width_cmp == width && height_cmp == height && nrcomps == nrcomps_cmp);
 
 		file_name = path.u8string() + "-py." + cubemap.img_extension_;
 		cubemap.host_data_py_ = stbi_load(file_name.c_str(), &(width), &(height), &(nrcomps), 0);
+        assert(width_cmp == width && height_cmp == height && nrcomps == nrcomps_cmp);
 
 		file_name = path.u8string() + "-pz." + cubemap.img_extension_;
 		cubemap.host_data_pz_ = stbi_load(file_name.c_str(), &(width), &(height), &(nrcomps), 0);
+        assert(width_cmp == width && height_cmp == height && nrcomps == nrcomps_cmp);
 
+        cubemap.width_ = width;
+        cubemap.height_ = height;
+        cubemap.nr_comps_ = nrcomps;
 		if (cubemap.host_data_nx_ == nullptr
             || cubemap.host_data_ny_ == nullptr
 			|| cubemap.host_data_nz_ == nullptr

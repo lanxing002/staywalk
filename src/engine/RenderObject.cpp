@@ -83,7 +83,7 @@ namespace staywalk {
 	}
 
 	CubeMap::CubeMap(const string& name /*= "tex-0"*/)
-	:RObject(name){
+	:Tex(name){
 	}
 
 	GLuint CubeMap::get_updated_glid() {

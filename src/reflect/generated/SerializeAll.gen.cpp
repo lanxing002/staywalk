@@ -386,7 +386,7 @@ RObject::operator==(rhs) ;
 void ::staywalk::CubeMap::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
-    RObject::dump(value, dumper);
+    Tex::dump(value, dumper);
 
     {
         json::Value prop;
@@ -431,7 +431,7 @@ void ::staywalk::CubeMap::load(rapidjson::Value& value, ::staywalk::reflect::Loa
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
-    RObject::load(value, loader);
+    Tex::load(value, loader);
 
     itr = value.FindMember("img_name_");
     if(itr != value.MemberEnd()){
@@ -467,7 +467,7 @@ void ::staywalk::CubeMap::load(rapidjson::Value& value, ::staywalk::reflect::Loa
 
 bool ::staywalk::CubeMap::operator==(const ::staywalk::CubeMap& rhs) const {
     return 
-RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->img_name_, rhs.img_name_) && ::staywalk::Comparer::equal(this->img_extension_, rhs.img_extension_) && ::staywalk::Comparer::equal(this->wrap_s_, rhs.wrap_s_) && ::staywalk::Comparer::equal(this->wrap_t_, rhs.wrap_t_) && ::staywalk::Comparer::equal(this->wrap_r_, rhs.wrap_r_) && ::staywalk::Comparer::equal(this->min_filter_, rhs.min_filter_) && ::staywalk::Comparer::equal(this->mag_filter_, rhs.mag_filter_);
+Tex::operator==(rhs)  && ::staywalk::Comparer::equal(this->img_name_, rhs.img_name_) && ::staywalk::Comparer::equal(this->img_extension_, rhs.img_extension_) && ::staywalk::Comparer::equal(this->wrap_s_, rhs.wrap_s_) && ::staywalk::Comparer::equal(this->wrap_t_, rhs.wrap_t_) && ::staywalk::Comparer::equal(this->wrap_r_, rhs.wrap_r_) && ::staywalk::Comparer::equal(this->min_filter_, rhs.min_filter_) && ::staywalk::Comparer::equal(this->mag_filter_, rhs.mag_filter_);
 }
 
 
@@ -1319,6 +1319,36 @@ RenderTarget::operator==(rhs) ;
 
 ::staywalk::reflect::MetaInfo staywalk::DepthRenderTarget::get_meta_info() const {
     return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::DepthRenderTarget, "staywalk::DepthRenderTarget"};
+
+}
+
+#include "C:/Users/Lenovo/Documents/gly/git_stars/staywalk/src/project/SkyBox.h"
+
+void ::staywalk::Skybox::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+
+    Actor::dump(value, dumper);
+
+}
+
+
+void ::staywalk::Skybox::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    Actor::load(value, loader);
+
+}
+
+
+bool ::staywalk::Skybox::operator==(const ::staywalk::Skybox& rhs) const {
+    return 
+Actor::operator==(rhs) ;
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::Skybox::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Skybox, "staywalk::Skybox"};
 
 }
 

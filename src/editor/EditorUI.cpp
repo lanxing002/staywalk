@@ -194,8 +194,7 @@ void EditorUI::show_main_menu(){
                     if (it.path().has_filename()) {
                         auto name = it.path().filename().u8string();
                         if(ImGui::MenuItem(name.c_str())) {
-                            auto world = World::load(it.path().filename().stem().u8string());
-                            Engine::get_engine()->set_world(world);
+                            Engine::get_engine()->set_world(it.path().filename().stem().u8string());
                         }
                     }
                 }
