@@ -30,7 +30,7 @@ using namespace staywalk;
 #include "SkeletonMeshComponent.h"
 #include "RenderTarget.h"
 #include "DepthRenderTarget.h"
-#include "C:/Users/Lenovo/Documents/gly/git_stars/staywalk/src/project/SkyBox.h"
+#include "C:/Users/lanxi/Documents/lanxing/codes/ErJiu/staywalk/src/project/SkyBox.h"
 
 
 static void bind_auto(py::module& __module){

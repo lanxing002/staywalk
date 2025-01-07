@@ -16,15 +16,60 @@ uniform vec4 light;
 
 // shader code
 
-float query_shaodw(){
-    float d = texture(shadow, light_pos.xy).x;
-    vec3 n = normalize(norm); 
-    float bias = mix(0.0004, 0.00001, dot(n, light.xyz));
-    float s = (d + bias) < light_pos.z ? 0.0 : 1.0;
-    return s;
+#define NUM_SAMPLES 100
+#define NUM_RINGS 10
+
+#define EPS 1e-3
+#define PI 3.141592653589793
+#define PI2 6.283185307179586
+
+highp float rand_1to1(highp float x ) { 
+  // -1 -1
+  return fract(sin(x)*10000.0);
 }
 
+highp float rand_2to1(vec2 uv ) { 
+  // 0 - 1
+	const highp float a = 12.9898, b = 78.233, c = 43758.5453;
+	highp float dt = dot( uv.xy, vec2( a,b ) ), sn = mod( dt, PI );
+	return fract(sin(sn) * c);
+}
+
+vec2 possion_disk[NUM_SAMPLES];
+void poisson_sample( const in vec2 seed ) {
+
+  float ANGLE_STEP = PI2 * float( NUM_RINGS ) / float( NUM_SAMPLES );
+  float INV_NUM_SAMPLES = 1.0 / float( NUM_SAMPLES );
+
+  float angle = rand_2to1( seed ) * PI2;
+  float radius = INV_NUM_SAMPLES;
+  float radius_step = radius;
+
+  for( int i = 0; i < NUM_SAMPLES; i ++ ) {
+    possion_disk[i] = vec2( cos( angle ), sin( angle ) ) * pow( radius, 0.75 );
+    radius += radius_step;
+    angle += ANGLE_STEP;
+  }
+}
+
+
+float query_shaodw(){
+    vec3 n = normalize(norm); 
+    float bias = mix(0.0008, 0.0002, dot(n, light.xyz));
+    ivec2 tex_size = textureSize(shadow, 0);
+    vec2 inv_tex_size = 1.0 / vec2(tex_size);
+    float sum = 0.0;
+    for(int i = 0; i < NUM_SAMPLES; i++){
+        vec2 sample_pos = possion_disk[i] * 4.0 * inv_tex_size + light_pos.xy;
+        float d = texture(shadow, sample_pos).x;
+        sum += (d + bias) < light_pos.z ? 0.0 : 1.0;
+    }
+    return sum / NUM_SAMPLES;
+}
+
+
 void main(){
+    poisson_sample(texcoord);
     vec3 n = normalize(norm); 
     vec3 c = texture(diffuse, texcoord).xyz;  
     frag_color.xyz = c;
