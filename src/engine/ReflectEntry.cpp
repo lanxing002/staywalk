@@ -14,6 +14,7 @@
 #include "SkeletonMeshComponent.h"
 #include "RenderTarget.h"
 #include "DepthRenderTarget.h"
+#include "SkyBox.h"
 
 int entry()
 {

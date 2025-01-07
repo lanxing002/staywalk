@@ -39,8 +39,11 @@ namespace staywalk {
 	Engine::~Engine() {
 	}
 
-	void Engine::set_world(WorldRef	world){
+	void Engine::set_world(const string world_name){
 		// setup light
+		world_ = nullptr;  // destroy all asset
+		Event::World_AssetChanged();
+		auto world = World::load(world_name);
 		world_ = world;
 		selelcted_ = nullptr;
 		Event::World_AssetChanged();

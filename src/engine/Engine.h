@@ -26,13 +26,14 @@ namespace staywalk{
 		sw_Func() void cancel_monitor_file(FileMonitor::Key key);
 		//end of engine functions
 
-		sw_Func() void set_world(WorldRef world);
 		sw_Func() ProgramRef query_program(ProgramType pt);
 		sw_Func() InputManager& get_input_mgr() { return input_mgr_; }
 		sw_Func() vec2 get_view_size() { return view_size_; }
 		sw_Func() void set_view_size(vec2 value) { view_size_ = value; }
 		sw_Func() void select(Ref<Entity> target) { selelcted_ = target; }
 		sw_Func() Ref<Entity> get_selected() { return selelcted_; }
+
+		void set_world(const string world_name);
 
 		//---------------------------------//
 		void shutdown();

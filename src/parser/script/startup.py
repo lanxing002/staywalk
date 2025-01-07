@@ -42,6 +42,7 @@ if __name__ == '__main__':
     compile_args = [
                        '-std=c++17',
                        '-I{}/engine'.format(code_src_path),
+                       '-I{}/project'.format(code_src_path),
                        # f'-I{code_src_path}/reflect',
                        '-D_IN_REFLECT=1',  # switch on reflect
                    ] + other_include_path

@@ -30,6 +30,7 @@ using namespace staywalk;
 #include "SkeletonMeshComponent.h"
 #include "RenderTarget.h"
 #include "DepthRenderTarget.h"
+#include "C:/Users/Lenovo/Documents/gly/git_stars/staywalk/src/project/SkyBox.h"
 
 
 static void bind_auto(py::module& __module){
@@ -80,7 +81,7 @@ py::class_<::staywalk::Tex2DRT,Tex, std::shared_ptr<::staywalk::Tex2DRT>>(__modu
 py::class_<::staywalk::FrameBuffer,RObject, std::shared_ptr<::staywalk::FrameBuffer>>(__module, "FrameBuffer")
 ;
 
-py::class_<::staywalk::CubeMap,RObject, std::shared_ptr<::staywalk::CubeMap>>(__module, "CubeMap")
+py::class_<::staywalk::CubeMap,Tex, std::shared_ptr<::staywalk::CubeMap>>(__module, "CubeMap")
 	.def(py::init<const string &>())
 	.def_readwrite("img_name_", &CubeMap::img_name_)
 	.def_readwrite("img_extension_", &CubeMap::img_extension_)
@@ -150,7 +151,6 @@ py::class_<::staywalk::Engine, std::shared_ptr<::staywalk::Engine>>(__module, "E
 	.def_static("get_console", &Engine::get_console)
 	.def("monitor_file", &Engine::monitor_file)
 	.def("cancel_monitor_file", &Engine::cancel_monitor_file)
-	.def("set_world", &Engine::set_world)
 	.def("query_program", &Engine::query_program)
 	.def("get_input_mgr", &Engine::get_input_mgr, py::return_value_policy::reference_internal)
 	.def("get_view_size", &Engine::get_view_size)
@@ -250,6 +250,11 @@ py::class_<::staywalk::RenderTarget,Entity, std::shared_ptr<::staywalk::RenderTa
 
 py::class_<::staywalk::DepthRenderTarget,RenderTarget, std::shared_ptr<::staywalk::DepthRenderTarget>>(__module, "DepthRenderTarget")
 	.def(py::init<const string &>())
+;
+
+py::class_<::staywalk::Skybox,Actor, std::shared_ptr<::staywalk::Skybox>>(__module, "Skybox")
+	.def(py::init<const string &>())
+	.def_static("create", &Skybox::create)
 ;
 
 

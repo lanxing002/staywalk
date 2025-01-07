@@ -9,6 +9,7 @@ in vec3 light_pos;
 
 // output data layout
 out vec4 frag_color;  
+
 uniform sampler2D diffuse;
 uniform sampler2D shadow;
 uniform vec4 light;
