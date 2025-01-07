@@ -85,9 +85,9 @@
             "guid_": 834502029593280514,
             "transform_": {
                 "location": [
-                    18.0,
-                    12.0,
-                    13.0
+                    -4.0,
+                    0.0,
+                    0.0
                 ],
                 "scale": [
                     0.10000000149011612,
@@ -128,7 +128,7 @@
                 "guid_": 834508003624353793,
                 "shadertype_": 35633,
                 "code_": {
-                    "code": "#version 330 core\n\n// input data layout\nlayout(location = 0) in vec3 in_pos;\nlayout(location = 1) in vec3 in_norm;\nlayout(location = 2) in vec2 in_texcoord;\nlayout(location = 3) in vec3 in_tangent;\nlayout(location = 4) in vec3 in_bitangent;\n// layout(location = 5) in ivec4 boneIds; \n// layout(location = 6) in vec4 weights;\n\n// out data layout\nout vec3 norm;\nout vec2 texcoord;\nout vec3 tangent;\nout vec3 bitangent;\n\n// uniform \nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\n\nuniform sampler2D height;\n// shader code\nvoid main(){\n    norm = in_norm;\n    texcoord = in_texcoord;\n    tangent = in_tangent;\n    bitangent = in_bitangent;\n\n    float h = textureLod(height, in_texcoord, 0.0).x;    \n    vec4 world_pos = model * vec4(in_pos, 1.0);\n    world_pos.z = h * 5.0;\n    gl_Position = projection * view * world_pos;\n}\n\n",
+                    "code": "#version 330 core\n\n// input data layout\nlayout(location = 0) in vec3 in_pos;\nlayout(location = 1) in vec3 in_norm;\nlayout(location = 2) in vec2 in_texcoord;\nlayout(location = 3) in vec3 in_tangent;\nlayout(location = 4) in vec3 in_bitangent;\n// layout(location = 5) in ivec4 boneIds; \n// layout(location = 6) in vec4 weights;\n\n// out data layout\nout vec3 norm;\nout vec2 texcoord;\nout vec3 tangent;\nout vec3 bitangent;\nout vec3 light_pos;\n\n\n// uniform \nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\nuniform mat4 light_view_project;\n\n\nuniform sampler2D height;\n// shader code\nvoid main(){\n    norm = in_norm;\n    texcoord = in_texcoord;\n    tangent = in_tangent;\n    bitangent = in_bitangent;\n\n    float h = textureLod(height, in_texcoord, 0.0).x;    \n    vec4 world_pos = model * vec4(in_pos, 1.0);\n    world_pos.z = h * 5.0;\n\n    vec4 lpos = light_view_project * world_pos;\n    lpos /= lpos.w;\n    lpos = (lpos + 1.0) * 0.5;\n    light_pos = lpos.xyz;\n\n    gl_Position = projection * view * world_pos;\n}\n\n",
                     "code_type": 0
                 }
             },
@@ -137,7 +137,7 @@
                 "guid_": 834508003624353794,
                 "shadertype_": 35632,
                 "code_": {
-                    "code": "#version 330 core\n\n// input data layout\nin vec3 norm;\nin vec2 texcoord;\nin vec3 tangent;\nin vec3 bitangent;\n\n// output data layout\nout vec4 frag_color;  \n// uniform sampler2D height;\nuniform sampler2D height;\n\n\n// shader code  \n\nvoid main(){\n    vec3 light = normalize(vec3(0.3, 0.2, 0.9));\n    vec3 color = texture(height, texcoord).rrr;\n    //float factor = dot(n, vec3(1, 1, 0.5));\n    //frag_color.xyz = vec3(1.0, 1.0, 1.0);\n    // frag_color.xyz = color * 0.2;\n    // vec2 tsize = textureSize(height, 0);\n    // float step = dFdx(texcoord.x);\n    // step = max(dFdy(texcoord.x), step);\n    // step = max(dFdx(texcoord.y), step);\n    // step = max(dFdy(texcoord.y), step);\n\n    \n    vec2 tsize = textureSize(height, 0);\n    float step = 1.0 / tsize.x ;\n    float hx1 = texture(height, texcoord + vec2(-step, .0)).x;\n    float hx2 = texture(height, texcoord + vec2(step, .0)).x;\n    float hy1 = texture(height, texcoord + vec2(.0, -step)).x;\n    float hy2 = texture(height, texcoord + vec2(.0, +step)).x;\n\n    vec3 vx = vec3((hx2 - hx1)/ (step * 2.0), 0.0, 1.0);\n    vec3 vy = vec3(0.0, (hy2 - hy1)/ (step * 2.0), 1.0);\n    vec3 n = normalize(vx + vy);\n    float f = dot(n, light);\n    frag_color.z = 1.0; \n    frag_color.xyz = vec3(f) * vec3(0.8, 0.6, 0.4);\n    frag_color.w = 1.0;\n}",
+                    "code": "#version 330 core\n\n// input data layout\nin vec3 norm;\nin vec2 texcoord;\nin vec3 tangent;\nin vec3 bitangent;\nin vec3 light_pos;\n\n\n// output data layout\nout vec4 frag_color;  \n// uniform sampler2D height;\nuniform sampler2D height;\nuniform sampler2D shadow;\n \n\n// shader code  \n\nvoid main(){\n    vec3 light = normalize(vec3(0.3, 0.2, 0.9));\n    vec3 color = texture(height, texcoord).rrr;\n\n    float d = texture(shadow, light_pos.xy).x;\n    float s = (d + 0.0002) < light_pos.z ? 0.0 : 1.0;\n\n    \n    vec2 tsize = textureSize(height, 0);\n    float step = 1.0 / tsize.x ;\n    float hx1 = texture(height, texcoord + vec2(-step, .0)).x;\n    float hx2 = texture(height, texcoord + vec2(step, .0)).x;\n    float hy1 = texture(height, texcoord + vec2(.0, -step)).x;\n    float hy2 = texture(height, texcoord + vec2(.0, +step)).x;\n\n    vec3 vx = vec3((hx2 - hx1)/ (step * 2.0), 0.0, 1.0);\n    vec3 vy = vec3(0.0, (hy2 - hy1)/ (step * 2.0), 1.0);\n    vec3 n = normalize(vx + vy);\n    float f = dot(n, light);\n    frag_color.z = 1.0; \n    frag_color.xyz = vec3(f) * vec3(0.8, 0.6, 0.4);\n    frag_color.xyz *= s;\n    frag_color.w = 1.0;\n}",
                     "code_type": 0
                 }
             },
@@ -195,8 +195,8 @@
             "guid_": 834502661343543296,
             "transform_": {
                 "location": [
-                    0.0,
-                    0.0,
+                    -6.0,
+                    -1.0,
                     0.0
                 ],
                 "scale": [
@@ -273,14 +273,14 @@
             "guid_": 834511414860185600,
             "transform_": {
                 "location": [
-                    24.0,
-                    11.0,
-                    -1.0
+                    -1.0,
+                    3.0,
+                    1.0
                 ],
                 "scale": [
-                    1.0,
-                    1.0,
-                    1.0
+                    0.20000000298023224,
+                    0.20000000298023224,
+                    0.20000000298023224
                 ],
                 "rotation": [
                     1.0,
@@ -415,9 +415,9 @@
             "__object_type_": "staywalk::Animation",
             "name_": "vampire",
             "guid_": 836764263862239232,
-            "curr_time_": 2.2726213932037354,
+            "curr_time_": 2.402221441268921,
             "duration_": 3.433332920074463,
-            "ticks_pers_": 1.0,
+            "ticks_pers_": 0.10000000149011612,
             "node_root_": {
                 "name_": "RootNode",
                 "guid_": 836764263862239233,
@@ -2652,8 +2652,8 @@
             "transform_": {
                 "location": [
                     0.0,
-                    6.0,
-                    0.0
+                    3.0,
+                    1.0
                 ],
                 "scale": [
                     1.0,
@@ -2675,9 +2675,9 @@
             "guid_": 834502234564722688,
             "transform_": {
                 "location": [
-                    37.22716522216797,
-                    13.124076843261719,
-                    8.481700897216797
+                    7.62713623046875,
+                    2.2742061614990234,
+                    10.253060340881348
                 ],
                 "scale": [
                     1.0,
@@ -2685,14 +2685,14 @@
                     1.0
                 ],
                 "rotation": [
-                    -29.481090545654297,
-                    -1337.74072265625,
+                    -55.356327056884766,
+                    -1374.4686279296875,
                     0.0
                 ]
             },
             "porject_type_": 0,
             "fov_": 45.0,
-            "aspect_": 1.894892692565918,
+            "aspect_": 1.7777777910232544,
             "near_": 1.0,
             "far_": 1000.0
         },
@@ -2733,7 +2733,7 @@
                 "guid_": 844409217744896002,
                 "shadertype_": 35633,
                 "code_": {
-                    "code": "#version 330 core\n\n// input data layout\nlayout(location = 0) in vec3 in_pos;\nlayout(location = 1) in vec3 in_norm;\nlayout(location = 2) in vec2 in_texcoord;\nlayout(location = 3) in vec3 in_tangent;\nlayout(location = 4) in vec3 in_bitangent;\nlayout(location = 5) in ivec4 bone_ids; \nlayout(location = 6) in vec4 bone_weights;\n\n \n// uniform \nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\nlayout (std140) uniform  BoneMatrixBlock {\n    mat4 bone_matrices[100];\n};\n\nconst int MAX_BONES = 100;\nconst int MAX_BONE_INFLUENCE = 4;\n\n// shader code\nvoid main(){\n    vec4 total_pos = vec4(0.0f);\n    for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++){\n        if(bone_ids[i] == -1)  continue;\n        if(bone_ids[i] >=MAX_BONES) {\n            total_pos = vec4(in_pos, 1.0f);\n            break;\n        }\n        vec4 local_pos = bone_matrices[bone_ids[i]] * vec4(in_pos,1.0f);\n        total_pos += local_pos * bone_weights[i];\n        //vec3 localNormal = mat3(bones_matrices[bone_ids[i]]) * norm;\n   }\n\t\n    mat4 viewModel = view * model;\n    gl_Position = projection * view * model * total_pos, 1.0;\n}\n\n",
+                    "code": "#version 330 core\n\n// input data layout\nlayout(location = 0) in vec3 in_pos;\nlayout(location = 1) in vec3 in_norm;\nlayout(location = 2) in vec2 in_texcoord;\nlayout(location = 3) in vec3 in_tangent;\nlayout(location = 4) in vec3 in_bitangent;\nlayout(location = 5) in ivec4 bone_ids; \nlayout(location = 6) in vec4 bone_weights;\n\n \n// uniform \nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\nlayout (std140) uniform  BoneMatrixBlock {\n    mat4 bone_matrices[100];\n};\n\nconst int MAX_BONES = 100;\nconst int MAX_BONE_INFLUENCE = 4;\n\n// shader code\nvoid main(){\n    vec4 total_pos = vec4(0.0f);\n    for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++){\n        if(bone_ids[i] == -1)  continue;\n        if(bone_ids[i] >=MAX_BONES) {\n            total_pos = vec4(in_pos, 1.0f);\n            break;\n        }\n        vec4 local_pos = bone_matrices[bone_ids[i]] * vec4(in_pos,1.0f);\n        total_pos += local_pos * bone_weights[i];\n        //vec3 localNormal = mat3(bones_matrices[bone_ids[i]]) * norm;\n   }\n\t\n    gl_Position = projection * view * model * total_pos;\n}\n\n",
                     "code_type": 0
                 }
             },
@@ -2782,9 +2782,9 @@
                 "guid_": 844416340092518400,
                 "transform_": {
                     "location": [
-                        45.0,
-                        45.0,
-                        45.0
+                        7.0,
+                        7.0,
+                        7.0
                     ],
                     "scale": [
                         1.0,
@@ -2800,12 +2800,12 @@
                 "porject_type_": 0,
                 "fov_": 45.0,
                 "aspect_": 1.0,
-                "near_": 10.0,
+                "near_": 1.0,
                 "far_": 400.0
             },
             "post_stage_": false,
-            "width_": 1024,
-            "height_": 1024,
+            "width_": 2048,
+            "height_": 2048,
             "program_": 844409217744896001
         },
         "834511653369282560": {

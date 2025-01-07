@@ -35,7 +35,6 @@ void main(){
         //vec3 localNormal = mat3(bones_matrices[bone_ids[i]]) * norm;
    }
 	
-    mat4 viewModel = view * model;
-    gl_Position = projection * view * model * total_pos, 1.0;
+    gl_Position = projection * view * model * total_pos;
 }
 

@@ -51,6 +51,7 @@ namespace staywalk {
 
 	void StateSet::use(ProgramRef program, int tex_slot_bias){
 		assert(program);
+		program->use();
 		for (auto& [n, u] : uniforms_) {
 			if (u) program->set_uniform(n, u);
 		}
