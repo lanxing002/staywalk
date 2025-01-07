@@ -12,8 +12,8 @@ namespace staywalk {
 
 	void Material::use(RenderInfo info){
 		auto prog = program_ == nullptr ? info.program_ : program_;
-		info.stateset_->use(prog);
 		prog->use();
+		info.stateset_->use(prog);
 
 		prog->set_uniform("view", info.view_.top());
 		prog->set_uniform("projection", info.projection_.top());

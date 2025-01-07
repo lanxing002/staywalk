@@ -15,15 +15,19 @@ uniform vec4 light;
 
 // shader code
 
+float query_shaodw(){
+    float d = texture(shadow, light_pos.xy).x;
+    vec3 n = normalize(norm); 
+    float bias = mix(0.0004, 0.00001, dot(n, light.xyz));
+    float s = (d + bias) < light_pos.z ? 0.0 : 1.0;
+    return s;
+}
+
 void main(){
     vec3 n = normalize(norm); 
     vec3 c = texture(diffuse, texcoord).xyz;  
-    float d = texture(shadow, light_pos.xy).x;
-    //float factor = dot(n, vec3(1, 1, 0.5));
-    //frag_color.xyz = vec3(1.0, 1.0, 1.0);
-    //frag_color.xyz = light.xyz * 1.0;
     frag_color.xyz = c;
-    float s = (d + 0.001) < frag_color.z ? 0.0 : 1.0;
-    frag_color.xyz *= s;
+    frag_color.xyz *= query_shaodw();
+    // frag_color.xyz = light.xyz;
     frag_color.w = 1.0;
 }

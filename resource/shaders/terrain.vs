@@ -14,11 +14,15 @@ out vec3 norm;
 out vec2 texcoord;
 out vec3 tangent;
 out vec3 bitangent;
+out vec3 light_pos;
+
 
 // uniform 
 uniform mat4 model;
 uniform mat4 view;
 uniform mat4 projection;
+uniform mat4 light_view_project;
+
 
 uniform sampler2D height;
 // shader code
@@ -31,6 +35,12 @@ void main(){
     float h = textureLod(height, in_texcoord, 0.0).x;    
     vec4 world_pos = model * vec4(in_pos, 1.0);
     world_pos.z = h * 5.0;
+
+    vec4 lpos = light_view_project * world_pos;
+    lpos /= lpos.w;
+    lpos = (lpos + 1.0) * 0.5;
+    light_pos = lpos.xyz;
+
     gl_Position = projection * view * world_pos;
 }
 
