@@ -5,6 +5,7 @@
 #include "rhi.h"
 
 namespace staywalk {
+
 	RObject::RObject(const string& name)
 		: Object(name) {
 	}
@@ -192,4 +193,80 @@ namespace staywalk {
 		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
+
+	GBuffer::GBuffer() 
+		:RObject("gbuffer") {
+
+	}
+
+	GLuint GBuffer::get_updated_glid() {
+		if (dirty_) {
+			gl_update();
+			dirty_ = false;
+		}
+		return glid_;
+	}
+	
+	void GBuffer::set_size(int width, int height) {
+		assert(width > 0 && height > 0);
+		if (width_ != width || height_ != height) {
+			width_ = width;
+			height_ = height;
+			mark_dirty();
+		}
+	}
+
+	void GBuffer::bind(){
+		glBindFramebuffer(GL_FRAMEBUFFER, get_updated_glid());  // gbuffer
+		glViewport(0, 0, width_, height_);
+	}
+
+	//GlWrap wrap_s_ = GlWrap::REPEAT;
+	//GlWrap wrap_t_ = GlWrap::REPEAT;
+	//GlMinFilter min_filter_ = GlMinFilter::LINEAR;
+	//GlMagFilter mag_filter_ = GlMagFilter::LINEAR;
+	//GlTexFormat format_ = GlTexFormat::RGBA;
+
+	void GBuffer::gl_update() {
+		glGenFramebuffers(1, &glid_);
+		glBindFramebuffer(GL_FRAMEBUFFER, glid_);
+
+		// position color buffer
+		glGenTextures(1, &pos_glid_);
+		glBindTexture(GL_TEXTURE_2D, pos_glid_);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width_, height_, 0, GL_RGBA, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, pos_glid_, 0);
+		
+		// normal color buffer
+		glGenTextures(1, &normal_glid_);
+		glBindTexture(GL_TEXTURE_2D, normal_glid_);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA16F, width_, height_, 0, GL_RGBA, GL_FLOAT, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT1, GL_TEXTURE_2D, normal_glid_, 0);
+		// color + specular color buffer
+		
+		glGenTextures(1, &albedo_glid_);
+		glBindTexture(GL_TEXTURE_2D, albedo_glid_);
+		glTexImage2D(GL_TEXTURE_2D, 0, GL_RGBA, width_, height_, 0, GL_RGBA, GL_UNSIGNED_BYTE, NULL);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_NEAREST);
+		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT2, GL_TEXTURE_2D, albedo_glid_, 0);
+
+		unsigned int attachments[3] = { GL_COLOR_ATTACHMENT0, GL_COLOR_ATTACHMENT1, GL_COLOR_ATTACHMENT2 };
+		glDrawBuffers(3, attachments);
+
+		// depth is render buffer, should not use in shader ??
+		glGenRenderbuffers(1, &depth_glid_);
+		glBindRenderbuffer(GL_RENDERBUFFER, depth_glid_);
+		glRenderbufferStorage(GL_RENDERBUFFER, GL_DEPTH_COMPONENT, width_, height_);
+		glFramebufferRenderbuffer(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_RENDERBUFFER, depth_glid_);
+
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		GLFBCheck(glid_);
+
+		// wrap mode is defualt
+	}
 }

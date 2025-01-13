@@ -36,6 +36,7 @@ namespace staywalk
 	using idtype = uint64_t;
 
 	using vec2 = glm::vec2;
+	using ivec2 = glm::ivec2;
 	using vec3 = glm::vec3;
 	using vec4 = glm::vec4;
 	using mat4 = glm::mat4;
@@ -82,6 +83,7 @@ namespace staywalk
 	constexpr uint kGlSickId = 0;
 	static constexpr uint kMaxBoueInfluence = 4;
 	static constexpr uint kMaxBoneNum = 100;
+	static constexpr ivec2 kwindowSize = ivec2(1280, 720);
 
 	namespace reflect {
 		template<typename T>
@@ -115,6 +117,9 @@ public:																			\
 
 #define GLCheck(__invoke_code)\
 	__invoke_code; Utility::check_gl_error(fmt::format("flie: {} --> line: {}", __FILE__, __LINE__));
+
+#define GLFBCheck(__glid)\
+	Utility::check_fb_completeness(__glid, fmt::format("flie: {} --> line: {}", __FILE__, __LINE__));
 
 // forward declare 
 namespace staywalk{

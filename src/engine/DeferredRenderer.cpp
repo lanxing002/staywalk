@@ -1,4 +1,4 @@
-#include "Renderer.h"
+#include "DeferredRenderer.h"
 #include "Engine.h"
 #include "Actor.h"
 #include "World.h"
@@ -12,31 +12,20 @@
 
 using namespace staywalk;
 
-
-ProgramRef Renderer::query_program(ProgramType pt){
-	return program_table_[(int)pt];
+staywalk::DeferredRenderer::DeferredRenderer(){
+	pbr_name_ = "deferred_pbr";
+	gbuffer_ = std::make_shared<GBuffer>();
 }
 
-void Renderer::initialize(){
-	ProgramRef pbr = std::make_shared<Program>(pbr_name_);
-	ProgramRef shadow = std::make_shared<Program>(shadow_name_);
-	pbr->load_post();
-	shadow->load_post();
+staywalk::DeferredRenderer::~DeferredRenderer() {
 
-	program_table_[static_cast<int>(ProgramType::PBR)] = pbr;
-	program_table_[static_cast<int>(ProgramType::Shadow)] = shadow;
-
-	Program::monitor(program_table_[static_cast<int>(ProgramType::PBR)]);
-	Program::monitor(program_table_[static_cast<int>(ProgramType::Shadow)]);
-	stateset_ = std::make_shared<StateSet>("std");
-
-	glEnable(GL_DEPTH_TEST);
-
-	glEnable(GL_BLEND);
-	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
 
-void Renderer::render(double delta, unsigned long long count)
+void DeferredRenderer::initialize(){
+	Renderer::initialize();
+}
+
+void DeferredRenderer::render(double delta, unsigned long long count)
 {
 	auto engine = Engine::get_engine();
 	auto world = engine->get_world();
@@ -54,9 +43,10 @@ void Renderer::render(double delta, unsigned long long count)
 	
 	for (size_t idx = 0; idx <= rt_num; idx++) {
 		bool main_pass = idx == rt_num;
+		// set up frambe buffer
 		if (main_pass) {
-			glBindFramebuffer(GL_FRAMEBUFFER, 0);  // default framebuffer
-			glViewport(0, 0, engine->get_view_size().x, engine->get_view_size().y);
+			gbuffer_->set_size(engine->get_view_size().x, engine->get_view_size().y);
+			gbuffer_->bind();
 		}
 		else{
 			if (rts[idx] == nullptr) continue;
@@ -146,15 +136,10 @@ void Renderer::render(double delta, unsigned long long count)
 					&& render_info.view_.size() == 1);
 		}
 	}
+
+	glBindFramebuffer(GL_FRAMEBUFFER, 0);  // gbuffer
 }
 
-staywalk::Renderer::~Renderer(){
-
-}
-
-void staywalk::Renderer::destroy(){
-	Program::monitor(program_table_[static_cast<int>(ProgramType::PBR)], false);
-	Program::monitor(program_table_[static_cast<int>(ProgramType::Shadow)], false);
-	for (int i = 0; i < (int)ProgramType::_Count; i++)
-		program_table_[i] = nullptr;
+void staywalk::DeferredRenderer::destroy(){
+	Renderer::destroy();
 }

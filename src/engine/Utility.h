@@ -61,6 +61,8 @@ namespace staywalk{
 
 		static void check_gl_error(const std::string& file_line);
 
+		static void check_fb_completeness(unsigned int glid, const std::string & file_line);
+
 		/***********************************************/
 		/*****************render object*****************/
 		/***********************************************/

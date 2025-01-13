@@ -2,6 +2,7 @@
 #include "rhi.h"
 #include "EditorUI.h"
 #include "Renderer.h"
+#include "Common.h"
 
 #include <chrono>
 
@@ -11,7 +12,7 @@
 */
 class Window{
 public:
-	Window(int width = 1280, int height = 720);
+	Window(int width = staywalk::kwindowSize.x, int height = staywalk::kwindowSize.y);
 	~Window();
 
 	void run();

@@ -181,8 +181,7 @@ namespace staywalk{
 		GLenum error;
         while ((error = glGetError()) != GL_NO_ERROR){
             string info;
-            switch (error)
-            {
+            switch (error){
             case GL_INVALID_ENUM:
                 info = "GL_INVALID_ENUM";
                 break;
@@ -210,6 +209,17 @@ namespace staywalk{
             log(fmt::format("opengl::error --> {}, {}", info, file_line), LogLevel::Error);
 		}
 	}
+
+    void Utility::check_fb_completeness(unsigned int glid, const std::string& file_line) {
+        glBindFramebuffer(GL_FRAMEBUFFER, glid);
+        bool success = true;
+        if (glCheckFramebufferStatus(GL_FRAMEBUFFER) != GL_FRAMEBUFFER_COMPLETE)
+            success = false;
+
+        glBindFramebuffer(GL_FRAMEBUFFER, 0);
+        if (!success)
+            log(fmt::format("opengl::framebuffer not complete --> {}", file_line), LogLevel::Error);
+    }
 
 	shared_ptr<Tex2D> Utility::make_texture(fs::path tex_name) {
         auto result = std::make_shared<Tex2D>();

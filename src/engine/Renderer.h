@@ -11,15 +11,17 @@ namespace staywalk {
 
 		ProgramRef query_program(ProgramType pt);
 
-		void initialize();
+		virtual void initialize();
 
-		void destroy();
+		virtual void destroy();
 
 		virtual void render(double delta, unsigned long long count);
 
-	private:
-		RenderLight light_mgr_;
+	protected:
 		StateSetRef stateset_;
 		std::array<ProgramRef, (int)ProgramType::_Count> program_table_;
+
+		string pbr_name_ = "pbr";
+		string shadow_name_ = "shadow";
 	};
 }
