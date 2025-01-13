@@ -145,10 +145,11 @@ namespace staywalk{
 		friend class Utility;
 	};
 
+	// render target will use one texture object in shader
 	class sw_Class()  Tex2DRT : public Tex {
 	public:
 		sw_Func() Tex2DRT(const string& name = "rt-2d");
-		//sw_Prop() Tex2d tex;
+		
 		sw_Prop() GlWrap wrap_s_ = GlWrap::REPEAT;
 		sw_Prop() GlWrap wrap_t_ = GlWrap::REPEAT;
 		sw_Prop() GlMinFilter min_filter_ = GlMinFilter::LINEAR;
@@ -165,6 +166,8 @@ namespace staywalk{
 	private:
 		void gl_update() override;
 	};
+
+	//TODO: need to complete : color(imply + depth), depth, stencil, depth + stencil
 
 	class sw_Class()  FrameBuffer : public RObject {
 	public:
@@ -212,6 +215,32 @@ namespace staywalk{
 		int nr_comps_ = -1;
 
 		friend class Utility;
+	};
+
+	// will use mulity render target in other shader
+	class GBuffer : public RObject {
+	public:
+		GBuffer();
+		GLuint get_updated_glid();
+		void gl_delete() {}
+		void set_size(int width, int height);
+
+		uint get_pos() { assert(!dirty_); return pos_glid_; }
+		uint get_depth() { assert(!dirty_); return depth_glid_; }
+		uint get_normal() { assert(!dirty_); return normal_glid_; }
+		uint get_albedo() { assert(!dirty_); return albedo_glid_; }
+		void bind();
+
+	private:
+		int width_ = -1;
+		int height_ = -1;
+
+		uint pos_glid_ = kGlSickId;
+		uint depth_glid_ = kGlSickId;
+		uint normal_glid_ = kGlSickId;
+		uint albedo_glid_ = kGlSickId;
+
+		void gl_update();
 	};
 
 	// engine use this struct to manage light

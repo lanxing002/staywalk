@@ -4,6 +4,7 @@
 #include "rhi.h"
 #include "Event.h"
 #include "World.h"
+#include "DeferredRenderer.h"
 
 namespace staywalk {
 	shared_ptr<Engine> Engine::get_engine(){
@@ -22,13 +23,14 @@ namespace staywalk {
 		//world_ = World::load("marry-world");
 		world_ = nullptr;
 		console_ = nullptr;
+		renderer_ = std::make_shared<DeferredRenderer>();
 		Py::run("");
 		file_monitor_.start();
 	}
 
 	void Engine::shutdown()
 	{
-		renderer_.destroy();
+		renderer_->destroy();
 		world_ = nullptr;
 		console_ = nullptr;
 		selelcted_ = nullptr;
@@ -51,18 +53,18 @@ namespace staywalk {
 
 	staywalk::ProgramRef Engine::query_program(ProgramType pt)
 	{
-		return renderer_.query_program(pt);
+		return renderer_->query_program(pt);
 	}
 
 	void Engine::initialize() {
 		console_ = std::make_shared<Console>();
 		log_register_console(console_);
 
-		renderer_.initialize();
+		renderer_->initialize();
 	}
 
 	void Engine::render_update(float delta, unsigned int frame_count){
-		renderer_.render(delta, frame_count);
+		renderer_->render(delta, frame_count);
 	}
 
 	void Engine::logic_update(float delta){

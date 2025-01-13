@@ -28,8 +28,8 @@ namespace staywalk{
 
 		sw_Func() ProgramRef query_program(ProgramType pt);
 		sw_Func() InputManager& get_input_mgr() { return input_mgr_; }
-		sw_Func() vec2 get_view_size() { return view_size_; }
-		sw_Func() void set_view_size(vec2 value) { view_size_ = value; }
+		sw_Func() ivec2 get_view_size() { return view_size_; }
+		sw_Func() void set_view_size(ivec2 value) { view_size_ = value; }
 		sw_Func() void select(Ref<Entity> target) { selelcted_ = target; }
 		sw_Func() Ref<Entity> get_selected() { return selelcted_; }
 
@@ -52,12 +52,12 @@ namespace staywalk{
 		bool destroy_ = false;
 		FileMonitor file_monitor_;
 		Ref<Console> console_{nullptr};
-		Renderer renderer_;
+		Ref<Renderer> renderer_;
 
 		EntityRef selelcted_{ nullptr };
 		WorldRef world_{ nullptr };
 
-		vec2 view_size_;
+		ivec2 view_size_;
 		InputManager input_mgr_;
 	};
 }
