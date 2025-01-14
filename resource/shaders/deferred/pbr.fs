@@ -2,9 +2,9 @@
 uniform sampler2D diffuse;
 
 vec4 get_albedo(){
-    return texture(diffuse, in_texcoord); 
+    return texture(diffuse, fs_texcoord); 
 }
 
 vec3 get_normal(){
-    return in_norm;
+    return normalize((fs_norm + 1.0) * 0.5);
 }
