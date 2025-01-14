@@ -41,8 +41,16 @@ namespace staywalk{
 
 		static fs::path get_resource_dir();
 
-		static fs::path get_shaders_dir();
+		static fs::path get_deferred_shaders_dir();
 		
+		static fs::path get_forward_shaders_dir();
+
+		static fs::path get_common_shaders_dir();
+
+		static string get_deferred_vs_tempalte();
+
+		static string get_deferred_fs_template();
+
 		static fs::path get_textures_dir();
 
 		static fs::path get_objects_dir();

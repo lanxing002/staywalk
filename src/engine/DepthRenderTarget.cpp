@@ -17,7 +17,7 @@ namespace staywalk {
 		if (program_) Program::monitor(program_, false);
 	}
 
-	void DepthRenderTarget::use(){
+	void DepthRenderTarget::bind(){
 		auto fbid = framebuffer_->get_updated_glid();
 		glBindFramebuffer(GL_FRAMEBUFFER, fbid);
 

@@ -15,9 +15,9 @@ namespace staywalk {
 		prog->use();
 		info.stateset_->use(prog);
 
-		prog->set_uniform("view", info.view_.top());
-		prog->set_uniform("projection", info.projection_.top());
-		prog->set_uniform("model", info.model_.top());
+		prog->set_uniform("u_view", info.view_.top());
+		prog->set_uniform("u_projection", info.projection_.top());
+		prog->set_uniform("u_model", info.model_.top());
 
 		for (auto& [n, u] : uniforms_) {
 			if (u) prog->set_uniform(name_, u);

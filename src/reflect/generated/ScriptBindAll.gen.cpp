@@ -102,9 +102,9 @@ py::class_<::staywalk::Uniform,Object, std::shared_ptr<::staywalk::Uniform>>(__m
 
 py::class_<::staywalk::Program,RObject, std::shared_ptr<::staywalk::Program>>(__module, "Program")
 	.def(py::init<const string &>())
+	.def_readwrite("deferred_", &Program::deferred_)
 	.def_readwrite("vs_", &Program::vs_)
 	.def_readwrite("fs_", &Program::fs_)
-	.def_readwrite("gs_", &Program::gs_)
 ;
 
 py::class_<::staywalk::StateSet,Object, std::shared_ptr<::staywalk::StateSet>>(__module, "StateSet")

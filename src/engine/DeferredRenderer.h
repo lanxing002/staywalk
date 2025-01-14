@@ -14,6 +14,8 @@ namespace staywalk {
 
 		void destroy() override;
 
+		void render_main(RenderInfo& renderinfo);
+
 		void render(double delta, unsigned long long count) override;
 
 	private:

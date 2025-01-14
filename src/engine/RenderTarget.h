@@ -16,7 +16,7 @@ namespace staywalk {
 
 		//--------------------------------//
 		void tick(float delta) override;
-		virtual void use() {}
+		virtual void bind() {}
 
 	protected:
 		FrameBufferRef framebuffer_;

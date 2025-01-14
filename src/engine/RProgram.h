@@ -2,6 +2,7 @@
 
 #include "RenderObject.h"
 #include "SimpleType.h"
+#include <regex>
 
 namespace staywalk{
 	class Render;
@@ -31,6 +32,7 @@ namespace staywalk{
 		Shader(const string& code_text = "", const string & name = "shader-0");
 		sw_Prop() ShaderType shadertype_ = ShaderType::None;
 		sw_Prop() SWCodeRef code_;
+		string glsl_code_;	// really glsl code, construct from code_
 
 		GLuint get_updated_glid();
 		void gl_delete();
@@ -83,10 +85,12 @@ namespace staywalk{
 	public:
 		sw_Func() Program(const string & name = "program-0");
 		~Program() override;
+		sw_Prop() bool deferred_;
 		sw_Prop() Shader vs_;
 		sw_Prop() Shader fs_;
-		sw_Prop() Shader gs_;
+		//sw_Prop() Shader gs_;
 		MetaRegister(Program);
+
 
 		void use();
 		void gl_delete();
@@ -102,6 +106,7 @@ namespace staywalk{
 		void gl_update();
 		void check_link_error();
 		void dump_post() const;
+		void construct_glsl_code();
 
 	private:
 		map<string, GLint> uniforms_;

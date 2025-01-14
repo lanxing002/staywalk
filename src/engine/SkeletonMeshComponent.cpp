@@ -11,9 +11,9 @@ namespace staywalk {
 
 	void SkeletonMeshComponent::draw(RenderInfo& info) {
 		info.model_.push(info.model_.top() * transform_.matrix());
-		info.program_->set_uniform("model", info.model_.top());
+		info.program_->set_uniform("u_model", info.model_.top());
 		if (animation_) {
-			auto bind_idx = info.program_->set_uniform_block("BoneMatrixBlock");
+			auto bind_idx = info.program_->set_uniform_block("nod_u_bone_matrices_block");
 			glBindBufferBase(GL_UNIFORM_BUFFER, 0, animation_->get_updated_glid());
 		}
 
