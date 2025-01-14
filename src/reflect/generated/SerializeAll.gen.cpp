@@ -599,6 +599,11 @@ void ::staywalk::Program::dump(rapidjson::Value& value, ::staywalk::reflect::Dum
 
     {
         json::Value prop;
+        dumper.write(this->deferred_, prop);
+        value.AddMember("deferred_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
         dumper.write(this->vs_, prop);
         value.AddMember("vs_", prop, dumper.get_doc().GetAllocator()); 
     }
@@ -606,11 +611,6 @@ void ::staywalk::Program::dump(rapidjson::Value& value, ::staywalk::reflect::Dum
         json::Value prop;
         dumper.write(this->fs_, prop);
         value.AddMember("fs_", prop, dumper.get_doc().GetAllocator()); 
-    }
-    {
-        json::Value prop;
-        dumper.write(this->gs_, prop);
-        value.AddMember("gs_", prop, dumper.get_doc().GetAllocator()); 
     }
     this->dump_post();
 }
@@ -622,6 +622,10 @@ void ::staywalk::Program::load(rapidjson::Value& value, ::staywalk::reflect::Loa
 
     RObject::load(value, loader);
 
+    itr = value.FindMember("deferred_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->deferred_, itr->value);
+    }
     itr = value.FindMember("vs_");
     if(itr != value.MemberEnd()){
         loader.read(this->vs_, itr->value);
@@ -630,17 +634,13 @@ void ::staywalk::Program::load(rapidjson::Value& value, ::staywalk::reflect::Loa
     if(itr != value.MemberEnd()){
         loader.read(this->fs_, itr->value);
     }
-    itr = value.FindMember("gs_");
-    if(itr != value.MemberEnd()){
-        loader.read(this->gs_, itr->value);
-    }
     this->load_post();
 }
 
 
 bool ::staywalk::Program::operator==(const ::staywalk::Program& rhs) const {
     return 
-RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->vs_, rhs.vs_) && ::staywalk::Comparer::equal(this->fs_, rhs.fs_) && ::staywalk::Comparer::equal(this->gs_, rhs.gs_);
+RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->deferred_, rhs.deferred_) && ::staywalk::Comparer::equal(this->vs_, rhs.vs_) && ::staywalk::Comparer::equal(this->fs_, rhs.fs_);
 }
 
 

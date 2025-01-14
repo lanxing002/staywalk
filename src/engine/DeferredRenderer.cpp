@@ -13,7 +13,6 @@
 using namespace staywalk;
 
 staywalk::DeferredRenderer::DeferredRenderer(){
-	pbr_name_ = "deferred_pbr";
 	gbuffer_ = std::make_shared<GBuffer>();
 }
 
@@ -42,7 +41,31 @@ void DeferredRenderer::render(double delta, unsigned long long count)
 	Tex2DRTRef shadow_tex = 0;
 	
 	for (size_t idx = 0; idx <= rt_num; idx++) {
+		RenderInfo render_info;
+		auto program = program_table_[(int)ProgramType::PBR];
 		bool main_pass = idx == rt_num;
+		
+		{ // construct renderinfo
+			render_info.model_.push(mat4(1.0));
+			render_info.view_.push(mat4(1.0));
+			render_info.projection_.push(mat4(1.0));
+			render_info.stateset_ = stateset_;
+
+			if (main_pass) {
+				if (auto cam = world->get_activated_camera()) {
+					render_info.view_.top() = cam->view_;
+					render_info.projection_.top() = cam->projection_;
+				}
+			}
+			else {
+				render_info.view_.top() = rts[idx]->camera_.view_;
+				render_info.projection_.top() = rts[idx]->camera_.projection_;
+			}
+
+			if (!main_pass && rts[idx]->program_) program = rts[idx]->program_;
+			render_info.program_ = program;
+		}
+		
 		// set up frambe buffer
 		if (main_pass) {
 			gbuffer_->set_size(engine->get_view_size().x, engine->get_view_size().y);
@@ -55,62 +78,31 @@ void DeferredRenderer::render(double delta, unsigned long long count)
 				light_view_project =  rts[idx]->camera_.projection_ * rts[idx]->camera_.view_;
 				shadow_tex = pcast<DepthRenderTarget>(rts[idx])->depth_rt_;
 			}
-			rts[idx]->use();
+			rts[idx]->bind();
 		}
 
+		// clear framebuffer
 		GLCheck(;);
 		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		GLCheck(;);
-		// light mgr
-		{
-			//auto& lights = world->get_lights();
-			//auto& buffer = light_mgr_.light_buffer;
-			//auto num = (int)std::min((unsigned int)lights.size(), RenderLight::kMaxLights);
-			//int real_count = 0;
-			//for (int i = 0; i < num; i++) {
-			//	if (lights[i] == nullptr) continue;
-			//	real_count++;
-			//	buffer.light_data[i].position = lights[i]->transform_.location;
-			//}
-			//buffer.light_count = real_count;
-			//light_mgr_.sync_to_gpu();
-		}
-
-		RenderInfo render_info;
-		render_info.model_.push(mat4(1.0));
-		render_info.view_.push(mat4(1.0));
-		render_info.projection_.push(mat4(1.0));
-		render_info.stateset_ = stateset_;
-		if (main_pass) {
-			if (auto cam = world->get_activated_camera()) {
-				render_info.view_.top() = cam->view_;
-				render_info.projection_.top() = cam->projection_;
-			}
-		}
-		else {
-			render_info.view_.top() = rts[idx]->camera_.view_;
-			render_info.projection_.top() = rts[idx]->camera_.projection_;
-		}
-
-		auto program = program_table_[(int)ProgramType::PBR];
-		if (!main_pass && rts[idx]->program_) program = rts[idx]->program_;
-		render_info.program_ = program;
 		
-		// setup shader
-		static UniformRef false_uniform = std::make_shared<Uniform>(0);
-		static UniformRef true_uniform = std::make_shared<Uniform>(1);
-		render_info.stateset_->add_uniform("light", std::make_shared<Uniform>(light_vec));
-		render_info.stateset_->add_uniform("light_view_project", std::make_shared<Uniform>(light_view_project));
-
-		if (main_pass) {
-			render_info.stateset_->add_tex("shadow", shadow_tex);
+		// setup uniform about shadow
+		{
+			render_info.stateset_->add_uniform("light", std::make_shared<Uniform>(light_vec));
+			render_info.stateset_->add_uniform("light_view_project", std::make_shared<Uniform>(light_view_project));
+			if (main_pass) {
+				render_info.stateset_->add_tex("shadow", shadow_tex);
+			}
 		}
 
 		// render mesh
 		{
+			static UniformRef false_uniform = std::make_shared<Uniform>(0);
+			static UniformRef true_uniform = std::make_shared<Uniform>(1);
+			
 			GLCheck(;);
-			render_info.stateset_->add_uniform("use_skeleton", false_uniform);
+			render_info.stateset_->add_uniform("nod_u_use_skeleton", false_uniform);
 			for (auto& actor : world->get_actors()) {
 				render_info.model_.top() = actor->transform_.matrix();
 				if (actor->sm_comp_) actor->sm_comp_->draw(render_info);
@@ -121,19 +113,23 @@ void DeferredRenderer::render(double delta, unsigned long long count)
 				&& render_info.model_.size() == 1
 				&& render_info.projection_.size() == 1
 				&& render_info.view_.size() == 1);
+
 			GLCheck(;);
-			render_info.stateset_->add_uniform("use_skeleton", true_uniform);
+			render_info.stateset_->add_uniform("nod_u_use_skeleton", true_uniform);
 			for (auto& actor : world->get_actors()) {
 				render_info.model_.top() = actor->transform_.matrix();
 				if (actor->skeleton_comp_) actor->skeleton_comp_->draw(render_info);
 			}
 
-			GLCheck(;)
-				assert(
-					render_info.program_ == program
-					&& render_info.model_.size() == 1
-					&& render_info.projection_.size() == 1
-					&& render_info.view_.size() == 1);
+			assert(
+				render_info.program_ == program
+				&& render_info.model_.size() == 1
+				&& render_info.projection_.size() == 1
+				&& render_info.view_.size() == 1);
+		}
+
+		if (main_pass) {
+			// use gbuffer render to default framebuffer
 		}
 	}
 

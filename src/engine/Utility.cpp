@@ -316,8 +316,42 @@ namespace staywalk{
         return fs::path("resource");
     }
 
-    fs::path Utility::get_shaders_dir() {
-        return fs::path("resource/shaders");
+    fs::path Utility::get_deferred_shaders_dir() {
+        return fs::path("resource/shaders/deferred");
+    }
+
+    fs::path Utility::get_forward_shaders_dir() {
+        return fs::path("resource/shaders/forward");
+    }
+
+    fs::path Utility::get_common_shaders_dir() {
+        return fs::path("resource/shaders/common");
+    }
+
+    string Utility::get_deferred_vs_tempalte() {
+        string result;
+        if (result.size() == 0) {
+            fs::path name = get_common_shaders_dir() / "deferred_common.vs";
+            assert(fs::exists(name));
+            ifstream ifs(name, std::ios::in);
+            result = string((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+            //assert(result.size() > 0);
+        }
+
+        return result;
+    }
+
+    string Utility::get_deferred_fs_template() {
+        string result;
+        if (result.size() == 0) {
+            fs::path name = get_common_shaders_dir() / "deferred_common.fs";
+            assert(fs::exists(name));
+            ifstream ifs(name, std::ios::in);
+            result = string((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
+            //assert(result.size() > 0);
+        }
+
+        return result;
     }
 
     fs::path Utility::get_textures_dir() {

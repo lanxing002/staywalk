@@ -347,18 +347,24 @@ void ::staywalk::Uniform::construct_obj_ui(bool can_modify) {
 
 void ::staywalk::Program::construct_basic_ui(bool can_modify) {
     RObject::construct_basic_ui(can_modify);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(deferred_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("deferred_", deferred_, can_modify || true);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(vs_)>()) 
         staywalk::reflect::UIHelper::construct_ui("vs_", vs_, can_modify || true);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(fs_)>()) 
         staywalk::reflect::UIHelper::construct_ui("fs_", fs_, can_modify || true);
-    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(gs_)>()) 
-        staywalk::reflect::UIHelper::construct_ui("gs_", gs_, can_modify || true);
 }
 
 
 
 void ::staywalk::Program::construct_obj_ui(bool can_modify) {
     RObject::construct_obj_ui(can_modify);
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(deferred_)>()){ 
+        //if (ImGui::TreeNode("deferred_")){
+            staywalk::reflect::UIHelper::construct_ui("deferred_", deferred_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(vs_)>()){ 
         //if (ImGui::TreeNode("vs_")){
             staywalk::reflect::UIHelper::construct_ui("vs_", vs_, can_modify || true);
@@ -368,12 +374,6 @@ void ::staywalk::Program::construct_obj_ui(bool can_modify) {
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(fs_)>()){ 
         //if (ImGui::TreeNode("fs_")){
             staywalk::reflect::UIHelper::construct_ui("fs_", fs_, can_modify || true);
-            //ImGui::TreePop();
-        //}    
-    }
-    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(gs_)>()){ 
-        //if (ImGui::TreeNode("gs_")){
-            staywalk::reflect::UIHelper::construct_ui("gs_", gs_, can_modify || true);
             //ImGui::TreePop();
         //}    
     }

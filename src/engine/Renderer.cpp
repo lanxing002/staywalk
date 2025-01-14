@@ -20,6 +20,7 @@ ProgramRef Renderer::query_program(ProgramType pt){
 void Renderer::initialize(){
 	ProgramRef pbr = std::make_shared<Program>(pbr_name_);
 	ProgramRef shadow = std::make_shared<Program>(shadow_name_);
+	pbr->deferred_ = true;
 	pbr->load_post();
 	shadow->load_post();
 
@@ -65,7 +66,7 @@ void Renderer::render(double delta, unsigned long long count)
 				light_view_project =  rts[idx]->camera_.projection_ * rts[idx]->camera_.view_;
 				shadow_tex = pcast<DepthRenderTarget>(rts[idx])->depth_rt_;
 			}
-			rts[idx]->use();
+			rts[idx]->bind();
 		}
 
 		GLCheck(;);

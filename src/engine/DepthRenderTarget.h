@@ -14,7 +14,7 @@ namespace staywalk {
 		Tex2DRTRef depth_rt_;
 
 		//--------------------------------//
-		void use() override;
+		void bind() override;
 
 		void tick(float delte) override;
 
