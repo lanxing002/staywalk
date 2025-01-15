@@ -1,7 +1,7 @@
 #version 330 core
 
-layout (location = 0) out vec3 g_pos;
-layout (location = 1) out vec3 g_normal;
+layout (location = 0) out vec4 g_pos;
+layout (location = 1) out vec4 g_normal;
 layout (location = 2) out vec4 g_albedo;
 
 // input data layout
@@ -18,8 +18,12 @@ vec4 get_albedo();
 vec3 get_normal();
 
 void main(){
-    g_pos = fs_world_pos;
-    g_normal = get_normal();
+    g_pos.xyz = fs_world_pos;
+    g_normal.xyz = get_normal();
+    
+    g_pos.w = 1.0;
+    g_normal.w = 1.0;
+
     g_albedo = get_albedo();
 }
 

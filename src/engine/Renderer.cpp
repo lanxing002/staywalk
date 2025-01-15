@@ -111,8 +111,8 @@ void Renderer::render(double delta, unsigned long long count)
 		// setup shader
 		static UniformRef false_uniform = std::make_shared<Uniform>(0);
 		static UniformRef true_uniform = std::make_shared<Uniform>(1);
-		render_info.stateset_->add_uniform("light", std::make_shared<Uniform>(light_vec));
-		render_info.stateset_->add_uniform("light_view_project", std::make_shared<Uniform>(light_view_project));
+		render_info.stateset_->add_uniform("u_light", std::make_shared<Uniform>(light_vec));
+		render_info.stateset_->add_uniform("u_light_view_project", std::make_shared<Uniform>(light_view_project));
 
 		if (main_pass) {
 			render_info.stateset_->add_tex("shadow", shadow_tex);
@@ -121,7 +121,7 @@ void Renderer::render(double delta, unsigned long long count)
 		// render mesh
 		{
 			GLCheck(;);
-			render_info.stateset_->add_uniform("use_skeleton", false_uniform);
+			render_info.stateset_->add_uniform("u_use_skeleton", false_uniform);
 			for (auto& actor : world->get_actors()) {
 				render_info.model_.top() = actor->transform_.matrix();
 				if (actor->sm_comp_) actor->sm_comp_->draw(render_info);
@@ -133,7 +133,7 @@ void Renderer::render(double delta, unsigned long long count)
 				&& render_info.projection_.size() == 1
 				&& render_info.view_.size() == 1);
 			GLCheck(;);
-			render_info.stateset_->add_uniform("use_skeleton", true_uniform);
+			render_info.stateset_->add_uniform("u_use_skeleton", true_uniform);
 			for (auto& actor : world->get_actors()) {
 				render_info.model_.top() = actor->transform_.matrix();
 				if (actor->skeleton_comp_) actor->skeleton_comp_->draw(render_info);
