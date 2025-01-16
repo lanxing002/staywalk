@@ -14,6 +14,9 @@ namespace staywalk {
 
 		void destroy() override;
 
+		void render(double delta, unsigned long long count) override;
+
+	private:
 		void render_main();
 
 		void render_post0();
@@ -24,10 +27,10 @@ namespace staywalk {
 
 		void render_custom_rt(RenderTargetRef rt);
 
-		void render(double delta, unsigned long long count) override;
-
 		// render all meshes, for render target or main pass
 		void render_all_mesh(RenderInfo& render_info);
+
+		void init_screen_source();
 
 	private:
 		// render pipeline start
@@ -40,7 +43,8 @@ namespace staywalk {
 
 
 			// render to screen pass
-
+			uint screen_draw_program_ = kGlSickId;
+			uint screen_vao_ = kGlSickId;
 
 
 		// render pipeline end
