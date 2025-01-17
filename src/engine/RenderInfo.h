@@ -7,6 +7,8 @@ namespace staywalk {
 		PBR,
 		Shadow,
 		//
+		DeferredPBR,
+		DeferredPBRPost,
 		_Count
 	};
 

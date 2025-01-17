@@ -11,7 +11,7 @@ namespace staywalk {
 		~DepthRenderTarget();
 		MetaRegister(DepthRenderTarget);
 
-		Tex2DRTRef depth_rt_;
+		RenderTarget2DRef rt_;
 
 		//--------------------------------//
 		void bind() override;

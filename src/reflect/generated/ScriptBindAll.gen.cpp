@@ -57,25 +57,19 @@ py::class_<::staywalk::RObject,Object, std::shared_ptr<::staywalk::RObject>>(__m
 ;
 
 py::class_<::staywalk::Tex,RObject, std::shared_ptr<::staywalk::Tex>>(__module, "Tex")
+	.def_readwrite("img_name_", &Tex::img_name_)
+	.def_readwrite("internal_format_", &Tex::internal_format_)
+	.def_readwrite("format_", &Tex::format_)
 ;
 
 py::class_<::staywalk::Tex2D,Tex, std::shared_ptr<::staywalk::Tex2D>>(__module, "Tex2D")
 	.def(py::init<const string &>())
+	.def("resize", &Tex2D::resize)
 	.def_readwrite("mipmap_", &Tex2D::mipmap_)
 	.def_readwrite("wrap_s_", &Tex2D::wrap_s_)
 	.def_readwrite("wrap_t_", &Tex2D::wrap_t_)
 	.def_readwrite("min_filter_", &Tex2D::min_filter_)
 	.def_readwrite("mag_filter_", &Tex2D::mag_filter_)
-	.def_readwrite("img_name_", &Tex2D::img_name_)
-;
-
-py::class_<::staywalk::Tex2DRT,Tex, std::shared_ptr<::staywalk::Tex2DRT>>(__module, "Tex2DRT")
-	.def(py::init<const string &>())
-	.def_readwrite("wrap_s_", &Tex2DRT::wrap_s_)
-	.def_readwrite("wrap_t_", &Tex2DRT::wrap_t_)
-	.def_readwrite("min_filter_", &Tex2DRT::min_filter_)
-	.def_readwrite("mag_filter_", &Tex2DRT::mag_filter_)
-	.def_readwrite("format_", &Tex2DRT::format_)
 ;
 
 py::class_<::staywalk::FrameBuffer,RObject, std::shared_ptr<::staywalk::FrameBuffer>>(__module, "FrameBuffer")
@@ -90,6 +84,16 @@ py::class_<::staywalk::CubeMap,Tex, std::shared_ptr<::staywalk::CubeMap>>(__modu
 	.def_readwrite("wrap_r_", &CubeMap::wrap_r_)
 	.def_readwrite("min_filter_", &CubeMap::min_filter_)
 	.def_readwrite("mag_filter_", &CubeMap::mag_filter_)
+;
+
+py::class_<::staywalk::RenderTarget2D,Tex, std::shared_ptr<::staywalk::RenderTarget2D>>(__module, "RenderTarget2D")
+	.def(py::init<const string &>())
+	.def("resize", &RenderTarget2D::resize)
+	.def("set_comp_flag", &RenderTarget2D::set_comp_flag)
+	.def_readwrite("wrap_s_", &RenderTarget2D::wrap_s_)
+	.def_readwrite("wrap_t_", &RenderTarget2D::wrap_t_)
+	.def_readwrite("min_filter_", &RenderTarget2D::min_filter_)
+	.def_readwrite("mag_filter_", &RenderTarget2D::mag_filter_)
 ;
 
 py::class_<::staywalk::Shader,RObject, std::shared_ptr<::staywalk::Shader>>(__module, "Shader")

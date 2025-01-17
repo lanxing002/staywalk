@@ -167,6 +167,21 @@ void ::staywalk::Tex::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper&
 
     RObject::dump(value, dumper);
 
+    {
+        json::Value prop;
+        dumper.write(this->img_name_, prop);
+        value.AddMember("img_name_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->internal_format_, prop);
+        value.AddMember("internal_format_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->format_, prop);
+        value.AddMember("format_", prop, dumper.get_doc().GetAllocator()); 
+    }
 }
 
 
@@ -176,12 +191,24 @@ void ::staywalk::Tex::load(rapidjson::Value& value, ::staywalk::reflect::Loader&
 
     RObject::load(value, loader);
 
+    itr = value.FindMember("img_name_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->img_name_, itr->value);
+    }
+    itr = value.FindMember("internal_format_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->internal_format_, itr->value);
+    }
+    itr = value.FindMember("format_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->format_, itr->value);
+    }
 }
 
 
 bool ::staywalk::Tex::operator==(const ::staywalk::Tex& rhs) const {
     return 
-RObject::operator==(rhs) ;
+RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->img_name_, rhs.img_name_) && ::staywalk::Comparer::equal(this->internal_format_, rhs.internal_format_) && ::staywalk::Comparer::equal(this->format_, rhs.format_);
 }
 
 
@@ -222,11 +249,6 @@ void ::staywalk::Tex2D::dump(rapidjson::Value& value, ::staywalk::reflect::Dumpe
         dumper.write(this->mag_filter_, prop);
         value.AddMember("mag_filter_", prop, dumper.get_doc().GetAllocator()); 
     }
-    {
-        json::Value prop;
-        dumper.write(this->img_name_, prop);
-        value.AddMember("img_name_", prop, dumper.get_doc().GetAllocator()); 
-    }
     this->dump_post();
 }
 
@@ -257,97 +279,18 @@ void ::staywalk::Tex2D::load(rapidjson::Value& value, ::staywalk::reflect::Loade
     if(itr != value.MemberEnd()){
         loader.read(this->mag_filter_, itr->value);
     }
-    itr = value.FindMember("img_name_");
-    if(itr != value.MemberEnd()){
-        loader.read(this->img_name_, itr->value);
-    }
     this->load_post();
 }
 
 
 bool ::staywalk::Tex2D::operator==(const ::staywalk::Tex2D& rhs) const {
     return 
-Tex::operator==(rhs)  && ::staywalk::Comparer::equal(this->mipmap_, rhs.mipmap_) && ::staywalk::Comparer::equal(this->wrap_s_, rhs.wrap_s_) && ::staywalk::Comparer::equal(this->wrap_t_, rhs.wrap_t_) && ::staywalk::Comparer::equal(this->min_filter_, rhs.min_filter_) && ::staywalk::Comparer::equal(this->mag_filter_, rhs.mag_filter_) && ::staywalk::Comparer::equal(this->img_name_, rhs.img_name_);
+Tex::operator==(rhs)  && ::staywalk::Comparer::equal(this->mipmap_, rhs.mipmap_) && ::staywalk::Comparer::equal(this->wrap_s_, rhs.wrap_s_) && ::staywalk::Comparer::equal(this->wrap_t_, rhs.wrap_t_) && ::staywalk::Comparer::equal(this->min_filter_, rhs.min_filter_) && ::staywalk::Comparer::equal(this->mag_filter_, rhs.mag_filter_);
 }
 
 
 ::staywalk::reflect::MetaInfo staywalk::Tex2D::get_meta_info() const {
     return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Tex2D, "staywalk::Tex2D"};
-
-}
-
-#include "RenderObject.h"
-
-void ::staywalk::Tex2DRT::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
-    assert(value.IsObject());
-
-    Tex::dump(value, dumper);
-
-    {
-        json::Value prop;
-        dumper.write(this->wrap_s_, prop);
-        value.AddMember("wrap_s_", prop, dumper.get_doc().GetAllocator()); 
-    }
-    {
-        json::Value prop;
-        dumper.write(this->wrap_t_, prop);
-        value.AddMember("wrap_t_", prop, dumper.get_doc().GetAllocator()); 
-    }
-    {
-        json::Value prop;
-        dumper.write(this->min_filter_, prop);
-        value.AddMember("min_filter_", prop, dumper.get_doc().GetAllocator()); 
-    }
-    {
-        json::Value prop;
-        dumper.write(this->mag_filter_, prop);
-        value.AddMember("mag_filter_", prop, dumper.get_doc().GetAllocator()); 
-    }
-    {
-        json::Value prop;
-        dumper.write(this->format_, prop);
-        value.AddMember("format_", prop, dumper.get_doc().GetAllocator()); 
-    }
-}
-
-
-void ::staywalk::Tex2DRT::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
-    assert(value.IsObject());
-    json::Value::MemberIterator itr;
-
-    Tex::load(value, loader);
-
-    itr = value.FindMember("wrap_s_");
-    if(itr != value.MemberEnd()){
-        loader.read(this->wrap_s_, itr->value);
-    }
-    itr = value.FindMember("wrap_t_");
-    if(itr != value.MemberEnd()){
-        loader.read(this->wrap_t_, itr->value);
-    }
-    itr = value.FindMember("min_filter_");
-    if(itr != value.MemberEnd()){
-        loader.read(this->min_filter_, itr->value);
-    }
-    itr = value.FindMember("mag_filter_");
-    if(itr != value.MemberEnd()){
-        loader.read(this->mag_filter_, itr->value);
-    }
-    itr = value.FindMember("format_");
-    if(itr != value.MemberEnd()){
-        loader.read(this->format_, itr->value);
-    }
-}
-
-
-bool ::staywalk::Tex2DRT::operator==(const ::staywalk::Tex2DRT& rhs) const {
-    return 
-Tex::operator==(rhs)  && ::staywalk::Comparer::equal(this->wrap_s_, rhs.wrap_s_) && ::staywalk::Comparer::equal(this->wrap_t_, rhs.wrap_t_) && ::staywalk::Comparer::equal(this->min_filter_, rhs.min_filter_) && ::staywalk::Comparer::equal(this->mag_filter_, rhs.mag_filter_) && ::staywalk::Comparer::equal(this->format_, rhs.format_);
-}
-
-
-::staywalk::reflect::MetaInfo staywalk::Tex2DRT::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Tex2DRT, "staywalk::Tex2DRT"};
 
 }
 
@@ -473,6 +416,72 @@ Tex::operator==(rhs)  && ::staywalk::Comparer::equal(this->img_name_, rhs.img_na
 
 ::staywalk::reflect::MetaInfo staywalk::CubeMap::get_meta_info() const {
     return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::CubeMap, "staywalk::CubeMap"};
+
+}
+
+#include "RenderObject.h"
+
+void ::staywalk::RenderTarget2D::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+    assert(value.IsObject());
+
+    Tex::dump(value, dumper);
+
+    {
+        json::Value prop;
+        dumper.write(this->wrap_s_, prop);
+        value.AddMember("wrap_s_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->wrap_t_, prop);
+        value.AddMember("wrap_t_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->min_filter_, prop);
+        value.AddMember("min_filter_", prop, dumper.get_doc().GetAllocator()); 
+    }
+    {
+        json::Value prop;
+        dumper.write(this->mag_filter_, prop);
+        value.AddMember("mag_filter_", prop, dumper.get_doc().GetAllocator()); 
+    }
+}
+
+
+void ::staywalk::RenderTarget2D::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+    assert(value.IsObject());
+    json::Value::MemberIterator itr;
+
+    Tex::load(value, loader);
+
+    itr = value.FindMember("wrap_s_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->wrap_s_, itr->value);
+    }
+    itr = value.FindMember("wrap_t_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->wrap_t_, itr->value);
+    }
+    itr = value.FindMember("min_filter_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->min_filter_, itr->value);
+    }
+    itr = value.FindMember("mag_filter_");
+    if(itr != value.MemberEnd()){
+        loader.read(this->mag_filter_, itr->value);
+    }
+}
+
+
+bool ::staywalk::RenderTarget2D::operator==(const ::staywalk::RenderTarget2D& rhs) const {
+    return 
+Tex::operator==(rhs)  && ::staywalk::Comparer::equal(this->wrap_s_, rhs.wrap_s_) && ::staywalk::Comparer::equal(this->wrap_t_, rhs.wrap_t_) && ::staywalk::Comparer::equal(this->min_filter_, rhs.min_filter_) && ::staywalk::Comparer::equal(this->mag_filter_, rhs.mag_filter_);
+}
+
+
+::staywalk::reflect::MetaInfo staywalk::RenderTarget2D::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::RenderTarget2D, "staywalk::RenderTarget2D"};
 
 }
 

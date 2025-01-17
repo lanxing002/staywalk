@@ -11,25 +11,35 @@ namespace staywalk{
 	};
 
 	enum class sw_Class() GlMinFilter : int {
-			NEAREST = GL_NEAREST,
-			LINEAR = GL_LINEAR,
-			NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
-			LINEAR_MIPMAP_NEAREST = GL_LINEAR_MIPMAP_NEAREST,
-			NEAREST_MIPMAP_LINEAR = GL_NEAREST_MIPMAP_LINEAR,
-			LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR,
-		};
-
-	enum class sw_Class() GlTexFormat : int {
-				RED = GL_RED,
-				RGB = GL_RGB,
-				RGBA = GL_RGBA,
-				DEPTH = GL_DEPTH_COMPONENT,
-				DEPTHSTENCIL = GL_DEPTH_STENCIL,
-		};
+		NEAREST = GL_NEAREST,
+		LINEAR = GL_LINEAR,
+		NEAREST_MIPMAP_NEAREST = GL_NEAREST_MIPMAP_NEAREST,
+		LINEAR_MIPMAP_NEAREST = GL_LINEAR_MIPMAP_NEAREST,
+		NEAREST_MIPMAP_LINEAR = GL_NEAREST_MIPMAP_LINEAR,
+		LINEAR_MIPMAP_LINEAR = GL_LINEAR_MIPMAP_LINEAR,
+	};
 
 	enum class sw_Class() GlMagFilter : int {
 		NEAREST = GL_NEAREST,
-			LINEAR = GL_LINEAR,
+		LINEAR = GL_LINEAR,
+	};
+
+	enum class sw_Class() GlTexInternalFormat : int {
+		RED = GL_RED,
+		RG = GL_RG,
+		RGB = GL_RGB,
+		RGBA = GL_RGBA,
+		DEPTH = GL_DEPTH_COMPONENT,
+		DEPTHSTENCIL = GL_DEPTH_STENCIL,
+	};
+
+	enum class sw_Class() GlTexFormat : int {
+		RED = GL_RED,
+		RG = GL_RG,
+		RGB = GL_RGB,
+		RGBA = GL_RGBA,
+		DEPTH = GL_DEPTH_COMPONENT,
+		DEPTHSTENCIL = GL_DEPTH_STENCIL,
 	};
 
 	struct Drawable {
@@ -104,12 +114,15 @@ namespace staywalk{
 	
 	class sw_Class() Tex : public RObject {
 	public:
+		sw_Prop() string img_name_;
+		sw_Prop() GlTexInternalFormat internal_format_;
+		sw_Prop() GlTexFormat format_;
+
 		MetaRegister(Tex);
 
 		Tex(const string & name = "tex");
 		virtual GLuint get_updated_glid() { assert(false); return glid_; }
 		virtual void gl_delete() { return; }
-
 		virtual GLenum get_tex_enum() { assert(false); return 0; }
 
 	private:
@@ -124,7 +137,9 @@ namespace staywalk{
 		sw_Prop() GlWrap wrap_t_ = GlWrap::REPEAT;
 		sw_Prop() GlMinFilter min_filter_ = GlMinFilter::LINEAR;
 		sw_Prop() GlMagFilter mag_filter_ = GlMagFilter::LINEAR;
-		sw_Prop() string img_name_;
+		
+		sw_Func() void resize(int width, int height);
+
 		MetaRegister(Tex2D);
 
 		GLuint get_updated_glid() override;
@@ -136,38 +151,15 @@ namespace staywalk{
 		void load_post();
 		void dump_post() const;
 
-		// texture host memory 
+		// texture host memory for texture from disk
 		unsigned char* host_data_ = nullptr;
+
 		int width_ = -1;
 		int height_ = -1;
 		int nr_comps_ = -1;
 
 		friend class Utility;
 	};
-
-	// render target will use one texture object in shader
-	class sw_Class()  Tex2DRT : public Tex {
-	public:
-		sw_Func() Tex2DRT(const string& name = "rt-2d");
-		
-		sw_Prop() GlWrap wrap_s_ = GlWrap::REPEAT;
-		sw_Prop() GlWrap wrap_t_ = GlWrap::REPEAT;
-		sw_Prop() GlMinFilter min_filter_ = GlMinFilter::LINEAR;
-		sw_Prop() GlMagFilter mag_filter_ = GlMagFilter::LINEAR;
-		sw_Prop() GlTexFormat format_ = GlTexFormat::RGBA;
-		MetaRegister(Tex2DRT);
-
-		GLenum get_tex_enum() override { return GL_TEXTURE_2D; }
-		GLuint get_updated_glid() override;
-		void gl_delete() override {}
-
-		int width_ = -1;
-		int height_ = -1;
-	private:
-		void gl_update() override;
-	};
-
-	//TODO: need to complete : color(imply + depth), depth, stencil, depth + stencil
 
 	class sw_Class()  FrameBuffer : public RObject {
 	public:
@@ -216,6 +208,56 @@ namespace staywalk{
 
 		friend class Utility;
 	};
+
+	enum class sw_Class() RTComp : int {
+		None = 0,
+		COLOR = 1 << 0,
+		DEPTH = 1 << 1,
+		STENCIL = 1 << 2,
+		COLOR_DEPTH = COLOR | DEPTH,
+		COLOR_DEPTH_STENCIL = COLOR | DEPTH | STENCIL,
+		DEPTH_STENCIL = DEPTH | STENCIL,
+	};
+
+	// render target will use one texture object in shader
+	class sw_Class()  RenderTarget2D : public Tex {
+	public:
+		sw_Prop() GlWrap wrap_s_ = GlWrap::REPEAT;
+		sw_Prop() GlWrap wrap_t_ = GlWrap::REPEAT;
+		sw_Prop() GlMinFilter min_filter_ = GlMinFilter::LINEAR;
+		sw_Prop() GlMagFilter mag_filter_ = GlMagFilter::LINEAR;
+
+	
+	public:
+		sw_Func() RenderTarget2D(const string & name = "rt-2d");
+		sw_Func() void resize(int width, int height);
+		sw_Func() void set_comp_flag(RTComp flag);
+		MetaRegister(RenderTarget2D);
+
+		GLenum get_tex_enum() override { return GL_TEXTURE_2D; }
+		GLuint get_updated_glid() override;
+		void gl_delete() override {}
+		void bind();
+		uint get_color();
+		uint get_depth();
+		uint get_stencil();
+		uint get_depth_stencil();
+
+	private:
+		void gl_update() override;
+
+		RTComp rt_comp_flags_ = RTComp::None;
+
+		uint color_glid_ = kGlSickId;
+		uint depth_glid_ = kGlSickId;
+		uint stencil_glid_ = kGlSickId;
+		uint depth_stencil_glid_ = kGlSickId;
+
+		int width_ = -1;
+		int height_ = -1;
+	};
+
+	//TODO: need to complete : color(imply + depth), depth, stencil, depth + stencil
 
 	// will use mulity render target in other shader
 	class GBuffer : public RObject {
