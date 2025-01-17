@@ -10,26 +10,18 @@ namespace staywalk {
 		: Object(name) {
 	}
 
+	Tex::Tex(const string& name /*= "tex"*/)
+		: RObject(name) {
+	}
 
 	Tex2D::Tex2D(const string& name)
 		: Tex(name) {
 	}
 
 	void Tex2D::gl_update() {
-		if (host_data_ == nullptr) return;
-
-		GLenum format = GL_RED;
-		if (nr_comps_ == 1)
-			format = GL_RED;
-		else if (nr_comps_ == 3)
-			format = GL_RGB;
-		else if (nr_comps_ == 4)
-			format = GL_RGBA;
-
-		glGenTextures(1, &glid_);
+		if(glid_ == kGlSickId) glGenTextures(1, &glid_);
 		glBindTexture(GL_TEXTURE_2D, glid_);
-		glTexImage2D(GL_TEXTURE_2D, 0, format, width_, height_, 0, format, GL_UNSIGNED_BYTE, host_data_);
-		
+		glTexImage2D(GL_TEXTURE_2D, 0, (GLint)internal_format_, width_, height_, 0, (GLenum)format_, GL_UNSIGNED_BYTE, host_data_);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (GLint)wrap_s_);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (GLint)wrap_t_);
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLint)min_filter_);
@@ -50,11 +42,31 @@ namespace staywalk {
 		glid_ = kGlSickId;
 	}
 
-	void Tex2D::load_post() {
-		auto status = Utility::load_tex_resource(*this);
+
+	void Tex2D::resize(int width, int height){
+		if(img_name_.size() > 0)
+			log(fmt::format("Tex2D::set_size {}, set size for file texture make no scene", name_), LogLevel::Warn);
+		width_ = width;
+		height_ = height;
 		dirty_ = true;
-		log(fmt::format("RTex::load_post from {}, status: {}", name_, status),
-			status ? LogLevel::Info : LogLevel::Warn);
+	}
+
+	void Tex2D::load_post() {
+		if (img_name_.size() > 0){  // load from file
+			auto status = Utility::load_tex_resource(*this);
+			if (status) {
+				if (nr_comps_ == 1)
+					format_ = GlTexFormat::RED;
+				else if (nr_comps_ == 3)
+					format_ = GlTexFormat::RGB;
+				else if (nr_comps_ == 4)
+					format_ = GlTexFormat::RGBA;
+			}
+
+			dirty_ = true;
+			log(fmt::format("RTex::load_post from {}, status: {}", name_, status),
+				status ? LogLevel::Info : LogLevel::Warn);
+		}
 	}
 
 	void Tex2D::dump_post() const {
@@ -141,14 +153,31 @@ namespace staywalk {
 	void CubeMap::dump_post() const	{
 	}
 
-	Tex2DRT::Tex2DRT(const string& name /*= "rt-2d"*/)
+	RenderTarget2D::RenderTarget2D(const string& name /*= "rt-2d"*/)
 	:Tex(name){
 
 	}
 
-	GLuint Tex2DRT::get_updated_glid() {
+	void RenderTarget2D::set_comp_flag(RTComp flag) {
+		if (flag != rt_comp_flags_) {
+			rt_comp_flags_ = flag;
+			dirty_ = true;
+		}
+	}
+
+
+	void RenderTarget2D::resize(int width, int height) {
+		if (width != width_ || height != height) {
+			width_ = width;
+			height_ = height;
+			dirty_ = true;
+		}
+	}
+
+	GLuint RenderTarget2D::get_updated_glid() {
+		assert(rt_comp_flags_ != RTComp::None);
 		if (width_ <= 0 || height_ <= 0) {
-			log(fmt::format("RenderTarget::get_updated_glid wrong width {} or height {}", width_, height_), 
+			log(fmt::format("RenderTarget::get_updated_glid wrong width {} or height {}", width_, height_),
 				LogLevel::Error);
 			return kGlSickId;
 		}
@@ -159,19 +188,64 @@ namespace staywalk {
 		return glid_;
 	}
 
-	void Tex2DRT::gl_update(){
-		assert(width_ > 0 && height_ > 0);
-		glGenTextures(1, &glid_);
-		glBindTexture(GL_TEXTURE_2D, glid_);
-		glTexImage2D(GL_TEXTURE_2D, 0, (int)format_, width_, height_, 0, (int)format_, GL_FLOAT, NULL);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (int)min_filter_);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (int)mag_filter_);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, (int)(wrap_s_));
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, (int)(wrap_t_));
+	void RenderTarget2D::gl_update(){
+		if (glid_ == kGlSickId) glGenFramebuffers(1, &glid_);
+		glBindFramebuffer(GL_FRAMEBUFFER, glid_);
+
+		if (rt_comp_flags_ == RTComp::COLOR) {
+			if(color_glid_ == kGlSickId) glGenTextures(1, &color_glid_);
+			glBindTexture(GL_TEXTURE_2D, color_glid_);
+			glTexImage2D(GL_TEXTURE_2D, 0, (GLint)internal_format_, width_, height_, 0, (GLenum)format_, GL_UNSIGNED_BYTE, NULL);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLint)min_filter_);
+			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLint)mag_filter_);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color_glid_, 0);
+
+			unsigned int attachments[1] = { GL_COLOR_ATTACHMENT0};
+			glDrawBuffers(1, attachments);
+		}
+
+		if (rt_comp_flags_ == RTComp::DEPTH) {
+			if (kGlSickId == depth_glid_) glGenTextures(1, &depth_glid_);
+			glBindTexture(GL_TEXTURE_2D, depth_glid_);
+			glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH_COMPONENT, width_, height_, 0, GL_DEPTH_COMPONENT, GL_FLOAT, NULL);
+			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depth_glid_, 0);
+		}
+		
+		glReadBuffer(GL_NONE);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
+		GLFBCheck(glid_);
 	}
 
-	Tex::Tex(const string& name /*= "tex"*/)
-	:RObject(name){
+	void RenderTarget2D::bind() {
+		glBindFramebuffer(GL_FRAMEBUFFER, get_updated_glid());  // gbuffer
+		glViewport(0, 0, width_, height_);
+	}
+
+	uint RenderTarget2D::get_color() {
+		assert(!dirty_);
+		if (rt_comp_flags_ == RTComp::COLOR)
+			return color_glid_;
+		return kGlSickId;
+	}
+	uint RenderTarget2D::get_depth() {
+		assert(!dirty_);
+		if (rt_comp_flags_ == RTComp::DEPTH)
+			return depth_glid_;
+		return kGlSickId;
+	}
+
+	uint RenderTarget2D::get_stencil() {
+		assert(!dirty_);
+		if (rt_comp_flags_ == RTComp::STENCIL)
+			return stencil_glid_;
+		return kGlSickId;
+	}
+
+	uint RenderTarget2D::get_depth_stencil() {
+		assert(!dirty_);
+		//if ((rt_comp_flags_ & (int)RTComp::STENCIL) > 0 && (rt_comp_flags_ & (int)RTComp::DEPTH) > 0)
+		//	return depth_stencil_glid_;
+		return kGlSickId;
 	}
 
 	FrameBuffer::FrameBuffer(const string& name /*= "framebuffer"*/)
@@ -186,17 +260,11 @@ namespace staywalk {
 	void FrameBuffer::gl_update() {
 		gl_delete();
 		glGenFramebuffers(1, &glid_);
-		//glBindFramebuffer(GL_FRAMEBUFFER, glid_);
-		//glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_ATTACHMENT, GL_TEXTURE_2D, depthMap, 0);
-		//glDrawBuffer(GL_NONE);
-		//glReadBuffer(GL_NONE);
-		//glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
 
 	GBuffer::GBuffer() 
 		:RObject("gbuffer") {
-
 	}
 
 	GLuint GBuffer::get_updated_glid() {
@@ -228,7 +296,7 @@ namespace staywalk {
 	//GlTexFormat format_ = GlTexFormat::RGBA;
 
 	void GBuffer::gl_update() {
-		glGenFramebuffers(1, &glid_);
+		if(glid_ == kGlSickId) glGenFramebuffers(1, &glid_);
 		glBindFramebuffer(GL_FRAMEBUFFER, glid_);
 
 		// position color buffer

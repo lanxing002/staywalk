@@ -146,7 +146,7 @@ namespace staywalk{
 	class Camera;
 	class Tex;
 	class Tex2D;
-	class Tex2DRT;
+	class RenderTarget2D;
 	class FrameBuffer;
 	class CubeMap;
 	class Mesh;
@@ -171,7 +171,7 @@ namespace staywalk{
 	using LightRef = shared_ptr<RLight>;
 	using TexRef = shared_ptr<Tex>;
 	using Tex2DRef = shared_ptr<Tex2D>;
-	using Tex2DRTRef = shared_ptr<Tex2DRT>;
+	using RenderTarget2DRef = shared_ptr<RenderTarget2D>;
 	using FrameBufferRef = shared_ptr<FrameBuffer>;
 	using CubeMapRef = shared_ptr<CubeMap>;
 	using MeshRef = shared_ptr<Mesh>;

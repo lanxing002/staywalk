@@ -21,10 +21,29 @@ staywalk::DeferredRenderer::~DeferredRenderer() {
 }
 
 void DeferredRenderer::initialize(){
-	Renderer::initialize();
+	ProgramRef pbr = std::make_shared<Program>("pbr");
+	ProgramRef pbrpost = std::make_shared<Program>("pbrpost");
+	ProgramRef shadow = std::make_shared<Program>(shadow_name_);
+	pbr->deferred_ = true;
+	
+	pbr->load_post();
+	pbrpost->load_post();
+	shadow->load_post();
+
+	program_table_[static_cast<int>(ProgramType::DeferredPBR)] = pbr;
+	program_table_[static_cast<int>(ProgramType::DeferredPBRPost)] = pbrpost;
+	program_table_[static_cast<int>(ProgramType::Shadow)] = shadow;
+
+	Program::monitor(program_table_[static_cast<int>(ProgramType::DeferredPBR)]);
+	Program::monitor(program_table_[static_cast<int>(ProgramType::DeferredPBRPost)]);
+	Program::monitor(program_table_[static_cast<int>(ProgramType::Shadow)]);
+	stateset_ = std::make_shared<StateSet>("std");
+
+	glEnable(GL_DEPTH_TEST);
+
+	glEnable(GL_BLEND);
+	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 }
-
-
 
 void staywalk::DeferredRenderer::render_screen(){
 	glBindFramebuffer(GL_FRAMEBUFFER, 0);
@@ -145,24 +164,68 @@ void staywalk::DeferredRenderer::render_all_mesh(RenderInfo& render_info){
 
 
 void staywalk::DeferredRenderer::destroy(){
-	Renderer::destroy();
+	Program::monitor(program_table_[static_cast<int>(ProgramType::DeferredPBR)], false);
+	Program::monitor(program_table_[static_cast<int>(ProgramType::DeferredPBRPost)], false);
+	Program::monitor(program_table_[static_cast<int>(ProgramType::Shadow)], false);
+	for (int i = 0; i < (int)ProgramType::_Count; i++)
+		program_table_[i] = nullptr;
 }
 
 void staywalk::DeferredRenderer::render_main(){
-	Tex2DRTRef shadow_tex = 0;
-	RenderInfo render_info;
-	{
-		render_info.model_.push(mat4(1.0));
-		render_info.view_.push(mat4(1.0));
-		render_info.projection_.push(mat4(1.0));
-		render_info.stateset_ = stateset_;
-	}
-
 	auto engine = Engine::get_engine();
 	auto world = engine->get_world();
-	if (auto cam = world->get_activated_camera()) {
-		render_info.view_.top() = cam->view_;
-		render_info.projection_.top() = cam->projection_;
+	
+	// gbuffer pass
+	{
+		mainpass_gbuffer_->set_size(engine->get_view_size().x, engine->get_view_size().y);
+		glBindFramebuffer(GL_FRAMEBUFFER, mainpass_gbuffer_->get_updated_glid());
+		glViewport(0, 0, engine->get_view_size().x, engine->get_view_size().y);
+
+		glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+		//Tex2DRTRef shadow_tex = 0;
+		RenderInfo render_info;
+		{
+			render_info.model_.push(mat4(1.0));
+			render_info.view_.push(mat4(1.0));
+			render_info.projection_.push(mat4(1.0));
+		}
+
+		if (auto cam = world->get_activated_camera()) {
+			render_info.view_.top() = cam->view_;
+			render_info.projection_.top() = cam->projection_;
+		}
+		render_info.program_ = program_table_[(int)ProgramType::DeferredPBR];
+
+		render_info.stateset_ = stateset_;
+		//render_info.stateset_->add_uniform("u_light", std::make_shared<Uniform>(light_vec));
+		//render_info.stateset_->add_uniform("u_light_view_project", std::make_shared<Uniform>(light_view_project));
+		//render_info.stateset_->add_tex("shadow", shadow_tex);
+		render_all_mesh(render_info);
+	}
+
+	// light pass
+	{
+		if (screen_vao_ == kGlSickId) init_screen_source();
+		auto program = program_table_[(int)ProgramType::DeferredPBRPost];
+		program->use();
+
+		int activated_idx = 0;
+		glActiveTexture(GL_TEXTURE0 + activated_idx);
+		activated_idx++;
+		glBindTexture(GL_TEXTURE_2D, mainpass_gbuffer_->get_albedo());
+		program->set_uniform("albedo", activated_idx);
+
+		//glActiveTexture(GL_TEXTURE0 + activated_idx);
+		//activated_idx++;
+		//glBindTexture(GL_TEXTURE_2D, mainpass_gbuffer_->get_albedo());
+
+		//glActiveTexture(GL_TEXTURE0 + activated_idx);
+		//activated_idx++;
+		//glBindTexture(GL_TEXTURE_2D, mainpass_gbuffer_->get_albedo());
+		glBindVertexArray(screen_vao_);
+		glDrawArrays(GL_TRIANGLES, 0, 3);
 	}
 }
 

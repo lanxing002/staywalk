@@ -37,6 +37,7 @@ namespace staywalk {
 
 			// mainpass
 			Ref<GBuffer> mainpass_gbuffer_;
+			RenderTargetRef mainpass_fb_;
 
 
 			// post pass

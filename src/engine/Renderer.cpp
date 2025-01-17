@@ -51,7 +51,7 @@ void Renderer::render(double delta, unsigned long long count)
 		light->light_type_ == LightType::Directional ? 1.0 : -1.0);
 
 	mat4 light_view_project = mat4(1.0);
-	Tex2DRTRef shadow_tex = 0;
+	//Tex2DRTRef shadow_tex = 0;
 	
 	for (size_t idx = 0; idx <= rt_num; idx++) {
 		bool main_pass = idx == rt_num;
@@ -64,7 +64,7 @@ void Renderer::render(double delta, unsigned long long count)
 			if (rts[idx]->post_stage_) { post.push_back(rts[idx]); continue; }
 			if (rts[idx]->get_meta_info().tname == "staywalk::DepthRenderTarget") {
 				light_view_project =  rts[idx]->camera_.projection_ * rts[idx]->camera_.view_;
-				shadow_tex = pcast<DepthRenderTarget>(rts[idx])->depth_rt_;
+				//shadow_tex = pcast<DepthRenderTarget>(rts[idx])->depth_rt_;
 			}
 			rts[idx]->bind();
 		}
@@ -115,7 +115,7 @@ void Renderer::render(double delta, unsigned long long count)
 		render_info.stateset_->add_uniform("u_light_view_project", std::make_shared<Uniform>(light_view_project));
 
 		if (main_pass) {
-			render_info.stateset_->add_tex("shadow", shadow_tex);
+			//render_info.stateset_->add_tex("shadow", shadow_tex);
 		}
 
 		// render mesh
