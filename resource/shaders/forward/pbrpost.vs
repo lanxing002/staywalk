@@ -5,5 +5,5 @@ layout (location = 1) in vec2 vs_texcoord;
 out vec2 fs_texcoord;	
 void main(){
     fs_texcoord = vs_texcoord;
-    gl_Position = vec4(vs_pos, 1.0f);
+    gl_Position = vec4(vs_pos, 1.0f); 
 };

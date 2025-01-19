@@ -104,11 +104,11 @@ py::class_<::staywalk::Shader,RObject, std::shared_ptr<::staywalk::Shader>>(__mo
 py::class_<::staywalk::Uniform,Object, std::shared_ptr<::staywalk::Uniform>>(__module, "Uniform")
 ;
 
-py::class_<::staywalk::Program,RObject, std::shared_ptr<::staywalk::Program>>(__module, "Program")
+py::class_<::staywalk::StdProgram,RObject, std::shared_ptr<::staywalk::StdProgram>>(__module, "StdProgram")
 	.def(py::init<const string &>())
-	.def_readwrite("deferred_", &Program::deferred_)
-	.def_readwrite("vs_", &Program::vs_)
-	.def_readwrite("fs_", &Program::fs_)
+	.def_readwrite("deferred_", &StdProgram::deferred_)
+	.def_readwrite("vs_", &StdProgram::vs_)
+	.def_readwrite("fs_", &StdProgram::fs_)
 ;
 
 py::class_<::staywalk::StateSet,Object, std::shared_ptr<::staywalk::StateSet>>(__module, "StateSet")

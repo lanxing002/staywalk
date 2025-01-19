@@ -22,7 +22,7 @@ namespace staywalk {
 		static const string AoKey;
 
 		~StateSet();
-		void use(ProgramRef program, int tex_slot_bias = 0);
+		void use(StdProgramRef program, int tex_slot_bias = 0);
 		int get_texture_num() { return (int)texs_.size(); }
 
 	protected:

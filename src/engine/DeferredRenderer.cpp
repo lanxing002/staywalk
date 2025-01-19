@@ -14,6 +14,10 @@ using namespace staywalk;
 
 staywalk::DeferredRenderer::DeferredRenderer(){
 	mainpass_gbuffer_ = std::make_shared<GBuffer>();
+	post_front_ = std::make_shared<RenderTarget2D>();
+	post_back_ = std::make_shared<RenderTarget2D>();
+	post_front_->set_comp_flag(RTComp::COLOR);
+	post_back_->set_comp_flag(RTComp::COLOR);
 }
 
 staywalk::DeferredRenderer::~DeferredRenderer() {
@@ -21,9 +25,9 @@ staywalk::DeferredRenderer::~DeferredRenderer() {
 }
 
 void DeferredRenderer::initialize(){
-	ProgramRef pbr = std::make_shared<Program>("pbr");
-	ProgramRef pbrpost = std::make_shared<Program>("pbrpost");
-	ProgramRef shadow = std::make_shared<Program>(shadow_name_);
+	StdProgramRef pbr = std::make_shared<StdProgram>("pbr");
+	StdProgramRef pbrpost = std::make_shared<StdProgram>("pbrpost");
+	StdProgramRef shadow = std::make_shared<StdProgram>(shadow_name_);
 	pbr->deferred_ = true;
 	
 	pbr->load_post();
@@ -34,9 +38,9 @@ void DeferredRenderer::initialize(){
 	program_table_[static_cast<int>(ProgramType::DeferredPBRPost)] = pbrpost;
 	program_table_[static_cast<int>(ProgramType::Shadow)] = shadow;
 
-	Program::monitor(program_table_[static_cast<int>(ProgramType::DeferredPBR)]);
-	Program::monitor(program_table_[static_cast<int>(ProgramType::DeferredPBRPost)]);
-	Program::monitor(program_table_[static_cast<int>(ProgramType::Shadow)]);
+	StdProgram::monitor(program_table_[static_cast<int>(ProgramType::DeferredPBR)]);
+	StdProgram::monitor(program_table_[static_cast<int>(ProgramType::DeferredPBRPost)]);
+	StdProgram::monitor(program_table_[static_cast<int>(ProgramType::Shadow)]);
 	stateset_ = std::make_shared<StateSet>("std");
 
 	glEnable(GL_DEPTH_TEST);
@@ -100,6 +104,12 @@ void DeferredRenderer::render(double delta, unsigned long long count){
 	auto engine = Engine::get_engine();
 	auto world = engine->get_world();
 	if (world == nullptr) return;
+	auto view_size = engine->get_view_size();
+	if (view_size.x == 0 || view_size.y == 0) return;
+
+	post_front_->resize(view_size.x, view_size.y);
+	post_back_->resize(view_size.x, view_size.y);
+	mainpass_gbuffer_->resize(view_size.x, view_size.y);
 
 	vector<RenderTargetRef> post;
 	const auto& rts = world->get_all_rendertargets();
@@ -118,7 +128,7 @@ void DeferredRenderer::render(double delta, unsigned long long count){
 
 	for (auto& rt : post_rts)
 		render_custom_rt(rt);
-
+	
 	render_post0();
 
 	render_post1();
@@ -164,9 +174,9 @@ void staywalk::DeferredRenderer::render_all_mesh(RenderInfo& render_info){
 
 
 void staywalk::DeferredRenderer::destroy(){
-	Program::monitor(program_table_[static_cast<int>(ProgramType::DeferredPBR)], false);
-	Program::monitor(program_table_[static_cast<int>(ProgramType::DeferredPBRPost)], false);
-	Program::monitor(program_table_[static_cast<int>(ProgramType::Shadow)], false);
+	StdProgram::monitor(program_table_[static_cast<int>(ProgramType::DeferredPBR)], false);
+	StdProgram::monitor(program_table_[static_cast<int>(ProgramType::DeferredPBRPost)], false);
+	StdProgram::monitor(program_table_[static_cast<int>(ProgramType::Shadow)], false);
 	for (int i = 0; i < (int)ProgramType::_Count; i++)
 		program_table_[i] = nullptr;
 }
@@ -177,7 +187,6 @@ void staywalk::DeferredRenderer::render_main(){
 	
 	// gbuffer pass
 	{
-		mainpass_gbuffer_->set_size(engine->get_view_size().x, engine->get_view_size().y);
 		glBindFramebuffer(GL_FRAMEBUFFER, mainpass_gbuffer_->get_updated_glid());
 		glViewport(0, 0, engine->get_view_size().x, engine->get_view_size().y);
 
@@ -207,16 +216,17 @@ void staywalk::DeferredRenderer::render_main(){
 
 	// light pass
 	{
+		post_front_->bind();
 		if (screen_vao_ == kGlSickId) init_screen_source();
 		auto program = program_table_[(int)ProgramType::DeferredPBRPost];
 		program->use();
 
 		int activated_idx = 0;
 		glActiveTexture(GL_TEXTURE0 + activated_idx);
-		activated_idx++;
 		glBindTexture(GL_TEXTURE_2D, mainpass_gbuffer_->get_albedo());
 		program->set_uniform("albedo", activated_idx);
-
+		
+		activated_idx++;
 		//glActiveTexture(GL_TEXTURE0 + activated_idx);
 		//activated_idx++;
 		//glBindTexture(GL_TEXTURE_2D, mainpass_gbuffer_->get_albedo());

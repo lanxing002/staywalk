@@ -601,7 +601,7 @@ Object::operator==(rhs)  && ::staywalk::Comparer::equal(this->utype_, rhs.utype_
 
 #include "RProgram.h"
 
-void ::staywalk::Program::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
+void ::staywalk::StdProgram::dump(rapidjson::Value& value, ::staywalk::reflect::Dumper& dumper) const {
     assert(value.IsObject());
 
     RObject::dump(value, dumper);
@@ -625,7 +625,7 @@ void ::staywalk::Program::dump(rapidjson::Value& value, ::staywalk::reflect::Dum
 }
 
 
-void ::staywalk::Program::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
+void ::staywalk::StdProgram::load(rapidjson::Value& value, ::staywalk::reflect::Loader& loader) {
     assert(value.IsObject());
     json::Value::MemberIterator itr;
 
@@ -647,14 +647,14 @@ void ::staywalk::Program::load(rapidjson::Value& value, ::staywalk::reflect::Loa
 }
 
 
-bool ::staywalk::Program::operator==(const ::staywalk::Program& rhs) const {
+bool ::staywalk::StdProgram::operator==(const ::staywalk::StdProgram& rhs) const {
     return 
 RObject::operator==(rhs)  && ::staywalk::Comparer::equal(this->deferred_, rhs.deferred_) && ::staywalk::Comparer::equal(this->vs_, rhs.vs_) && ::staywalk::Comparer::equal(this->fs_, rhs.fs_);
 }
 
 
-::staywalk::reflect::MetaInfo staywalk::Program::get_meta_info() const {
-    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::Program, "staywalk::Program"};
+::staywalk::reflect::MetaInfo staywalk::StdProgram::get_meta_info() const {
+    return ::staywalk::reflect::MetaInfo{::staywalk::reflect::ObjectType::StdProgram, "staywalk::StdProgram"};
 
 }
 

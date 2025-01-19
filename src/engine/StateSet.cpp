@@ -49,7 +49,7 @@ namespace staywalk {
 		return true;
 	}
 
-	void StateSet::use(ProgramRef program, int tex_slot_bias){
+	void StateSet::use(StdProgramRef program, int tex_slot_bias){
 		assert(program);
 		program->use();
 		for (auto& [n, u] : uniforms_) {

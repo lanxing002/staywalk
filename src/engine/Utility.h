@@ -46,6 +46,8 @@ namespace staywalk{
 		static fs::path get_forward_shaders_dir();
 
 		static fs::path get_common_shaders_dir();
+		
+		static fs::path get_compute_shaders_dir();
 
 		static string get_deferred_vs_tempalte();
 

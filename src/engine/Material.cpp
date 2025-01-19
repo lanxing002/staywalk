@@ -7,7 +7,7 @@ namespace staywalk {
 	}
 
 	Material::~Material(){
-		if (program_) Program::monitor(program_, false);
+		if (program_) StdProgram::monitor(program_, false);
 	}
 
 	void Material::use(RenderInfo info){

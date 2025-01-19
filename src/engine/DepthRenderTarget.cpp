@@ -14,7 +14,7 @@ namespace staywalk {
 	}
 	
 	DepthRenderTarget::~DepthRenderTarget() {
-		if (program_) Program::monitor(program_, false);
+		if (program_) StdProgram::monitor(program_, false);
 	}
 
 	void DepthRenderTarget::bind(){
@@ -46,7 +46,7 @@ namespace staywalk {
 		rt_->set_comp_flag(RTComp::DEPTH);
 		//rt_->wrap_s_ = GlWrap::REPEAT;
 		//rt_->wrap_t_ = GlWrap::REPEAT;
-		if (program_) Program::monitor(program_, true);
+		if (program_) StdProgram::monitor(program_, true);
 	}
 }
 

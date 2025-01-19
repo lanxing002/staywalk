@@ -13,13 +13,13 @@
 using namespace staywalk;
 
 
-ProgramRef Renderer::query_program(ProgramType pt){
+StdProgramRef Renderer::query_program(ProgramType pt){
 	return program_table_[(int)pt];
 }
 
 void Renderer::initialize(){
-	ProgramRef pbr = std::make_shared<Program>(pbr_name_);
-	ProgramRef shadow = std::make_shared<Program>(shadow_name_);
+	StdProgramRef pbr = std::make_shared<StdProgram>(pbr_name_);
+	StdProgramRef shadow = std::make_shared<StdProgram>(shadow_name_);
 	pbr->deferred_ = true;
 	pbr->load_post();
 	shadow->load_post();
@@ -27,8 +27,8 @@ void Renderer::initialize(){
 	program_table_[static_cast<int>(ProgramType::PBR)] = pbr;
 	program_table_[static_cast<int>(ProgramType::Shadow)] = shadow;
 
-	Program::monitor(program_table_[static_cast<int>(ProgramType::PBR)]);
-	Program::monitor(program_table_[static_cast<int>(ProgramType::Shadow)]);
+	StdProgram::monitor(program_table_[static_cast<int>(ProgramType::PBR)]);
+	StdProgram::monitor(program_table_[static_cast<int>(ProgramType::Shadow)]);
 	stateset_ = std::make_shared<StateSet>("std");
 
 	glEnable(GL_DEPTH_TEST);
@@ -154,8 +154,8 @@ staywalk::Renderer::~Renderer(){
 }
 
 void staywalk::Renderer::destroy(){
-	Program::monitor(program_table_[static_cast<int>(ProgramType::PBR)], false);
-	Program::monitor(program_table_[static_cast<int>(ProgramType::Shadow)], false);
+	StdProgram::monitor(program_table_[static_cast<int>(ProgramType::PBR)], false);
+	StdProgram::monitor(program_table_[static_cast<int>(ProgramType::Shadow)], false);
 	for (int i = 0; i < (int)ProgramType::_Count; i++)
 		program_table_[i] = nullptr;
 }
