@@ -35,17 +35,18 @@ namespace staywalk {
 	private:
 		// render pipeline start
 
-			// mainpass
-			Ref<GBuffer> mainpass_gbuffer_;
-			RenderTargetRef mainpass_fb_;
+		// mainpass
+		Ref<GBuffer> mainpass_gbuffer_;
+		RenderTargetRef mainpass_fb_;
+
+		// post pass
+		RenderTarget2DRef post_front_;   // just color
+		RenderTarget2DRef post_back_;	  // just color	 
 
 
-			// post pass
-
-
-			// render to screen pass
-			uint screen_draw_program_ = kGlSickId;
-			uint screen_vao_ = kGlSickId;
+		// render to screen pass
+		uint screen_draw_program_ = kGlSickId;
+		uint screen_vao_ = kGlSickId;
 
 
 		// render pipeline end

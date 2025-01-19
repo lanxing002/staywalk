@@ -17,7 +17,7 @@ namespace staywalk {
 		std::stack<staywalk::mat4> model_;
 		std::stack<staywalk::mat4> view_;
 		std::stack<staywalk::mat4> projection_;
-		staywalk::ProgramRef program_{ nullptr };
+		staywalk::StdProgramRef program_{ nullptr };
 		staywalk::StateSetRef stateset_{ nullptr };
 		int texture_slot = 0;
 		bool can_override_{ false };

@@ -9,7 +9,7 @@ namespace staywalk {
 		Renderer() {}
 		~Renderer();
 
-		ProgramRef query_program(ProgramType pt);
+		StdProgramRef query_program(ProgramType pt);
 
 		virtual void initialize();
 
@@ -19,7 +19,7 @@ namespace staywalk {
 
 	protected:
 		StateSetRef stateset_;
-		std::array<ProgramRef, (int)ProgramType::_Count> program_table_;
+		std::array<StdProgramRef, (int)ProgramType::_Count> program_table_;
 
 		string pbr_name_ = "pbr";
 		string shadow_name_ = "shadow";

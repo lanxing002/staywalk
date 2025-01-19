@@ -212,8 +212,8 @@ namespace staywalk {
 		}
 		
 		glReadBuffer(GL_NONE);
-		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 		GLFBCheck(glid_);
+		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
 
 	void RenderTarget2D::bind() {
@@ -275,7 +275,7 @@ namespace staywalk {
 		return glid_;
 	}
 	
-	void GBuffer::set_size(int width, int height) {
+	void GBuffer::resize(int width, int height) {
 		assert(width > 0 && height > 0);
 		if (width_ != width || height_ != height) {
 			width_ = width;

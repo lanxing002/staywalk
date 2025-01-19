@@ -115,8 +115,8 @@ namespace staywalk{
 	class sw_Class() Tex : public RObject {
 	public:
 		sw_Prop() string img_name_;
-		sw_Prop() GlTexInternalFormat internal_format_;
-		sw_Prop() GlTexFormat format_;
+		sw_Prop() GlTexInternalFormat internal_format_ = GlTexInternalFormat::RGBA;
+		sw_Prop() GlTexFormat format_ = GlTexFormat::RGBA;
 
 		MetaRegister(Tex);
 
@@ -265,7 +265,7 @@ namespace staywalk{
 		GBuffer();
 		GLuint get_updated_glid();
 		void gl_delete() {}
-		void set_size(int width, int height);
+		void resize(int width, int height);
 
 		uint get_pos() { assert(!dirty_); return pos_glid_; }
 		uint get_depth() { assert(!dirty_); return depth_glid_; }

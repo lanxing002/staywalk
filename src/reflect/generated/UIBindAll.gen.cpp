@@ -353,7 +353,7 @@ void ::staywalk::Uniform::construct_obj_ui(bool can_modify) {
 
 #include "RProgram.h"
 
-void ::staywalk::Program::construct_basic_ui(bool can_modify) {
+void ::staywalk::StdProgram::construct_basic_ui(bool can_modify) {
     RObject::construct_basic_ui(can_modify);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(deferred_)>()) 
         staywalk::reflect::UIHelper::construct_ui("deferred_", deferred_, can_modify || true);
@@ -365,7 +365,7 @@ void ::staywalk::Program::construct_basic_ui(bool can_modify) {
 
 
 
-void ::staywalk::Program::construct_obj_ui(bool can_modify) {
+void ::staywalk::StdProgram::construct_obj_ui(bool can_modify) {
     RObject::construct_obj_ui(can_modify);
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(deferred_)>()){ 
         //if (ImGui::TreeNode("deferred_")){

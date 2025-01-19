@@ -54,7 +54,7 @@ void staywalk::Shader::check_compile_error(){
 	}
 }
 
-Program::Program(const string& name)
+StdProgram::StdProgram(const string& name)
 	: RObject(name)
 	,vs_("", "vertex")
 	,fs_("", "fragment")
@@ -65,7 +65,7 @@ Program::Program(const string& name)
 	dirty_ = true;
 }
 
-void Program::load_post(){
+void StdProgram::load_post(){
 	auto p = deferred_ ? Utility::get_deferred_shaders_dir() : Utility::get_forward_shaders_dir();
 	auto vs_file = p / (name_ + ".vs"); string vs_code;
 	auto fs_file = p / (name_ + ".fs"); string fs_code;
@@ -73,7 +73,7 @@ void Program::load_post(){
 	if (Utility::load_text(fs_file, fs_code)) fs_.code_->text_ = fs_code;
 }
 
-void Program::dump_post() const{
+void StdProgram::dump_post() const{
 	auto p = deferred_ ? Utility::get_deferred_shaders_dir() : Utility::get_forward_shaders_dir();
 	auto vs_file = p / (name_ + ".vs"); string vs_code = vs_.code_->text_;
 	auto fs_file = p / (name_ + ".fs"); string fs_code = fs_.code_->text_;
@@ -82,20 +82,20 @@ void Program::dump_post() const{
 	Utility::dump_text(fs_file, fs_code);
 }
 
-staywalk::Program::~Program(){
+staywalk::StdProgram::~StdProgram(){
 }
 
-void staywalk::Program::gl_update(){
+void staywalk::StdProgram::gl_update(){
 	glid_ = glCreateProgram();
 }
 
-void staywalk::Program::gl_delete(){
+void staywalk::StdProgram::gl_delete(){
 	vs_.gl_delete();
 	fs_.gl_delete();
 	if (kGlSickId != glid_) glDeleteProgram(glid_);
 }
 
-void staywalk::Program::use() {
+void staywalk::StdProgram::use() {
 	if (dirty_) {
 		uniforms_.clear();
 		gl_update(); 
@@ -116,7 +116,7 @@ void staywalk::Program::use() {
 	glUseProgram(glid_);
 }
 
-GLint staywalk::Program::get_uniform(const string& name){
+GLint staywalk::StdProgram::get_uniform(const string& name){
 	auto it = uniforms_.find(name);
 	if (it != uniforms_.end())
 		return it->second;
@@ -125,7 +125,7 @@ GLint staywalk::Program::get_uniform(const string& name){
 	return target;
 }
 
-void staywalk::Program::set_uniform(const string& name, UniformRef uniform){
+void staywalk::StdProgram::set_uniform(const string& name, UniformRef uniform){
 	if (uniform == nullptr) return;
 	auto utype = uniform->utype_;
 	void* pdata = nullptr;
@@ -167,7 +167,7 @@ void staywalk::Program::set_uniform(const string& name, UniformRef uniform){
 
 }
 
-GLint staywalk::Program::set_uniform_block(const string& name){
+GLint staywalk::StdProgram::set_uniform_block(const string& name){
 	GLuint block_idx = glGetUniformBlockIndex(glid_, name.c_str());
 	GLCheck(;);
 	const auto it = uniforms_block_.find(block_idx);
@@ -185,7 +185,7 @@ GLint staywalk::Program::set_uniform_block(const string& name){
 	return bind_idx;
 }
 
-void staywalk::Program::check_link_error(){
+void staywalk::StdProgram::check_link_error(){
 	GLint success;
 	GLchar info[2048];
 	glGetProgramiv(glid_, GL_LINK_STATUS, &success);
@@ -195,14 +195,14 @@ void staywalk::Program::check_link_error(){
 	}
 }
 
-void staywalk::Program::monitor(ProgramRef program, bool flag /*= true*/){
+void staywalk::StdProgram::monitor(StdProgramRef program, bool flag /*= true*/){
 	if (program == nullptr) return;
 	auto p = program->deferred_ ? Utility::get_deferred_shaders_dir() : Utility::get_forward_shaders_dir();
 	auto name = program->name_;
 	auto vs_file = p / (name + ".vs"); string vs_code;
 	auto fs_file = p / (name + ".fs"); string fs_code;
 	auto cs_file = p / (name + ".cs"); string cs_code;
-	auto weak_ref = std::weak_ptr<Program>(program);
+	auto weak_ref = std::weak_ptr<StdProgram>(program);
 	auto engine = Engine::get_engine();
 
 	if (flag) {
@@ -225,10 +225,9 @@ void staywalk::Program::monitor(ProgramRef program, bool flag /*= true*/){
 		engine->cancel_monitor_file(FileMonitor::make_key(program->vs_.get_guid(), vs_file ));
 		engine->cancel_monitor_file(FileMonitor::make_key( program->fs_.get_guid(), fs_file ));
 	}
-
 }
 
-void staywalk::Program::construct_glsl_code() {
+void staywalk::StdProgram::construct_glsl_code() {
 	if (!deferred_) {
 		if(vs_.is_dirty()) vs_.glsl_code_ = vs_.code_->text_;
 		if(fs_.is_dirty()) fs_.glsl_code_ = fs_.code_->text_;
@@ -244,3 +243,69 @@ void staywalk::Program::construct_glsl_code() {
 	}
 }
 
+
+void staywalk::CSProgram::monitor(CSProgramRef program, bool flag = true) {
+	if (program == nullptr) return;
+	auto name = program->name_;
+	auto cs_file = Utility::get_compute_shaders_dir() / (name + ".cs"); string cs_code;
+	auto weak_ref = std::weak_ptr<CSProgram>(program);
+	auto engine = Engine::get_engine();
+
+	if (flag) {
+		engine->monitor_file(FileMonitor::make_key(program->cs_.get_guid(), cs_file), [weak_ref](const string& new_context) {
+			if (auto ref = weak_ref.lock()) {
+				ref->cs_.code_->text_ = new_context;
+				ref->cs_.mark_dirty();
+				log(fmt::format("cs::hotload {} --> suceess", ref->name_));
+			}
+			});
+	}
+	else {
+		engine->cancel_monitor_file(FileMonitor::make_key(program->cs_.get_guid(), cs_file));
+	}
+}
+
+staywalk::CSProgram::CSProgram(const string& name)
+	:RObject(name){
+	cs_.shadertype_ = ShaderType::CS;
+	dirty_ = true;
+}
+
+staywalk::CSProgram::~CSProgram() {
+
+}
+
+void staywalk::CSProgram::dispatch() {
+	if (dirty_) {
+		gl_update();
+		dirty_ = false;
+	}
+
+	if (cs_.is_dirty()) {
+		glAttachShader(glid_, cs_.get_updated_glid());
+		glLinkProgram(glid_);
+		check_link_error();
+	}
+
+	glUseProgram(glid_);
+}
+
+void staywalk::CSProgram::gl_update() {
+	glid_ = glCreateProgram();
+}
+	////sw_Prop() Shader cs_;
+	////MetaRegister(CSProgram);
+
+	//void dispatch();
+	//void gl_delete();
+
+	//GLint get_uniform(const string & name);
+	//template<typename T>
+	//void set_uniform(const string & name, T value) { static_assert(false && "not impl!!"); }
+	//void set_uniform(const string & name, UniformRef uniform);
+	//GLint set_uniform_block(const string & name);
+void staywalk::CSProgram::load_post() {
+	auto p = Utility::get_compute_shaders_dir();
+	auto cs_file = p / (name_ + ".cs"); string cs_code;
+	if (Utility::load_text(cs_file, cs_code)) cs_.code_->text_ = cs_code;
+}

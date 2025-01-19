@@ -66,7 +66,7 @@ namespace staywalk {
 
 	static MaterialRef make_cube_material(){
 		auto result = std::make_shared<Material>("skybox");
-		result->program_ = std::make_shared<Program>("skybox"); // shader 
+		result->program_ = std::make_shared<StdProgram>("skybox"); // shader 
 		CubeMapRef cubemap = std::make_shared<CubeMap>("skybox");  // material texture
 		result->add_tex("skybox", cubemap);
 		return result;

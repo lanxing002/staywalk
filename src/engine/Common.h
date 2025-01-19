@@ -139,7 +139,8 @@ namespace staywalk{
 	class SkeletonMesh;
 	
 	class RObject;
-	class Program;
+	class StdProgram;
+	class CSProgram;
 	class Shader;
 	class Material;
 	class RLight;
@@ -165,7 +166,8 @@ namespace staywalk{
 	using AnimationRef = shared_ptr<Animation>;
 	using SkeletonMeshRef = shared_ptr<SkeletonMesh>;
 
-	using ProgramRef = shared_ptr<Program>;
+	using StdProgramRef = shared_ptr<StdProgram>;
+	using CSProgramRef = shared_ptr<CSProgram>;
 	using ShaderRef = shared_ptr<Shader>;
 	using MaterialRef = shared_ptr<Material>;
 	using LightRef = shared_ptr<RLight>;

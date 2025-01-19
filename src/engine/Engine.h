@@ -26,7 +26,7 @@ namespace staywalk{
 		sw_Func() void cancel_monitor_file(FileMonitor::Key key);
 		//end of engine functions
 
-		sw_Func() ProgramRef query_program(ProgramType pt);
+		sw_Func() StdProgramRef query_program(ProgramType pt);
 		sw_Func() InputManager& get_input_mgr() { return input_mgr_; }
 		sw_Func() ivec2 get_view_size() { return view_size_; }
 		sw_Func() void set_view_size(ivec2 value) { view_size_ = value; }

@@ -25,16 +25,16 @@
 #include "RenderTarget.h"
 #include "DepthRenderTarget.h"
 #include "C:/Users/Lenovo/Documents/gly/git_stars/staywalk/src/project/SkyBox.h"
-#include "RProgram.h"
+#include "RenderInfo.h"
 #include "RenderObject.h"
 #include "RProgram.h"
-#include "RenderObject.h"
 #include "RenderObject.h"
 #include "Camera.h"
-#include "RenderObject.h"
 #include "Light.h"
 #include "RenderObject.h"
-#include "RenderInfo.h"
+#include "RenderObject.h"
+#include "RenderObject.h"
+#include "RProgram.h"
 #include "RenderObject.h"
 
 
@@ -66,7 +66,7 @@ shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
 
     else if (minfo.tname == "staywalk::Uniform"){return std::make_shared<::staywalk::Uniform>();}
 
-    else if (minfo.tname == "staywalk::Program"){return std::make_shared<::staywalk::Program>();}
+    else if (minfo.tname == "staywalk::StdProgram"){return std::make_shared<::staywalk::StdProgram>();}
 
     else if (minfo.tname == "staywalk::StateSet"){return std::make_shared<::staywalk::StateSet>();}
 
@@ -106,6 +106,28 @@ shared_ptr<Object> reflect::create_empty(reflect::MetaInfo minfo) {
 
 template<>
 std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::ProgramType>() {
+    return { 
+        {static_cast<int>(::staywalk::ProgramType::PBR), "PBR"},
+        {static_cast<int>(::staywalk::ProgramType::Shadow), "Shadow"},
+        {static_cast<int>(::staywalk::ProgramType::DeferredPBR), "DeferredPBR"},
+        {static_cast<int>(::staywalk::ProgramType::DeferredPBRPost), "DeferredPBRPost"},
+        {static_cast<int>(::staywalk::ProgramType::_Count), "_Count"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
+    return { 
+        {static_cast<int>(::staywalk::GlWrap::CLAMP_TO_EDGE), "CLAMP_TO_EDGE"},
+        {static_cast<int>(::staywalk::GlWrap::MIRRORED_REPEAT), "MIRRORED_REPEAT"},
+        {static_cast<int>(::staywalk::GlWrap::REPEAT), "REPEAT"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
 staywalk::reflect::get_enum_label<::staywalk::UniformType>() {
     return { 
         {static_cast<int>(::staywalk::UniformType::U1f), "U1f"},
@@ -122,6 +144,37 @@ staywalk::reflect::get_enum_label<::staywalk::UniformType>() {
 
 template<>
 std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlTexFormat>() {
+    return { 
+        {static_cast<int>(::staywalk::GlTexFormat::RED), "RED"},
+        {static_cast<int>(::staywalk::GlTexFormat::RG), "RG"},
+        {static_cast<int>(::staywalk::GlTexFormat::RGB), "RGB"},
+        {static_cast<int>(::staywalk::GlTexFormat::RGBA), "RGBA"},
+        {static_cast<int>(::staywalk::GlTexFormat::DEPTH), "DEPTH"},
+        {static_cast<int>(::staywalk::GlTexFormat::DEPTHSTENCIL), "DEPTHSTENCIL"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::ProjectType>() {
+    return { 
+        {static_cast<int>(::staywalk::ProjectType::Persepective), "Persepective"},
+        {static_cast<int>(::staywalk::ProjectType::Ortho), "Ortho"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::LightType>() {
+    return { 
+        {static_cast<int>(::staywalk::LightType::Directional), "Directional"},
+        {static_cast<int>(::staywalk::LightType::Position), "Position"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
 staywalk::reflect::get_enum_label<::staywalk::GlTexInternalFormat>() {
     return { 
         {static_cast<int>(::staywalk::GlTexInternalFormat::RED), "RED"},
@@ -130,6 +183,29 @@ staywalk::reflect::get_enum_label<::staywalk::GlTexInternalFormat>() {
         {static_cast<int>(::staywalk::GlTexInternalFormat::RGBA), "RGBA"},
         {static_cast<int>(::staywalk::GlTexInternalFormat::DEPTH), "DEPTH"},
         {static_cast<int>(::staywalk::GlTexInternalFormat::DEPTHSTENCIL), "DEPTHSTENCIL"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>() {
+    return { 
+        {static_cast<int>(::staywalk::GlMagFilter::NEAREST), "NEAREST"},
+        {static_cast<int>(::staywalk::GlMagFilter::LINEAR), "LINEAR"},
+    };
+}
+
+template<>
+std::vector<std::pair<int, std::string>>
+staywalk::reflect::get_enum_label<::staywalk::RTComp>() {
+    return { 
+        {static_cast<int>(::staywalk::RTComp::None), "None"},
+        {static_cast<int>(::staywalk::RTComp::COLOR), "COLOR"},
+        {static_cast<int>(::staywalk::RTComp::DEPTH), "DEPTH"},
+        {static_cast<int>(::staywalk::RTComp::STENCIL), "STENCIL"},
+        {static_cast<int>(::staywalk::RTComp::COLOR_DEPTH), "COLOR_DEPTH"},
+        {static_cast<int>(::staywalk::RTComp::COLOR_DEPTH_STENCIL), "COLOR_DEPTH_STENCIL"},
+        {static_cast<int>(::staywalk::RTComp::DEPTH_STENCIL), "DEPTH_STENCIL"},
     };
 }
 
@@ -155,81 +231,5 @@ staywalk::reflect::get_enum_label<::staywalk::GlMinFilter>() {
         {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_NEAREST), "LINEAR_MIPMAP_NEAREST"},
         {static_cast<int>(::staywalk::GlMinFilter::NEAREST_MIPMAP_LINEAR), "NEAREST_MIPMAP_LINEAR"},
         {static_cast<int>(::staywalk::GlMinFilter::LINEAR_MIPMAP_LINEAR), "LINEAR_MIPMAP_LINEAR"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::RTComp>() {
-    return { 
-        {static_cast<int>(::staywalk::RTComp::None), "None"},
-        {static_cast<int>(::staywalk::RTComp::COLOR), "COLOR"},
-        {static_cast<int>(::staywalk::RTComp::DEPTH), "DEPTH"},
-        {static_cast<int>(::staywalk::RTComp::STENCIL), "STENCIL"},
-        {static_cast<int>(::staywalk::RTComp::COLOR_DEPTH), "COLOR_DEPTH"},
-        {static_cast<int>(::staywalk::RTComp::COLOR_DEPTH_STENCIL), "COLOR_DEPTH_STENCIL"},
-        {static_cast<int>(::staywalk::RTComp::DEPTH_STENCIL), "DEPTH_STENCIL"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::ProjectType>() {
-    return { 
-        {static_cast<int>(::staywalk::ProjectType::Persepective), "Persepective"},
-        {static_cast<int>(::staywalk::ProjectType::Ortho), "Ortho"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlMagFilter>() {
-    return { 
-        {static_cast<int>(::staywalk::GlMagFilter::NEAREST), "NEAREST"},
-        {static_cast<int>(::staywalk::GlMagFilter::LINEAR), "LINEAR"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::LightType>() {
-    return { 
-        {static_cast<int>(::staywalk::LightType::Directional), "Directional"},
-        {static_cast<int>(::staywalk::LightType::Position), "Position"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlWrap>() {
-    return { 
-        {static_cast<int>(::staywalk::GlWrap::CLAMP_TO_EDGE), "CLAMP_TO_EDGE"},
-        {static_cast<int>(::staywalk::GlWrap::MIRRORED_REPEAT), "MIRRORED_REPEAT"},
-        {static_cast<int>(::staywalk::GlWrap::REPEAT), "REPEAT"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::ProgramType>() {
-    return { 
-        {static_cast<int>(::staywalk::ProgramType::PBR), "PBR"},
-        {static_cast<int>(::staywalk::ProgramType::Shadow), "Shadow"},
-        {static_cast<int>(::staywalk::ProgramType::DeferredPBR), "DeferredPBR"},
-        {static_cast<int>(::staywalk::ProgramType::DeferredPBRPost), "DeferredPBRPost"},
-        {static_cast<int>(::staywalk::ProgramType::_Count), "_Count"},
-    };
-}
-
-template<>
-std::vector<std::pair<int, std::string>>
-staywalk::reflect::get_enum_label<::staywalk::GlTexFormat>() {
-    return { 
-        {static_cast<int>(::staywalk::GlTexFormat::RED), "RED"},
-        {static_cast<int>(::staywalk::GlTexFormat::RG), "RG"},
-        {static_cast<int>(::staywalk::GlTexFormat::RGB), "RGB"},
-        {static_cast<int>(::staywalk::GlTexFormat::RGBA), "RGBA"},
-        {static_cast<int>(::staywalk::GlTexFormat::DEPTH), "DEPTH"},
-        {static_cast<int>(::staywalk::GlTexFormat::DEPTHSTENCIL), "DEPTHSTENCIL"},
     };
 }

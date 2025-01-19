@@ -122,7 +122,7 @@
             "img_name_": "heightmap.png"
         },
         "834508003624353792": {
-            "__object_type_": "staywalk::Program",
+            "__object_type_": "staywalk::StdProgram",
             "name_": "terrain",
             "guid_": 834508003624353792,
             "deferred_": true,
@@ -2611,7 +2611,7 @@
             "mag_filter_": 9729
         },
         "844731575940677636": {
-            "__object_type_": "staywalk::Program",
+            "__object_type_": "staywalk::StdProgram",
             "name_": "skybox",
             "guid_": 844731575940677636,
             "deferred_": false,
@@ -2752,7 +2752,7 @@
             ]
         },
         "844409217744896001": {
-            "__object_type_": "staywalk::Program",
+            "__object_type_": "staywalk::StdProgram",
             "name_": "depth",
             "guid_": 844409217744896001,
             "deferred_": false,
@@ -2873,7 +2873,7 @@
             "mag_filter_": 9729
         },
         "834693969836244992": {
-            "__object_type_": "staywalk::Program",
+            "__object_type_": "staywalk::StdProgram",
             "name_": "sky",
             "guid_": 834693969836244992,
             "deferred_": false,

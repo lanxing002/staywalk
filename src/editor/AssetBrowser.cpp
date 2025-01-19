@@ -36,7 +36,7 @@ AssetsBrowser::AssetsBrowser(){
 		{(int)reflect::ObjectType::RObject,                 "RObj"  },
 		{(int)reflect::ObjectType::Shader,                 "Shader"},
 		{(int)reflect::ObjectType::Uniform,                "Unif"  },
-		{(int)reflect::ObjectType::Program,                "Prog"  },
+		{(int)reflect::ObjectType::StdProgram,                "Prog"  },
 		{(int)reflect::ObjectType::Material,                "Mat"   },
 		{(int)reflect::ObjectType::Camera,                  "Cam"   },
 		{(int)reflect::ObjectType::RLight,                  "Light" },

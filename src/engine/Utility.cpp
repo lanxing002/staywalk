@@ -324,6 +324,10 @@ namespace staywalk{
         return fs::path("resource/shaders/forward");
     }
 
+    fs::path Utility::get_compute_shaders_dir() {
+        return fs::path("resource/shaders/cs");
+    }
+
     fs::path Utility::get_common_shaders_dir() {
         return fs::path("resource/shaders/common");
     }
@@ -386,10 +390,18 @@ namespace staywalk{
 	}
 
 	bool Utility::load_text(const fs::path& file_name, std::string& text){
-        if (!fs::exists(file_name)) return false;
+        if (!fs::exists(file_name)) {
+            log(fmt::format("Utility::load_text Failed --> file <{}> not exists", file_name.u8string()), LogLevel::Warn);
+            return false;
+        }
 
 		ifstream ifs = ifstream(file_name, std::ios::in);
-		if (!ifs) return false;
+        if (!ifs) {
+            log(fmt::format("Utility::load_text Failed --> can not open file <{}>", file_name.u8string()), LogLevel::Warn);
+            return false;
+        }
+
+
 		std::string content((std::istreambuf_iterator<char>(ifs)), std::istreambuf_iterator<char>());
         text = content;
         return true;
