@@ -32,6 +32,7 @@ namespace staywalk {
         ImGuiIO& io = ImGui::GetIO();
         font_ = io.Fonts->AddFontFromFileTTF("C:/Windows/Fonts/consola.ttf", 18.0f);
         for (auto& [s, l] : log_cache_) add_log(s, l);
+        log_cache_.clear();
     }
 
     Console::~Console() {

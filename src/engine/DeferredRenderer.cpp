@@ -9,6 +9,7 @@
 #include "DepthRenderTarget.h"
 #include "Material.h"
 #include "reflect.h"
+#include "Logger.h"
 
 using namespace staywalk;
 
@@ -16,6 +17,8 @@ staywalk::DeferredRenderer::DeferredRenderer(){
 	mainpass_gbuffer_ = std::make_shared<GBuffer>();
 	post_front_ = std::make_shared<RenderTarget2D>();
 	post_back_ = std::make_shared<RenderTarget2D>();
+	post_front_->format_ = GlTexFormat::RGBA32F;
+	post_back_->format_ = GlTexFormat::RGBA32F;
 	post_front_->set_comp_flag(RTComp::COLOR);
 	post_back_->set_comp_flag(RTComp::COLOR);
 }
@@ -28,11 +31,14 @@ void DeferredRenderer::initialize(){
 	StdProgramRef pbr = std::make_shared<StdProgram>("pbr");
 	StdProgramRef pbrpost = std::make_shared<StdProgram>("pbrpost");
 	StdProgramRef shadow = std::make_shared<StdProgram>(shadow_name_);
+	post_cs0_ = std::make_shared<CSProgram>("bloom");
+	//post_cs1_ = std::make_shared<CSProgram>("");
 	pbr->deferred_ = true;
 	
 	pbr->load_post();
 	pbrpost->load_post();
 	shadow->load_post();
+	post_cs0_->load_post();
 
 	program_table_[static_cast<int>(ProgramType::DeferredPBR)] = pbr;
 	program_table_[static_cast<int>(ProgramType::DeferredPBRPost)] = pbrpost;
@@ -41,6 +47,7 @@ void DeferredRenderer::initialize(){
 	StdProgram::monitor(program_table_[static_cast<int>(ProgramType::DeferredPBR)]);
 	StdProgram::monitor(program_table_[static_cast<int>(ProgramType::DeferredPBRPost)]);
 	StdProgram::monitor(program_table_[static_cast<int>(ProgramType::Shadow)]);
+	CSProgram::monitor(post_cs0_);
 	stateset_ = std::make_shared<StateSet>("std");
 
 	glEnable(GL_DEPTH_TEST);
@@ -58,7 +65,7 @@ void staywalk::DeferredRenderer::render_screen(){
 		init_screen_source();
 
 	glActiveTexture(GL_TEXTURE0);
-	//glBindTexture(GL_TEXTURE_2D, textureID);
+	glBindTexture(GL_TEXTURE_2D, post_front_->get_color());
 
 	GLint tex_slot = glGetUniformLocation(screen_draw_program_, "tex");
 	glUniform1i(tex_slot, 0);
@@ -104,12 +111,12 @@ void DeferredRenderer::render(double delta, unsigned long long count){
 	auto engine = Engine::get_engine();
 	auto world = engine->get_world();
 	if (world == nullptr) return;
-	auto view_size = engine->get_view_size();
-	if (view_size.x == 0 || view_size.y == 0) return;
+	view_size_ = engine->get_view_size();
+	if (view_size_.x <= 0 || view_size_.y <= 0) return;
 
-	post_front_->resize(view_size.x, view_size.y);
-	post_back_->resize(view_size.x, view_size.y);
-	mainpass_gbuffer_->resize(view_size.x, view_size.y);
+	post_front_->resize(view_size_.x, view_size_.y);
+	post_back_->resize(view_size_.x, view_size_.y);
+	mainpass_gbuffer_->resize(view_size_.x, view_size_.y);
 
 	vector<RenderTargetRef> post;
 	const auto& rts = world->get_all_rendertargets();
@@ -240,7 +247,23 @@ void staywalk::DeferredRenderer::render_main(){
 }
 
 void staywalk::DeferredRenderer::render_post0(){
+	glBindFramebuffer(GL_FRAMEBUFFER, post_back_->get_updated_glid());
+	glViewport(0, 0, view_size_.x, view_size_.y);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
+	glBindImageTexture(0, post_front_->get_color(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
+	glBindImageTexture(1, post_back_->get_color(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
+
+	ivec3 work_group = ivec3(
+		(view_size_.x / 256) + ((view_size_.x % 256 == 0) ? 0 : 1), 
+		view_size_.y,
+		1
+	);
+
+	post_cs0_->set_work_group_size(work_group);
+	post_cs0_->dispatch();
+	std::swap(post_front_, post_back_);
 }
 
 void staywalk::DeferredRenderer::render_post1()

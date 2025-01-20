@@ -54,8 +54,104 @@ void staywalk::Shader::check_compile_error(){
 	}
 }
 
+staywalk::Program::Program(const string& name)
+	:RObject(name) {
+
+}
+
+staywalk::Program::~Program() {
+
+}
+
+void staywalk::Program::gl_update() {
+	glid_ = glCreateProgram();
+}
+
+void staywalk::Program::gl_delete() {
+	if (kGlSickId != glid_) glDeleteProgram(glid_);
+}
+
+void staywalk::Program::check_link_error() {
+	GLint success;
+	GLchar info[2048];
+	glGetProgramiv(glid_, GL_LINK_STATUS, &success);
+	if (!success) {
+		glGetProgramInfoLog(glid_, 2048, NULL, info);
+		log(fmt::format("RProgram::Link {}: Failed --> {}", name_, info), LogLevel::Warn);
+	}
+}
+
+GLint staywalk::Program::get_uniform(const string& name) {
+	auto it = uniforms_.find(name);
+	if (it != uniforms_.end())
+		return it->second;
+	GLint target = glGetUniformLocation(glid_, name.c_str());
+	uniforms_[name] = target;
+	return target;
+}
+
+void staywalk::Program::set_uniform(const string& name, UniformRef uniform) {
+	if (uniform == nullptr) return;
+	auto utype = uniform->utype_;
+	void* pdata = nullptr;
+	switch (utype)
+	{
+	case staywalk::UniformType::U1f:
+		pdata = &uniform->vdata_.x;
+		glUniform1f(get_uniform(name), *reinterpret_cast<float*>(pdata));
+		break;
+	case staywalk::UniformType::U2f:
+		pdata = &uniform->vdata_.x;
+		glUniform2fv(get_uniform(name), 1, reinterpret_cast<float*>(pdata));
+		break;
+	case staywalk::UniformType::U3f:
+		pdata = &uniform->vdata_.x;
+		glUniform3fv(get_uniform(name), 1, reinterpret_cast<float*>(pdata));
+		break;
+	case staywalk::UniformType::U4f:
+		pdata = &uniform->vdata_.x;
+		glUniform4fv(get_uniform(name), 1, reinterpret_cast<float*>(pdata));
+		break;
+	case staywalk::UniformType::U1i:
+		pdata = &uniform->idata_;
+		glUniform1i(get_uniform(name), *reinterpret_cast<int*>(pdata));
+		break;
+	case staywalk::UniformType::U2i:
+		break;
+	case staywalk::UniformType::U3i:
+		break;
+	case staywalk::UniformType::U4i:
+		break;
+	case staywalk::UniformType::UMat4:
+		pdata = &uniform->mdata_;
+		glUniformMatrix4fv(get_uniform(name), 1, GL_FALSE, reinterpret_cast<float*>(pdata));
+		break;
+	default:
+		break;
+	}
+}
+
+GLint staywalk::Program::set_uniform_block(const string& name) {
+	GLuint block_idx = glGetUniformBlockIndex(glid_, name.c_str());
+	GLCheck(;);
+	const auto it = uniforms_block_.find(block_idx);
+	if (it != uniforms_block_.end()) {
+		glUniformBlockBinding(glid_, it->first, it->second);
+		GLCheck(;);
+
+		return it->second;
+	}
+	auto bind_idx = (int)uniforms_block_.size();
+	glUniformBlockBinding(glid_, block_idx, bind_idx);
+	GLCheck(;);
+
+	uniforms_block_[block_idx] = bind_idx;
+	return bind_idx;
+}
+
+
 StdProgram::StdProgram(const string& name)
-	: RObject(name)
+	: Program(name)
 	,vs_("", "vertex")
 	,fs_("", "fragment")
 {
@@ -85,14 +181,10 @@ void StdProgram::dump_post() const{
 staywalk::StdProgram::~StdProgram(){
 }
 
-void staywalk::StdProgram::gl_update(){
-	glid_ = glCreateProgram();
-}
-
 void staywalk::StdProgram::gl_delete(){
 	vs_.gl_delete();
 	fs_.gl_delete();
-	if (kGlSickId != glid_) glDeleteProgram(glid_);
+	Program::gl_delete();
 }
 
 void staywalk::StdProgram::use() {
@@ -116,92 +208,12 @@ void staywalk::StdProgram::use() {
 	glUseProgram(glid_);
 }
 
-GLint staywalk::StdProgram::get_uniform(const string& name){
-	auto it = uniforms_.find(name);
-	if (it != uniforms_.end())
-		return it->second;
-	GLint target = glGetUniformLocation(glid_, name.c_str());
-	uniforms_[name] = target;
-	return target;
-}
-
-void staywalk::StdProgram::set_uniform(const string& name, UniformRef uniform){
-	if (uniform == nullptr) return;
-	auto utype = uniform->utype_;
-	void* pdata = nullptr;
-	switch (utype)
-	{
-	case staywalk::UniformType::U1f:
-		pdata = &uniform->vdata_.x;
-		glUniform1f(get_uniform(name), *reinterpret_cast<float*>(pdata));
-		break;
-	case staywalk::UniformType::U2f:
-		pdata = &uniform->vdata_.x;
-		glUniform2fv(get_uniform(name), 1,  reinterpret_cast<float*>(pdata));
-		break;
-	case staywalk::UniformType::U3f:
-		pdata = &uniform->vdata_.x;
-		glUniform3fv(get_uniform(name), 1, reinterpret_cast<float*>(pdata));
-		break;
-	case staywalk::UniformType::U4f:
-		pdata = &uniform->vdata_.x;
-		glUniform4fv(get_uniform(name), 1, reinterpret_cast<float*>(pdata));
-		break;
-	case staywalk::UniformType::U1i:
-		pdata = &uniform->idata_;
-		glUniform1i(get_uniform(name), *reinterpret_cast<int*>(pdata));
-		break;
-	case staywalk::UniformType::U2i:
-		break;
-	case staywalk::UniformType::U3i:
-		break;
-	case staywalk::UniformType::U4i:
-		break;
-	case staywalk::UniformType::UMat4:
-		pdata = &uniform->mdata_;
-		glUniformMatrix4fv(get_uniform(name), 1, GL_FALSE, reinterpret_cast<float*>(pdata));
-		break;
-	default:
-		break;
-	}
-
-}
-
-GLint staywalk::StdProgram::set_uniform_block(const string& name){
-	GLuint block_idx = glGetUniformBlockIndex(glid_, name.c_str());
-	GLCheck(;);
-	const auto it = uniforms_block_.find(block_idx);
-	if (it != uniforms_block_.end()) {
-		glUniformBlockBinding(glid_, it->first, it->second);
-		GLCheck(;);
-
-		return it->second;
-	}
-	auto bind_idx = (int)uniforms_block_.size();
-	glUniformBlockBinding(glid_, block_idx, bind_idx);
-	GLCheck(;);
-
-	uniforms_block_[block_idx] = bind_idx;
-	return bind_idx;
-}
-
-void staywalk::StdProgram::check_link_error(){
-	GLint success;
-	GLchar info[2048];
-	glGetProgramiv(glid_, GL_LINK_STATUS, &success);
-	if (!success){
-		glGetProgramInfoLog(glid_, 2048, NULL, info);
-		log(fmt::format("RProgram::Link {}: Failed --> {}", name_, info), LogLevel::Warn);
-	}
-}
-
 void staywalk::StdProgram::monitor(StdProgramRef program, bool flag /*= true*/){
 	if (program == nullptr) return;
 	auto p = program->deferred_ ? Utility::get_deferred_shaders_dir() : Utility::get_forward_shaders_dir();
 	auto name = program->name_;
 	auto vs_file = p / (name + ".vs"); string vs_code;
 	auto fs_file = p / (name + ".fs"); string fs_code;
-	auto cs_file = p / (name + ".cs"); string cs_code;
 	auto weak_ref = std::weak_ptr<StdProgram>(program);
 	auto engine = Engine::get_engine();
 
@@ -244,7 +256,7 @@ void staywalk::StdProgram::construct_glsl_code() {
 }
 
 
-void staywalk::CSProgram::monitor(CSProgramRef program, bool flag = true) {
+void staywalk::CSProgram::monitor(CSProgramRef program, bool flag) {
 	if (program == nullptr) return;
 	auto name = program->name_;
 	auto cs_file = Utility::get_compute_shaders_dir() / (name + ".cs"); string cs_code;
@@ -266,7 +278,7 @@ void staywalk::CSProgram::monitor(CSProgramRef program, bool flag = true) {
 }
 
 staywalk::CSProgram::CSProgram(const string& name)
-	:RObject(name){
+	:Program(name){
 	cs_.shadertype_ = ShaderType::CS;
 	dirty_ = true;
 }
@@ -282,30 +294,31 @@ void staywalk::CSProgram::dispatch() {
 	}
 
 	if (cs_.is_dirty()) {
+		cs_.glsl_code_ = cs_.code_->text_;
 		glAttachShader(glid_, cs_.get_updated_glid());
 		glLinkProgram(glid_);
 		check_link_error();
 	}
 
 	glUseProgram(glid_);
+	assert(work_gorup_size_.x > 0 && work_gorup_size_.y > 0 && work_gorup_size_.z > 0);
+	glDispatchCompute(work_gorup_size_.x, work_gorup_size_.y, work_gorup_size_.z);
+	glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);
 }
 
-void staywalk::CSProgram::gl_update() {
-	glid_ = glCreateProgram();
+void staywalk::CSProgram::gl_delete() {
+	cs_.gl_delete();
+	Program::gl_delete();
 }
-	////sw_Prop() Shader cs_;
-	////MetaRegister(CSProgram);
 
-	//void dispatch();
-	//void gl_delete();
-
-	//GLint get_uniform(const string & name);
-	//template<typename T>
-	//void set_uniform(const string & name, T value) { static_assert(false && "not impl!!"); }
-	//void set_uniform(const string & name, UniformRef uniform);
-	//GLint set_uniform_block(const string & name);
 void staywalk::CSProgram::load_post() {
 	auto p = Utility::get_compute_shaders_dir();
 	auto cs_file = p / (name_ + ".cs"); string cs_code;
 	if (Utility::load_text(cs_file, cs_code)) cs_.code_->text_ = cs_code;
+}
+
+void staywalk::CSProgram::dump_post() const {
+	auto cs_file = Utility::get_compute_shaders_dir() / (name_ + ".cs"); 
+	string cs_code = cs_.code_->text_;
+	Utility::dump_text(cs_file, cs_code);
 }

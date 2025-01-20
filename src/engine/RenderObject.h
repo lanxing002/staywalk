@@ -38,6 +38,7 @@ namespace staywalk{
 		RG = GL_RG,
 		RGB = GL_RGB,
 		RGBA = GL_RGBA,
+		RGBA32F = GL_RGBA32F,
 		DEPTH = GL_DEPTH_COMPONENT,
 		DEPTHSTENCIL = GL_DEPTH_STENCIL,
 	};

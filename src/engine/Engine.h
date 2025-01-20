@@ -46,6 +46,7 @@ namespace staywalk{
 		void event_clear() { input_mgr_.clear(); }
 
 	private:
+		void collect_gpu_info();
 		Engine();
 
 	private:

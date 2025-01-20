@@ -353,8 +353,22 @@ void ::staywalk::Uniform::construct_obj_ui(bool can_modify) {
 
 #include "RProgram.h"
 
-void ::staywalk::StdProgram::construct_basic_ui(bool can_modify) {
+void ::staywalk::Program::construct_basic_ui(bool can_modify) {
     RObject::construct_basic_ui(can_modify);
+}
+
+
+
+void ::staywalk::Program::construct_obj_ui(bool can_modify) {
+    RObject::construct_obj_ui(can_modify);
+}
+
+
+
+#include "RProgram.h"
+
+void ::staywalk::StdProgram::construct_basic_ui(bool can_modify) {
+    Program::construct_basic_ui(can_modify);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(deferred_)>()) 
         staywalk::reflect::UIHelper::construct_ui("deferred_", deferred_, can_modify || true);
     if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(vs_)>()) 
@@ -366,7 +380,7 @@ void ::staywalk::StdProgram::construct_basic_ui(bool can_modify) {
 
 
 void ::staywalk::StdProgram::construct_obj_ui(bool can_modify) {
-    RObject::construct_obj_ui(can_modify);
+    Program::construct_obj_ui(can_modify);
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(deferred_)>()){ 
         //if (ImGui::TreeNode("deferred_")){
             staywalk::reflect::UIHelper::construct_ui("deferred_", deferred_, can_modify || true);
@@ -382,6 +396,28 @@ void ::staywalk::StdProgram::construct_obj_ui(bool can_modify) {
     if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(fs_)>()){ 
         //if (ImGui::TreeNode("fs_")){
             staywalk::reflect::UIHelper::construct_ui("fs_", fs_, can_modify || true);
+            //ImGui::TreePop();
+        //}    
+    }
+}
+
+
+
+#include "RProgram.h"
+
+void ::staywalk::CSProgram::construct_basic_ui(bool can_modify) {
+    Program::construct_basic_ui(can_modify);
+    if constexpr (::staywalk::reflect::UIHelper::is_basic<decltype(cs_)>()) 
+        staywalk::reflect::UIHelper::construct_ui("cs_", cs_, can_modify || true);
+}
+
+
+
+void ::staywalk::CSProgram::construct_obj_ui(bool can_modify) {
+    Program::construct_obj_ui(can_modify);
+    if constexpr (!::staywalk::reflect::UIHelper::is_basic<decltype(cs_)>()){ 
+        //if (ImGui::TreeNode("cs_")){
+            staywalk::reflect::UIHelper::construct_ui("cs_", cs_, can_modify || true);
             //ImGui::TreePop();
         //}    
     }
