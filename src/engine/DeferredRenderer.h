@@ -34,6 +34,7 @@ namespace staywalk {
 
 	private:
 		// render pipeline start
+		ivec2 view_size_;
 
 		// mainpass
 		Ref<GBuffer> mainpass_gbuffer_;
@@ -43,11 +44,12 @@ namespace staywalk {
 		RenderTarget2DRef post_front_;   // just color
 		RenderTarget2DRef post_back_;	  // just color	 
 
+		CSProgramRef post_cs0_;
+		CSProgramRef post_cs1_;
 
 		// render to screen pass
 		uint screen_draw_program_ = kGlSickId;
 		uint screen_vao_ = kGlSickId;
-
 
 		// render pipeline end
 	};

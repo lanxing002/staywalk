@@ -222,20 +222,20 @@ namespace staywalk {
 	}
 
 	uint RenderTarget2D::get_color() {
-		assert(!dirty_);
+		get_updated_glid();
 		if (rt_comp_flags_ == RTComp::COLOR)
 			return color_glid_;
 		return kGlSickId;
 	}
 	uint RenderTarget2D::get_depth() {
-		assert(!dirty_);
+		get_updated_glid();
 		if (rt_comp_flags_ == RTComp::DEPTH)
 			return depth_glid_;
 		return kGlSickId;
 	}
 
 	uint RenderTarget2D::get_stencil() {
-		assert(!dirty_);
+		get_updated_glid();
 		if (rt_comp_flags_ == RTComp::STENCIL)
 			return stencil_glid_;
 		return kGlSickId;

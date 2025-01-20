@@ -57,6 +57,7 @@ namespace staywalk {
 	}
 
 	void Engine::initialize() {
+		collect_gpu_info();
 		console_ = std::make_shared<Console>();
 		log_register_console(console_);
 
@@ -81,5 +82,26 @@ namespace staywalk {
 		file_monitor_.unwatch_file(key);
 	}
 
+	void Engine::collect_gpu_info() {
+		GLint max_work_group_size[3];
+		GLint max_work_group_invocations;
+		GLint max_work_group_count[3];
+
+		for (int i = 0; i < 3; ++i) {
+			glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_SIZE, i, &max_work_group_size[i]);
+		}
+
+		glGetIntegerv(GL_MAX_COMPUTE_WORK_GROUP_INVOCATIONS, &max_work_group_invocations);
+
+		for (int i = 0; i < 3; ++i) {
+			glGetIntegeri_v(GL_MAX_COMPUTE_WORK_GROUP_COUNT, i, &max_work_group_count[i]);
+		}
+
+		log(fmt::format("Max Work Group Size ({}, {}, {})", max_work_group_size[0], max_work_group_size[1], max_work_group_size[2]));
+		log(fmt::format("Max Work Group Invocations ({})", max_work_group_invocations));
+		log(fmt::format("Max Work Group Count ({}, {}, {})", max_work_group_count[0], max_work_group_count[1], max_work_group_count[2]));
+
+		assert(kCSLocalSize.x * kCSLocalSize.y * kCSLocalSize.z <= max_work_group_invocations);
+	}
 }
 
