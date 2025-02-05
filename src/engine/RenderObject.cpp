@@ -195,11 +195,12 @@ namespace staywalk {
 		if (rt_comp_flags_ == RTComp::COLOR) {
 			if(color_glid_ == kGlSickId) glGenTextures(1, &color_glid_);
 			glBindTexture(GL_TEXTURE_2D, color_glid_);
-			glTexImage2D(GL_TEXTURE_2D, 0, (GLint)internal_format_, width_, height_, 0, (GLenum)format_, GL_UNSIGNED_BYTE, NULL);
+			glTexImage2D(GL_TEXTURE_2D, 0, (GLint)internal_format_, width_, height_, 0, (GLenum)format_, 
+				GL_UNSIGNED_BYTE, NULL);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, (GLint)min_filter_);
 			glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, (GLint)mag_filter_);
+			
 			glFramebufferTexture2D(GL_FRAMEBUFFER, GL_COLOR_ATTACHMENT0, GL_TEXTURE_2D, color_glid_, 0);
-
 			unsigned int attachments[1] = { GL_COLOR_ATTACHMENT0};
 			glDrawBuffers(1, attachments);
 		}

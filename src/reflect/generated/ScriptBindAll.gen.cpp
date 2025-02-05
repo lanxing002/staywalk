@@ -118,6 +118,7 @@ py::class_<::staywalk::StdProgram,Program, std::shared_ptr<::staywalk::StdProgra
 
 py::class_<::staywalk::CSProgram,Program, std::shared_ptr<::staywalk::CSProgram>>(__module, "CSProgram")
 	.def(py::init<const string &>())
+	.def("set_work_group_size", &CSProgram::set_work_group_size)
 	.def_readwrite("cs_", &CSProgram::cs_)
 ;
 

@@ -38,9 +38,19 @@ namespace staywalk{
 		RG = GL_RG,
 		RGB = GL_RGB,
 		RGBA = GL_RGBA,
-		RGBA32F = GL_RGBA32F,
 		DEPTH = GL_DEPTH_COMPONENT,
 		DEPTHSTENCIL = GL_DEPTH_STENCIL,
+	};
+
+	enum class sw_Class() GlTexFormatType : int {
+		UBYTE = GL_UNSIGNED_BYTE,
+		BYTE = GL_BYTE,
+		USHORT = GL_UNSIGNED_SHORT,
+		SHORT = GL_SHORT,
+		UINT = GL_UNSIGNED_INT,
+		INT = GL_INT,
+		HFLOAT = GL_HALF_FLOAT,
+		FLOAT = GL_FLOAT,
 	};
 
 	struct Drawable {

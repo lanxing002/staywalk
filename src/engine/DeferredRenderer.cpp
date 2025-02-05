@@ -17,8 +17,10 @@ staywalk::DeferredRenderer::DeferredRenderer(){
 	mainpass_gbuffer_ = std::make_shared<GBuffer>();
 	post_front_ = std::make_shared<RenderTarget2D>();
 	post_back_ = std::make_shared<RenderTarget2D>();
-	post_front_->format_ = GlTexFormat::RGBA32F;
-	post_back_->format_ = GlTexFormat::RGBA32F;
+	post_front_->format_ = GlTexFormat::RGBA;
+	post_front_->internal_format_ = GlTexInternalFormat::RGBA;
+	post_back_->format_ = GlTexFormat::RGBA;
+	post_back_->internal_format_ = GlTexInternalFormat::RGBA;
 	post_front_->set_comp_flag(RTComp::COLOR);
 	post_back_->set_comp_flag(RTComp::COLOR);
 }
@@ -252,8 +254,10 @@ void staywalk::DeferredRenderer::render_post0(){
 	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
-	glBindImageTexture(0, post_front_->get_color(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA32F);
-	glBindImageTexture(1, post_back_->get_color(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA32F);
+	GLCheck(;);
+	glBindImageTexture(0, post_front_->get_color(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA8);
+	glBindImageTexture(1, post_back_->get_color(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA8);
+	GLCheck(;);
 
 	ivec3 work_group = ivec3(
 		(view_size_.x / 256) + ((view_size_.x % 256 == 0) ? 0 : 1), 
