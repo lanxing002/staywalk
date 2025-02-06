@@ -5,7 +5,8 @@
         834511414860185600,
         834693371539750912,
         835411044707860480,
-        844731575940677632
+        844731575940677632,
+        855609558205202432
     ],
     "cameras": [
         834502234564722688
@@ -37,7 +38,9 @@
         "836764263887405056": 836764263887405056,
         "837042716469624832": 837042716469624832,
         "844409217744896001": 844409217744896001,
-        "844731575940677632": 844731575940677632
+        "844731575940677632": 844731575940677632,
+        "855610626104360960": 855610626104360960,
+        "855613419401773058": 855613419401773058
     },
     "__real_objects": {
         "834502029593280513": {
@@ -114,12 +117,14 @@
             "__object_type_": "staywalk::Tex2D",
             "name_": "heightmap",
             "guid_": 834518570049208320,
+            "img_name_": "heightmap.png",
+            "internal_format_": 6408,
+            "format_": 6408,
             "mipmap_": true,
             "wrap_s_": 10497,
             "wrap_t_": 10497,
             "min_filter_": 9729,
-            "mag_filter_": 9729,
-            "img_name_": "heightmap.png"
+            "mag_filter_": 9729
         },
         "834508003624353792": {
             "__object_type_": "staywalk::StdProgram",
@@ -131,7 +136,7 @@
                 "guid_": 834508003624353793,
                 "shadertype_": 35633,
                 "code_": {
-                    "code": "\nuniform sampler2D height_tex;\n\nvoid vs_main(inout OutBlock out_data)\n{\n    float h = textureLod(height_tex, in_texcoord, 0.0).x;    \n    vec4 world_pos = u_model * vec4(in_pos, 1.0);\n    world_pos.z = h * 5.0; \n\n    out_data.world_pos = world_pos;\n    out_data.norm = in_norm;\n    out_data.texcoord = in_texcoord;\n    out_data.tangent = in_tangent;\n    out_data.bitangent = in_bitangent;\n}\n",
+                    "code": "\nuniform sampler2D height_tex;\n\nvoid vs_main(inout OutBlock out_data)\n{\n    float h = textureLod(height_tex, vs_texcoord, 0.0).x;    \n    vec4 world_pos = u_model * vec4(vs_pos, 1.0);\n    world_pos.z = h * 5.0; \n\n    out_data.world_pos = world_pos;\n    out_data.norm = vs_norm;\n    out_data.texcoord = vs_texcoord;\n    out_data.tangent = vs_tangent;\n    out_data.bitangent = vs_bitangent;\n}\n",
                     "code_type": 0
                 }
             },
@@ -140,7 +145,7 @@
                 "guid_": 834508003624353794,
                 "shadertype_": 35632,
                 "code_": {
-                    "code": "\nuniform sampler2D height_tex;\n\nvec4 get_albedo(){\n    return vec4(0.8, 0.6, 0.4, 1.0);\n}\n\nvec3 get_normal(){\n    vec2 tsize = textureSize(height_tex, 0);\n    float step = 1.0 / tsize.x ;\n    float hx1 = texture(height_tex, in_texcoord + vec2(-step, .0)).x;\n    float hx2 = texture(height_tex, in_texcoord + vec2(step, .0)).x;\n    float hy1 = texture(height_tex, in_texcoord + vec2(.0, -step)).x;\n    float hy2 = texture(height_tex, in_texcoord + vec2(.0, +step)).x;\n\n    vec3 vx = vec3((hx2 - hx1)/ (step * 2.0), 0.0, 1.0);\n    vec3 vy = vec3(0.0, (hy2 - hy1)/ (step * 2.0), 1.0);\n    return normalize(vx + vy);\n}\n",
+                    "code": "\nuniform sampler2D height_tex;\n\nvec4 get_albedo(){\n    return vec4(0.8, 0.6, 0.4, 1.0);\n}\n\nvec3 get_normal(){\n    vec2 tsize = textureSize(height_tex, 0);\n    float step = 1.0 / tsize.x ;\n    float hx1 = texture(height_tex, fs_texcoord + vec2(-step, .0)).x;\n    float hx2 = texture(height_tex, fs_texcoord + vec2(step, .0)).x;\n    float hy1 = texture(height_tex, fs_texcoord + vec2(.0, -step)).x;\n    float hy2 = texture(height_tex, fs_texcoord + vec2(.0, +step)).x;\n\n    vec3 vx = vec3((hx2 - hx1)/ (step * 2.0), 0.0, 1.0);\n    vec3 vy = vec3(0.0, (hy2 - hy1)/ (step * 2.0), 1.0);\n    return normalize(vx + vy);\n}\n",
                     "code_type": 0
                 }
             }
@@ -216,12 +221,14 @@
             "__object_type_": "staywalk::Tex2D",
             "name_": "diffuse3",
             "guid_": 834941005600915456,
+            "img_name_": "diffuse3.jpg",
+            "internal_format_": 6408,
+            "format_": 6407,
             "mipmap_": true,
             "wrap_s_": 10497,
             "wrap_t_": 10497,
             "min_filter_": 9729,
-            "mag_filter_": 9729,
-            "img_name_": "diffuse3.jpg"
+            "mag_filter_": 9729
         },
         "834941007001812992": {
             "__object_type_": "staywalk::Material",
@@ -318,12 +325,14 @@
             "__object_type_": "staywalk::Tex2D",
             "name_": "Vampire_diffuse2",
             "guid_": 836764263073710080,
+            "img_name_": "Vampire_diffuse2.png",
+            "internal_format_": 6408,
+            "format_": 6408,
             "mipmap_": true,
             "wrap_s_": 10497,
             "wrap_t_": 10497,
             "min_filter_": 9729,
-            "mag_filter_": 9729,
-            "img_name_": "Vampire_diffuse2.png"
+            "mag_filter_": 9729
         },
         "836764263858044928": {
             "__object_type_": "staywalk::Material",
@@ -339,7 +348,7 @@
             "__object_type_": "staywalk::Animation",
             "name_": "vampire",
             "guid_": 836764263862239232,
-            "curr_time_": 2.63179612159729,
+            "curr_time_": 0.23514240980148315,
             "duration_": 3.433332920074463,
             "ticks_pers_": 0.10000000149011612,
             "node_root_": {
@@ -2603,6 +2612,9 @@
             "name_": "skybox",
             "guid_": 844731575940677640,
             "img_name_": "debug",
+            "internal_format_": 6408,
+            "format_": 6408,
+            "img_name_": "debug",
             "img_extension_": "jpg",
             "wrap_s_": 33071,
             "wrap_t_": 33071,
@@ -2696,15 +2708,60 @@
             "sm_comp_": 844731575940677633,
             "skeleton_comp_": 18446744073709551615
         },
-        "834502234564722688": {
-            "__object_type_": "staywalk::Camera",
-            "name_": "main",
-            "guid_": 834502234564722688,
-            "transform_": {
+        "855613419401773057": {
+            "__object_type_": "staywalk::Mesh",
+            "name_": "0-mesh",
+            "guid_": 855613419401773057
+        },
+        "855610626104360960": {
+            "__object_type_": "staywalk::StdProgram",
+            "name_": "hdr",
+            "guid_": 855610626104360960,
+            "deferred_": true,
+            "vs_": {
+                "name_": "vertex",
+                "guid_": 855610626104360961,
+                "shadertype_": 35633,
+                "code_": {
+                    "code": "// \"common/deffered_common.vs\"\n\nvoid vs_main(inout OutBlock out_data)\n{ \n    out_data.world_pos = u_model * vec4(vs_pos, 1.0);\n    out_data.norm = vs_norm;\n    out_data.texcoord = vs_texcoord;\n    out_data.tangent = vs_tangent;\n    out_data.bitangent = vs_bitangent;\n}\n \n ",
+                    "code_type": 0
+                }
+            },
+            "fs_": {
+                "name_": "fragment",
+                "guid_": 855610626104360962,
+                "shadertype_": 35632,
+                "code_": {
+                    "code": "\nvec4 get_albedo(){\n    return vec4(5.0, 0.2, 0.8, 1.0); \n}\n\nvec3 get_normal(){\n    return normalize((fs_norm + 1.0) * 0.5);\n}",
+                    "code_type": 0
+                }
+            }
+        },
+        "855613419401773056": {
+            "__object_type_": "staywalk::Material",
+            "name_": "0-material",
+            "guid_": 855613419401773056,
+            "uniforms_": {},
+            "texs_": {
+                "diffuse": 18446744073709551615
+            },
+            "program_": 855610626104360960
+        },
+        "855613419401773058": {
+            "__object_type_": "staywalk::StaticMeshComponent",
+            "name_": "box2",
+            "guid_": 855613419401773058,
+            "meshs": [
+                {
+                    "first": 855613419401773057,
+                    "second": 855613419401773056
+                }
+            ],
+            "transform": {
                 "location": [
-                    1.7144691944122314,
-                    5.846570014953613,
-                    2.7815752029418945
+                    0.0,
+                    0.0,
+                    0.0
                 ],
                 "scale": [
                     1.0,
@@ -2712,8 +2769,54 @@
                     1.0
                 ],
                 "rotation": [
-                    -31.272695541381836,
-                    -969.6863403320313,
+                    1.0,
+                    1.0,
+                    1.0
+                ]
+            }
+        },
+        "855609558205202432": {
+            "__object_type_": "staywalk::Actor",
+            "name_": "light",
+            "guid_": 855609558205202432,
+            "transform_": {
+                "location": [
+                    0.0,
+                    0.0,
+                    0.0
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    4.0,
+                    1.0,
+                    1.0
+                ]
+            },
+            "sm_comp_": 855613419401773058,
+            "skeleton_comp_": 18446744073709551615
+        },
+        "834502234564722688": {
+            "__object_type_": "staywalk::Camera",
+            "name_": "main",
+            "guid_": 834502234564722688,
+            "transform_": {
+                "location": [
+                    -3.3178133964538574,
+                    1.0889785289764404,
+                    1.9308971166610718
+                ],
+                "scale": [
+                    1.0,
+                    1.0,
+                    1.0
+                ],
+                "rotation": [
+                    -31.323877334594727,
+                    -448.3571472167969,
                     0.0
                 ]
             },
@@ -2761,7 +2864,7 @@
                 "guid_": 844409217744896002,
                 "shadertype_": 35633,
                 "code_": {
-                    "code": "#version 330 core\n\n// input data layout\nlayout(location = 0) in vec3    in_pos;\nlayout(location = 1) in vec3    in_norm;\nlayout(location = 2) in vec2    in_texcoord;\nlayout(location = 3) in vec3    in_tangent;\nlayout(location = 4) in vec3    in_bitangent;\nlayout(location = 5) in ivec4   bone_ids; \nlayout(location = 6) in vec4    bone_weights;\n\n \n// uniform \nuniform mat4 model;\nuniform mat4 view;\nuniform mat4 projection;\nlayout (std140) uniform  BoneMatrixBlock {\n    mat4 bone_matrices[100];\n};\n\nconst int MAX_BONES = 100;\nconst int MAX_BONE_INFLUENCE = 4;\n\n// shader code\nvoid main(){\n    vec4 total_pos = vec4(0.0f);\n    for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++){\n        if(bone_ids[i] == -1)  continue;\n        if(bone_ids[i] >=MAX_BONES) { \n            total_pos = vec4(in_pos, 1.0f);\n            break;\n        }\n        vec4 local_pos = bone_matrices[bone_ids[i]] * vec4(in_pos,1.0f);\n        total_pos += local_pos * bone_weights[i];\n   }\n\t\n    gl_Position = projection * view * model * total_pos;\n}\n\n",
+                    "code": "#version 330 core\n\n// input data layout\nlayout(location = 0) in vec3    in_pos;\nlayout(location = 1) in vec3    in_norm;\nlayout(location = 2) in vec2    in_texcoord;\nlayout(location = 3) in vec3    in_tangent;\nlayout(location = 4) in vec3    in_bitangent;\nlayout(location = 5) in ivec4   bone_ids; \nlayout(location = 6) in vec4    bone_weights;\n\n \n// uniform \nuniform mat4 u_model;\nuniform mat4 u_view;\nuniform mat4 u_projection;\n\nconst int MAX_BONES = 100;\nconst int MAX_BONE_INFLUENCE = 4;\nlayout (std140) uniform  nod_u_bone_matrices_block{\n    mat4 nod_bone_matrices[MAX_BONES];\n};\n\n\n// shader code\nvoid main(){\n    vec4 total_pos = vec4(0.0f);\n    for(int i = 0 ; i < MAX_BONE_INFLUENCE ; i++){\n        if(bone_ids[i] == -1)  continue;\n        if(bone_ids[i] >=MAX_BONES) { \n            total_pos = vec4(in_pos, 1.0f);\n            break;\n        }\n        vec4 local_pos = nod_bone_matrices[bone_ids[i]] * vec4(in_pos,1.0f);\n        total_pos += local_pos * bone_weights[i];\n   }\n\t\n    gl_Position = u_projection * u_view * u_model * total_pos;\n}\n\n",
                     "code_type": 0
                 }
             },
@@ -2865,36 +2968,15 @@
             "name_": "sky",
             "guid_": 834693087056887808,
             "img_name_": "skybox",
+            "internal_format_": 6408,
+            "format_": 6408,
+            "img_name_": "skybox",
             "img_extension_": "jpg",
             "wrap_s_": 33071,
             "wrap_t_": 33071,
             "wrap_r_": 33071,
             "min_filter_": 9729,
             "mag_filter_": 9729
-        },
-        "834693969836244992": {
-            "__object_type_": "staywalk::StdProgram",
-            "name_": "sky",
-            "guid_": 834693969836244992,
-            "deferred_": false,
-            "vs_": {
-                "name_": "vertex",
-                "guid_": 834693969836244993,
-                "shadertype_": 35633,
-                "code_": {
-                    "code": "",
-                    "code_type": 0
-                }
-            },
-            "fs_": {
-                "name_": "fragment",
-                "guid_": 834693969836244994,
-                "shadertype_": 35632,
-                "code_": {
-                    "code": "",
-                    "code_type": 0
-                }
-            }
         },
         "834693827154411520": {
             "__object_type_": "staywalk::Material",
@@ -2904,7 +2986,7 @@
             "texs_": {
                 "e": 18446744073709551615
             },
-            "program_": 834693969836244992
+            "program_": 855610626104360960
         },
         "834693658446921728": {
             "__object_type_": "staywalk::StaticMeshComponent",
@@ -2932,6 +3014,30 @@
                     1.0,
                     1.0
                 ]
+            }
+        },
+        "834693969836244992": {
+            "__object_type_": "staywalk::StdProgram",
+            "name_": "sky",
+            "guid_": 834693969836244992,
+            "deferred_": false,
+            "vs_": {
+                "name_": "vertex",
+                "guid_": 834693969836244993,
+                "shadertype_": 35633,
+                "code_": {
+                    "code": "",
+                    "code_type": 0
+                }
+            },
+            "fs_": {
+                "name_": "fragment",
+                "guid_": 834693969836244994,
+                "shadertype_": 35632,
+                "code_": {
+                    "code": "",
+                    "code_type": 0
+                }
             }
         },
         "837042716469624832": {
