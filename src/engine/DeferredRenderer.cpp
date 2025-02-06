@@ -18,9 +18,9 @@ staywalk::DeferredRenderer::DeferredRenderer(){
 	post_front_ = std::make_shared<RenderTarget2D>();
 	post_back_ = std::make_shared<RenderTarget2D>();
 	post_front_->format_ = GlTexFormat::RGBA;
-	post_front_->internal_format_ = GlTexInternalFormat::RGBA;
+	post_front_->internal_format_ = GlTexInternalFormat::RGBA16F;
 	post_back_->format_ = GlTexFormat::RGBA;
-	post_back_->internal_format_ = GlTexInternalFormat::RGBA;
+	post_back_->internal_format_ = GlTexInternalFormat::RGBA16F;
 	post_front_->set_comp_flag(RTComp::COLOR);
 	post_back_->set_comp_flag(RTComp::COLOR);
 }
@@ -33,14 +33,11 @@ void DeferredRenderer::initialize(){
 	StdProgramRef pbr = std::make_shared<StdProgram>("pbr");
 	StdProgramRef pbrpost = std::make_shared<StdProgram>("pbrpost");
 	StdProgramRef shadow = std::make_shared<StdProgram>(shadow_name_);
-	post_cs0_ = std::make_shared<CSProgram>("bloom");
-	//post_cs1_ = std::make_shared<CSProgram>("");
 	pbr->deferred_ = true;
 	
 	pbr->load_post();
 	pbrpost->load_post();
 	shadow->load_post();
-	post_cs0_->load_post();
 
 	program_table_[static_cast<int>(ProgramType::DeferredPBR)] = pbr;
 	program_table_[static_cast<int>(ProgramType::DeferredPBRPost)] = pbrpost;
@@ -49,13 +46,25 @@ void DeferredRenderer::initialize(){
 	StdProgram::monitor(program_table_[static_cast<int>(ProgramType::DeferredPBR)]);
 	StdProgram::monitor(program_table_[static_cast<int>(ProgramType::DeferredPBRPost)]);
 	StdProgram::monitor(program_table_[static_cast<int>(ProgramType::Shadow)]);
-	CSProgram::monitor(post_cs0_);
+
 	stateset_ = std::make_shared<StateSet>("std");
+	initialize_post();
 
 	glEnable(GL_DEPTH_TEST);
 
 	glEnable(GL_BLEND);
 	glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+}
+
+void staywalk::DeferredRenderer::initialize_post(){
+	post_cs0_ = std::make_shared<CSProgram>("bloom");
+	post_tone_mapping_cs_ = std::make_shared<CSProgram>("tone_mapping");
+
+	post_cs0_->load_post();
+	post_tone_mapping_cs_->load_post();
+
+	CSProgram::monitor(post_cs0_);
+	CSProgram::monitor(post_tone_mapping_cs_);
 }
 
 void staywalk::DeferredRenderer::render_screen(){
@@ -141,6 +150,8 @@ void DeferredRenderer::render(double delta, unsigned long long count){
 	render_post0();
 
 	render_post1();
+
+	render_post_tone_mapping();
 
 	render_screen();
 }
@@ -255,8 +266,8 @@ void staywalk::DeferredRenderer::render_post0(){
 	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 	GLCheck(;);
-	glBindImageTexture(0, post_front_->get_color(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA8);
-	glBindImageTexture(1, post_back_->get_color(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA8);
+	glBindImageTexture(0, post_front_->get_color(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
+	glBindImageTexture(1, post_back_->get_color(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA16F);
 	GLCheck(;);
 
 	ivec3 work_group = ivec3(
@@ -272,6 +283,29 @@ void staywalk::DeferredRenderer::render_post0(){
 
 void staywalk::DeferredRenderer::render_post1()
 {
+}
+
+void staywalk::DeferredRenderer::render_post_tone_mapping()
+{
+	glBindFramebuffer(GL_FRAMEBUFFER, post_back_->get_updated_glid());
+	glViewport(0, 0, view_size_.x, view_size_.y);
+	glClearColor(0.0f, 0.0f, 0.0f, 1.0f);
+	glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	GLCheck(;);
+	glBindImageTexture(0, post_front_->get_color(), 0, GL_FALSE, 0, GL_READ_ONLY, GL_RGBA16F);
+	glBindImageTexture(1, post_back_->get_color(), 0, GL_FALSE, 0, GL_WRITE_ONLY, GL_RGBA16F);
+	GLCheck(;);
+
+	ivec3 work_group = ivec3(
+		(view_size_.x / 256) + ((view_size_.x % 256 == 0) ? 0 : 1),
+		view_size_.y,
+		1
+	);
+
+	post_tone_mapping_cs_->set_work_group_size(work_group);
+	post_tone_mapping_cs_->dispatch();
+	std::swap(post_front_, post_back_);
 }
 
 void staywalk::DeferredRenderer::init_screen_source() {

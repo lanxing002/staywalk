@@ -31,6 +31,7 @@ namespace staywalk{
 		RGBA = GL_RGBA,
 		DEPTH = GL_DEPTH_COMPONENT,
 		DEPTHSTENCIL = GL_DEPTH_STENCIL,
+		RGBA16F = GL_RGBA16F,
 	};
 
 	enum class sw_Class() GlTexFormat : int {

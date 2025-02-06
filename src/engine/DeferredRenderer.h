@@ -12,6 +12,8 @@ namespace staywalk {
 
 		void initialize() override;
 
+		void initialize_post();
+
 		void destroy() override;
 
 		void render(double delta, unsigned long long count) override;
@@ -22,6 +24,8 @@ namespace staywalk {
 		void render_post0();
 		
 		void render_post1();
+
+		void render_post_tone_mapping();
 
 		void render_screen();
 
@@ -46,6 +50,8 @@ namespace staywalk {
 
 		CSProgramRef post_cs0_;
 		CSProgramRef post_cs1_;
+
+		CSProgramRef post_tone_mapping_cs_;
 
 		// render to screen pass
 		uint screen_draw_program_ = kGlSickId;
