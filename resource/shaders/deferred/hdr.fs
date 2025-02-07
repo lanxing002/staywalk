@@ -1,6 +1,6 @@
 
 vec4 get_albedo(){
-    return vec4(120.0, 0.2, 0.8, 1.0); 
+    return vec4(7.0, .4, .0, 1.0); 
 }
 
 vec3 get_normal(){

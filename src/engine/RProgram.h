@@ -143,6 +143,7 @@ namespace staywalk{
 		MetaRegister(CSProgram);
 
 		~CSProgram() override;
+		void use();
 		void dispatch();
 		void gl_delete() override;
 		void load_post();
@@ -151,6 +152,7 @@ namespace staywalk{
 		void dump_post() const;
 
 	private:
+		bool used_ = false;
 		map<string, GLint> uniforms_;
 		map<GLuint, GLint> uniforms_block_;
 		ivec3 work_gorup_size_ = ivec3(-1, -1, -1);
