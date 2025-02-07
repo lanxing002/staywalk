@@ -287,7 +287,7 @@ staywalk::CSProgram::~CSProgram() {
 
 }
 
-void staywalk::CSProgram::dispatch() {
+void staywalk::CSProgram::use() {
 	if (dirty_) {
 		gl_update();
 		dirty_ = false;
@@ -299,8 +299,12 @@ void staywalk::CSProgram::dispatch() {
 		glLinkProgram(glid_);
 		check_link_error();
 	}
-
 	glUseProgram(glid_);
+	used_ = true;
+}
+
+void staywalk::CSProgram::dispatch() {
+	assert(used_ && "must invoke use() before");
 	assert(work_gorup_size_.x > 0 && work_gorup_size_.y > 0 && work_gorup_size_.z > 0);
 	glDispatchCompute(work_gorup_size_.x, work_gorup_size_.y, work_gorup_size_.z);
 	glMemoryBarrier(GL_SHADER_IMAGE_ACCESS_BARRIER_BIT);

@@ -21,7 +21,7 @@ namespace staywalk {
 	private:
 		void render_main();
 
-		void render_post0();
+		void render_post_bloom();
 		
 		void render_post1();
 
@@ -48,8 +48,9 @@ namespace staywalk {
 		RenderTarget2DRef post_front_;   // just color
 		RenderTarget2DRef post_back_;	  // just color	 
 
-		CSProgramRef post_cs0_;
-		CSProgramRef post_cs1_;
+		CSProgramRef post_bloom_h_cs_;
+		CSProgramRef post_bloom_v_cs_;
+		RenderTarget2DRef post_bloom_rt_;
 
 		CSProgramRef post_tone_mapping_cs_;
 
