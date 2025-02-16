@@ -21,15 +21,10 @@ echo -----------------
 echo %PYTHON_SOURCE%
 echo %REMOTE_PYTHON_DIR%
 
-
-@REM for /f "USEBACKQ" %%i in (`dir PCbuild\*.bat /b`) do copy PCBuild\%%i "%REMOTE_PYTHON_DIR%PCBuild"
-@REM for /f "USEBACKQ" %%i in (`dir %PYTHON_SOURCE%PCbuild\*.bat /b`) do cp %PYTHON_SOURCE%PCbuild\%%i "%REMOTE_PYTHON_DIR%PCBuild"
-@REM for /f "USEBACKQ" %%i in (`dir %PYTHON_SOURCE%PCbuild\*.py /b`) do cp %PYTHON_SOURCE%PCbuild\%%i "%REMOTE_PYTHON_DIR%PCBuild"
-
-cp -r "%PYTHON_SOURCE%Include" "%REMOTE_PYTHON_DIR%Include" > nul
-cp -r "%PYTHON_SOURCE%Lib" "%REMOTE_PYTHON_DIR%Lib" > nul
-cp -r "%PYTHON_SOURCE%Tools" "%REMOTE_PYTHON_DIR%Tools" > nul
-cp "%PYTHON_SOURCE%PC\pyconfig.h" "%REMOTE_PYTHON_DIR%Include"
+xcopy "%PYTHON_SOURCE%Include" "%REMOTE_PYTHON_DIR%Include" /E /H /C /I
+xcopy "%PYTHON_SOURCE%Lib" "%REMOTE_PYTHON_DIR%Lib" /E /H /C /I
+xcopy "%PYTHON_SOURCE%Tools" "%REMOTE_PYTHON_DIR%Tools" /E /H /C /I
+cp "%PYTHON_SOURCE%PC\pyconfig.h" "%REMOTE_PYTHON_DIR%Include" /E /H /C /I
 
 echo -------------------
 
