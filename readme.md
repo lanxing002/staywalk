@@ -1,13 +1,21 @@
-## example 
-IMGUI_SIMPLE_EXAMPLE 用于开启imgui测试
+## 简介
+用于实践一些技术以及用于测试一些shader和pipeline。
+
+## 开发日志
 
 
-## cpython 
-cpython 项目巨大，本身没有cmakelists.txt；从头构建.cmake文件比较困难，因此选择取巧的方式，直接在服用它本身所自带的项目
-build的时候，使用cpython/build.bat
+## Build
+使用cmake完成项目构建
 
-由于build.bat需要使用python.exe，这个需要注意以下
+```cmake
+cmake -S . -B .\build\
+```
+初次构建由于需要clone和build cpython,因此需要一会时间。之后可以在.\build目录下可以看到staywalk.sln
 
-分两步构建，先构建python-core, 然后deploy到一个文件夹，之后再在项目中使用。
+解决方案中，需要先生成generated_code项目，自动生成ui和脚本绑定代码；然后启动engine项目即可。
 
-删除了assimp的test文件，占用空间过大
+启动之后，可以载入测试world.
+![alt text](readme-res/image.png)
+
+## 问题 
+构建过程中，可能会出现找不到python310_d.lib， 手动重新生成解决方案中ThridParty/cpython/pythoncode即可；因为自动构建的bat在powershell中启动存在一些问题；
