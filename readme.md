@@ -1,10 +1,28 @@
 ## 简介
+---
 用于实践一些技术以及用于测试一些shader和pipeline。
 
 ## 开发日志
+tag -- skeleton 支持gpu蒙皮
 
+![alt text](readme-res/skeleton.gif)
+
+tag -- shadow 阴影
+
+![alt text](image.png)
+
+## Console
+---
+```python
+# 显示engine bind的一些接口
+print(dir(sw.g.engine))
+# 显示world bind的一些接口
+print(dir(sw.g.world))
+```
+更加详细具体的文档等待整理
 
 ## Build
+---
 使用cmake完成项目构建
 
 ```cmake
@@ -18,4 +36,4 @@ cmake -S . -B .\build\
 ![alt text](readme-res/image.png)
 
 ## 问题 
-构建过程中，可能会出现找不到python310_d.lib， 手动重新生成解决方案中ThridParty/cpython/pythoncode即可；
+构建过程中，可能会出现找不到， 手动重新生成解决方案中ThridParty/cpython/pythoncode即可；因为自动构建的bat在powershell中启动存在一些问题；
