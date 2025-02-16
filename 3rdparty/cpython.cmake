@@ -10,7 +10,7 @@ if(NOT DEFINED builed_cpython)
     execute_process(
         COMMAND ${CMAKE_COMMAND} -E echo "staring runging build python......"
         COMMAND ${cpython_dir_}/PCbuild/build.bat  
-        COMMAND ${cpython_dir_}/PCbuild/deploy.bat
+        COMMAND ${cpython_dir_}/PCbuild/deploy_local.bat
         WORKING_DIRECTORY ${cpython_dir_}/PCbuild
         RESULT_VARIABLE result
     )

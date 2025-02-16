@@ -21,9 +21,9 @@ echo -----------------
 echo %PYTHON_SOURCE%
 echo %REMOTE_PYTHON_DIR%
 
-xcopy "%PYTHON_SOURCE%Include" "%REMOTE_PYTHON_DIR%Include" /E /H /C /I
-xcopy "%PYTHON_SOURCE%Lib" "%REMOTE_PYTHON_DIR%Lib" /E /H /C /I
-xcopy "%PYTHON_SOURCE%Tools" "%REMOTE_PYTHON_DIR%Tools" /E /H /C /I
+xcopy "%PYTHON_SOURCE%Include" "%REMOTE_PYTHON_DIR%Include" /E /H /C /I /Y /Q
+xcopy "%PYTHON_SOURCE%Lib" "%REMOTE_PYTHON_DIR%Lib" /E /H /C /I /Y /Q
+xcopy "%PYTHON_SOURCE%Tools" "%REMOTE_PYTHON_DIR%Tools" /E /H /C /I /Y /Q
 cp "%PYTHON_SOURCE%PC\pyconfig.h" "%REMOTE_PYTHON_DIR%Include"
 
 echo -------------------
